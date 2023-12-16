@@ -37,7 +37,7 @@ const Start = () => {
             </Welcome>
             <Grid>
                 <ReservationStatus 
-                    btReservations={btReservations} 
+                    btReservations={btReservations}
                     selected={selected}
                     setSelected={setSelected}
                 />

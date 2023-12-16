@@ -29,11 +29,8 @@ const ReservationStatus = (props) => {
                 {
                     btReservations.map(item => (
                         <BtReservations
-                            style={{
-                                color: selected === item.id ? "#D64D4D" : "#c4c4c4",
-                                borderBottomColor: selected === item.id ? "#D64D4D" : "transparent",
-                                borderBottomWidth: selected === item.id ? 2 : 0
-                            }}
+                            textColor={selected === item.id ? "#D64D4D" : "#c4c4c4"}
+                            borderBottom={selected === item.id ? "#D64D4D" : "transparent"}
                             key={item.id}
                             onClick={() => setSelected(item.id)}
                         >

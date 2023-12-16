@@ -47,9 +47,11 @@ export const DivReservations = styled.div`
 export const BtReservations = styled.button`
     background-color: transparent;
     border: 2px solid transparent;
+    border-bottom-color: ${props => props.borderBottom};
     padding-bottom: .4rem;
     font-weight: 700;
     font-size: 16px;
+    color: ${props => props.textColor};
     
     &:hover {
         cursor: pointer;
@@ -58,7 +60,7 @@ export const BtReservations = styled.button`
 
 export const ListHeader = styled.div`
     display: grid;
-    grid-template-columns: 96px 156px repeat(3, 144px)
+    grid-template-columns: repeat(5, auto);
 `
 
 export const Text = styled.p`
@@ -101,16 +103,16 @@ export const ListBody = styled.div`
 export const ElementList = styled.div`
     background-color: #f4f4f4;
     display: grid;
-    grid-template-columns: 84px 156px repeat(3, 144px);
-    justify-content: center;
+    grid-template-columns: 13rem 14rem 12rem 12rem repeat(1, auto);
     border-radius: 8px;
-    padding: 6px 0;
+    padding: .5rem 0;
 `
 
 export const InputPin = styled.input`
     width: 45px;
     height: 24px;
     align-self: center;
+    justify-self: center;
     background-color: #7c7c7c;
     border: none;
     color: #fff;
@@ -145,6 +147,13 @@ export const InfoReservation = styled.div`
     justify-content: space-between;
 `
 
+export const GroupInfo = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+`
+
 export const ParkingInfo = styled.div`
     padding: 1.3rem;
     border-radius: 10px;
@@ -172,6 +181,10 @@ export const Info = styled.div`
     margin-bottom: 10px;
     text-align: center;
     color: #523499;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
     &:first-child {
         background-color: #523499;
@@ -191,11 +204,11 @@ export const GroupButton = styled.div`
 `
 
 export const Button = styled.button`
-    background-color: #523499;
+    background-color: ${props => props.background ? props.background : "#523499"};
     color: #fff;
     border-radius: 6px;
     border: none;
-    padding: 10px 0;
+    padding: .8rem 0;
 
     &:hover {
         cursor: pointer;
@@ -203,9 +216,5 @@ export const Button = styled.button`
 
     &:active {
         opacity: 0.9;
-    }
-
-    &:last-child {
-        background-color: #d64d4d;
     }
 `

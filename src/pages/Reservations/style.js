@@ -3,13 +3,46 @@ import styled from "styled-components";
 export const Container = styled.div`
     margin: 2rem 2.5rem 2rem 0;
     display: grid;
-    grid-template-rows: repeat(2, 40%) 10%;
+    grid-template-rows: 45% 45% 10%;
 `
 
 export const Content = styled.div`
     display: grid;
-    grid-template-rows: 40px 240px;
+    grid-template-rows: 40px 15rem;
     grid-template-columns: repeat(2, 1fr) 22vw;
+    column-gap: 1rem;
+
+    &:first-child {
+        margin-bottom: 12rem;
+    }
+
+    &:last-child {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+    }
+`
+
+export const ItemReservation = styled.div`
+    display: grid;
+    grid-template-rows: 40px 17rem;
+    grid-template-columns: repeat(2, 1fr) 22vw;
+    column-gap: 1rem;
+
+    &:first-child {
+        margin-bottom: 12rem;
+    }
+
+    &:last-child {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+    }
+`
+
+export const CloseReserve = styled.div`
     column-gap: 1rem;
 
     &:first-child {
@@ -79,6 +112,7 @@ export const ReservationList = styled.div`
 
 export const List = styled.div`
     width: 100%;
+    height: 19rem;
     background-color: #fff;
     grid-row: 2;
     grid-column: span 2;
@@ -134,16 +168,12 @@ export const TitleReservation = styled.p`
 `
 
 export const BottomButton = styled.button`
-    background-color: #D64D4D;
+    background-color: ${props => props.buttonColor};
     border-radius: 10px;
     border: none;
     color: #fff;
-    width: 144px;
-    height: 40px;
-
-    &:last-child {
-        background-color: #509C76;
-    }
+    width: 10rem;
+    height: 3rem;
 
     &:hover {
         cursor: pointer;
@@ -194,7 +224,8 @@ export const ListBody = styled.div`
 `
 
 export const ElementList = styled.button`
-    background-color: #f4f4f4;
+    background-color: ${props => props.backgroundColor};
+    color: ${props => props.textColor};
     display: grid;
     grid-template-columns: 50px repeat(2, 120px) 60px 140px 50px;
     justify-content: space-evenly;
@@ -212,7 +243,6 @@ export const ElementList = styled.button`
 `
 
 export const ItemList = styled.p`
-    color: #7c7c7c;
     font-size: 13px;
     justify-self: center;
 `

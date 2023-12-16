@@ -8,11 +8,29 @@ export const Container = styled.div`
     gap: 3rem;
 `
 
+export const Notification = styled.button`
+    background-color: #eee;
+    position: absolute;
+    right: 0;
+    margin: 1.25rem;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 8px;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &:active {
+        opacity: 0.6;
+    }
+`
+
 export const SideBar = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #523499;
+    background-color: ${props => props.background};
     height: 100vh;
 `
 
@@ -47,10 +65,48 @@ export const Profile = styled.div`
     flex-direction: row;
     align-items: center; 
     gap: 6px;
-    margin-left: 48px; 
-    margin-bottom: 48px;
+
+    div {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+`
+
+export const Bottom = styled.div`
     position: absolute; 
     bottom: 0;
+    left: 0;
+    margin-left: 5rem; 
+    margin-bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+
+    span {
+        display: flex;
+        flex-direction: column;
+        gap: .6rem;
+    }
+`
+
+export const Name = styled.p`
+    font-size: 15px;
+    color: #fff;
+`
+
+export const Select = styled.select`
+    background-color: transparent;
+    border-radius: 6px;
+    border: 1px solid #fff;
+    padding: .3rem;
+    outline: none;
+    width: 70%;
+    color: #fff;
+
+    option {
+        color: #000;
+    }
 `
 
 export const ImageProfile = styled.img`

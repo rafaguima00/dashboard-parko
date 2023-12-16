@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-    margin: 2rem 2.5rem 2rem 0;
+    margin: 2rem 4rem 2rem 0;
     display: grid;
     grid-template-columns: 368px repeat(2, auto);
     grid-template-rows: 2.5rem auto 8rem 2.5rem;
@@ -119,12 +119,12 @@ export const Info = styled.div`
     font-size: 12px;
 
     p:first-child {
-        color: #545454;
+        color: ${props => props.textColor};
         font-weight: 700;
     }
 
     p:last-child {
-        color: #523499;
+        color: ${props => props.priceTextColor};
     }
 `
 
@@ -151,6 +151,52 @@ export const List = styled.span`
     }
 `
 
+export const ListHeader = styled.div`
+    display: grid;
+    grid-template-columns: 50px repeat(2, 120px) 60px 140px 50px auto;
+    justify-content: space-evenly;
+    border-bottom: solid 1px #EAEAEA;
+    padding-bottom: 6px;
+`
+
+export const Text = styled.p`
+    color: #C4C4C4;
+    font-size: 14px;
+    justify-self: center;
+`
+
+export const ListBody = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+    max-height: 23rem;
+    padding-top: 6px;
+`
+
+export const ElementList = styled.button`
+    background-color: #f4f4f4;
+    display: grid;
+    grid-template-columns: 50px repeat(2, 120px) 60px 140px 50px auto;
+    justify-content: space-evenly;
+    border-radius: 8px;
+    border: none;
+    padding: 8px 0;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &:active {
+        opacity: 0.7;
+    }
+`
+
+export const ItemList = styled.p`
+    color: #7c7c7c;
+    font-size: 13px;
+    justify-self: center;
+`
+
 export const ButtonGroup = styled.div`
     grid-column: 1;
     grid-row: 4;
@@ -162,14 +208,10 @@ export const ButtonGroup = styled.div`
 
 export const Button = styled.button`
     width: 7rem;
-    background: #523499;
+    background: ${props => props.buttonColor ? props.buttonColor : "#523499"};
     color: #fff;
     border: none;
     border-radius: 10px;
-
-    &:first-child {
-        background: #d64d4d;
-    }
 
     &:hover {
         cursor: pointer;
@@ -181,18 +223,36 @@ export const Button = styled.button`
 `
 
 export const Graphics = styled.div`
-    background: orange;
     grid-row: span 2;
     grid-column: span 2;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 1.25rem;
+    
+    div {
+        background-color: #fff;
+        width: 100%;
+        border-radius: 18px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+
+    div:last-child {
+        background-color: ${props => props.background};
+        color: #fff;
+    }
 `
 
 export const InputSearch = styled.input`
     background-color: #eee;
-    border: 1px solid #523499;
+    border: 1px solid ${props => props.inputColor};
     border-radius: 6px;
     padding: 8px;
 
     &:focus {
-        outline: 1px solid #523499;
+        outline: 1px solid ${props => props.inputColor};
     }
 `

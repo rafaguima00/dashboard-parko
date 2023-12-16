@@ -10,7 +10,7 @@ export const Container = styled.div`
 export const Image = styled.img`
     height: 100vh;
     width: 50vw;
-    background: #523499;
+    background: ${props => props.backgroundImg};
 `
 
 export const WelcomeArea = styled.div`
@@ -19,16 +19,16 @@ export const WelcomeArea = styled.div`
 `
 
 export const Logo = styled.img`
-    height: 34px;
-    width: 120px;
-    margin: 48px;
+    height: 10%;
+    width: 20%;
+    margin: 3rem;
 `
 
 export const ElementText = styled.div`
     width: 50vw;
     display: flex;
     align-items: center;
-    margin-top: 48px;
+    margin-top: 3rem;
 `
 
 export const Slogan = styled.p`
@@ -58,6 +58,9 @@ export const FormContent = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: 50%;
 `
 
 export const TextField = styled.div`
@@ -73,7 +76,7 @@ export const Label = styled.label`
 `
 
 export const Input = styled.input`
-    width: 200px;
+    width: 100%;
     padding: 12px;
     border: 2px solid #7d7d7d;
     border-radius: 10px;
@@ -94,7 +97,7 @@ export const NewPassword = styled.div`
 
 export const TextPassword = styled.p`
     font-size: 12px;
-    color: #523499;
+    color: ${props => props.textColor};
     font-weight: 600;
     padding-right: 4px;
 `
@@ -117,7 +120,7 @@ export const Login = styled.button`
     padding: 12px;
     border: none;
     border-radius: 10px;
-    background-color: #523499;
+    background-color: ${props => props.buttonColor};
     color: #fff;
 
     &:hover {

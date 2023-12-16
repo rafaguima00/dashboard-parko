@@ -1,5 +1,6 @@
 import {
     InfoReservation,
+    GroupInfo,
     Title,
     Subtitle,
     Info,
@@ -21,7 +22,7 @@ const InfoReserve = () => {
 
     return (
         <InfoReservation>
-            <div>
+            <GroupInfo>
                 <Info>
                     <Title>10/24</Title>
                     <Subtitle style={{ color: "#f4f4f4" }}>Vagas disponíveis</Subtitle>
@@ -40,11 +41,11 @@ const InfoReserve = () => {
                     <Title>72,1%</Title>
                     <Subtitle>Satisfação do cliente</Subtitle>
                 </Info>
-            </div>
+            </GroupInfo>
             <GroupButton>
                 <Button>+ Nova reserva</Button>
                 <Button>Abrir caixa</Button>
-                <Button>Fechar caixa</Button>
+                <Button background="#d64d4d">Fechar caixa</Button>
             </GroupButton>
         </InfoReservation>
     )

@@ -6,6 +6,11 @@ import Reservations from "../pages/Reservations";
 import Checkout from "../pages/Checkout";
 import Management from "../pages/Management";
 import Settings from "../pages/Settings";
+import Ratings from "../pages/Ratings";
+import FormEstablishment from "../pages/Settings/forms/establishment/establishment";
+import FormOpening from "../pages/Settings/forms/openingHour/openingHour";
+import ColaboratorsForm from "../pages/Settings/forms/colaborators/colaborators";
+import PriceTableForm from "../pages/Settings/forms/priceTable/priceTable";
 
 export const router = createBrowserRouter([
     {
@@ -36,6 +41,26 @@ export const router = createBrowserRouter([
             {
                 path: "/settings",
                 element: <Settings />
+            },
+            {
+                path: "/settings/establishment",
+                element: <FormEstablishment />
+            },
+            {
+                path: "/settings/funcionamento",
+                element: <FormOpening />
+            },
+            {
+                path: "/settings/colaborators",
+                element: <ColaboratorsForm />
+            },
+            {
+                path: "/settings/table",
+                element: <PriceTableForm />
+            },
+            {
+                path: "/rating",
+                element: <Ratings />
             }
         ]
     }

@@ -15,6 +15,7 @@ import { GlobalContext } from "../../../context/globalContext";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import validator from "validator";
+import { theme } from "../../../theme/theme";
 
 const Form = () => {
 
@@ -22,6 +23,8 @@ const Form = () => {
     const [messageError, setMessageError] = useState("");
 
     const { setDataClient, dataClient } = useContext(GlobalContext);
+
+    const { primaryColor } = theme;
 
     const {
         register,
@@ -96,10 +99,10 @@ const Form = () => {
                     <MessageError>{messageError}</MessageError>
                 }
                 <NewPassword>
-                    <TextPassword>Esqueceu a senha?</TextPassword>
+                    <TextPassword textColor={primaryColor}>Esqueceu a senha?</TextPassword>
                     <BtPassword>Crie uma nova</BtPassword>
                 </NewPassword>
-                <Login type="Submit" onClick={() => handleSubmit(onSubmit)()}>Login</Login>
+                <Login buttonColor={primaryColor} type="Submit" onClick={() => handleSubmit(onSubmit)()}>Login</Login>
             </FormContent>
         </AreaForm>
     )

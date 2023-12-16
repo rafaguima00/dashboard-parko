@@ -1,6 +1,8 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import NavigationBar from "./components/navigationBar";
-import { Container } from "./style";
+import { Container, Notification } from "./style";
+import { IoNotificationsOutline } from "react-icons/io5";
+
 
 const Menu = () => {
 
@@ -9,7 +11,7 @@ const Menu = () => {
         display: "flex",
         flexDirection: "row",
         gap: 16,
-        padding: 10
+        padding: 16
     }
 
     const styleSelected = {
@@ -18,7 +20,7 @@ const Menu = () => {
         flexDirection: "row",
         gap: 16,
         backgroundColor: "#f4f4f4",
-        padding: 10,
+        padding: 16,
         borderBottomLeftRadius: 10,
         borderTopLeftRadius: 10
     }
@@ -43,6 +45,9 @@ const Menu = () => {
                 handleLogout={handleLogout} 
             />
             <Outlet />
+            <Notification>
+                <IoNotificationsOutline size={18} color="#523499" />
+            </Notification>
         </Container>
     )
 }

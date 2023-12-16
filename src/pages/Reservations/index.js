@@ -2,8 +2,9 @@ import { useContext } from "react";
 import { GlobalContext } from "../../context/globalContext";
 import {
     Container,
-    Content,
-    BottomButton
+    ItemReservation,
+    BottomButton,
+    CloseReserve
 } from "./style";
 import TopContent from "./components/top";
 import ListConfirmedReserve from "./components/listConfirmed";
@@ -17,16 +18,16 @@ const Reservations = () => {
 
     return (
         <Container>
-            <Content>
+            <ItemReservation>
                 <TopContent />
                 <ListConfirmedReserve />
                 <TimingReserve username={username} />
-            </Content>
+            </ItemReservation>
             <SelectedReserve />
-            <Content>
-                <BottomButton>Cancelar</BottomButton>
-                <BottomButton>Fechar reserva</BottomButton>
-            </Content>
+            <CloseReserve>
+                <BottomButton buttonColor={"#d64d4d"}>Cancelar</BottomButton>
+                <BottomButton buttonColor={"#509c76"}>Fechar reserva</BottomButton>
+            </CloseReserve>
         </Container>
     )
 }

@@ -9,7 +9,10 @@ import {
     Profile,
     ImageProfile,
     UserName,
-    Logout
+    Logout,
+    Bottom,
+    Name,
+    Select
 } from "../style";
 import camera from "../../../assets/camera.png";
 import logo from "../../../assets/logo-parko.png";
@@ -17,8 +20,12 @@ import { AiOutlineHome } from "react-icons/ai";
 import { LiaCarSideSolid } from "react-icons/lia";
 import { CgNotes } from "react-icons/cg";
 import { RiMoneyDollarCircleLine, RiSettings5Line } from "react-icons/ri";
+import { FiStar } from "react-icons/fi";
+import { theme } from "../../../theme/theme";
 
 const NavigationBar = (props) => {
+
+    const { primaryColor, neutralColor } = theme;
 
     const { styles, textSelected, handleLogout } = props;
 
@@ -62,6 +69,13 @@ const NavigationBar = (props) => {
             title: "Settings",
             text: "Configurações",
             icon: RiSettings5Line
+        },
+        {
+            id: 6,
+            path: "/rating",
+            title: "Rating",
+            text: "Avaliações",
+            icon: FiStar
         }
     ]
 
@@ -70,7 +84,7 @@ const NavigationBar = (props) => {
     }
 
     return (
-        <SideBar>
+        <SideBar background={primaryColor}>
             <Image src={logo} />
             <NavBar>
                 {links.map(item => (
@@ -83,7 +97,7 @@ const NavigationBar = (props) => {
                         onClick={() => handleSelectItem(item.id)}
                     >
                         <item.icon
-                            color={linkSeletected === item.id ? "#545454" : "#fff"}
+                            color={linkSeletected === item.id ? neutralColor : "#fff"}
                             size={18}
                             title={item.title}
                         />
@@ -93,13 +107,22 @@ const NavigationBar = (props) => {
                     </Link>
                 ))}
             </NavBar>
-            <Profile>
-                <ImageProfile src={camera} />
-                <div>
-                    <UserName>{username ? username : "[user_name]"}</UserName>
-                    <Logout onClick={handleLogout}>Logout</Logout>
-                </div>
-            </Profile>
+            <Bottom>
+                <span>
+                    <Name>Estacionamento</Name>
+                    <Select>
+                        <option background={primaryColor}>Bela Park</option>
+                        <option background={primaryColor}>Estacionamento x</option>
+                    </Select>
+                </span>
+                <Profile>
+                    <ImageProfile src={camera} />
+                    <div>
+                        <UserName>{username ? username : "[user_name]"}</UserName>
+                        <Logout onClick={handleLogout}>Logout</Logout>
+                    </div>
+                </Profile>
+            </Bottom>
         </SideBar>
     )
 }

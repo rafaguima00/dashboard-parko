@@ -6,7 +6,7 @@ import {
 const Buttons = () => {
     return (
         <ButtonGroup>
-            <Button>Fechar caixa</Button>
+            <Button buttonColor={"#d64d4d"}>Fechar caixa</Button>
             <Button>Aporte</Button>
             <Button>Retirada</Button>
         </ButtonGroup>

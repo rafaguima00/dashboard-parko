@@ -1,21 +1,25 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { GlobalContext } from "../../../context/globalContext";
 import {
     List,
     ListHeader,
-    Text, 
+    Text,
     ListBody,
     ElementList,
     ItemList
 } from "../style";
-import { confirmedReserve } from "../../../mocks/confirmadas"; 
+import { confirmedReserve } from "../../../mocks/confirmadas";
 import { formatCurrency } from "../../../services/formatCurrency";
 
 const ListConfirmedReserve = () => {
 
+    const [clicked, setClicked] = useState(0);
+
     const { setSelectedClient } = useContext(GlobalContext);
 
-    const handleOnClick = ({item}) => {
+    const handleOnClick = ({ index, item }) => {
+        setClicked(index)
+
         setSelectedClient({
             id: item.id,
             idClient: item.id_cliente,
@@ -42,8 +46,12 @@ const ListConfirmedReserve = () => {
             </ListHeader>
             {
                 confirmedReserve.map((item, index) => (
-                    <ListBody key={index}>
-                        <ElementList onClick={() => handleOnClick({ item })}>
+                    <ListBody key={item.id}>
+                        <ElementList
+                            backgroundColor={clicked === index ? "#523499" : "#f4f4f4"}
+                            textColor={clicked === index ? "#fff" : "#7c7c7c"}
+                            onClick={() => handleOnClick({ index, item })}
+                        >
                             <ItemList>{item.id}</ItemList>
                             <ItemList>{item.name}</ItemList>
                             <ItemList>{item.vehicle}</ItemList>
