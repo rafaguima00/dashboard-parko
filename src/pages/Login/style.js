@@ -59,7 +59,7 @@ export const FormContent = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 50%;
+    width: 35%;
     height: 50%;
 `
 
@@ -68,6 +68,7 @@ export const TextField = styled.div`
     flex-direction: column;
     gap: 8px;
     margin-bottom: 1rem;
+    width: 19rem;
 `
 
 export const Label = styled.label`
@@ -92,7 +93,7 @@ export const NewPassword = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    padding-bottom: 8px;
+    padding-bottom: 1rem;
 `
 
 export const TextPassword = styled.p`
@@ -116,7 +117,7 @@ export const BtPassword = styled.button`
 `
 
 export const Login = styled.button`
-    width: 200px;
+    width: 18rem;
     padding: 12px;
     border: none;
     border-radius: 10px;

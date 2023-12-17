@@ -3,7 +3,6 @@ import { GlobalContext } from "../../../context/globalContext";
 import {
     Content,
     List,
-    TitleReservation,
     GridItems,
     InfoReservation,
     Edit,
@@ -16,6 +15,7 @@ import {
     Receive
 } from "../style";
 import { formatCurrency } from "../../../services/formatCurrency";
+import Top from "../../../components/top/top";
 
 const SelectedReserve = () => {
 
@@ -37,7 +37,7 @@ const SelectedReserve = () => {
 
     return (
         <Content>
-            <TitleReservation><strong>Reserva</strong> Selecionada</TitleReservation>
+            <Top children="Reserva Selecionada" fontsize={19}/>
             <List>
                 <section>
                     <GridItems>

@@ -5,13 +5,13 @@ import {
     BtReservations,
     ListHeader,
     Text,
-    TextState,
-    TextClient
+    TextState
 } from "../style";
 import { RxInfoCircled } from "react-icons/rx";
 import PendingReserve from "./pendingReserve";
 import ConfirmedReserve from "./confirmedReserve";
 import RefusedReserve from "./refusedReserve";
+import Top from "../../../components/top/top";
 
 const ReservationStatus = (props) => {
 
@@ -20,9 +20,7 @@ const ReservationStatus = (props) => {
     return (
         <ReserveStatus>
             <TextReservations>
-                <TextClient>
-                    <strong>Reservas</strong> Clientes Parko
-                </TextClient>
+                <Top children={"Reservas Clientes Parko"} fontsize={17} />
                 <RxInfoCircled color="#c4c4c4" size={22} />
             </TextReservations>
             <DivReservations>

@@ -1,24 +1,10 @@
-import { useNavigate } from "react-router-dom";
-import { ContainerForm, Top } from "../style";
+import { ContainerForm } from "../style";
+import TopForm from "../../components/topForm";
 
 const PriceTableForm = () => {
-
-    const navigate = useNavigate();
-
-    const routerScreen = () => {
-        return navigate("/settings")
-    }
-
     return (
         <ContainerForm>
-            <Top>
-                <button
-                    onClick={routerScreen}
-                >
-                    voltar
-                </button>
-                <p>Tabela de preços</p>
-            </Top>
+            <TopForm children="Tabela de Preços" />
         </ContainerForm>
     )
 }

@@ -102,7 +102,7 @@ const Form = () => {
                     <TextPassword textColor={primaryColor}>Esqueceu a senha?</TextPassword>
                     <BtPassword>Crie uma nova</BtPassword>
                 </NewPassword>
-                <Login buttonColor={primaryColor} type="Submit" onClick={() => handleSubmit(onSubmit)()}>Login</Login>
+                <Login buttonColor={primaryColor} type="submit" onClick={() => handleSubmit(onSubmit)()}>Login</Login>
             </FormContent>
         </AreaForm>
     )

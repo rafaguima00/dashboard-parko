@@ -1,14 +1,30 @@
 import {
-    ButtonGroup,
-    Button
+    ButtonGroup
 } from "../style";
+import GlobalButton from "../../../components/button/button";
+import { theme } from "../../../theme/theme";
 
 const Buttons = () => {
+
+    const { cancelColor, primaryColor } = theme;
+
     return (
         <ButtonGroup>
-            <Button buttonColor={"#d64d4d"}>Fechar caixa</Button>
-            <Button>Aporte</Button>
-            <Button>Retirada</Button>
+            <GlobalButton 
+                children="Fechar Caixa"
+                background={cancelColor}
+                largura={"7rem"}
+            />
+            <GlobalButton 
+                children="Aporte"
+                background={primaryColor}
+                largura={"7rem"}
+            />
+            <GlobalButton 
+                children="Retirada"
+                background={primaryColor}
+                largura={"7rem"}
+            />
         </ButtonGroup>
     )
 }

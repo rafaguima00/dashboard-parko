@@ -26,7 +26,7 @@ export const Content = styled.div`
 
 export const ItemReservation = styled.div`
     display: grid;
-    grid-template-rows: 40px 17rem;
+    grid-template-rows: 2.5rem 17rem;
     grid-template-columns: repeat(2, 1fr) 22vw;
     column-gap: 1rem;
 
@@ -57,17 +57,12 @@ export const CloseReserve = styled.div`
     }
 `
 
-export const Top = styled.div`
+export const TopItem = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
     grid-column: span 2;
-`
-
-export const Title = styled.p`
-    font-size: 19px;
-    color: #545454;
 `
 
 export const InputGroup = styled.div`
@@ -128,7 +123,7 @@ export const List = styled.div`
 `
 
 export const Timing = styled.div`
-    background-color: #523499;
+    background-color: ${props => props.background};
     grid-row: 2;
     grid-column: 3;
     border-radius: 20px;
@@ -138,6 +133,7 @@ export const Timing = styled.div`
     align-items: center;
     gap: 2rem;
     color: #fff;
+    height: 19rem;
 `
 
 export const View = styled.div`
@@ -165,23 +161,6 @@ export const TitleReservation = styled.p`
     grid-column: span 3;
     font-size: 19px;
     color: #545454;
-`
-
-export const BottomButton = styled.button`
-    background-color: ${props => props.buttonColor};
-    border-radius: 10px;
-    border: none;
-    color: #fff;
-    width: 10rem;
-    height: 3rem;
-
-    &:hover {
-        cursor: pointer;
-    }
-
-    &:active {
-        opacity: 0.5;
-    }
 `
 
 export const ListHeader = styled.div`

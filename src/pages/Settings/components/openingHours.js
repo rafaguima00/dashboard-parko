@@ -8,6 +8,8 @@ import {
 } from "../style";
 import { theme } from "../../../theme/theme";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { ParkingContext } from "../../../context/parkingContext";
 
 const OpeningHours = () => {
 
@@ -19,6 +21,8 @@ const OpeningHours = () => {
         return navigate("/settings/funcionamento");
     }
 
+    const { openHour, closeHour } = useContext(ParkingContext);
+
     return (
         <ContentInfo gridColumn={"span 2"} gridRow={"span 1"}>
             <ButtonEdit onClick={routeScreen}>
@@ -26,7 +30,9 @@ const OpeningHours = () => {
             </ButtonEdit>
             <Menu>
                 <Warning textColor={neutralColor}>Em funcionamento de <strong>Segunda à Sábado</strong></Warning>
-                <Hour textColor={primaryColor}>08:00h - 22:00h</Hour>
+                <Hour textColor={primaryColor}>
+                    {openHour.monday.hour}:{openHour.monday.minute}h - {closeHour.monday.hour}:{closeHour.monday.minute}h
+                </Hour>
                 <hr/>
                 <Warning textColor={cancelColor}><strong>Não funcionamos nos feriados</strong></Warning>
             </Menu>

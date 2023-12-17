@@ -4,11 +4,12 @@ import {
     IconGroup,
     Icon
 } from "../style";
+import Top from "../../../components/top/top";
 
 const FirstHeader = () => {
     return (
         <Title>
-            <p><strong>Caixa</strong> Aberto</p>
+            <Top children="Caixa Aberto" fontsize={19} />
             <IconGroup>
                 <Icon><BsPrinter size={16} color="#545454" /></Icon>
                 <Icon><BsDownload size={16} color="#545454" /></Icon>

@@ -4,12 +4,13 @@ import {
     Title,
     Subtitle,
     Info,
-    GroupButton,
-    Button
+    GroupButton
 } from "../style";
 import { formatCurrency } from "../../../services/formatCurrency";
 import { CgNotes } from "react-icons/cg";
 import { FaRightLeft } from "react-icons/fa6";
+import GlobalButton from "../../../components/button/button";
+import { theme } from "../../../theme/theme";
 
 const InfoReserve = () => {
 
@@ -19,6 +20,8 @@ const InfoReserve = () => {
         top: 0,
         margin: 10
     }
+
+    const { primaryColor, cancelColor } = theme;
 
     return (
         <InfoReservation>
@@ -43,9 +46,21 @@ const InfoReserve = () => {
                 </Info>
             </GroupInfo>
             <GroupButton>
-                <Button>+ Nova reserva</Button>
-                <Button>Abrir caixa</Button>
-                <Button background="#d64d4d">Fechar caixa</Button>
+                <GlobalButton
+                    background={primaryColor}
+                    children="+ Nova Reserva"
+                    altura={"2rem"}
+                />
+                <GlobalButton
+                    background={primaryColor}
+                    children="Abrir Caixa"
+                    altura={"2rem"}
+                />
+                <GlobalButton
+                    background={cancelColor}
+                    children="Fechar Caixa"
+                    altura={"2rem"}
+                />
             </GroupButton>
         </InfoReservation>
     )

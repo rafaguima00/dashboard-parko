@@ -1,16 +1,16 @@
 import {
-    Top,
-    Title,
+    TopItem,
     InputGroup,
     InputSearch,
     Icon
 } from "../style";
 import { FiDownload, FiPlus } from "react-icons/fi";
+import Top from "../../../components/top/top";
 
 const TopContent = () => {
     return (
-        <Top>
-            <Title><strong>Reservas</strong> Abertas</Title>
+        <TopItem>
+            <Top children="Reservas Abertas" fontsize={19}/>
             <InputGroup>
                 <InputSearch type="text" placeholder="Procurar" />
                 <Icon>
@@ -20,7 +20,7 @@ const TopContent = () => {
                     <FiDownload color="#545454" size={16} />
                 </Icon>
             </InputGroup>
-        </Top>
+        </TopItem>
     )
 }
 

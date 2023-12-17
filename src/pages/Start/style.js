@@ -32,10 +32,6 @@ export const TextReservations = styled.div`
     padding-bottom: 1rem;
 `
 
-export const TextClient = styled.p`
-    color: #545454;
-`
-
 export const DivReservations = styled.div`
     display: flex;
     flex-direction: row;
@@ -108,7 +104,7 @@ export const ElementList = styled.div`
     padding: .5rem 0;
 `
 
-export const InputPin = styled.input`
+export const InputPin = styled.button`
     width: 45px;
     height: 24px;
     align-self: center;
@@ -116,12 +112,15 @@ export const InputPin = styled.input`
     background-color: #7c7c7c;
     border: none;
     color: #fff;
+    font-weight: 700;
     border-radius: 6px;
 
-    &::placeholder {
-        color: #fff;
-        font-weight: 700;
-        text-align: center;
+    &:hover {
+        cursor: pointer;
+    }
+
+    &:active {
+        opacity: 0.8;
     }
 `
 
@@ -201,20 +200,4 @@ export const GroupButton = styled.div`
     flex-direction: column;
     gap: 10px;
     margin-top: 16px;
-`
-
-export const Button = styled.button`
-    background-color: ${props => props.background ? props.background : "#523499"};
-    color: #fff;
-    border-radius: 6px;
-    border: none;
-    padding: .8rem 0;
-
-    &:hover {
-        cursor: pointer;
-    }
-
-    &:active {
-        opacity: 0.9;
-    }
 `

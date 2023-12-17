@@ -1,24 +1,11 @@
-import { useNavigate } from "react-router-dom";
-import { ContainerForm, Top } from "../style";
+import TopForm from "../../components/topForm";
+import { ContainerForm } from "../style";
 
 const ColaboratorsForm = () => {
 
-    const navigate = useNavigate();
-
-    const routerScreen = () => {
-        return navigate("/settings")
-    }
-
     return (
         <ContainerForm>
-            <Top>
-                <button
-                    onClick={routerScreen}
-                >
-                    voltar
-                </button>
-                <p>Colaboradores</p>
-            </Top>
+            <TopForm children="Nossos colaboradores" />
         </ContainerForm>
     )
 }

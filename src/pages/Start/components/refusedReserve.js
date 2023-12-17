@@ -13,7 +13,7 @@ const RefusedReserve = () => {
         {
             refusedReserve.map(item => (
                 <ElementList key={item.id}>
-                    <InputPin type="number" placeholder="PIN" />
+                    <InputPin>PIN</InputPin>
                     <ItemList>{item.clock}</ItemList>
                     <ItemList>{item.vehicle}</ItemList>
                     <ItemList>{item.lisencePlate}</ItemList>
