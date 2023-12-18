@@ -5,7 +5,9 @@ const GlobalButton = ({
     background,
     textcolor,
     largura,
-    altura
+    altura,
+    bold,
+    btborder
 }) => {
     return (
         <Button 
@@ -13,6 +15,8 @@ const GlobalButton = ({
             textcolor={textcolor}
             largura={largura}
             altura={altura}
+            bold={bold}
+            btborder={btborder}
         >
             {children}
         </Button>

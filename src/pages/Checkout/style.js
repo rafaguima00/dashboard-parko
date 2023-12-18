@@ -8,9 +8,7 @@ export const Container = styled.div`
     gap: 1rem;
 `
 
-export const Title = styled.p`
-    font-size: 19px;
-    color: #545454;
+export const Title = styled.div`
     grid-column: 1;
     grid-row: 1;
     display: flex;
@@ -41,9 +39,7 @@ export const IconGroup = styled.div`
     gap: .5rem;
 `
 
-export const SecondTitle = styled.p`
-    font-size: 19px;
-    color: #545454;
+export const SecondTitle = styled.div`
     grid-row: 1;
     grid-column: span 2;
     display: flex;
@@ -119,12 +115,12 @@ export const Info = styled.div`
     font-size: 12px;
 
     p:first-child {
-        color: ${props => props.textColor};
+        color: ${props => props.textcolor};
         font-weight: 700;
     }
 
     p:last-child {
-        color: ${props => props.priceTextColor};
+        color: ${props => props.pricetxtcolor};
     }
 `
 
@@ -248,11 +244,11 @@ export const Graphics = styled.div`
 
 export const InputSearch = styled.input`
     background-color: #eee;
-    border: 1px solid ${props => props.inputColor};
+    border: 1px solid ${props => props.inputcolor};
     border-radius: 6px;
     padding: 8px;
 
     &:focus {
-        outline: 1px solid ${props => props.inputColor};
+        outline: 1px solid ${props => props.inputcolor};
     }
 `

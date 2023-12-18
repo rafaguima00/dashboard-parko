@@ -31,58 +31,58 @@ const SummaryContent = () => {
                 </div>
             </Header><hr/>
             <InfoCheckout>
-                <Info priceTextColor={neutralColor} textColor={neutralColor}>
+                <Info pricetxtcolor={neutralColor} textcolor={neutralColor}>
                     <p>Abertura do caixa</p>
                     <p>R$ 100,00</p>
                 </Info>
-                <Info priceTextColor={primaryColor} textColor={neutralColor}>
+                <Info pricetxtcolor={primaryColor} textcolor={neutralColor}>
                     <p>Vendas em dinheiro</p>
                     <p>R$ 25,00</p>
                 </Info>
-                <Info priceTextColor={primaryColor} textColor={neutralColor}>
+                <Info pricetxtcolor={primaryColor} textcolor={neutralColor}>
                     <p>Recebimento de dívidas (dinheiro)</p>
                     <p>R$ 0,00</p>
                 </Info>
-                <Info priceTextColor={primaryColor} textColor={neutralColor}> 
+                <Info pricetxtcolor={primaryColor} textcolor={neutralColor}> 
                     <p>Aportes</p>
                     <p>R$ 0,00</p>
                 </Info>
-                <Info priceTextColor={cancelColor} textColor={neutralColor}> 
+                <Info pricetxtcolor={cancelColor} textcolor={neutralColor}> 
                     <p>Retiradas</p>
                     <p>-R$ 10,00</p>
                 </Info>
-                <Info priceTextColor={neutralColor} textColor="#000">
+                <Info pricetxtcolor={neutralColor} textcolor="#000">
                     <p>Fechamento do caixa</p>
                     <p>R$ 350,00</p>
                 </Info>
             </InfoCheckout><hr/>
             <InfoCheckout>
                 <h3>Resumo de vendas</h3>
-                <Info priceTextColor={neutralColor} textColor={neutralColor}>
+                <Info pricetxtcolor={neutralColor} textcolor={neutralColor}>
                     <p>Dinheiro</p>
                     <p>R$ 100,00</p>
                 </Info>
-                <Info priceTextColor={neutralColor} textColor={neutralColor}>
+                <Info pricetxtcolor={neutralColor} textcolor={neutralColor}>
                     <p>Pix</p>
                     <p>R$ 25,00</p>
                 </Info>
-                <Info priceTextColor={neutralColor} textColor={neutralColor}>
+                <Info pricetxtcolor={neutralColor} textcolor={neutralColor}>
                     <p>Débito</p>
                     <p>R$ 0,00</p>
                 </Info>
-                <Info priceTextColor={neutralColor} textColor={neutralColor}>
+                <Info pricetxtcolor={neutralColor} textcolor={neutralColor}>
                     <p>Crédito</p>
                     <p>R$ 0,00</p>
                 </Info>
-                <Info priceTextColor={neutralColor} textColor={neutralColor}>
+                <Info pricetxtcolor={neutralColor} textcolor={neutralColor}>
                     <p>Parko Débito</p>
                     <p>R$ 10,00</p>
                 </Info>
-                <Info priceTextColor={neutralColor} textColor={neutralColor}>
+                <Info pricetxtcolor={neutralColor} textcolor={neutralColor}>
                     <p>A pagar</p>
                     <p>R$ 350,00</p>
                 </Info>
-                <Info priceTextColor={neutralColor} textColor="#000">
+                <Info pricetxtcolor={neutralColor} textcolor="#000">
                     <p>Total</p>
                     <p>R$ 350,00</p>
                 </Info>

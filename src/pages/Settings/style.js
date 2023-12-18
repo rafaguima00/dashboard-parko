@@ -10,8 +10,8 @@ export const Container = styled.div`
 
 export const ContentInfo = styled.div`
     background: #fff;
-    grid-column: ${props => props.gridColumn};;
-    grid-row: ${props => props.gridRow};
+    grid-column: ${props => props.gridcolumn};
+    grid-row: ${props => props.gridrow};
     border-radius: 1rem;
     padding: 1rem;
     position: relative;
@@ -21,8 +21,8 @@ export const Title = styled.p`
     font-size: 19px;
     color: #545454;
     background-color: ${props => props.background};
-    grid-column: ${props => props.gridColumn};
-    grid-row: ${props => props.gridRow};
+    grid-column: ${props => props.gridcolumn};
+    grid-row: ${props => props.gridrow};
 `
 
 export const ButtonEdit = styled.button`
@@ -63,7 +63,7 @@ export const InfoEstablishment = styled.div`
 `
 
 export const TextArea = styled.div`
-    color: ${props => props.textColor};
+    color: ${props => props.textcolor};
     display: flex;
     flex-direction: column;
     gap: .4rem;
@@ -97,13 +97,13 @@ export const Menu = styled.section`
 `
 
 export const Warning = styled.p`
-    color: ${props => props.textColor};
+    color: ${props => props.textcolor};
     font-size: 15px;
 `
 
 export const Hour = styled.p`
     font-weight: 700;
-    color: ${props => props.textColor};
+    color: ${props => props.textcolor};
     font-size: 3.2rem;
     display: inline-block;
 

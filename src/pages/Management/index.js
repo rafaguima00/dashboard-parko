@@ -24,10 +24,10 @@ const Management = () => {
 
     return (
         <Container>
-            <Title gridColumn={1} gridRow={1}>
+            <Title gridcolumn={1} gridrow={1}>
                 <strong>Gestão</strong>
             </Title>
-            <Financial gridColumn={1} gridRow={"span 2"}>
+            <Financial gridcolumn={1} gridrow={"span 2"}>
                 {buttons.map(item => (
                     <div key={item.id} style={{ width: "100%" }}>
                         <Button 
@@ -55,10 +55,13 @@ const Management = () => {
                     </div>
                 ))}
             </Financial>
-            <Title gridColumn={"span 2"} gridRow={1}>
-                <strong>Relatórios</strong> Financeiros
+            <Title gridcolumn={"span 2"} gridrow={1}>
+                { selected === 0 && "Relatórios Financeiros"}
+                { selected === 1 && "Registros de Contas"}
+                { selected === 2 && "Registro de Patrimônio"}
+                { selected === 3 && "Registro de Ocorrências"}
             </Title>
-            <Financial gridColumn={"span 2"} gridRow={"span 2"}>
+            <Financial gridcolumn={"span 2"} gridrow={"span 2"}>
                 { selected === 0 && <FinancialReport bqSelected={bqSelected} /> }
                 { selected === 1 && <Accounts/> }
                 { selected === 2 && <Heritage/> }

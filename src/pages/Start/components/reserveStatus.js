@@ -20,15 +20,15 @@ const ReservationStatus = (props) => {
     return (
         <ReserveStatus>
             <TextReservations>
-                <Top children={"Reservas Clientes Parko"} fontsize={17} />
+                <Top children={"Reservas Clientes Parko"} font={17} />
                 <RxInfoCircled color="#c4c4c4" size={22} />
             </TextReservations>
             <DivReservations>
                 {
                     btReservations.map(item => (
                         <BtReservations
-                            textColor={selected === item.id ? "#D64D4D" : "#c4c4c4"}
-                            borderBottom={selected === item.id ? "#D64D4D" : "transparent"}
+                            textcolor={selected === item.id ? "#D64D4D" : "#c4c4c4"}
+                            borderbottom={selected === item.id ? "#D64D4D" : "transparent"}
                             key={item.id}
                             onClick={() => setSelected(item.id)}
                         >

@@ -8,7 +8,7 @@ const Ratings = () => {
 
     return (
         <Container>
-            <Top children="Avaliações" fontsize={19} />
+            <Top children="Avaliações" font={19} />
             <Rate />
         </Container>
     )

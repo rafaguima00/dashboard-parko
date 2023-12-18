@@ -24,17 +24,17 @@ const OpeningHours = () => {
     const { openHour, closeHour } = useContext(ParkingContext);
 
     return (
-        <ContentInfo gridColumn={"span 2"} gridRow={"span 1"}>
+        <ContentInfo gridcolumn={"span 2"} gridrow={"span 1"}>
             <ButtonEdit onClick={routeScreen}>
                 <BiEdit size={22} color="#545454" />
             </ButtonEdit>
             <Menu>
-                <Warning textColor={neutralColor}>Em funcionamento de <strong>Segunda à Sábado</strong></Warning>
-                <Hour textColor={primaryColor}>
+                <Warning textcolor={neutralColor}>Em funcionamento de <strong>Segunda à Sábado</strong></Warning>
+                <Hour textcolor={primaryColor}>
                     {openHour.monday.hour}:{openHour.monday.minute}h - {closeHour.monday.hour}:{closeHour.monday.minute}h
                 </Hour>
                 <hr/>
-                <Warning textColor={cancelColor}><strong>Não funcionamos nos feriados</strong></Warning>
+                <Warning textcolor={cancelColor}><strong>Não funcionamos nos feriados</strong></Warning>
             </Menu>
         </ContentInfo>
     )

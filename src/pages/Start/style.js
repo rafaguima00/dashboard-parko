@@ -43,11 +43,11 @@ export const DivReservations = styled.div`
 export const BtReservations = styled.button`
     background-color: transparent;
     border: 2px solid transparent;
-    border-bottom-color: ${props => props.borderBottom};
+    border-bottom-color: ${props => props.borderbottom};
     padding-bottom: .4rem;
     font-weight: 700;
     font-size: 16px;
-    color: ${props => props.textColor};
+    color: ${props => props.textcolor};
     
     &:hover {
         cursor: pointer;

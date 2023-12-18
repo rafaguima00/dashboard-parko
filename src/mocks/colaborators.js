@@ -1,4 +1,4 @@
-import avatar from "../assets/avatar.png";
+import avatar from "../assets/avatar3.png";
 import avatar1 from "../assets/avatar1.jpg";
 import avatar2 from "../assets/avatar2.jpg";
 

@@ -21,15 +21,15 @@ const PriceTable = () => {
     }
 
     return (
-        <ContentInfo gridColumn={3} gridRow={4}>
+        <ContentInfo gridcolumn={3} gridrow={4}>
             <ButtonEdit onClick={routeScreen}>
                 <BiEdit size={22} color={neutralColor} />
             </ButtonEdit>
             <Menu>
-                <Warning textColor={neutralColor}>Valor da hora</Warning>
-                <Hour textColor={primaryColor}>{formatCurrency(10, "BRL")+"/h"}</Hour>
+                <Warning textcolor={neutralColor}>Valor da hora</Warning>
+                <Hour textcolor={primaryColor}>{formatCurrency(10, "BRL")+"/h"}</Hour>
                 <hr/>
-                <Warning textColor={cancelColor}><strong>Não há tempo de tolerância</strong></Warning>
+                <Warning textcolor={cancelColor}><strong>Não há tempo de tolerância</strong></Warning>
             </Menu>
         </ContentInfo>
     )

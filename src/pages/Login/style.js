@@ -10,7 +10,7 @@ export const Container = styled.div`
 export const Image = styled.img`
     height: 100vh;
     width: 50vw;
-    background: ${props => props.backgroundImg};
+    background: ${props => props.backgroundimg};
 `
 
 export const WelcomeArea = styled.div`
@@ -98,7 +98,7 @@ export const NewPassword = styled.div`
 
 export const TextPassword = styled.p`
     font-size: 12px;
-    color: ${props => props.textColor};
+    color: ${props => props.textcolor};
     font-weight: 600;
     padding-right: 4px;
 `
@@ -121,7 +121,7 @@ export const Login = styled.button`
     padding: 12px;
     border: none;
     border-radius: 10px;
-    background-color: ${props => props.buttonColor};
+    background-color: ${props => props.btcolor};
     color: #fff;
 
     &:hover {

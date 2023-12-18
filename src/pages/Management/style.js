@@ -11,15 +11,15 @@ export const Container = styled.div`
 export const Title = styled.p`
     font-size: 19px;
     color: #545454;
-    grid-row: ${props => props.gridRow};
-    grid-column: ${props => props.gridColumn};
+    grid-row: ${props => props.gridrow};
+    grid-column: ${props => props.gridcolumn};
 `
 
 export const Financial = styled.div`
     padding: 1rem;
     border-radius: 1rem;
-    grid-row: ${props => props.gridRow};
-    grid-column: ${props => props.gridColumn};
+    grid-row: ${props => props.gridrow};
+    grid-column: ${props => props.gridcolumn};
     background-color: #fff;
     display: flex;
     flex-direction: column;

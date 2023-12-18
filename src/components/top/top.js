@@ -3,7 +3,7 @@ import { Text } from "./style";
 const Top = ({ 
     children,
     textcolor,
-    fontsize
+    font
 }) => {
 
     const firstWord = children.split(" ")[0];
@@ -12,7 +12,7 @@ const Top = ({
     return (
         <Text 
             textcolor={textcolor}
-            fontsize={fontsize}
+            font={font}
         >
             <strong>{firstWord}</strong> {removeFirstWord}
         </Text>

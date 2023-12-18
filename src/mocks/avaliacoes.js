@@ -22,5 +22,5 @@ export const rating = [
         id: 27,
         name: "Jorge",
         comment: ``
-    },
+    }
 ]

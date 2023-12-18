@@ -24,7 +24,7 @@ const Colaborators = () => {
     }
 
     return (
-        <ContentInfo gridColumn={2} gridRow={4}>
+        <ContentInfo gridcolumn={2} gridrow={4}>
             <Section>
                 {colaborators.map(item => ( 
                     <Profile key={item.id}>

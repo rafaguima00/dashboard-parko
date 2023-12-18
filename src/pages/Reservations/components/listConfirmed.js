@@ -48,8 +48,8 @@ const ListConfirmedReserve = () => {
                 confirmedReserve.map((item, index) => (
                     <ListBody key={item.id}>
                         <ElementList
-                            backgroundColor={clicked === index ? "#523499" : "#f4f4f4"}
-                            textColor={clicked === index ? "#fff" : "#7c7c7c"}
+                            backgroundcolor={clicked === index ? "#523499" : "#f4f4f4"}
+                            textcolor={clicked === index ? "#fff" : "#7c7c7c"}
                             onClick={() => handleOnClick({ index, item })}
                         >
                             <ItemList>{item.id}</ItemList>

@@ -99,10 +99,10 @@ const Form = () => {
                     <MessageError>{messageError}</MessageError>
                 }
                 <NewPassword>
-                    <TextPassword textColor={primaryColor}>Esqueceu a senha?</TextPassword>
+                    <TextPassword textcolor={primaryColor}>Esqueceu a senha?</TextPassword>
                     <BtPassword>Crie uma nova</BtPassword>
                 </NewPassword>
-                <Login buttonColor={primaryColor} type="submit" onClick={() => handleSubmit(onSubmit)()}>Login</Login>
+                <Login btcolor={primaryColor} type="submit" onClick={() => handleSubmit(onSubmit)()}>Login</Login>
             </FormContent>
         </AreaForm>
     )

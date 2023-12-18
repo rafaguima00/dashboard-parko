@@ -10,7 +10,7 @@ const Login = () => {
 
     return (
         <Container>
-            <Image backgroundImg={primaryColor} src={bgImage} />
+            <Image backgroundimg={primaryColor} src={bgImage} />
             <Welcome />
             <Form />
         </Container>

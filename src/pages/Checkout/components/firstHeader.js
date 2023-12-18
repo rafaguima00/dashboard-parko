@@ -9,11 +9,11 @@ import Top from "../../../components/top/top";
 const FirstHeader = () => {
     return (
         <Title>
-            <Top children="Caixa Aberto" fontsize={19} />
+            <Top children="Caixa Aberto" font={19} />
             <IconGroup>
-                <Icon><BsPrinter size={16} color="#545454" /></Icon>
-                <Icon><BsDownload size={16} color="#545454" /></Icon>
-                <Icon><BsCalendar4 size={16} color="#545454" /></Icon>
+                <Icon><BsPrinter size={16} color="#545454"/></Icon>
+                <Icon><BsDownload size={16} color="#545454"/></Icon>
+                <Icon><BsCalendar4 size={16} color="#545454"/></Icon>
             </IconGroup>
         </Title>
     )

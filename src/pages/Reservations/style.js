@@ -203,8 +203,8 @@ export const ListBody = styled.div`
 `
 
 export const ElementList = styled.button`
-    background-color: ${props => props.backgroundColor};
-    color: ${props => props.textColor};
+    background-color: ${props => props.backgroundcolor};
+    color: ${props => props.textcolor};
     display: grid;
     grid-template-columns: 50px repeat(2, 120px) 60px 140px 50px;
     justify-content: space-evenly;

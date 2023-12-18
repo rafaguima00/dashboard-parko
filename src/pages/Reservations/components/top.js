@@ -10,7 +10,7 @@ import Top from "../../../components/top/top";
 const TopContent = () => {
     return (
         <TopItem>
-            <Top children="Reservas Abertas" fontsize={19}/>
+            <Top children="Reservas Abertas" font={19}/>
             <InputGroup>
                 <InputSearch type="text" placeholder="Procurar" />
                 <Icon>

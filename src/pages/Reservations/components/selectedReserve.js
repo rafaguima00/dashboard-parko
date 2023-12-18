@@ -16,8 +16,11 @@ import {
 } from "../style";
 import { formatCurrency } from "../../../services/formatCurrency";
 import Top from "../../../components/top/top";
+import { theme } from "../../../theme/theme";
 
 const SelectedReserve = () => {
+
+    const { neutralColor } = theme;
 
     const { selectedClient } = useContext(GlobalContext);
     const {
@@ -37,7 +40,7 @@ const SelectedReserve = () => {
 
     return (
         <Content>
-            <Top children="Reserva Selecionada" fontsize={19}/>
+            <Top children="Reserva Selecionada" font={19}/>
             <List>
                 <section>
                     <GridItems>
@@ -72,7 +75,7 @@ const SelectedReserve = () => {
                     {debt > 0 &&
                         <div>
                             <TextOption>
-                                Dívida Total <strong style={{ color: '#d64d4d' }}>{formatCurrency(debt, 'BRL')}</strong>
+                                Dívida Total <strong style={{ color: neutralColor }}>{formatCurrency(debt, 'BRL')}</strong>
                             </TextOption>
                             <Payment>
                                 <Select name="select">
@@ -100,8 +103,8 @@ const SelectedReserve = () => {
                             }
                         </Receive>
                         <Payment>
-                            <Select name="select">
-                                <option value="credit-parko" selected>Crédito Parko</option>
+                            <Select>
+                                <option value="credit-parko">Crédito Parko</option>
                                 <option value="debit">Débito Parko</option>
                                 <option value="pix">Pix Parko</option>
                                 <option value="credit">Crédito Pessoal</option>

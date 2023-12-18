@@ -15,9 +15,9 @@ const SecondHeader = () => {
 
     return (
         <SecondTitle>
-            <Top children="Reservas Fechadas" fontsize={19} />
+            <Top children="Reservas Fechadas" font={19} />
             <IconGroup>
-                <InputSearch inputColor={primaryColor} type="text" placeholder="Procurar" />
+                <InputSearch inputcolor={primaryColor} type="text" placeholder="Procurar" />
                 <Icon><BiEdit size={19} color="#545454" /></Icon>
                 <Icon><BsCalendar4 size={16} color="#545454" /></Icon>
                 <Icon><BsDownload size={16} color="#545454" /></Icon>
