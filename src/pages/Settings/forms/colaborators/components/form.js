@@ -1,13 +1,15 @@
 import { 
-    FormContent,
-    Image,
-    Edit,
-    DivImage,
     DivInput,
     Label,
     Input,
     DivButton
 } from "../../style";
+import { 
+    FormContent,
+    DivImage, 
+    Image, 
+    Edit 
+} from "../style";
 import avatar from "../../../../../assets/avatar.png";
 import { FaRegEdit } from "react-icons/fa";
 import { forms } from "../map";

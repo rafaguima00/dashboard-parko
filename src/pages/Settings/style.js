@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-    margin: 2rem 2.5rem 2rem 0;
+    margin: 2rem 2.5rem 1.5rem 0;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: 3% 1fr 3% 1fr;
@@ -19,7 +19,7 @@ export const ContentInfo = styled.div`
 
 export const Title = styled.p`
     font-size: 19px;
-    color: #545454;
+    color: ${props => props.textcolor};
     background-color: ${props => props.background};
     grid-column: ${props => props.gridcolumn};
     grid-row: ${props => props.gridrow};
@@ -75,7 +75,7 @@ export const TextArea = styled.div`
 `
 
 export const P = styled.p`
-    font-size: 14px;
+    font-size: 16px;
 `
 
 export const Name = styled.p`

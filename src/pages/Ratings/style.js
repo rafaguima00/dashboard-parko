@@ -31,34 +31,12 @@ export const Container = styled.div`
     }
 `
 
-export const Title = styled.p`
-    font-size: 19px;
-    color: #545454;
-`
-
 export const Profile = styled.div`
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 6px;
     padding-bottom: 1rem;
-
-    div {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        gap: 6px;
-    }
-
-    span {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        gap: 1px;
-    }
 `
 
 export const ImageProfile = styled.img`
@@ -71,10 +49,9 @@ export const ImageProfile = styled.img`
 
 export const UserName = styled.p`
     font-size: 15px;
-    color: #545454;
+    color: ${props => props.textcolor};
     background-color: transparent;
     border: none;
-    margin-left: 6px;
     width: 9rem;
     text-align: start;
 `
@@ -98,4 +75,11 @@ export const Comments = styled.div`
         font-size: 14px;
         text-align: center;
     }
+`
+
+export const Space = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: .4rem;
 `

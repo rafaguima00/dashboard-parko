@@ -164,7 +164,8 @@ export const ParkingInfo = styled.div`
 `
 
 export const Title = styled.div`
-    font-size: 26px;
+    font-size: 28px;
+    font-weight: 700;
 `
 
 export const Subtitle = styled.p`

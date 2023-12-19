@@ -6,7 +6,7 @@ import {
     Name,
     P,
     GroupButton
-} from "../../style";
+} from "../style";
 import { colaborators } from "../../../../../mocks/colaborators";
 import GlobalButton from "../../../../../components/button/button";
 

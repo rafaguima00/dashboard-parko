@@ -37,11 +37,17 @@ export const Financial = styled.div`
 export const Button = styled.button`
     background: none;
     border: none;
-    font-size: 18px;
+    font-size: ${props => props.font ? props.font : 18}px;
+    font-weight: ${props => props.bold ? "700" : "400"};
     color: ${props => props.textcolor};
     border: 2px solid transparent;
     border-bottom-color: ${props => props.borderbottom};
     padding: .5rem .8rem .5rem 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: .6rem;
 
     &:hover {
         cursor: pointer;
@@ -58,7 +64,7 @@ export const Span = styled.span`
 export const Div = styled.div`
     background-color: #fff;
     height: ${props => props.height}%;
-    padding: 1rem;
+    padding: 2rem 3rem 1rem;
     border-radius: 1rem;
     position: relative;
 `
@@ -67,12 +73,11 @@ export const BlockQuote = styled.button`
     display: block;
     background: none;
     border: none;
-    font-size: 17px;
+    font-size: 16px;
     color: ${props => props.textcolor};
     border: 2px solid transparent;
     border-bottom-color: ${props => props.borderbottom};
     padding: 0 2rem;
-    font-weight: 500;
 
     &:hover {
         cursor: pointer;
@@ -81,6 +86,7 @@ export const BlockQuote = styled.button`
 
 export const Section = styled.span`
     margin-left: 5rem;
+    display: ${props => props.display};
 `
 
 export const Icon = styled.button`
@@ -98,15 +104,11 @@ export const Icon = styled.button`
 
 export const Footer = styled.footer`
     display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
     gap: .5rem;
     height: 92%;
     color: #c7c7c7;
     font-size: 15px;
-
-    p:hover {
-        cursor: pointer;
-    }
 `

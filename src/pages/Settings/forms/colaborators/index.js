@@ -1,8 +1,6 @@
 import TopForm from "../../components/topForm";
-import { 
-    ContainerForm,
-    ContentView
-} from "../style";
+import { ContainerForm } from "../style";
+import { ContentView } from "./style";
 import { theme } from "../../../../theme/theme";
 import FormColaborator from "./components/form";
 import ListColaborators from "./components/listColaborators";

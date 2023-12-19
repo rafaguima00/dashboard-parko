@@ -51,7 +51,7 @@ export const NavBar = styled.nav`
 export const Path = styled.button`
     color: #fff;
     font-size: 17px;
-    font-weight: 500;
+    font-weight: 400;
     background-color: transparent;
     border: none;
 

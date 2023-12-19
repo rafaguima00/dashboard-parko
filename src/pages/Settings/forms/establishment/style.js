@@ -1,40 +1,14 @@
 import styled from "styled-components";
 
-export const ContainerForm = styled.div`
-    padding-top: 6rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3.5rem;
-`
-
-export const Top = styled.div`
+export const Form = styled.form`
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 1021px;
-    position: relative;
-`
-
-export const Icon = styled.button`
-    background: none;
-    border: none;
-    position: absolute;
-    left: 0;
-
-    &:hover {
-        cursor: pointer;
-    }
-
-    &:active {
-        opacity: 0.7;
-    }
-`
-
-export const Text = styled.p`
-    color: ${props => props.textcolor};
-    font-size: 19px;
+    flex-wrap: wrap;
+    column-gap: 1rem;
+    justify-content: space-between;
+    align-items: stretch;
+    width: 64rem;
+    height: 30rem;
 `
 
 export const DivInput = styled.div`
@@ -66,7 +40,7 @@ export const Input = styled.input`
 `
 
 export const DivButton = styled.div`
-    width: 100%;
+    width: 64rem;
     display: flex;
     flex-direction: row;
     justify-content: center;

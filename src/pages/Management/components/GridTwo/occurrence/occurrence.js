@@ -1,4 +1,4 @@
-import { Div, Span } from "../style";
+import { Div, Span } from "../../../style";
 
 const Occurrence = () => {
     return (

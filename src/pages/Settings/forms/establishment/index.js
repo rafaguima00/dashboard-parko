@@ -1,11 +1,11 @@
+import { ContainerForm } from "../style";
 import { 
-    ContainerForm, 
-    DivInput,
     Form,
+    DivInput,
     Label,
     Input,
     DivButton
-} from "../style";
+} from "./style";
 import { theme } from "../../../../theme/theme";
 import { forms } from "./map";
 import GlobalButton from "../../../../components/button/button";

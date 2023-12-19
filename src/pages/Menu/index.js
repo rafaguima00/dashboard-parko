@@ -11,7 +11,8 @@ const Menu = () => {
         display: "flex",
         flexDirection: "row",
         gap: 16,
-        padding: 16
+        padding: 16,
+        fontWeight: 400
     }
 
     const styleSelected = {
@@ -22,7 +23,8 @@ const Menu = () => {
         backgroundColor: "#f4f4f4",
         padding: 16,
         borderBottomLeftRadius: 10,
-        borderTopLeftRadius: 10
+        borderTopLeftRadius: 10,
+        fontWeight: 400
     }
 
     const textSelected = {

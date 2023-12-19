@@ -31,7 +31,7 @@ const OpeningHours = () => {
             <Menu>
                 <Warning textcolor={neutralColor}>Em funcionamento de <strong>Segunda à Sábado</strong></Warning>
                 <Hour textcolor={primaryColor}>
-                    {openHour.monday.hour}:{openHour.monday.minute}h - {closeHour.monday.hour}:{closeHour.monday.minute}h
+                    {openHour.monday}h - {closeHour.monday}h
                 </Hour>
                 <hr/>
                 <Warning textcolor={cancelColor}><strong>Não funcionamos nos feriados</strong></Warning>
