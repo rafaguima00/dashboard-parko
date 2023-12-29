@@ -2,14 +2,14 @@ import Top from "../../../../../../components/top/top";
 import { Table, Icon, Body } from "../style";
 import { FiEye } from "react-icons/fi";
 import { TbDownload } from "react-icons/tb";
-import { cash } from "../../../../map/tableCash"
+import { cash } from "../../../../map/tableCash";
 
 const Cash = (props) => {
 
     const { neutralColor } = props;
 
     return (
-        <div>
+        <>
             <Top 
                 children="Faturamento e caixa"
                 textcolor={neutralColor}
@@ -41,7 +41,7 @@ const Cash = (props) => {
                     </Body>
                 </Table>
             </span>
-        </div>
+        </>
     )
 }
 

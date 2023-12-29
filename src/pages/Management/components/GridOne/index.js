@@ -1,5 +1,5 @@
+import Top from "../../../../components/top/top";
 import {
-    Title, 
     Financial,
     Button,
     BlockQuote,
@@ -14,9 +14,7 @@ const GridOne = (props) => {
 
     return (
         <>
-            <Title gridcolumn={1} gridrow={1}>
-                <strong>Gestão</strong>
-            </Title>
+            <Top children="Gestão" font={19} gridcolumn={1} gridrow={1}/>
             <Financial gridcolumn={1} gridrow={"span 2"}>
                 {buttons.map(item => (
                     <div key={item.id} style={{ width: "100%" }}>
@@ -24,6 +22,7 @@ const GridOne = (props) => {
                             textcolor={selected === item.id ? neutralColor : "#7d7d7d"}
                             borderbottom={selected === item.id ? primaryColor : "transparent"}
                             bold={selected === item.id && true}
+                            paddingright={".8rem"}
                             onClick={() => setSelected(item.id)}
                         >
                             {item.name}
@@ -35,10 +34,11 @@ const GridOne = (props) => {
                                 {blockquote.map(item => (
                                     <BlockQuote 
                                         textcolor={bqSelected === item.id ? "#858585" : "#b7b7b7"}
+                                        bold={bqSelected === item.id ? 700 : 400}
                                         key={item.id}
                                         onClick={() => setBqSelected(item.id)}
                                     >
-                                        {item.name}
+                                        <p>{item.name}</p>
                                     </BlockQuote>
                                 ))}
                             </Section>

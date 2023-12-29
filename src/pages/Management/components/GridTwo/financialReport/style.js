@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const Table = styled.table`
     margin: 1rem 0 0;
     width: 100%;
+    border-collapse: collapse;
 
     tr {
         height: 3rem;

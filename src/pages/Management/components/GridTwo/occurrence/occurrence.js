@@ -1,10 +1,17 @@
-import { Div, Span } from "../../../style";
+import { Div } from "./style";
+import { theme } from "../../../../../theme/theme";
+import Register from "./components/register";
+import FormOcurrence from "./components/formOcurrence";
 
 const Occurrence = () => {
+
+    const { primaryColor, neutralColor, cancelColor, greenColor } = theme;
+
     return (
-        <Span>
-            <Div height={100}>Registro de Ocorrências</Div>
-        </Span>
+        <Div>
+            <Register primaryColor={primaryColor} neutralColor={neutralColor} />
+            <FormOcurrence colors={{ cancelColor, greenColor, primaryColor }} />
+        </Div>
     )
 }
 

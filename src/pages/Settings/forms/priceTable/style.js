@@ -9,7 +9,6 @@ export const Form = styled.div`
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    border: 2px solid #000;
 `
 
 export const Label = styled.label`
@@ -65,4 +64,9 @@ export const Column = styled.div`
     display: flex;
     flex-direction: column;
     gap: 2rem;
+`
+
+export const Block = styled.div`
+    display: block;
+    margin: auto;
 `

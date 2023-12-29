@@ -1,34 +1,21 @@
-import { 
-    Container,
-    Title
-} from "./style";
+import { Container } from "./style";
 import Establishment from "./components/establishment";
 import Colaborators from "./components/colaborators";
 import PriceTable from "./components/priceTable";
 import OpeningHours from "./components/openingHours";
-import { theme } from "../../theme/theme";
+import Top from "../../components/top/top";
 
 const Settings = () => {
-
-    const { neutralColor } = theme;
     
     return (
         <Container>
-            <Title gridcolumn={1} gridrow={1} textcolor={neutralColor}>
-                <strong>Meu</strong> estabelecimento
-            </Title>
+            <Top children="Meu estabelecimento" gridcolumn={1} gridrow={1} font={19}/>
             <Establishment />
-            <Title gridcolumn={"span 2"} gridrow={1} textcolor={neutralColor}>
-                <strong>Horário</strong> de funcionamento
-            </Title>
+            <Top children="Horário de funcionamento" gridcolumn={"span 2"} gridrow={1} font={19}/>
             <OpeningHours />
-            <Title gridcolumn={2} gridrow={3} textcolor={neutralColor}>
-                <strong>Nossos</strong> colaboradores
-            </Title>
+            <Top children="Nossos colaboradores" gridcolumn={2} gridrow={3} font={19}/>
             <Colaborators />
-            <Title gridcolumn={3} gridrow={3} textcolor={neutralColor}>
-                <strong>Tabela</strong> de preço
-            </Title>
+            <Top children="Tabela de preço" gridcolumn={3} gridrow={3} font={19}/>
             <PriceTable />
         </Container>
     )

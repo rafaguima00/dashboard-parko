@@ -3,7 +3,9 @@ import { Text } from "./style";
 const Top = ({ 
     children,
     textcolor,
-    font
+    font,
+    gridrow,
+    gridcolumn
 }) => {
 
     const firstWord = children.split(" ")[0];
@@ -13,6 +15,8 @@ const Top = ({
         <Text 
             textcolor={textcolor}
             font={font}
+            gridrow={gridrow}
+            gridcolumn={gridcolumn}
         >
             <strong>{firstWord}</strong> {removeFirstWord}
         </Text>

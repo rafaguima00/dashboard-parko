@@ -14,10 +14,17 @@ import avatar from "../../../../../assets/avatar.png";
 import { FaRegEdit } from "react-icons/fa";
 import { forms } from "../map";
 import GlobalButton from "../../../../../components/button/button";
+import { useNavigate } from "react-router-dom";
 
 const FormColaborator = (props) => {
 
     const { primaryColor, neutralColor, cancelColor, greenColor } = props.theme;
+
+    const navigate = useNavigate();
+
+    const screenBack = () => {
+        return navigate("/settings")
+    }
 
     return (
         <FormContent>
@@ -45,6 +52,7 @@ const FormColaborator = (props) => {
                     background={cancelColor}
                     largura={"12rem"}
                     altura={"2.8rem"}
+                    aoPressionar={screenBack}
                 />
                 <GlobalButton 
                     children="Salvar"

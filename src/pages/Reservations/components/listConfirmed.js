@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../../../context/globalContext";
 import {
     List,
@@ -33,6 +33,11 @@ const ListConfirmedReserve = () => {
             debt: item.debt
         })
     }
+
+    useEffect(() => {
+        const indexOf = confirmedReserve.values().next().value;
+        setSelectedClient(indexOf)
+    }, [])
 
     return (
         <List>

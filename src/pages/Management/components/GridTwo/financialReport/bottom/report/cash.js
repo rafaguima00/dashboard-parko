@@ -1,4 +1,4 @@
-import { Table, Head, Th, Td } from "../style";
+import { Block, Table, Head, Th, Td } from "../style";
 import { cashFlow } from "../../../../../map/cashFlow";
 import { formatCurrency } from "../../../../../../../services/formatCurrency";
 
@@ -11,7 +11,7 @@ const ReportCash = (props) => {
     }
 
     return (
-        <div>
+        <Block>
             <Table>
                 <Head textcolor="#bababa">
                     <tr>
@@ -32,7 +32,7 @@ const ReportCash = (props) => {
                     ))}
                 </tbody>
             </Table>
-        </div>
+        </Block>
     )
 }
 
