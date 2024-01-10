@@ -163,7 +163,7 @@ export const ParkingInfo = styled.div`
     align-items: center;
 `
 
-export const Title = styled.div`
+export const TitleLine = styled.div`
     font-size: 28px;
     font-weight: 700;
 `
@@ -176,15 +176,15 @@ export const Subtitle = styled.p`
 export const Info = styled.div`
     position: relative;
     background-color: #fff;
-    padding: 1.3rem;
     border-radius: 10px;
     margin-bottom: 10px;
-    text-align: center;
     color: #523499;
     height: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
+    align-items: center;
+    gap: 1rem;
 
     &:first-child {
         background-color: #523499;
@@ -194,6 +194,10 @@ export const Info = styled.div`
     &:last-child {
         margin-bottom: 0;
     }
+`
+
+export const TextAligned = styled.span`
+    text-align: center;
 `
 
 export const GroupButton = styled.div`

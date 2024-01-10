@@ -15,9 +15,9 @@ import HeritageAndStock from "./subComponents/heritageAndStock";
 import { theme } from "../../../../../theme/theme";
 import ReportCash from "./bottom/report/cash";
 import { useState } from "react";
-import GraphicFlow from "./bottom/graphics/cash";
-import GraphicClient from "./bottom/graphics/client";
-import GraphicCosts from "./bottom/graphics/costs";
+import GraphicFlow from "./bottom/graphics/cash/cash";
+import GraphicClient from "./bottom/graphics/costumer/client";
+import GraphicCosts from "./bottom/graphics/costs/costs";
 import ReportClient from "./bottom/report/client";
 import ReportCosts from "./bottom/report/costs";
 

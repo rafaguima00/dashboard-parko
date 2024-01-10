@@ -6,7 +6,7 @@ import { GroupInput, InputSearch } from "../style";
 
 const InputGroup = (props) => {
 
-    const { neutralColor, primaryColor } = props;
+    const { neutralColor, primaryColor, setFilterDate, setCount } = props;
 
     return (
         <GroupInput>
@@ -15,6 +15,7 @@ const InputGroup = (props) => {
                 paddingright={".5rem"} 
                 paddingleft={".5rem"}
                 borderradius={".5rem"}
+                onClick={() => setFilterDate(true)}
             >
                 <GoCalendar size={19} color={neutralColor}/>
             </Button>
@@ -31,6 +32,7 @@ const InputGroup = (props) => {
                 paddingright={".5rem"} 
                 paddingleft={".5rem"}
                 borderradius={".5rem"}
+                onClick={() => setCount(true)}
             >
                 <HiOutlinePlus size={19} color="#fff"/>
             </Button>

@@ -5,7 +5,7 @@ import { GroupInput, InputSearch } from "../style";
 
 const InputGroup = (props) => {
 
-    const { neutralColor, primaryColor } = props;
+    const { neutralColor, primaryColor, setNewItem } = props;
 
     return (
         <GroupInput>
@@ -22,6 +22,7 @@ const InputGroup = (props) => {
                 paddingright={".5rem"} 
                 paddingleft={".5rem"}
                 borderradius={".5rem"}
+                onClick={() => setNewItem(true)}
             >
                 <HiOutlinePlus size={19} color="#fff"/>
             </Button>

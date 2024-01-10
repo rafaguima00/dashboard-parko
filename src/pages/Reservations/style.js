@@ -252,7 +252,7 @@ export const InfoReservation = styled.div`
 `
 
 export const Edit = styled.button`
-    padding: 8px 16px;
+    padding: .5rem 1rem;
     border: solid 2px #523499;
     border-radius: 6px;
     color: #523499;

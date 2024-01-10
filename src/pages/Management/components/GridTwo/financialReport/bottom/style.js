@@ -7,16 +7,6 @@ export const Table = styled.table`
     tr {
         height: 2.7rem;
     }
-
-    /* th:first-child {
-        width: 25%;
-        text-align: center;
-    }
-
-    th:last-child {
-        width: 25%;
-        text-align: center;
-    } */
 `
 
 export const Head = styled.thead`
@@ -77,4 +67,12 @@ export const Div = styled.div`
 export const Month = styled.p`
     font-weight: 700;
     font-size: 16px;
+`
+
+export const GraphicElement = styled.div`
+    width: ${props => props.largura}%;
+    height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `

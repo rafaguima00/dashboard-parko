@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { GlobalContext } from "../../../context/globalContext";
 import {
     Content,
@@ -17,6 +17,9 @@ import {
 import { formatCurrency } from "../../../services/formatCurrency";
 import Top from "../../../components/top/top";
 import { theme } from "../../../theme/theme";
+import Modal from "../../../components/Modal";
+import EditModal from "../form/edit";
+import DebtPayment from "../form/debtPayment";
 
 const SelectedReserve = () => {
 
@@ -38,6 +41,9 @@ const SelectedReserve = () => {
 
     const change = valorAReceber - value;
 
+    const [openEdit, setOpenEdit] = useState(false);
+    const [openDebt, setOpenDebt] = useState(false);
+
     return (
         <Content>
             <Top children="Reserva Selecionada" font={19}/>
@@ -46,7 +52,7 @@ const SelectedReserve = () => {
                     <GridItems>
                         <InfoReservation>
                             <strong>Número reserva: </strong>
-                            <p>{id ? id : ''}</p>
+                            <p>{id}</p>
                         </InfoReservation>
                         <InfoReservation>
                             <strong>Placa: </strong>
@@ -69,7 +75,19 @@ const SelectedReserve = () => {
                             <p>{dateExit}</p>
                         </InfoReservation>
                     </GridItems>
-                    <Edit>Editar</Edit>
+                    <Edit
+                        onClick={() => setOpenEdit(true)}
+                    >
+                        Editar
+                    </Edit>
+                    <Modal
+                        isOpen={openEdit}
+                        setOpen={setOpenEdit}
+                        title={`Nº ${id}`}
+                        maxWidth={"52rem"}
+                    >
+                        <EditModal selectedClient={selectedClient} />
+                    </Modal>
                 </section>
                 <SecondSection>
                     {debt > 0 &&
@@ -87,7 +105,19 @@ const SelectedReserve = () => {
                                     <option value="money">Dinheiro</option>
                                 </Select>
                                 <Price>{formatCurrency(debt, 'BRL')}</Price>
-                                <Add>+</Add>
+                                <Add
+                                    onClick={() => setOpenDebt(true)}
+                                >
+                                    +
+                                </Add>
+                                <Modal
+                                    isOpen={openDebt}
+                                    setOpen={setOpenDebt}
+                                    title={"Pagamento de Dívida"}
+                                    maxWidth={"30rem"}
+                                >
+                                    <DebtPayment selectedClient={selectedClient} valorAReceber={valorAReceber} />
+                                </Modal>
                             </Payment>
                         </div>
                     }

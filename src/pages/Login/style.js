@@ -33,9 +33,8 @@ export const ElementText = styled.div`
 
 export const Slogan = styled.p`
     color: #f4f4f4;
-    font-size: 45px;
-    display: block;
-    margin: 0 56px 0 108px;
+    font-size: 52px;
+    margin: 0 25%;
     padding: 48px 0;
 `
 

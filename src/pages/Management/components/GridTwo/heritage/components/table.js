@@ -8,10 +8,22 @@ import {
     ListHeader, 
     Text
 } from "../style";
+import { heritage } from "../../../../../../mocks/patrimonio";
 
 const TableAccount = (props) => {
 
-    const { neutralColor } = props;
+    const { neutralColor, setEditItem, setChosenItem } = props;
+
+    const returnData = ({ item }) => {
+        setChosenItem({
+            id: item.id,
+            code: item.code,
+            item:  item.item,
+            category: item.category,
+            quantity: item.quantity
+        })
+        setEditItem(true)
+    }
 
     return (
         <List>
@@ -23,34 +35,22 @@ const TableAccount = (props) => {
                 <Text textcolor="#bababa">Ação</Text>
             </ListHeader>
             <ListBody>
-                <ElementList>
-                    <Text textcolor="#7c7c7c">0001</Text>
-                    <Text textcolor="#7c7c7c">Meterial de escritório</Text>
-                    <Text textcolor="#7c7c7c">1</Text>
-                    <Text textcolor="#7c7c7c">Caixa de canetas</Text>
-                    <GroupButton marginright={".5rem"} largura={"100%"} background="#fff">
-                        <button>
-                            <FiEdit color={neutralColor} size={19}/>
-                        </button>
-                        <button>
-                            <AiOutlineDelete color={neutralColor} size={19}/>
-                        </button>
-                    </GroupButton> 
-                </ElementList>
-                <ElementList>
-                    <Text textcolor="#7c7c7c">0002</Text>
-                    <Text textcolor="#7c7c7c">Imóvel</Text>
-                    <Text textcolor="#7c7c7c">1</Text>
-                    <Text textcolor="#7c7c7c">Terreno Loja 1</Text>
-                    <GroupButton marginright={".5rem"} largura={"100%"} background="#fff">
-                        <button>
-                            <FiEdit color={neutralColor} size={19}/>
-                        </button>
-                        <button>
-                            <AiOutlineDelete color={neutralColor} size={19}/>
-                        </button>
-                    </GroupButton> 
-                </ElementList>
+                {heritage.map(item => (
+                    <ElementList key={item.id}>
+                        <Text textcolor="#7c7c7c">{item.code}</Text>
+                        <Text textcolor="#7c7c7c">{item.category}</Text>
+                        <Text textcolor="#7c7c7c">{item.quantity}</Text>
+                        <Text textcolor="#7c7c7c">{item.name}</Text>
+                        <GroupButton marginright={".5rem"} largura={"100%"} background="#fff">
+                            <button onClick={() => returnData({item})}>
+                                <FiEdit color={neutralColor} size={19}/>
+                            </button>
+                            <button>
+                                <AiOutlineDelete color={neutralColor} size={19}/>
+                            </button>
+                        </GroupButton> 
+                    </ElementList>
+                ))}
             </ListBody>
         </List>
     )
