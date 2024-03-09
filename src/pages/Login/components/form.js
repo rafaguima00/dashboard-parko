@@ -13,45 +13,63 @@ import {
 import { useState, useContext } from "react";
 import { GlobalContext } from "../../../context/globalContext";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import validator from "validator";
 import { theme } from "../../../theme/theme";
+import api from "../../../services/api/server";
 
 const Form = () => {
 
     const [error, setError] = useState(false);
     const [messageError, setMessageError] = useState("");
 
-    const { setDataClient, dataClient } = useContext(GlobalContext);
-
+    const { 
+        setDataClient, 
+        dataClient, 
+        setPark, 
+        setColaborators,
+    } = useContext(GlobalContext);
     const { primaryColor } = theme;
-
-    const {
-        register,
-        handleSubmit,
-        formState: { errors }
-    } = useForm();
 
     const navigate = useNavigate();
 
-    const onSubmit = (data) => {
-        const { email, password } = data;
+    const loadData = async () => {
+        await api.get(`/establishments/${dataClient.id_establishment}`)
+        .then(response => {
+            setPark(response.data[0]);
+        })
+        .catch(e => {
+            console.log(e)
+        })
+    }
 
-        if(email === "rafael@email.com" && password === '123456') {
-            const date = new Date().toLocaleString();
+    const listColaborators = async () => {
+        await api.get(`/colaborators/${dataClient.id_establishment}`)
+        .then(response => {
+            setColaborators(response.data);
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    }
 
-            setDataClient({ 
-                ...dataClient, 
-                username: "Rafael Moreira",
-                email: email,
-                password: password,
-                login: date
-            })
-            return navigate("/start")
-        } else {
-            setError(true)
-            setMessageError("E-mail ou senha incorretos")
-        }
+    const handleLogin = async (e) => {
+        e.preventDefault();
+
+        await api.post("/colaborators/login", {
+            email: dataClient.email,
+            password: dataClient.password
+        })
+        .then(response => {    
+            setDataClient(response.data);
+            loadData();
+            listColaborators();
+            return navigate("/start");
+        })
+        .catch(e => {
+            if(e.response.status === 400) {
+                setError(true)
+                setMessageError(e.response.data.message)
+            }
+        })
     }
 
     return (
@@ -64,17 +82,8 @@ const Form = () => {
                             type="email"
                             placeholder="Digite seu e-mail"
                             required
-                            {...register("email", {
-                                required: true,
-                                validate: (value) => validator.isEmail(value)
-                            })}
+                            onChange={e => setDataClient({ ...dataClient, email: e.target.value })}
                         />
-                        {errors?.email?.type === "required" &&
-                            <MessageError>E-mail é obrigatório</MessageError>
-                        }
-                        {errors?.email?.type === "validate" &&
-                            <MessageError>E-mail inválido</MessageError>
-                        }
                     </TextField>
                     <TextField>
                         <Label>Senha</Label>
@@ -82,17 +91,8 @@ const Form = () => {
                             type="password"
                             placeholder="Digite sua senha"
                             required
-                            {...register("password", {
-                                required: true,
-                                minLength: 6
-                            })}
+                            onChange={e => setDataClient({ ...dataClient, password: e.target.value })}
                         />
-                        {errors?.password?.type === "required" &&
-                            <MessageError>Senha é obrigatória</MessageError>
-                        }
-                        {errors?.password?.type === "minLength" &&
-                            <MessageError>A senha deve conter 6 ou mais caracteres</MessageError>
-                        }
                     </TextField>
                 </div>
                 { error &&
@@ -102,7 +102,7 @@ const Form = () => {
                     <TextPassword textcolor={primaryColor}>Esqueceu a senha?</TextPassword>
                     <BtPassword>Crie uma nova</BtPassword>
                 </NewPassword>
-                <Login btcolor={primaryColor} type="submit" onClick={() => handleSubmit(onSubmit)()}>Login</Login>
+                <Login btcolor={primaryColor} type="submit" onClick={(e) => handleLogin(e)}>Login</Login>
             </FormContent>
         </AreaForm>
     )

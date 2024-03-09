@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { GlobalContext } from "../../../context/globalContext";
 import { 
     List,
     ListHeader,
@@ -6,10 +8,15 @@ import {
     ElementList,
     ItemList
 } from "../style";
-import { confirmedReserve } from "../../../mocks/confirmadas";
 import { formatCurrency } from "../../../services/formatCurrency";
 
-const ListReserve = () => {
+const ListReserve = (props) => {
+
+    const { reservaConfirmada } = props;
+    const { dataClient } = useContext(GlobalContext);
+
+    const firstWord = dataClient.colaborator.split(" ")[0];
+
     return (
         <List>
             <ListHeader>
@@ -22,16 +29,16 @@ const ListReserve = () => {
                 <Text>Caixa</Text>
             </ListHeader>
             {
-                confirmedReserve.map((item, index) => (
+                reservaConfirmada.map((item, index) => (
                     <ListBody key={index}>
                         <ElementList>
                             <ItemList>{item.id}</ItemList>
                             <ItemList>{item.name}</ItemList>
-                            <ItemList>{item.vehicle}</ItemList>
+                            <ItemList>{item.name_vehicle}</ItemList>
                             <ItemList>{item.license_plate}</ItemList>
-                            <ItemList>{item.date_entry}</ItemList>
+                            <ItemList>{item.data_entrada}, {item.hora_entrada}</ItemList>
                             <ItemList>{formatCurrency(item.value, 'BRL')}</ItemList>
-                            <ItemList>Rafael</ItemList>
+                            <ItemList>{firstWord}</ItemList>
                         </ElementList>
                     </ListBody>
                 ))

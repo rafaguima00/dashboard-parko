@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import { GlobalContext } from "../../../context/globalContext";
 import {
     InfoReservation,
     GroupInfo,
@@ -15,15 +16,17 @@ import GlobalButton from "../../../components/button/button";
 import { theme } from "../../../theme/theme";
 import { Chart as ChartJS, ArcElement, Title } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
-import { data, options } from "../datasets/doughnut";
-import { dataClient, optionsClient } from "../datasets/dgClientSatisfation";
+import { datachart, options } from "../datasets/doughnut";
+import { dataCliente, optionsClient } from "../datasets/dgClientSatisfation";
 import Modal from "../../../components/Modal";
 import NewReservation from "../form/newReservation";
-import Confirmation from "../form/confirmation";
+import api from "../../../services/api/server";
 
 ChartJS.register(ArcElement, Title);
 
 const InfoReserve = () => {
+
+    const heightButton = "2.4rem";
 
     const styleIcon = {
         position: "absolute",
@@ -35,6 +38,99 @@ const InfoReserve = () => {
     const { primaryColor, cancelColor } = theme;
 
     const [open, setOpen] = useState(false);
+    const [data, setData] = useState({});
+    const [vehicles, setVehicles] = useState([]);
+    const [users, setUsers] = useState([]);
+
+    const { dataClient } = useContext(GlobalContext);
+
+    //função para guardar os dados de todos os veículos cadastrados na const 'vehicles'
+    const verifyVehicles = async () => {
+        await api.get("/vehicles")
+        .then(response => {
+            setVehicles(response.data);
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    }
+
+    //função para guardar os dados de todos os usuários cadastrados na const 'users'
+    const verifyUsers = async () => {
+        await api.get("/users")
+        .then(response => {
+            setUsers(response.data);
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    }
+
+    //1- pegar as informações do usuário e criar no banco de dados
+    const createUser = async () => {
+        await api.post("/users", { 
+            tel: data.tel,
+            name_user: data.name_user, 
+            email: "", 
+            cpf: "", 
+            rg: "", 
+            data_nasc: "",
+            password: ""
+        })
+        .then(() => {
+            const idUser = users.at(-1).id;
+            createVehicle(idUser);
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    }
+
+    //2- pegar as informações do veículo e criar no banco de dados
+    const createVehicle = async (id) => {
+        await api.post("/vehicles", {
+            id_costumer: id+1, 
+            name_vehicle: data.name_vehicle, 
+            color: data.color,
+            license_plate: data.license_plate
+        })
+        .then(() => {
+            createReservation();
+        })
+        .catch(e => {
+            console.log(e);
+        })
+        .finally(() => {
+            setOpen(false)
+        })
+    }
+
+    //3- feito isso, cadastrar a reserva no banco de dados
+    const createReservation = async () => {
+        const idUser = users.at(-1).id+1;
+        const idVehicle = vehicles.at(-1).id+1;
+        await api.post("/reservations", {
+            data_entrada: data.data_entrada,
+            hora_entrada: data.hora_entrada,
+            data_saida: data.data_entrada, //A data de saída é a mesma da entrada
+            hora_saida: data.hora_saida,
+            value: 10, 
+            id_costumer: idUser,
+            id_vehicle: idVehicle, 
+            id_establishment: dataClient.id_establishment 
+        })
+        .then(() => {
+            console.log("Operação realizada com sucesso")
+        })
+        .catch(e => {
+            console.log(e);
+        });
+    }
+
+    useEffect(() => {
+        verifyVehicles();
+        verifyUsers();
+    }, []);
 
     return (
         <InfoReservation>
@@ -46,7 +142,7 @@ const InfoReserve = () => {
                     </span>
                     <div style={{ width: 64, height: 64 }}>
                         <Doughnut
-                            data={data}
+                            data={datachart}
                             options={options}
                         />
                     </div>
@@ -72,7 +168,7 @@ const InfoReserve = () => {
                     </span>
                     <div style={{ width: 64, height: 64 }}>
                         <Doughnut
-                            data={dataClient}
+                            data={dataCliente}
                             options={optionsClient}
                         />
                     </div>
@@ -82,18 +178,18 @@ const InfoReserve = () => {
                 <GlobalButton
                     background={primaryColor}
                     children="+ Nova Reserva"
-                    altura={"2rem"}
+                    altura={heightButton}
                     aoPressionar={() => setOpen(true)}
                 />
                 <GlobalButton
                     background={primaryColor}
                     children="Abrir Caixa"
-                    altura={"2rem"}
+                    altura={heightButton}
                 />
                 <GlobalButton
                     background={cancelColor}
                     children="Fechar Caixa"
-                    altura={"2rem"}
+                    altura={heightButton}
                 />
             </GroupButton>
             <Modal 
@@ -101,8 +197,16 @@ const InfoReserve = () => {
                 setOpen={setOpen} 
                 title={"Nova Reserva"}
                 maxWidth={"52rem"}
+                funcao={createUser}
             >
-                <NewReservation />
+                <NewReservation 
+                    state={{
+                        data, 
+                        setData,
+                        vehicles,
+                        setVehicles
+                    }}
+                />
             </Modal>
         </InfoReservation>
     )

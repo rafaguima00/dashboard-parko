@@ -40,20 +40,20 @@ export const Profile = styled.button`
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     gap: .8rem;
     width: 100%;
-    background: none;
+    background: ${props => props.background};
     border: none;
     border-bottom: 1px solid ${props => props.bordercolor};
+    border-radius: 1rem;
     color: #fff;
-    padding: 1rem 0;
-
-    &:first-child {
-        padding-top: 0;
-    }
+    padding: 1rem;
+    margin-bottom: 1rem;
 
     &:last-child {
         border-bottom: none;
+        margin-bottom: 0;
     }
 
     &:hover {
@@ -124,4 +124,9 @@ export const FormContent = styled.form`
     gap: .8rem;
     width: 688px;
     height: 456px;
+`
+
+export const MessageError = styled.p`
+    font-size: 12px;
+    color: ${props => props.textcolor};
 `

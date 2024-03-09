@@ -18,7 +18,7 @@ const PriceTable = () => {
 
     const routeScreen = () => {
         return navigate("/settings/table");
-    }
+    };
 
     return (
         <ContentInfo gridcolumn={3} gridrow={4}>
@@ -27,12 +27,16 @@ const PriceTable = () => {
             </ButtonEdit>
             <Menu>
                 <Warning textcolor={neutralColor}>Valor da hora</Warning>
-                <Hour textcolor={primaryColor}>{formatCurrency(10, "BRL")+"/h"}</Hour>
+                <Hour textcolor={primaryColor}>
+                    {/* {formatCurrency(10, "BRL")+"/h"} */}
+                </Hour>
                 <hr/>
-                <Warning textcolor={cancelColor}><strong>Não há tempo de tolerância</strong></Warning>
+                <Warning textcolor={cancelColor}>
+                    {/* <strong>Não há tempo de tolerância</strong> */}
+                </Warning>
             </Menu>
         </ContentInfo>
     )
-}
+};
 
 export default PriceTable;

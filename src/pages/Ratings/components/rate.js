@@ -4,7 +4,9 @@ import {
     Space,
     UserName,
     Body,
-    Comments
+    Comments,
+    Div,
+    Note
 } from "../style";
 import camera from "../../../assets/camera.png";
 import { FaStar } from "react-icons/fa6";
@@ -23,7 +25,10 @@ const Rate = () => {
                         <ImageProfile src={camera} />
                         <Space>
                             <UserName textcolor={neutralColor}>{item.name}</UserName>
-                            <FaStar color={primaryColor} title="olá ndd"/>
+                            <Div>
+                                <FaStar color={primaryColor} children={"4.5"} />
+                                <Note>4.5</Note>
+                            </Div>
                         </Space>
                     </Profile>
                     <hr />

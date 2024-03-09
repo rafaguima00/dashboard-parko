@@ -1,13 +1,18 @@
-import { Form, DivInput, Input, Label } from "./style";
+import { Form, DivInput, Input, Label, InputNumber } from "./style";
 
-const Contribution = ({ primaryColor, neutralColor }) => {
+const Contribution = ({ primaryColor, neutralColor, state }) => {
+
+    const { novoAporte, setNovoAporte } = state;
+
     return (
         <Form>
             <DivInput largura={"45%"}>
                 <Label textcolor={neutralColor}>Valor</Label>
-                <Input 
-                    type="text" 
+                <InputNumber 
+                    type="number" 
                     bordercolor={primaryColor} 
+                    value={novoAporte.value}
+                    onChange={e => setNovoAporte({ ...novoAporte, value: e.target.value })}
                 />
             </DivInput>
             <DivInput largura={"45%"}>
@@ -15,6 +20,8 @@ const Contribution = ({ primaryColor, neutralColor }) => {
                 <Input 
                     type="datetime-local" 
                     bordercolor={primaryColor} 
+                    value={novoAporte.created_at}
+                    onChange={e => setNovoAporte({ ...novoAporte, created_at: e.target.value })}
                 />
             </DivInput>
             <DivInput largura={"100%"}>
@@ -22,6 +29,8 @@ const Contribution = ({ primaryColor, neutralColor }) => {
                 <Input 
                     type="text" 
                     bordercolor={primaryColor} 
+                    value={novoAporte.description}
+                    onChange={e => setNovoAporte({ ...novoAporte, description: e.target.value })}
                 />
             </DivInput>
         </Form>

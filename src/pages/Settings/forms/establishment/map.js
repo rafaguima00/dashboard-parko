@@ -49,13 +49,6 @@ export const forms = [
         largura: 670
     },
     {
-        id: 7,
-        type: "text",
-        label: "Sexo",
-        placeholder: "",
-        largura: 324
-    },
-    {
         id: 8,
         type: "text",
         label: "Endereço",

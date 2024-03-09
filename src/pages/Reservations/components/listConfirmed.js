@@ -8,10 +8,11 @@ import {
     ElementList,
     ItemList
 } from "../style";
-import { confirmedReserve } from "../../../mocks/confirmadas";
 import { formatCurrency } from "../../../services/formatCurrency";
 
-const ListConfirmedReserve = () => {
+const ListConfirmedReserve = (props) => {
+
+    const { reservaPendente } = props;
 
     const [clicked, setClicked] = useState(0);
 
@@ -22,22 +23,18 @@ const ListConfirmedReserve = () => {
 
         setSelectedClient({
             id: item.id,
-            idClient: item.id_cliente,
+            id_costumer: item.id_costumer,
             name: item.name,
-            clock: item.clock,
-            dateEntry: item.date_entry,
-            dateExit: item.date_exit,
-            vehicle: item.vehicle,
-            licensePlate: item.license_plate,
-            value: item.value,
-            debt: item.debt
+            tel: item.tel,
+            hora_entrada: item.hora_entrada,
+            data_entrada: item.data_entrada,
+            data_saida: item.data_saida,
+            name_vehicle: item.name_vehicle,
+            color: item.color,
+            license_plate: item.license_plate,
+            value: item.value
         })
     }
-
-    useEffect(() => {
-        const indexOf = confirmedReserve.values().next().value;
-        setSelectedClient(indexOf)
-    }, [])
 
     return (
         <List>
@@ -50,7 +47,9 @@ const ListConfirmedReserve = () => {
                 <Text>Valor</Text>
             </ListHeader>
             {
-                confirmedReserve.map((item, index) => (
+                reservaPendente.length === 0 ?
+                <div>Nenhuma reserva aberta no momento</div> :
+                reservaPendente.map((item, index) => (
                     <ListBody key={item.id}>
                         <ElementList
                             backgroundcolor={clicked === index ? "#523499" : "#f4f4f4"}
@@ -59,9 +58,9 @@ const ListConfirmedReserve = () => {
                         >
                             <ItemList>{item.id}</ItemList>
                             <ItemList>{item.name}</ItemList>
-                            <ItemList>{item.vehicle}</ItemList>
+                            <ItemList>{item.name_vehicle}</ItemList>
                             <ItemList>{item.license_plate}</ItemList>
-                            <ItemList>{item.date_entry}</ItemList>
+                            <ItemList>{item.data_entrada}, {item.hora_entrada}</ItemList>
                             <ItemList>{formatCurrency(item.value, 'BRL')}</ItemList>
                         </ElementList>
                     </ListBody>

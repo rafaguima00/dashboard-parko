@@ -60,6 +60,33 @@ export const InputText = styled.input`
     padding: 6px;
 `
 
+export const InputNumber = styled.input`
+    padding: .5rem;
+    background: none;
+    border: 1px solid ${props => props.bordercolor};
+    border-radius: .5rem;
+    width: ${props => props.largura}px;
+    height: 2rem;
+    -moz-appearance: textfield;
+    appearance: textfield;
+
+    &::-webkit-inner-spin-button { 
+        -webkit-appearance: none;
+    }
+
+    &::placeholder {
+        color: #7d7d7d;
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &:disabled {
+        background-color: #c4c4c4;
+    }
+`
+
 export const Column = styled.div`
     display: flex;
     flex-direction: column;

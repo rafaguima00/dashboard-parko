@@ -6,9 +6,10 @@ import {
 } from "../style";
 import { theme } from "../../../theme/theme";
 
-const TimingReserve = ({ username }) => {
+const TimingReserve = (props) => {
 
     const { primaryColor } = theme;
+    const { name } = props;
 
     return (
         <Timing background={primaryColor}>
@@ -18,7 +19,7 @@ const TimingReserve = ({ username }) => {
             </Clock>
             <View>
                 <Name>Caixa responsável:</Name>
-                <Name>{username ? username : "[user_name]"}</Name>
+                <Name>{name ? name : "[user_name]"}</Name>
             </View>
         </Timing>
     )

@@ -5,7 +5,7 @@ const { primaryColor } = theme;
 let satisfied = 72.1;
 let notSatisfied = 100 - satisfied;
 
-export const dataClient = {
+export const dataCliente = {
     labels: ["satisfied", "not satisfied"],
     datasets: [
         {

@@ -30,7 +30,7 @@ const NavigationBar = (props) => {
     const { styles, textSelected, handleLogout } = props;
 
     const { dataClient } = useContext(GlobalContext);
-    const { username } = dataClient;
+    const { colaborator } = dataClient;
 
     const [linkSeletected, setLinkSelected] = useState(1);
 
@@ -95,6 +95,7 @@ const NavigationBar = (props) => {
                             linkSeletected === item.id ? styles[1] : styles[0]
                         }
                         onClick={() => handleSelectItem(item.id)}
+                        
                     >
                         <item.icon
                             color={linkSeletected === item.id ? neutralColor : "#fff"}
@@ -108,17 +109,17 @@ const NavigationBar = (props) => {
                 ))}
             </NavBar>
             <Bottom>
-                <span>
+                {/* <span>
                     <Name>Estacionamento</Name>
                     <Select>
                         <option background={primaryColor}>Bela Park</option>
                         <option background={primaryColor}>Estacionamento x</option>
                     </Select>
-                </span>
+                </span> */}
                 <Profile>
                     <ImageProfile src={camera} />
                     <div>
-                        <UserName>{username ? username : "[user_name]"}</UserName>
+                        <UserName>{colaborator ? colaborator : "[user_name]"}</UserName>
                         <Logout onClick={handleLogout}>Logout</Logout>
                     </div>
                 </Profile>

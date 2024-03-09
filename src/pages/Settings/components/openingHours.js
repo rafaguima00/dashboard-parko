@@ -8,8 +8,10 @@ import {
 } from "../style";
 import { theme } from "../../../theme/theme";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ParkingContext } from "../../../context/parkingContext";
+import { GlobalContext } from "../../../context/globalContext";
+import api from "../../../services/api/server";
 
 const OpeningHours = () => {
 
@@ -21,7 +23,25 @@ const OpeningHours = () => {
         return navigate("/settings/funcionamento");
     }
 
-    const { openHour, closeHour } = useContext(ParkingContext);
+    const { dataClient } = useContext(GlobalContext);
+
+    const [horaAbertura, setHoraAbertura] = useState(null);
+    const [horaFechamento, setHoraFechamento] = useState(null);
+
+    const recuperarDados = async () => {
+        await api.get(`/hora_funcionamento/${dataClient.id_establishment}`)
+        .then(res => {
+            setHoraAbertura(res.data[0].hora_abertura);
+            setHoraFechamento(res.data[0].hora_fechamento);
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    };
+
+    useEffect(() => {
+        recuperarDados();
+    }, []);
 
     return (
         <ContentInfo gridcolumn={"span 2"} gridrow={"span 1"}>
@@ -31,7 +51,7 @@ const OpeningHours = () => {
             <Menu>
                 <Warning textcolor={neutralColor}>Em funcionamento de <strong>Segunda à Sábado</strong></Warning>
                 <Hour textcolor={primaryColor}>
-                    {openHour.monday}h - {closeHour.monday}h
+                    {horaAbertura}h - {horaFechamento}h
                 </Hour>
                 <hr/>
                 <Warning textcolor={cancelColor}><strong>Não funcionamos nos feriados</strong></Warning>

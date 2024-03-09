@@ -1,6 +1,9 @@
 import { Form, DivInput, Input, Label } from "./style";
 
-const Retirada = ({ primaryColor, neutralColor }) => {
+const Retirada = ({ primaryColor, neutralColor, state }) => {
+
+    const { setNovaRetirada, novaRetirada } = state;
+
     return (
         <Form>
             <DivInput largura={"45%"}>
@@ -8,6 +11,8 @@ const Retirada = ({ primaryColor, neutralColor }) => {
                 <Input 
                     type="text" 
                     bordercolor={primaryColor} 
+                    value={novaRetirada.value}
+                    onChange={e => setNovaRetirada({ ...novaRetirada, value: e.target.value })}
                 />
             </DivInput>
             <DivInput largura={"45%"}>
@@ -15,6 +20,8 @@ const Retirada = ({ primaryColor, neutralColor }) => {
                 <Input 
                     type="datetime-local" 
                     bordercolor={primaryColor} 
+                    value={novaRetirada.created_at}
+                    onChange={e => setNovaRetirada({ ...novaRetirada, created_at: e.target.value })}
                 />
             </DivInput>
             <DivInput largura={"100%"}>
@@ -22,6 +29,8 @@ const Retirada = ({ primaryColor, neutralColor }) => {
                 <Input 
                     type="text" 
                     bordercolor={primaryColor} 
+                    value={novaRetirada.description}
+                    onChange={e => setNovaRetirada({ ...novaRetirada, description: e.target.value })}
                 />
             </DivInput>
         </Form>

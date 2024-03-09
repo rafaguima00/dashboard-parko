@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const BottomButton = (props) => {
 
-    const { cancelColor, greenColor } = props;
+    const { cancelColor, greenColor, recuperarDados } = props;
 
     const navigate = useNavigate();
 
@@ -26,6 +26,7 @@ const BottomButton = (props) => {
                 background={greenColor}
                 largura={"12rem"}
                 altura={"2.8rem"}
+                aoPressionar={recuperarDados}
             />
         </DivButton>
     )

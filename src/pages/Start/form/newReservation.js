@@ -1,9 +1,10 @@
-import { Form, DivInput, Input, Label } from "./style";
+import { Form, DivInput, Input, Label, InputNumber } from "./style";
 import { theme } from "../../../theme/theme";
 
-const NewReservation = () => {
+const NewReservation = (props) => {
 
     const { neutralColor, primaryColor } = theme;
+    const { data, setData, vehicles } = props.state;
 
     return (
         <Form>
@@ -12,7 +13,7 @@ const NewReservation = () => {
                 <Input 
                     type="text" 
                     bordercolor={primaryColor} 
-                    value={"0001"}
+                    value={vehicles.length+1}
                     disabled
                 />
             </DivInput>
@@ -23,14 +24,18 @@ const NewReservation = () => {
                     bordercolor={primaryColor} 
                     largura={360}
                     placeholder="Nome Completo"
+                    value={data.name_user}
+                    onChange={e => setData({ ...data, name_user: e.target.value })}
                 />
             </DivInput>
             <DivInput>
                 <Label textcolor={neutralColor}>Contato</Label>
-                <Input 
-                    type="text" 
+                <InputNumber 
+                    type="number"
                     bordercolor={primaryColor} 
                     placeholder="(xx) xxxxx-xxxx"
+                    value={data.tel}
+                    onChange={e => setData({ ...data, tel: e.target.value })}
                 />
             </DivInput>
             <DivInput>
@@ -40,6 +45,8 @@ const NewReservation = () => {
                     bordercolor={primaryColor} 
                     placeholder="Modelo do Veículo"
                     largura={245}
+                    value={data.name_vehicle}
+                    onChange={e => setData({ ...data, name_vehicle: e.target.value })}
                 />
             </DivInput>
             <DivInput>
@@ -49,6 +56,8 @@ const NewReservation = () => {
                     bordercolor={primaryColor} 
                     placeholder="Cor do Veículo"
                     largura={245}
+                    value={data.color}
+                    onChange={e => setData({ ...data, color: e.target.value })}
                 />
             </DivInput>
             <DivInput>
@@ -58,6 +67,8 @@ const NewReservation = () => {
                     bordercolor={primaryColor} 
                     placeholder="Placa do Veículo"
                     largura={245}
+                    value={data.license_plate}
+                    onChange={e => setData({ ...data, license_plate: e.target.value })}
                 />
             </DivInput>
             <DivInput>
@@ -66,6 +77,7 @@ const NewReservation = () => {
                     type="date"
                     bordercolor={primaryColor} 
                     largura={245}
+                    onChange={e => setData({ ...data, data_entrada: e.target.value })}
                 />
             </DivInput>
             <DivInput>
@@ -74,6 +86,16 @@ const NewReservation = () => {
                     type="time" 
                     bordercolor={primaryColor} 
                     largura={245}
+                    onChange={e => setData({ ...data, hora_entrada: e.target.value })}
+                />
+            </DivInput>
+            <DivInput>
+                <Label textcolor={neutralColor}>Hora de Saída</Label>
+                <Input 
+                    type="time" 
+                    bordercolor={primaryColor} 
+                    largura={245}
+                    onChange={e => setData({ ...data, hora_saida: e.target.value })}
                 />
             </DivInput>
         </Form>

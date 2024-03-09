@@ -14,7 +14,8 @@ function Modal({
     setOpen,
     title,
     children,
-    maxWidth
+    maxWidth,
+    funcao
 }) {
 
     const { greenColor, cancelColor, primaryColor } = theme;
@@ -41,7 +42,7 @@ function Modal({
                             <GlobalButton 
                                 children={"Salvar"} 
                                 background={greenColor} 
-                                aoPressionar={() => setOpen(false)}
+                                aoPressionar={funcao}
                                 largura={"12rem"}
                                 altura={"2.8rem"}
                             />

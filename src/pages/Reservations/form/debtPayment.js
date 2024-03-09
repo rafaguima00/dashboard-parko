@@ -3,11 +3,11 @@ import { theme } from "../../../theme/theme";
 import { formatCurrency } from "../../../services/formatCurrency";
 import { useState } from "react";
 
-const DebtPayment = ({ selectedClient, valorAReceber }) => {
+const DebtPayment = ({ selectedClient, debt }) => {
 
     const { neutralColor, primaryColor } = theme;
 
-    const [value, setValue] = useState(valorAReceber);
+    const [value, setValue] = useState(debt);
 
     return (
         <Form>
@@ -27,14 +27,14 @@ const DebtPayment = ({ selectedClient, valorAReceber }) => {
                     largura={"240px"} 
                     type="text" 
                     bordercolor={primaryColor} 
-                    value={formatCurrency(selectedClient.debt, 'BRL')}
+                    value={formatCurrency(value, 'BRL')}
                     disabled
 
                 />
             </DivInput>
             <DivInput>
                 <Label textcolor={neutralColor}>Forma de Pagamento</Label>
-                <Select largura={"300px"}>
+                <Select largura={"300px"} defaultValue="credit-parko">
                     <option value="credit-parko">Crédito Parko</option>
                     <option value="debit">Débito Parko</option>
                     <option value="pix">Pix Parko</option>

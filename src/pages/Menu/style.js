@@ -29,15 +29,17 @@ export const Notification = styled.button`
 export const SideBar = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     background-color: ${props => props.background};
     height: 100vh;
+    width: 90%;
 `
 
 export const Image = styled.img`
-    height: 34px;
-    width: 120px;
-    margin: 48px 0 64px;
+    height: 2rem;
+    width: 7.5rem;
+    margin: 3rem auto 4rem;
+    display: block;
 `
 
 export const NavBar = styled.nav`
@@ -45,7 +47,8 @@ export const NavBar = styled.nav`
     flex-direction: column;
     gap: 1rem;
     width: 100%;
-    padding-left: 4rem;
+    height: 100%;
+    padding: 1rem 4rem 0;
 `
 
 export const Path = styled.button`
@@ -74,9 +77,6 @@ export const Profile = styled.div`
 `
 
 export const Bottom = styled.div`
-    position: absolute; 
-    bottom: 0;
-    left: 0;
     margin-left: 5rem; 
     margin-bottom: 3rem;
     display: flex;

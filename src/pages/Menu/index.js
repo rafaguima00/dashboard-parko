@@ -3,7 +3,6 @@ import NavigationBar from "./components/navigationBar";
 import { Container, Notification } from "./style";
 import { IoNotificationsOutline } from "react-icons/io5";
 
-
 const Menu = () => {
 
     const style = { 
@@ -22,8 +21,7 @@ const Menu = () => {
         gap: 16,
         backgroundColor: "#f4f4f4",
         padding: 16,
-        borderBottomLeftRadius: 10,
-        borderTopLeftRadius: 10,
+        borderRadius: 12,
         fontWeight: 400
     }
 

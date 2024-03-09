@@ -83,3 +83,15 @@ export const Space = styled.div`
     justify-content: center;
     gap: .4rem;
 `
+
+export const Div = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: .2rem;
+`
+
+export const Note = styled.p`
+    color: #7d7d7d;
+    font-size: 14px;
+`

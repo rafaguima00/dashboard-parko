@@ -2,7 +2,7 @@ let total = 24;
 let disponible = 10;
 let occupied = total - disponible; 
 
-export const data = {
+export const datachart = {
     labels: ["occupied", "disponible"],
     datasets: [
         {

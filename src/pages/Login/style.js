@@ -33,7 +33,7 @@ export const ElementText = styled.div`
 
 export const Slogan = styled.p`
     color: #f4f4f4;
-    font-size: 52px;
+    font-size: 54px;
     margin: 0 25%;
     padding: 48px 0;
 `
@@ -85,6 +85,7 @@ export const Input = styled.input`
 export const MessageError = styled.p`
     font-size: 12px;
     color: #CC0000;
+    margin: .5rem 0 1rem;
 `
 
 export const NewPassword = styled.div`
@@ -122,6 +123,7 @@ export const Login = styled.button`
     border-radius: 10px;
     background-color: ${props => props.btcolor};
     color: #fff;
+    font-size: 15px;
 
     &:hover {
         cursor: pointer;

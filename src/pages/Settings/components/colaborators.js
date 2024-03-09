@@ -9,12 +9,14 @@ import {
     Name, 
     P
 } from "../style";
-import { colaborators } from "../../../mocks/colaborators";
 import { theme } from "../../../theme/theme";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react"; 
+import { GlobalContext } from "../../../context/globalContext";
 
 const Colaborators = () => {
 
+    const { colaborators } = useContext(GlobalContext);
     const { neutralColor } = theme;
 
     const navigate = useNavigate();
@@ -29,10 +31,10 @@ const Colaborators = () => {
                 {colaborators.map(item => ( 
                     <Profile key={item.id}>
                         <span>
-                            <ImageProfile src={item.img} alt={item.name} />
+                            <ImageProfile src={item.img} alt={item.colaborator} />
                             <InfoUser textcolor={neutralColor}>
-                                <Name>{item.name}</Name>
-                                <P>{item.type}</P>
+                                <Name>{item.colaborator}</Name>
+                                <P>{item.type_colaborator}</P>
                             </InfoUser>
                         </span>
                         <EditProfile onClick={routeScreen}>

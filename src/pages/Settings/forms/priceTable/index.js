@@ -8,7 +8,8 @@ import {
     Select,
     InputText,
     Column,
-    Block
+    Block,
+    InputNumber
 } from "./style";
 import { theme } from "../../../../theme/theme";
 import GlobalButton from "../../../../components/button/button";
@@ -43,25 +44,20 @@ const PriceTableForm = () => {
                         </InputArea>
                     </Row>
                     <Row>
-                        <Label>Qual o tempo de tolerância do seu estabelecimento?</Label>
+                        <Label>Qual o tempo de tolerância do seu estabelecimento? (minutos)</Label>
                         <InputArea>
-                            <Select bordercolor={primaryColor}>
-                                <option>00:10</option>
-                                <option>00:15</option>
-                                <option>00:20</option>
-                                <option>00:30</option>
-                            </Select>
+                            <InputNumber bordercolor={primaryColor} type="number" placeholder="00:10"/>
                         </InputArea>
                     </Row>
                     <Column>
                         <Label bold>Selecione o tipo de cobrança:</Label>
                         <InputArea>
                             <div>
-                                <input type="radio" name="charge"/>
+                                <input type="radio" name="charge" checked disabled/>
                                 <Label font={14} textcolor={"#7d7d7d"}>Hora e fração da hora</Label>
                             </div>
                             <div>
-                                <input type="radio" name="charge" checked/>
+                                <input type="radio" name="charge" disabled/>
                                 <Label font={14} textcolor={"#7d7d7d"}>Tabela fixa</Label>
                             </div>
                         </InputArea>
@@ -69,13 +65,13 @@ const PriceTableForm = () => {
                     <Row>
                         <Label>Qual o valor da fração da hora em seu estabelecimento?</Label>
                         <InputArea> 
-                            <InputText bordercolor={primaryColor} type="number" placeholder="R$ 0,00"/>
+                            <InputNumber bordercolor={primaryColor} type="number" placeholder="R$ 0,00"/>
                         </InputArea>
                     </Row>
                     <Row>
                         <Label>Qual o valor da hora em seu estabelecimento?</Label>
                         <InputArea>
-                            <InputText bordercolor={primaryColor} type="number" placeholder="R$ 0,00"/>
+                            <InputNumber bordercolor={primaryColor} type="number" placeholder="R$ 0,00"/>
                         </InputArea>
                     </Row>
                     <DivButton marg={"3rem"}>

@@ -7,22 +7,32 @@ import {
     P,
     GroupButton
 } from "../style";
-import { colaborators } from "../../../../../mocks/colaborators";
 import GlobalButton from "../../../../../components/button/button";
+import { useContext, useEffect } from "react";
+import { GlobalContext } from "../../../../../context/globalContext"; 
 
 const ListColaborators = (props) => {
 
     const { primaryColor, neutralColor } = props.theme;
+    const { selected, setSelected, newColaborator } = props.state;
+    const { handleCreateColaborator, deleteColaborator } = props;
+
+    const { colaborators } = useContext(GlobalContext);
 
     return (
         <ColaboratorsView background={"#8371AE"}>
             <span>
                 {colaborators.map(item => ( 
-                    <Profile key={item.id} bordercolor={neutralColor}>
-                        <ImageProfile src={item.img} alt={item.name} />
+                    <Profile 
+                        key={item.id} 
+                        bordercolor={neutralColor}
+                        background={selected === item.id ? primaryColor : "none"} 
+                        onClick={() => setSelected(item.id)}
+                    >
+                        <ImageProfile src={item.img} alt={item.colaborator} />
                         <InfoUser textcolor={"#fff"}>
-                            <Name>{item.name}</Name>
-                            <P>{item.type}</P>
+                            <Name>{item.colaborator}</Name>
+                            <P>{item.type_colaborator}</P>
                         </InfoUser>
                     </Profile>
                 ))}
@@ -33,6 +43,7 @@ const ListColaborators = (props) => {
                     children="Adicionar"
                     altura={"2.6rem"}
                     bold={true}
+                    aoPressionar={e => handleCreateColaborator(e, newColaborator)}
                 />
                 <GlobalButton 
                     background={"transparent"}
@@ -40,6 +51,7 @@ const ListColaborators = (props) => {
                     altura={"2.6rem"}
                     bold={true}
                     btborder={`2px solid ${primaryColor}`}
+                    aoPressionar={() => deleteColaborator(selected)}
                 />
             </GroupButton>
         </ColaboratorsView>

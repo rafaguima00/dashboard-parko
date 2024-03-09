@@ -32,6 +32,7 @@ const EditModal = ({ selectedClient }) => {
                     type="text" 
                     bordercolor={primaryColor} 
                     placeholder="(xx) xxxxx-xxxx"
+                    value={selectedClient.tel}
                 />
             </DivInput>
             <DivInput>
@@ -41,7 +42,7 @@ const EditModal = ({ selectedClient }) => {
                     bordercolor={primaryColor} 
                     placeholder="Modelo do Veículo"
                     largura={"245px"}
-                    value={selectedClient.vehicle}
+                    value={selectedClient.name_vehicle}
                 />
             </DivInput>
             <DivInput>
@@ -51,6 +52,7 @@ const EditModal = ({ selectedClient }) => {
                     bordercolor={primaryColor} 
                     placeholder="Cor do Veículo"
                     largura={"245px"}
+                    value={selectedClient.color}
                 />
             </DivInput>
             <DivInput>
@@ -60,7 +62,7 @@ const EditModal = ({ selectedClient }) => {
                     bordercolor={primaryColor} 
                     placeholder="Placa do Veículo"
                     largura={"245px"}
-                    value={selectedClient.licensePlate}
+                    value={selectedClient.license_plate}
                 />
             </DivInput>
             <DivInput>
@@ -69,7 +71,7 @@ const EditModal = ({ selectedClient }) => {
                     type="date"
                     bordercolor={primaryColor} 
                     largura={"245px"}
-                    value={selectedClient.dateEntry}
+                    value={selectedClient.data_entrada}
                 />
             </DivInput>
             <DivInput>
@@ -78,7 +80,7 @@ const EditModal = ({ selectedClient }) => {
                     type="time" 
                     bordercolor={primaryColor} 
                     largura={"245px"}
-                    value={selectedClient.clock}
+                    value={selectedClient.hora_entrada}
                 />
             </DivInput>
         </Form>

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { GlobalContext } from "../../context/globalContext";
 import {
     Container,
@@ -11,22 +11,53 @@ import TimingReserve from "./components/timing";
 import SelectedReserve from "./components/selectedReserve";
 import { theme } from "../../theme/theme";
 import GlobalButton from "../../components/button/button";
+import api from "../../services/api/server";
 
 const Reservations = () => {
 
-    const { dataClient } = useContext(GlobalContext);
-    const { username } = dataClient;
-
+    const { 
+        dataClient, 
+        selectedClient, 
+        setSelectedClient, 
+        reservations, 
+        debts, 
+        setDebts 
+    } = useContext(GlobalContext);
+    const { colaborator } = dataClient;
     const { cancelColor, greenColor } = theme;
+
+    const recuperarDividas = async () => {
+        await api.get("/debts")
+        .then(res => {
+            setDebts(res.data);
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    };
+
+    const getDebtById = () => {
+        const findId = debts.find(item => item.id_costumer === selectedClient.id_costumer);
+        return findId;
+    };
+
+    const debtByIdCostumer = getDebtById();
+    const reservaPendente = reservations.filter(item => item.status === "Pendente");
+
+    useEffect(() => {
+        recuperarDividas();
+        const indexOf = reservaPendente.values().next().value;
+        setSelectedClient(indexOf);
+    }, []);
 
     return (
         <Container>
             <ItemReservation>
                 <TopContent />
-                <ListConfirmedReserve />
-                <TimingReserve username={username} />
+                <ListConfirmedReserve reservaPendente={reservaPendente} />
+                <TimingReserve name={colaborator} />
             </ItemReservation>
-            <SelectedReserve />
+            <SelectedReserve debts={debts} getDebtById={debtByIdCostumer} />
             <CloseReserve>
                 <GlobalButton 
                     children="Cancelar"

@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
     margin-top: 2rem;
+    margin-right: 2rem;
 `
 
 export const Welcome = styled.p`
@@ -205,4 +206,13 @@ export const GroupButton = styled.div`
     flex-direction: column;
     gap: 10px;
     margin-top: 16px;
+`
+
+export const AlignText = styled.div`
+    margin: 2rem 0;
+`
+
+export const Line = styled.p`
+    text-align: center;
+    color: ${props => props.textcolor};
 `

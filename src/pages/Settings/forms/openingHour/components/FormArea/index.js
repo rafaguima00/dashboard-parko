@@ -29,10 +29,24 @@ const FormArea = (props) => {
                 <Table>
                     {table.map(item => (
                         <Div key={item.id}>
-                            <WeekDay textcolor={neutralColor}>{item.week}</WeekDay>
-                            <Checkbox type="checkbox" checked={item.checked} onChange={e => setChecked(!e.target.value)}/>
-                            <Time type="time" bordercolor={primaryColor} value={item.open} onChange={e => item.onChangeOpen(e)}/>
-                            <Time type="time" bordercolor={primaryColor} value={item.close} onChange={e => item.onChangeClose(e)}/>
+                            <WeekDay textcolor={neutralColor}>
+                                {item.week}
+                            </WeekDay>
+                            <Checkbox type="checkbox" checked={item.checked} onChange={() => setChecked(!item.checked)} />
+                            <Time 
+                                type="time" 
+                                bordercolor={primaryColor} 
+                                value={item.open} 
+                                disabled={item.checked === true ? true : false} 
+                                onChange={e => item.onChangeOpen(e)}
+                            />
+                            <Time 
+                                type="time" 
+                                bordercolor={primaryColor} 
+                                value={item.close} 
+                                disabled={item.checked === true ? true : false} 
+                                onChange={e => item.onChangeClose(e)}
+                            />
                         </Div>
                     ))}
                 </Table>
@@ -46,10 +60,11 @@ const FormArea = (props) => {
                     <Item gridcolumn={4} textcolor={neutralColor}>Até</Item>
                 </Header>
                 <Div>
-                    <DateStyle type="date" min={date} />
-                    <Checkbox type="checkbox" />
-                    <Time type="time" bordercolor={primaryColor} />
-                    <Time type="time" bordercolor={primaryColor} />
+                    {/* Por enquanto, desabilitado */}
+                    <DateStyle type="date" min={date} disabled={true} />
+                    <Checkbox type="checkbox" disabled={true}/>
+                    <Time type="time" bordercolor={primaryColor} disabled={true} />
+                    <Time type="time" bordercolor={primaryColor} disabled={true} />
                 </Div>
             </Span>
         </FormItem>

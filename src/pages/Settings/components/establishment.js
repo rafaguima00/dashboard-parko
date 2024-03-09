@@ -12,6 +12,8 @@ import {
 import parking from "../../../assets/estacionamento.png";
 import { theme } from "../../../theme/theme";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react"; 
+import { GlobalContext } from "../../../context/globalContext";
 
 const Establishment = () => {
 
@@ -22,6 +24,8 @@ const Establishment = () => {
     const routerScreen = () => {
         return navigate("/settings/establishment")
     }
+
+    const { park } = useContext(GlobalContext);
 
     return (
         <ContentInfo gridcolumn={1} gridrow={"span 3"}>
@@ -35,39 +39,39 @@ const Establishment = () => {
                 <InfoEstablishment>
                     <TextArea textcolor={neutralColor}>
                         <P>Nome do Estabelecimento:</P>
-                        <Name>Bela Park</Name>
+                        <Name>{park.name}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>Razão Social:</P>
-                        <Name>Bela Park LTDA</Name>
+                        <Name>{park.razao_social}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>CNPJ:</P>
-                        <Name>91.679.663/0001-30</Name>
+                        <Name>{park.cnpj}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>Telefone:</P>
-                        <Name>(71) 98855-9060</Name>
+                        <Name>{park.contato}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>E-mail:</P>
-                        <Name>belapark@gmail.com</Name>
+                        <Name>{park.email}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>CEP:</P>
-                        <Name>41058-025</Name>
+                        <Name>{park.cep}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>Endereço:</P>
-                        <Name>Al. do Bosque, 736</Name>
+                        <Name>{park.end}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>Bairro:</P>
-                        <Name>Horto Bela Vista</Name>
+                        <Name>{park.bairro}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>Cidade:</P>
-                        <Name>Salvador</Name>
+                        <Name>{park.cidade}</Name>
                     </TextArea>
                 </InfoEstablishment>
             </MenuEstablishment>

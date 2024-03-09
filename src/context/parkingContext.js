@@ -25,13 +25,13 @@ export const ParkProvider = ({ children }) => {
     });
 
     const [checked, setChecked] = useState({
-        monday: true,
-        tuesday: true,
-        wednesday: true,
-        thursday: true,
-        friday: true,
-        saturday: true,
-        sunday: false
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        saturday: false,
+        sunday: true
     });
 
     const value = { 
