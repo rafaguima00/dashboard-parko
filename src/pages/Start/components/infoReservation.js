@@ -137,7 +137,7 @@ const InfoReserve = () => {
             <GroupInfo>
                 <Info>
                     <span>
-                        <TitleLine>10/24</TitleLine>
+                        <TitleLine>xx/xx</TitleLine>
                         <Subtitle style={{ color: "#f4f4f4" }}>Vagas disponíveis</Subtitle>
                     </span>
                     <div style={{ width: 64, height: 64 }}>
@@ -150,20 +150,20 @@ const InfoReserve = () => {
                 <Info>
                     <CgNotes color="#545454" size={16} title="Checkout" style={styleIcon} />
                     <TextAligned>
-                        <TitleLine>{formatCurrency(13300.90, 'BRL')}</TitleLine>
+                        <TitleLine>{formatCurrency(0, 'BRL')}</TitleLine>
                         <Subtitle>Faturamento diário</Subtitle>
                     </TextAligned>
                 </Info>
                 <Info>
                     <FaRightLeft color="#545454" size={16} title="Arrow" style={styleIcon} />
                     <TextAligned>
-                        <TitleLine>1000</TitleLine>
+                        <TitleLine>0</TitleLine>
                         <Subtitle>Número de pessoas no dia</Subtitle>
                     </TextAligned>
                 </Info>
                 <Info>
                     <span>
-                        <TitleLine>72,1%</TitleLine>
+                        <TitleLine>n/a</TitleLine>
                         <Subtitle>Satisfação do cliente</Subtitle>
                     </span>
                     <div style={{ width: 64, height: 64 }}>

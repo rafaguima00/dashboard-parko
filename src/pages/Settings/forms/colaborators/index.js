@@ -32,6 +32,9 @@ const ColaboratorsForm = () => {
         e.preventDefault();
 
         await api.post("/colaborators", item)
+        .then(() => {
+            console.log("tudo certo.")
+        })
         .catch(e => {
             alert(e.response.data.message)
         })
@@ -49,9 +52,9 @@ const ColaboratorsForm = () => {
 
     //Atualizar colaborador (PUT)
     const handleUpdate = async (e, selected) => {
-        e.preventDefault()
+        e.preventDefault();
 
-        await api.put(`/colaborators/${selected}`)
+        await api.put(`/colaborators/${selected}`, newColaborator)
         .then(() => {
             console.log("Usuário atualizado com sucesso.")
         })

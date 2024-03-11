@@ -9,7 +9,9 @@ export const InfoProvider = ({ children }) => {
     const [colaborators, setColaborators] = useState([]);
     const [reservations, setReservations] = useState([]);
     const [debts, setDebts] = useState([]);
+    const [priceTable, setPriceTable] = useState({});
     const [selectedClient, setSelectedClient] = useState({});
+    const [ratings, setRatings] = useState([]);
 
     const value = {
         dataClient, 
@@ -23,7 +25,11 @@ export const InfoProvider = ({ children }) => {
         reservations,
         setReservations,
         debts,
-        setDebts
+        setDebts,
+        priceTable,
+        setPriceTable,
+        ratings,
+        setRatings
     };
 
     return (

@@ -33,7 +33,7 @@ const SummaryContent = (props) => {
                     <Pg><strong>Responsável: </strong>{colaborator}</Pg>
                     <Pg><strong>E-mail: </strong>{email}</Pg>
                     <Pg><strong>Abertura do caixa: </strong>{/* data e hora de login */}</Pg>
-                    <Pg><strong>Fechamento do caixa: </strong>{/* data e hora de logout */}</Pg>
+                    <Pg><strong>Fechamento do caixa: </strong>{/* data e hora do último logout (se possível) */}</Pg>
                     <Pg><strong>Valor da abertura (dinheiro): </strong>{formatCurrency(aberturaCaixa, 'BRL')}</Pg>
                     <Pg><strong>Valor do fechamento (dinheiro): </strong>{formatCurrency(fechamentoCaixa, 'BRL')}</Pg>
                 </div>

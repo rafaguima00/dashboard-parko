@@ -14,10 +14,15 @@ import { GlobalContext } from "../../../../../context/globalContext";
 const ListColaborators = (props) => {
 
     const { primaryColor, neutralColor } = props.theme;
-    const { selected, setSelected, newColaborator } = props.state;
+    const { selected, setSelected, newColaborator, setNewColaborator } = props.state;
     const { handleCreateColaborator, deleteColaborator } = props;
 
     const { colaborators } = useContext(GlobalContext);
+
+    const handleClick = (item) => {
+        setSelected(item.id);
+        setNewColaborator(item);
+    }
 
     return (
         <ColaboratorsView background={"#8371AE"}>
@@ -27,7 +32,7 @@ const ListColaborators = (props) => {
                         key={item.id} 
                         bordercolor={neutralColor}
                         background={selected === item.id ? primaryColor : "none"} 
-                        onClick={() => setSelected(item.id)}
+                        onClick={() => handleClick(item)}
                     >
                         <ImageProfile src={item.img} alt={item.colaborator} />
                         <InfoUser textcolor={"#fff"}>

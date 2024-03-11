@@ -10,30 +10,38 @@ import {
 } from "../style";
 import camera from "../../../assets/camera.png";
 import { FaStar } from "react-icons/fa6";
-import { rating } from "../../../mocks/avaliacoes";
 import { theme } from "../../../theme/theme";
 
-const Rate = () => {
+const Rate = (props) => {
 
     const { neutralColor, primaryColor } = theme;
+    const { ratings, dataClient } = props;
+
+    const renderItems = () => {
+        const findRate = ratings.filter(item => item.id_establishment === dataClient.id_establishment);
+
+        return { findRate };
+    };
+
+    const { findRate } = renderItems();
 
     return (
         <section>
-            {rating.map((item) => (
+            {findRate.map((item) => (
                 <Body key={item.id}>
                     <Profile>
                         <ImageProfile src={camera} />
                         <Space>
-                            <UserName textcolor={neutralColor}>{item.name}</UserName>
+                            <UserName textcolor={neutralColor}>{item.name_costumer}</UserName>
                             <Div>
-                                <FaStar color={primaryColor} children={"4.5"} />
-                                <Note>4.5</Note>
+                                <FaStar color={primaryColor} children={item.rate} />
+                                <Note>{item.rate}</Note>
                             </Div>
                         </Space>
                     </Profile>
                     <hr />
                     <Comments>
-                        <p>{item.comment !== "" ? item.comment : "Sem comentários"}</p>
+                        <p>{item.comments !== "" ? item.comments : "Sem comentários"}</p>
                     </Comments>
                 </Body>
             ))

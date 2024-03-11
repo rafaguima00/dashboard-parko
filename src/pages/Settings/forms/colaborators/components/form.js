@@ -71,17 +71,8 @@ const FormColaborator = (props) => {
         }
     ]
 
-    const selectColaborator = (value) => {
-        const selectedColaborator = colaborators.find(item => item.id === selected);
-        const ultimoCaractere = selectedColaborator.colaborator.length+1
-        const tirarAspas = JSON.stringify(selectedColaborator.colaborator).substring(1, ultimoCaractere);
-
-        return tirarAspas;
-    }
-
-    useEffect(() => {
-        //selectColaborator();
-    }, [selected])
+    const telDigitado = newColaborator.tel;
+    const formataTel = telDigitado.replace(/(\d{2})(\d{5})(\d{4})/g, '($1) $2-$3');
 
     const selecionarCargo = (value) => {
 
@@ -229,7 +220,7 @@ const FormColaborator = (props) => {
                     bordercolor={primaryColor} 
                     largura={220}
                     required
-                    value={newColaborator.tel}
+                    value={formataTel}
                     onChange={e => setNewColaborator({ ...newColaborator, tel: e.target.value })}
                 />
             </DivInput>
@@ -260,7 +251,7 @@ const FormColaborator = (props) => {
                     background={greenColor}
                     largura={"12rem"}
                     altura={"2.8rem"}
-                    aoPressionar={handleUpdate}
+                    aoPressionar={e => handleUpdate(e, selected)}
                 />
             </DivButton>
         </FormContent>
