@@ -8,7 +8,7 @@ import {
     GroupButton
 } from "../style";
 import GlobalButton from "../../../../../components/button/button";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { GlobalContext } from "../../../../../context/globalContext"; 
 
 const ListColaborators = (props) => {

@@ -10,7 +10,7 @@ const Management = () => {
 
     const { neutralColor, primaryColor } = theme;
 
-    const [selected, setSelected] = useState(0);
+    const [selected, setSelected] = useState(3);
     const [bqSelected, setBqSelected] = useState(0);
 
     return (

@@ -4,13 +4,18 @@ import {
     Button,
     BlockQuote,
     Section
-} from "../../style"
+} from "../../style";
+import { useContext } from "react";
+import { GlobalContext } from "../../../../context/globalContext";
 
 const GridOne = (props) => {
 
     const { buttons, blockquote, colors, states } = props;
     const { neutralColor, primaryColor } = colors;
     const { selected, setSelected, bqSelected, setBqSelected } = states;
+
+    const { dataClient } = useContext(GlobalContext);
+    const { type_colaborator } = dataClient;
 
     return (
         <>
@@ -24,6 +29,11 @@ const GridOne = (props) => {
                             bold={selected === item.id && true}
                             paddingright={".8rem"}
                             onClick={() => setSelected(item.id)}
+                            style={ 
+                                (item.id === 0 || item.id === 1 || item.id === 2) && type_colaborator === "Funcionário(a)" ?
+                                { display: "none" } :
+                                {}
+                            }
                         >
                             {item.name}
                         </Button>
@@ -37,6 +47,7 @@ const GridOne = (props) => {
                                         bold={bqSelected === item.id ? 700 : 400}
                                         key={item.id}
                                         onClick={() => setBqSelected(item.id)}
+                                        style={type_colaborator === "Funcionário(a)" ? { display: "none" } : {}}
                                     >
                                         <p>{item.name}</p>
                                     </BlockQuote>

@@ -18,9 +18,9 @@ const FormOcurrence = (props) => {
     return (
         <FormArea>
             {formActive === 0 && <FormList setFormActive={setFormActive} primaryColor={primaryColor}/>}
-            {formActive === 1 && <MissTicket />}
-            {formActive === 2 && <TheftCostumer />}
-            {formActive === 3 && <TheftHeritage />}
+            {formActive === 1 && <MissTicket />} {/* Formulário de Perda de ticket */}
+            {formActive === 2 && <TheftCostumer />} {/* Formulário de furto de bens do cliente */}
+            {formActive === 3 && <TheftHeritage />} {/* Formulário de Furto de itens do patrimônio */}
             <GroupButton>
                 <GlobalButton 
                     children="Cancelar" 

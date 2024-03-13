@@ -1,5 +1,3 @@
-import { useContext, useEffect } from "react";
-import { GlobalContext } from "../../../../../context/globalContext";
 import { 
     DivInput,
     Label,
@@ -24,8 +22,6 @@ const FormColaborator = (props) => {
     const { primaryColor, neutralColor, cancelColor, greenColor } = props.theme;
     const { selected, newColaborator, setNewColaborator, dataClient } = props.state;
     const { handleUpdate } = props;
-
-    const { colaborators } = useContext(GlobalContext);
 
     const navigate = useNavigate();
 

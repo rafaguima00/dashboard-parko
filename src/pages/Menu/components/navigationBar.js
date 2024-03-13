@@ -30,7 +30,9 @@ const NavigationBar = (props) => {
     const { styles, textSelected, handleLogout } = props;
 
     const { dataClient } = useContext(GlobalContext);
-    const { colaborator } = dataClient;
+    const { colaborator, type_colaborator } = dataClient;
+
+    console.log(type_colaborator);
 
     const [linkSeletected, setLinkSelected] = useState(1);
 
@@ -77,11 +79,11 @@ const NavigationBar = (props) => {
             text: "Avaliações",
             icon: FiStar
         }
-    ]
+    ];
 
     const handleSelectItem = (id) => {
         setLinkSelected(id)
-    }
+    };
 
     return (
         <SideBar background={primaryColor}>
@@ -92,6 +94,8 @@ const NavigationBar = (props) => {
                         key={item.id}
                         to={item.path}
                         style={
+                            item.id === 5 && type_colaborator === "Funcionário(a)" ?
+                            { display: "none" } :
                             linkSeletected === item.id ? styles[1] : styles[0]
                         }
                         onClick={() => handleSelectItem(item.id)}

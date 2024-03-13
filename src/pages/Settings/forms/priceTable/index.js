@@ -5,8 +5,6 @@ import {
     Label,
     Row,
     InputArea,
-    Select,
-    InputText,
     Column,
     Block,
     InputNumber

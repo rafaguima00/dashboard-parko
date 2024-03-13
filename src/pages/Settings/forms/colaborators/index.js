@@ -10,7 +10,7 @@ import api from "../../../../services/api/server";
 
 const ColaboratorsForm = () => {
 
-    const { dataClient, colaborators, setColaborators } = useContext(GlobalContext);
+    const { dataClient } = useContext(GlobalContext);
 
     const [selected, setSelected] = useState(null);
     const [newColaborator, setNewColaborator] = useState({

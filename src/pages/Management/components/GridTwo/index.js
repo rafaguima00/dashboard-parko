@@ -4,10 +4,14 @@ import Heritage from "./heritage/heritage";
 import Occurrence from "./occurrence/occurrence";
 import { Financial } from "../../style";
 import Top from "../../../../components/top/top";
+import { useContext } from "react";
+import { GlobalContext } from "../../../../context/globalContext";
 
 const GridTwo = (props) => {
 
     const { selected, bqSelected } = props.states;
+    const { dataClient } = useContext(GlobalContext);
+    const { type_colaborator } = dataClient;
 
     const titleSelected = () => {
         if(selected === 0) {
@@ -28,7 +32,7 @@ const GridTwo = (props) => {
             <Top children={title} font={19} gridcolumn={2} gridrow={1}/>
             {selected === 3 && <Top children={"Formulário de Ocorrências"} font={19} gridcolumn={3} gridrow={1}/>}
             <Financial gridcolumn={"span 2"} gridrow={"span 2"}>
-                { selected === 0 && <FinancialReport bqSelected={bqSelected} /> }
+                { (type_colaborator !== "Funcionário(a)") && (selected === 0 && <FinancialReport bqSelected={bqSelected} />) }
                 { selected === 1 && <Accounts/> }
                 { selected === 2 && <Heritage/> }
                 { selected === 3 && <Occurrence/> }
