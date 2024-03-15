@@ -21,7 +21,7 @@ const FormColaborator = (props) => {
 
     const { primaryColor, neutralColor, cancelColor, greenColor } = props.theme;
     const { selected, newColaborator, setNewColaborator, dataClient } = props.state;
-    const { handleUpdate } = props;
+    const { handleUpdate, selecionarCargo, tipoContratacao } = props;
 
     const navigate = useNavigate();
 
@@ -69,27 +69,6 @@ const FormColaborator = (props) => {
 
     const telDigitado = newColaborator.tel;
     const formataTel = telDigitado.replace(/(\d{2})(\d{5})(\d{4})/g, '($1) $2-$3');
-
-    const selecionarCargo = (value) => {
-
-        if(value === "Funcionário(a)") {
-            setNewColaborator({ ...newColaborator, e_admin: 1 })
-        } else if (value === "Coordenador(a)") {
-            setNewColaborator({ ...newColaborator, e_admin: 2 })
-        } else if (value === "Administrador(a)") {
-            setNewColaborator({ ...newColaborator, e_admin: 3 })
-        }
-    }
-
-    const tipoContratacao = (value) => {
-        if(value === "Carteira assinada") {
-            setNewColaborator({ ...newColaborator, tipo_contratacao: 1 })
-        } else if (value === "Autônomo (PJ)") {
-            setNewColaborator({ ...newColaborator, tipo_contratacao: 2 })
-        }else if (value === "MEI") {
-            setNewColaborator({ ...newColaborator, tipo_contratacao: 3 })
-        }
-    }
 
     return (
         <FormContent>

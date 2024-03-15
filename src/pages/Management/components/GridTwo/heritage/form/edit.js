@@ -9,7 +9,7 @@ import {
 
 const EditHeritage = (props) => {
 
-    const { chosenItem } = props
+    const { chosenItem, setChosenItem } = props.state;
     const { neutralColor, primaryColor } = props.colors;
 
     return (
@@ -19,6 +19,7 @@ const EditHeritage = (props) => {
                 <Input 
                     type="text"
                     value={chosenItem.code}
+                    onChange={e => setChosenItem({ ...chosenItem, code: e.target.value })}
                     disabled
                     bordercolor={primaryColor}
                     largura={"11rem"}
@@ -27,8 +28,9 @@ const EditHeritage = (props) => {
             <DivInput>
                 <Label textcolor={neutralColor}>Data do Registro</Label>
                 <Input 
-                    type="text"
-                    value={chosenItem.dateRegister}
+                    type="date"
+                    value={chosenItem.date_registry}
+                    onChange={e => setChosenItem({ ...chosenItem, date_registry: e.target.value })}
                     disabled
                     bordercolor={primaryColor}
                     largura={"11rem"}
@@ -36,7 +38,10 @@ const EditHeritage = (props) => {
             </DivInput>
             <DivInput>
                 <Label textcolor={neutralColor}>Categoria</Label>
-                <Select largura={"23.5rem"}>
+                <Select 
+                    largura={"23.5rem"}
+                    onChange={e => setChosenItem({ ...chosenItem, category: e.target.value })}
+                >
                     <option>{chosenItem.category}</option>
                     <option>Contabilidade</option>
                 </Select>
@@ -46,6 +51,7 @@ const EditHeritage = (props) => {
                 <Input 
                     type="text"
                     value={chosenItem.quantity}
+                    onChange={e => setChosenItem({ ...chosenItem, quantity: e.target.value })}
                     bordercolor={primaryColor}
                     largura={"8rem"}
                 />
@@ -57,6 +63,8 @@ const EditHeritage = (props) => {
                     placeholder="Prata"
                     bordercolor={primaryColor}
                     largura={"11rem"}
+                    value={chosenItem.unit_measurement}
+                    onChange={e => setChosenItem({ ...chosenItem, unit_measurement: e.target.value })}
                 />
             </DivInput>
             <DivInput>
@@ -73,6 +81,7 @@ const EditHeritage = (props) => {
                 <Input 
                     type="text"
                     value={chosenItem.name}
+                    onChange={e => setChosenItem({ ...chosenItem, name: e.target.value })}
                     bordercolor={primaryColor}
                     largura={"23rem"}
                 />
@@ -84,7 +93,8 @@ const EditHeritage = (props) => {
                     placeholder="Quantidade final"
                     bordercolor={primaryColor}
                     largura={"11rem"}
-                    value={1}
+                    value={chosenItem.quantity}
+                    onChange={e => setChosenItem({ ...chosenItem, quantity: e.target.value })}
                 />
             </DivInput>
             <DivInput>
@@ -94,7 +104,8 @@ const EditHeritage = (props) => {
                     placeholder="R$ 0,00"
                     bordercolor={primaryColor}
                     largura={"11.5rem"}
-                    value={chosenItem.valor}
+                    value={chosenItem.value}
+                    onChange={e => setChosenItem({ ...chosenItem, value: e.target.value })}
                 />
             </DivInput>
         </RowForm>

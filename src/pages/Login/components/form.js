@@ -59,7 +59,6 @@ const Form = () => {
             password: dataClient.password
         })
         .then(response => {    
-            console.log(response);
             setDataClient(response.data);
             loadData();
             listColaborators();

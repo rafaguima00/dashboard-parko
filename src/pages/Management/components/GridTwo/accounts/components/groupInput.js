@@ -6,7 +6,13 @@ import { GroupInput, InputSearch } from "../style";
 
 const InputGroup = (props) => {
 
-    const { neutralColor, primaryColor, setFilterDate, setCount } = props;
+    const { 
+        neutralColor, 
+        primaryColor, 
+        setFilterDate, 
+        setCount, 
+        setText 
+    } = props;
 
     return (
         <GroupInput>
@@ -36,7 +42,12 @@ const InputGroup = (props) => {
             >
                 <HiOutlinePlus size={19} color="#fff"/>
             </Button>
-            <InputSearch type="text" placeholder="Procurar" inputcolor={primaryColor}/>
+            <InputSearch 
+                type="text" 
+                placeholder="Procurar" 
+                inputcolor={primaryColor}
+                onChange={e => setText(e.target.value)}
+            />
         </GroupInput>
     )
 }

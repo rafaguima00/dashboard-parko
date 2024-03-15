@@ -27,16 +27,37 @@ const ColaboratorsForm = () => {
         unidade: dataClient.id_establishment
     });
 
+    const selecionarCargo = (value) => {
+
+        if(value === "Funcionário(a)") {
+            setNewColaborator({ ...newColaborator, e_admin: 1 })
+        } else if (value === "Coordenador(a)") {
+            setNewColaborator({ ...newColaborator, e_admin: 2 })
+        } else if (value === "Administrador(a)") {
+            setNewColaborator({ ...newColaborator, e_admin: 3 })
+        }
+    }
+
+    const tipoContratacao = (value) => {
+        if(value === "Carteira assinada") {
+            setNewColaborator({ ...newColaborator, tipo_contratacao: 1 })
+        } else if (value === "Autônomo (PJ)") {
+            setNewColaborator({ ...newColaborator, tipo_contratacao: 2 })
+        }else if (value === "MEI") {
+            setNewColaborator({ ...newColaborator, tipo_contratacao: 3 })
+        }
+    }
+
     //Adicionar colaborator (POST)
     const handleCreateColaborator = async (e, item) => {
         e.preventDefault();
 
         await api.post("/colaborators", item)
         .then(() => {
-            console.log("tudo certo.")
+            alert(`Colaborador ${item.colaborator} registrado`);
         })
         .catch(e => {
-            alert(e.response.data.message)
+            alert(e.response.data.message);
         })
     }
 
@@ -54,13 +75,17 @@ const ColaboratorsForm = () => {
     const handleUpdate = async (e, selected) => {
         e.preventDefault();
 
-        await api.put(`/colaborators/${selected}`, newColaborator)
-        .then(() => {
-            console.log("Usuário atualizado com sucesso.")
-        })
-        .catch(e => {
-            console.log(e.response.data.message)
-        })
+        if(selected) {
+            await api.put(`/colaborators/${selected}`, newColaborator)
+            .then(() => {
+                alert("Usuário atualizado com sucesso.");
+            })
+            .catch(e => {
+                alert(e.response.data.message);
+            })
+        } else {
+            alert("Selecione um usuário para atualizar informações")
+        }
     }
 
     return (
@@ -88,6 +113,8 @@ const ColaboratorsForm = () => {
                         dataClient
                     }}
                     handleUpdate={handleUpdate}
+                    selecionarCargo={selecionarCargo}
+                    tipoContratacao={tipoContratacao}
                 />
             </ContentView>
         </ContainerForm>

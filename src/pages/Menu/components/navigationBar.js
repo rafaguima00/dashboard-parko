@@ -25,14 +25,10 @@ import { theme } from "../../../theme/theme";
 
 const NavigationBar = (props) => {
 
-    const { primaryColor, neutralColor } = theme;
-
-    const { styles, textSelected, handleLogout } = props;
-
     const { dataClient } = useContext(GlobalContext);
     const { colaborator, type_colaborator } = dataClient;
-
-    console.log(type_colaborator);
+    const { primaryColor, neutralColor } = theme;
+    const { styles, textSelected, handleLogout } = props;
 
     const [linkSeletected, setLinkSelected] = useState(1);
 

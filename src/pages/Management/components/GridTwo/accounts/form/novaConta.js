@@ -5,12 +5,14 @@ import {
     Label, 
     Select, 
     DivCheckbox,
-    DivRadio
+    DivRadio,
+    InputNumber
 } from "./style";
 
 const NovaConta = (props) => {
 
     const { primaryColor, neutralColor } = props.colors;
+    const { chosenAcc, setChosenAcc, setRadioValue, setCost } = props.state;
 
     return (
         <RowForm>
@@ -21,22 +23,30 @@ const NovaConta = (props) => {
                     bordercolor={primaryColor}
                     placeholder="Coelba - Jan/2020"
                     largura={"23.5rem"}
+                    value={chosenAcc.desc_item}
+                    onChange={e => setChosenAcc({ ...chosenAcc, desc_item: e.target.value })}
                 />
             </DivInput>
             <DivInput>
                 <Label textcolor={neutralColor}>Categoria</Label>
-                <Select largura={"23.5rem"}>
+                <Select 
+                    largura={"23.5rem"}
+                    onChange={e => setChosenAcc({ ...chosenAcc, category: e.target.value })}
+                >
+                    <option></option>
                     <option>Energia</option>
                     <option>Contabilidade</option>
                 </Select>
             </DivInput>
             <DivInput>
                 <Label textcolor={neutralColor}>Valor</Label>
-                <Input 
-                    type="text"
+                <InputNumber 
+                    type="number"
                     bordercolor={primaryColor}
                     placeholder="R$ 0,00"
                     largura={"160px"}
+                    value={chosenAcc.value}
+                    onChange={e => setChosenAcc({ ...chosenAcc, value: e.target.value })}
                 />
             </DivInput>
             <DivInput>
@@ -44,6 +54,8 @@ const NovaConta = (props) => {
                 <Input 
                     type="date"
                     bordercolor={primaryColor}
+                    value={chosenAcc.date_created}
+                    onChange={e => setChosenAcc({ ...chosenAcc, date_created: e.target.value })}
                 />
             </DivInput>
             <DivInput>
@@ -51,6 +63,8 @@ const NovaConta = (props) => {
                 <Input 
                     type="date"
                     bordercolor={primaryColor}
+                    value={chosenAcc.date_payment}
+                    onChange={e => setChosenAcc({ ...chosenAcc, date_payment: e.target.value })}
                 />
             </DivInput>
             <DivCheckbox>
@@ -62,9 +76,19 @@ const NovaConta = (props) => {
             <DivInput>
                 <Label textcolor={neutralColor}>A conta já foi paga?</Label>
                 <DivRadio>
-                    <input name="count" type="radio" />
+                    <input 
+                        name="count" 
+                        type="radio" 
+                        value="Pago" 
+                        onClick={e => setRadioValue(e.target.value)} 
+                    />
                     <Label textcolor={"#7d7d7d"}>Sim</Label>
-                    <input name="count" type="radio" />
+                    <input 
+                        name="count" 
+                        type="radio" 
+                        value="Pendente" 
+                        onClick={e => setRadioValue(e.target.value)} 
+                    />
                     <Label textcolor={"#7d7d7d"}>Não</Label>
                 </DivRadio>
             </DivInput>
@@ -80,9 +104,19 @@ const NovaConta = (props) => {
             <DivInput>
                 <Label textcolor={neutralColor}>Esta conta é um custo fixo ou variável?</Label>
                 <DivRadio>
-                    <input name="cost" type="radio" />
+                    <input 
+                        name="cost" 
+                        type="radio" 
+                        value="Fixo" 
+                        onClick={e => setCost(e.target.value)} 
+                    />
                     <Label textcolor={"#7d7d7d"}>Fixo</Label>
-                    <input name="cost" type="radio" />
+                    <input 
+                        name="cost" 
+                        type="radio" 
+                        value="Variável" 
+                        onClick={e => setCost(e.target.value)} 
+                    />
                     <Label textcolor={"#7d7d7d"}>Variável</Label>
                 </DivRadio>
             </DivInput>

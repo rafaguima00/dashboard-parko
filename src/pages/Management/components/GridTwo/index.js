@@ -10,7 +10,11 @@ import { GlobalContext } from "../../../../context/globalContext";
 const GridTwo = (props) => {
 
     const { selected, bqSelected } = props.states;
-    const { dataClient } = useContext(GlobalContext);
+    const { 
+        dataClient, 
+        occurrences, 
+        setOccurrences 
+    } = useContext(GlobalContext);
     const { type_colaborator } = dataClient;
 
     const titleSelected = () => {
@@ -35,7 +39,7 @@ const GridTwo = (props) => {
                 { (type_colaborator !== "Funcionário(a)") && (selected === 0 && <FinancialReport bqSelected={bqSelected} />) }
                 { selected === 1 && <Accounts/> }
                 { selected === 2 && <Heritage/> }
-                { selected === 3 && <Occurrence/> }
+                { selected === 3 && <Occurrence state={{ occurrences, setOccurrences }} dataClient={dataClient} /> }
             </Financial>
         </>
         
