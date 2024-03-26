@@ -1,15 +1,14 @@
 import {
     ButtonGroup
 } from "../style";
-import GlobalButton from "../../../components/button/button";
+import GlobalButton from "../../../components/button";
 import { theme } from "../../../theme/theme";
-import { useContext } from "react";
-import { GlobalContext } from "../../../context/globalContext";
+import { useUser } from "../../../context/globalContext";
 
 const Buttons = ({ setOpen, setOpenRetirada }) => {
 
     const { cancelColor, primaryColor } = theme;
-    const { dataClient } = useContext(GlobalContext);
+    const { dataClient } = useUser();
 
     return (
         <>

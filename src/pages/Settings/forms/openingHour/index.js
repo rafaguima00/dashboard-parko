@@ -1,8 +1,8 @@
 import TopForm from "../../components/topForm";
 import { ContainerForm } from "../style";
-import { useContext, useState } from "react";
-import { ParkingContext } from "../../../../context/parkingContext";
-import { GlobalContext } from "../../../../context/globalContext";
+import { useState } from "react";
+import { useParking } from "../../../../context/parkingContext";
+import { useUser } from "../../../../context/globalContext";
 import { theme } from "../../../../theme/theme";
 import FormArea from "./components/FormArea";
 import BottomButton from "./components/BottomButton";
@@ -21,8 +21,8 @@ const FormOpening = () => {
         setCloseHour, 
         setChecked, 
         checked 
-    } = useContext(ParkingContext);
-    const { dataClient } = useContext(GlobalContext);
+    } = useParking();
+    const { dataClient } = useUser();
 
     const { 
         cancelColor, 

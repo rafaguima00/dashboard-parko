@@ -1,5 +1,5 @@
-import { useState, useContext, useEffect } from "react";
-import { GlobalContext } from "../../../../../context/globalContext";
+import { useState, useEffect } from "react";
+import { useUser } from "../../../../../context/globalContext";
 import { Div, Span } from "../../../style";
 import { theme } from "../../../../../theme/theme";
 import InputGroup from "./components/groupInput";
@@ -10,7 +10,7 @@ import EditHeritage from "./form/edit";
 import api from "../../../../../services/api/server";
 
 const Heritage = () => {
-    const { patrimonio, setPatrimonio, dataClient } = useContext(GlobalContext);
+    const { patrimonio, setPatrimonio, dataClient } = useUser();
     const { neutralColor, primaryColor } = theme;
 
     const [newItem, setNewItem] = useState(false);

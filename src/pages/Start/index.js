@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../../context/globalContext";
+import { useEffect, useState } from "react";
+import { useUser } from "../../context/globalContext";
 import { 
     Container, 
     Welcome, 
@@ -8,15 +8,17 @@ import {
 import ReservationStatus from "./components/reserveStatus";
 import InfoReserve from "./components/infoReservation";
 import api from "../../services/api/server";
+import { jwtDecode } from "jwt-decode";
 
 const Start = () => {
 
     const { 
+        setDataClient,
         dataClient, 
         setPark,
         setColaborators,
         setReservations
-    } = useContext(GlobalContext);
+    } = useUser();
     const { colaborator } = dataClient;
 
     const [selected, setSelected] = useState(1);
@@ -36,8 +38,8 @@ const Start = () => {
         }
     ];
 
-    const loadData = async () => {
-        await api.get(`/establishments/${dataClient.id_establishment}`)
+    const loadData = async (id) => {
+        await api.get(`/establishments/${id}`)
         .then(response => {
             setPark(response.data[0]);
         })
@@ -46,8 +48,8 @@ const Start = () => {
         })
     };
 
-    const listColaborators = async () => {
-        await api.get(`/colaborators/${dataClient.id_establishment}`)
+    const listColaborators = async (id) => {
+        await api.get(`/colaborators/${id}`)
         .then(response => {
             setColaborators(response.data);
         })
@@ -66,12 +68,20 @@ const Start = () => {
         })
     };
 
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if(token) {
+            const decoded = jwtDecode(token);
+            setDataClient(decoded.user)
+        }
+    }, []);
 
     useEffect(() => {
-        loadData();
-        listColaborators();
+        loadData(dataClient.id_establishment);
+        listColaborators(dataClient.id_establishment);
         listReservations(dataClient.id_establishment);
-    }, []);
+    }, [dataClient]);
 
     return (
         <Container>

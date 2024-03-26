@@ -1,10 +1,9 @@
-import { useContext } from "react";
-import { GlobalContext } from "../../../../../../context/globalContext";
+import { useUser } from "../../../../../../context/globalContext";
 import { 
     FormArea, 
     GroupButton
 } from "../style";
-import GlobalButton from "../../../../../../components/button/button";
+import GlobalButton from "../../../../../../components/button";
 import FormList from "./formList";
 import MissTicket from "../forms/missTicket";
 import TheftCostumer from "../forms/theftCostumer";
@@ -13,7 +12,7 @@ import api from "../../../../../../services/api/server";
 
 const FormOcurrence = (props) => {
 
-    const { dataClient } = useContext(GlobalContext);
+    const { dataClient } = useUser();
 
     const { id_establishment } = dataClient;
     const { cancelColor, greenColor, primaryColor } = props.colors;

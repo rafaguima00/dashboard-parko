@@ -1,5 +1,5 @@
-import { useState, useContext, useEffect } from "react";
-import { GlobalContext } from "../../../context/globalContext";
+import { useState, useEffect } from "react";
+import { useUser } from "../../../context/globalContext";
 import {
     InfoReservation,
     GroupInfo,
@@ -12,7 +12,7 @@ import {
 import { formatCurrency } from "../../../services/formatCurrency";
 import { CgNotes } from "react-icons/cg";
 import { FaRightLeft } from "react-icons/fa6";
-import GlobalButton from "../../../components/button/button";
+import GlobalButton from "../../../components/button";
 import { theme } from "../../../theme/theme";
 import { Chart as ChartJS, ArcElement, Title } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
@@ -42,7 +42,7 @@ const InfoReserve = () => {
     const [vehicles, setVehicles] = useState([]);
     const [users, setUsers] = useState([]);
 
-    const { dataClient } = useContext(GlobalContext);
+    const { dataClient } = useUser();
 
     //função para guardar os dados de todos os veículos cadastrados na const 'vehicles'
     const verifyVehicles = async () => {

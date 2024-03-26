@@ -33,6 +33,7 @@ const Menu = () => {
 
     const handleLogout = () => {
         alert("Você saiu da sua conta");
+        localStorage.removeItem("token");
 
         return navigate("/");
     }
@@ -45,7 +46,7 @@ const Menu = () => {
                 handleLogout={handleLogout} 
             />
             <Outlet />
-            <Notification>
+            <Notification onClick={() => {}}>
                 <IoNotificationsOutline size={18} color="#523499" />
             </Notification>
         </Container>

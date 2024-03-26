@@ -3,9 +3,8 @@ import Accounts from "./accounts/accounts";
 import Heritage from "./heritage/heritage";
 import Occurrence from "./occurrence/occurrence";
 import { Financial } from "../../style";
-import Top from "../../../../components/top/top";
-import { useContext } from "react";
-import { GlobalContext } from "../../../../context/globalContext";
+import Top from "../../../../components/top";
+import { useUser } from "../../../../context/globalContext";
 
 const GridTwo = (props) => {
 
@@ -14,7 +13,7 @@ const GridTwo = (props) => {
         dataClient, 
         occurrences, 
         setOccurrences 
-    } = useContext(GlobalContext);
+    } = useUser();
     const { type_colaborator } = dataClient;
 
     const titleSelected = () => {

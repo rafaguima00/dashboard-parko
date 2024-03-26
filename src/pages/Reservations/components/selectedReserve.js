@@ -1,5 +1,5 @@
-import { useContext, useState } from "react";
-import { GlobalContext } from "../../../context/globalContext";
+import { useState } from "react";
+import { useUser } from "../../../context/globalContext";
 import {
     Content,
     List,
@@ -15,7 +15,7 @@ import {
     Receive
 } from "../style";
 import { formatCurrency } from "../../../services/formatCurrency";
-import Top from "../../../components/top/top";
+import Top from "../../../components/top";
 import { theme } from "../../../theme/theme";
 import Modal from "../../../components/Modal";
 import EditModal from "../form/edit";
@@ -26,7 +26,7 @@ const SelectedReserve = (props) => {
     const { getDebtById } = props;
     const { neutralColor } = theme;
 
-    const { selectedClient } = useContext(GlobalContext);
+    const { selectedClient } = useUser();
     const { id } = selectedClient;
 
     const [openEdit, setOpenEdit] = useState(false);
@@ -77,11 +77,7 @@ const SelectedReserve = (props) => {
                             <p>{selectedClient.data_saida}</p>
                         </InfoReservation>
                     </GridItems>
-                    <Edit
-                        onClick={() => setOpenEdit(true)}
-                    >
-                        Editar
-                    </Edit>
+                    <Edit onClick={() => setOpenEdit(true)}>Editar</Edit>
                     <Modal
                         isOpen={openEdit}
                         setOpen={setOpenEdit}

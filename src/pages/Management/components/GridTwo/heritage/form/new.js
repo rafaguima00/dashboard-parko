@@ -25,10 +25,6 @@ const NewHeritage = (props) => {
         setStates();
     }, []);
 
-    useEffect(() => {
-        console.log(chosenItem);
-    }, [chosenItem]);
-
     return (
         <RowForm>
             <DivInput>

@@ -3,15 +3,15 @@ import { theme } from "../../../../../theme/theme";
 import InputGroup from "./components/groupInput";
 import TableAccount from "./components/table";
 import Modal from "../../../../../components/Modal";
-import { useState, useContext, useEffect } from "react";
-import { GlobalContext } from "../../../../../context/globalContext";
+import { useState, useEffect } from "react";
+import { useUser } from "../../../../../context/globalContext";
 import FilterDate from "./form/filterDate";
 import NovaConta from "./form/novaConta";
 import api from "../../../../../services/api/server";
 
 const Accounts = () => {
 
-    const { accounts, setAccounts, dataClient } = useContext(GlobalContext);
+    const { accounts, setAccounts, dataClient } = useUser();
     const { neutralColor, primaryColor } = theme;
 
     const [filterDate, setFilterDate] = useState(false);

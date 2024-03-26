@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { GlobalContext } from "../../../context/globalContext";
+import { useUser } from "../../../context/globalContext";
 import { 
     List,
     ListHeader,
@@ -13,7 +12,7 @@ import { formatCurrency } from "../../../services/formatCurrency";
 const ListReserve = (props) => {
 
     const { reservaConfirmada } = props;
-    const { dataClient } = useContext(GlobalContext);
+    const { dataClient } = useUser();
 
     const firstWord = dataClient.colaborator.split(" ")[0];
 

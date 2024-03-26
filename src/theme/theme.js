@@ -3,4 +3,4 @@ export const theme = {
     cancelColor: "#d64d4d",
     neutralColor: "#545454",
     greenColor: "#509C76"
-}
+};

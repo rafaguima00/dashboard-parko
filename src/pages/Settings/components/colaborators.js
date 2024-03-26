@@ -11,12 +11,11 @@ import {
 } from "../style";
 import { theme } from "../../../theme/theme";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react"; 
-import { GlobalContext } from "../../../context/globalContext";
+import { useUser } from "../../../context/globalContext";
 
 const Colaborators = () => {
 
-    const { colaborators, dataClient } = useContext(GlobalContext);
+    const { colaborators, dataClient } = useUser();
     const { type_colaborator } = dataClient;
     const { neutralColor } = theme;
 

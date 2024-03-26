@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../../../context/globalContext";
+import { useState } from "react";
+import { useUser } from "../../../context/globalContext";
 import {
     List,
     ListHeader,
@@ -16,7 +16,7 @@ const ListConfirmedReserve = (props) => {
 
     const [clicked, setClicked] = useState(0);
 
-    const { setSelectedClient } = useContext(GlobalContext);
+    const { setSelectedClient } = useUser();
 
     const handleOnClick = ({ index, item }) => {
         setClicked(index)
@@ -34,7 +34,7 @@ const ListConfirmedReserve = (props) => {
             license_plate: item.license_plate,
             value: item.value
         })
-    }
+    };
 
     return (
         <List>

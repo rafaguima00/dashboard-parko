@@ -10,8 +10,8 @@ import {
     BtPassword,
     Login
 } from "../style";
-import { useState, useContext } from "react";
-import { GlobalContext } from "../../../context/globalContext";
+import { useState } from "react";
+import { useUser } from "../../../context/globalContext";
 import { useNavigate } from "react-router-dom";
 import { theme } from "../../../theme/theme";
 import api from "../../../services/api/server";
@@ -25,8 +25,8 @@ const Form = () => {
         setDataClient, 
         dataClient, 
         setPark, 
-        setColaborators,
-    } = useContext(GlobalContext);
+        setColaborators
+    } = useUser();
     const { primaryColor } = theme;
 
     const navigate = useNavigate();
@@ -39,7 +39,7 @@ const Form = () => {
         .catch(e => {
             console.log(e)
         })
-    }
+    };
 
     const listColaborators = async () => {
         await api.get(`/colaborators/${dataClient.id_establishment}`)
@@ -49,7 +49,7 @@ const Form = () => {
         .catch(e => {
             console.log(e);
         })
-    }
+    };
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -59,9 +59,11 @@ const Form = () => {
             password: dataClient.password
         })
         .then(response => {    
-            setDataClient(response.data);
+            localStorage.setItem("token", JSON.stringify(response.data))
             loadData();
             listColaborators();
+        })
+        .then(() => {
             return navigate("/start");
         })
         .catch(e => {
@@ -70,7 +72,7 @@ const Form = () => {
                 setMessageError(e.response.data.message)
             }
         })
-    }
+    };
 
     return (
         <AreaForm>

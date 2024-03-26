@@ -7,9 +7,8 @@ import {
     P,
     GroupButton
 } from "../style";
-import GlobalButton from "../../../../../components/button/button";
-import { useContext } from "react";
-import { GlobalContext } from "../../../../../context/globalContext"; 
+import GlobalButton from "../../../../../components/button";
+import { useUser } from "../../../../../context/globalContext"; 
 
 const ListColaborators = (props) => {
 
@@ -17,7 +16,7 @@ const ListColaborators = (props) => {
     const { selected, setSelected, newColaborator, setNewColaborator } = props.state;
     const { handleCreateColaborator, deleteColaborator } = props;
 
-    const { colaborators } = useContext(GlobalContext);
+    const { colaborators } = useUser();
 
     const handleClick = (item) => {
         setSelected(item.id);

@@ -8,9 +8,8 @@ import {
 } from "../style";
 import { theme } from "../../../theme/theme";
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
-import { ParkingContext } from "../../../context/parkingContext";
-import { GlobalContext } from "../../../context/globalContext";
+import { useEffect, useState } from "react";
+import { useUser } from "../../../context/globalContext";
 import api from "../../../services/api/server";
 
 const OpeningHours = () => {
@@ -23,7 +22,7 @@ const OpeningHours = () => {
         return navigate("/settings/funcionamento");
     }
 
-    const { dataClient } = useContext(GlobalContext);
+    const { dataClient } = useUser();
 
     const [horaAbertura, setHoraAbertura] = useState(null);
     const [horaFechamento, setHoraFechamento] = useState(null);

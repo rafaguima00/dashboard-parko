@@ -12,14 +12,13 @@ import {
 import parking from "../../../assets/estacionamento.png";
 import { theme } from "../../../theme/theme";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react"; 
-import { GlobalContext } from "../../../context/globalContext";
+import { useUser } from "../../../context/globalContext";
 
 const Establishment = () => {
 
     const { neutralColor } = theme;
 
-    const { park, dataClient } = useContext(GlobalContext);
+    const { park, dataClient } = useUser();
     const { type_colaborator } = dataClient;
 
     const navigate = useNavigate();

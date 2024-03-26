@@ -1,5 +1,5 @@
-import { useState, useContext } from "react";
-import { GlobalContext } from "../../../../context/globalContext";
+import { useState } from "react";
+import { useUser } from "../../../../context/globalContext";
 import TopForm from "../../components/topForm";
 import { ContainerForm } from "../style";
 import { ContentView } from "./style";
@@ -10,7 +10,7 @@ import api from "../../../../services/api/server";
 
 const ColaboratorsForm = () => {
 
-    const { dataClient } = useContext(GlobalContext);
+    const { dataClient } = useUser();
 
     const [selected, setSelected] = useState(null);
     const [newColaborator, setNewColaborator] = useState({

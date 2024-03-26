@@ -3,9 +3,23 @@ import Establishment from "./components/establishment";
 import Colaborators from "./components/colaborators";
 import PriceTable from "./components/priceTable";
 import OpeningHours from "./components/openingHours";
-import Top from "../../components/top/top";
+import Top from "../../components/top";
+import { useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
+import { useUser } from "../../context/globalContext";
 
 const Settings = () => {
+
+    const { setDataClient } = useUser();
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if(token) {
+            const decoded = jwtDecode(token);
+            setDataClient(decoded.user)
+        }
+    }, []);
     
     return (
         <Container>

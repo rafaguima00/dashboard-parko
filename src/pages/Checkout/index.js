@@ -1,5 +1,5 @@
-import { useState, useContext, useEffect } from "react";
-import { GlobalContext } from "../../context/globalContext";
+import { useState, useEffect } from "react";
+import { useUser } from "../../context/globalContext";
 import { Container, Graphics } from "./style";
 import Buttons from "./components/buttons";
 import FirstHeader from "./components/firstHeader";
@@ -22,14 +22,12 @@ ChartJS.register(ArcElement, BarElement, CategoryScale, LinearScale, Title);
 const Checkout = () => {
 
     const { primaryColor, neutralColor } = theme;
-    const { reservations, dataClient } = useContext(GlobalContext);
+    const { reservations, dataClient } = useUser();
 
     const [open, setOpen] = useState(false);
     const [openRetirada, setOpenRetirada] = useState(false);
-
     const [aportes, setAportes] = useState([]);
     const [novoAporte, setNovoAporte] = useState({});
-
     const [retiradas, setRetiradas] = useState([]);
     const [novaRetirada, setNovaRetirada] = useState({});
 

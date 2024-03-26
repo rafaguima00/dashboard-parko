@@ -1,6 +1,6 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useContext } from "react";
 
-export const GlobalContext = createContext({});
+const GlobalContext = createContext({});
 
 export const InfoProvider = ({ children }) => {
 
@@ -46,4 +46,6 @@ export const InfoProvider = ({ children }) => {
             {children}
         </GlobalContext.Provider>
     )
-}
+};
+
+export const useUser = () => useContext(GlobalContext);

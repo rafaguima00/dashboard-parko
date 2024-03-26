@@ -10,16 +10,16 @@ import {
     InputNumber
 } from "./style";
 import { theme } from "../../../../theme/theme";
-import GlobalButton from "../../../../components/button/button";
-import { GlobalContext } from "../../../../context/globalContext";
+import GlobalButton from "../../../../components/button";
+import { useUser } from "../../../../context/globalContext";
 import { useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import api from "../../../../services/api/server";
 
 const PriceTableForm = () => {
 
     const { primaryColor, cancelColor, greenColor } = theme;
-    const { dataClient, priceTable, setPriceTable } = useContext(GlobalContext);
+    const { dataClient, priceTable, setPriceTable } = useUser();
 
     const navigate = useNavigate();
 

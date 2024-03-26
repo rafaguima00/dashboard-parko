@@ -1,5 +1,5 @@
-import { useContext, useState, useEffect } from "react";
-import { GlobalContext } from "../../context/globalContext";
+import { useEffect } from "react";
+import { useUser } from "../../context/globalContext";
 import {
     Container,
     ItemReservation,
@@ -10,7 +10,7 @@ import ListConfirmedReserve from "./components/listConfirmed";
 import TimingReserve from "./components/timing";
 import SelectedReserve from "./components/selectedReserve";
 import { theme } from "../../theme/theme";
-import GlobalButton from "../../components/button/button";
+import GlobalButton from "../../components/button";
 import api from "../../services/api/server";
 
 const Reservations = () => {
@@ -21,8 +21,8 @@ const Reservations = () => {
         setSelectedClient, 
         reservations, 
         debts, 
-        setDebts 
-    } = useContext(GlobalContext);
+        setDebts
+    } = useUser();
     const { colaborator } = dataClient;
     const { cancelColor, greenColor } = theme;
 

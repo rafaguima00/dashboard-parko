@@ -1,12 +1,11 @@
-import Top from "../../../../components/top/top";
+import Top from "../../../../components/top";
 import {
     Financial,
     Button,
     BlockQuote,
     Section
 } from "../../style";
-import { useContext } from "react";
-import { GlobalContext } from "../../../../context/globalContext";
+import { useUser } from "../../../../context/globalContext";
 
 const GridOne = (props) => {
 
@@ -14,7 +13,7 @@ const GridOne = (props) => {
     const { neutralColor, primaryColor } = colors;
     const { selected, setSelected, bqSelected, setBqSelected } = states;
 
-    const { dataClient } = useContext(GlobalContext);
+    const { dataClient } = useUser();
     const { type_colaborator } = dataClient;
 
     return (

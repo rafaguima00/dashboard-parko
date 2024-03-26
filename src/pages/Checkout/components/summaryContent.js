@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { GlobalContext } from "../../../context/globalContext";
+import { useUser } from "../../../context/globalContext";
 import {
     Summary,
     Header,
@@ -13,7 +12,7 @@ import { formatCurrency } from "../../../services/formatCurrency";
 
 const SummaryContent = (props) => {
 
-    const { dataClient } = useContext(GlobalContext);
+    const { dataClient } = useUser();
     const { email, colaborator } = dataClient;
     const { 
         valoresTotal, 

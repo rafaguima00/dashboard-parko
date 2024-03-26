@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { useContext, useState } from "react";
-import { GlobalContext } from "../../../context/globalContext";
+import { useState } from "react";
+import { useUser } from "../../../context/globalContext";
 import {
     SideBar,
     Image,
@@ -25,7 +25,7 @@ import { theme } from "../../../theme/theme";
 
 const NavigationBar = (props) => {
 
-    const { dataClient } = useContext(GlobalContext);
+    const { dataClient } = useUser();
     const { colaborator, type_colaborator } = dataClient;
     const { primaryColor, neutralColor } = theme;
     const { styles, textSelected, handleLogout } = props;
