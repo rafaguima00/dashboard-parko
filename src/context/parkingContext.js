@@ -1,6 +1,6 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
-export const ParkingContext = createContext({});
+const ParkingContext = createContext({});
 
 export const ParkProvider = ({ children }) => {
 
@@ -48,4 +48,6 @@ export const ParkProvider = ({ children }) => {
             {children}
         </ParkingContext.Provider>
     )
-}
+};
+
+export const useParking = () => useContext(ParkingContext);

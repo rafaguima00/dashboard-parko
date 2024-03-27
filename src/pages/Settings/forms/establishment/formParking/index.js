@@ -5,9 +5,9 @@ import {
     Label,
     Input
 } from "../style";
-import { useContext, useState } from "react";
-import { GlobalContext } from "../../../../../context/globalContext";
-import GlobalButton from "../../../../../components/button/button";
+import { useState } from "react";
+import { useUser } from "../../../../../context/globalContext";
+import GlobalButton from "../../../../../components/button";
 import { useNavigate } from "react-router-dom";
 import api from "../../../../../services/api/server";
 import cepService from "../../../../../services/api/cep";
@@ -15,7 +15,7 @@ import cepService from "../../../../../services/api/cep";
 const FormParking = (props) => {
 
     const { neutralColor, primaryColor, cancelColor, greenColor } = props.colors;
-    const { park, dataClient } = useContext(GlobalContext);
+    const { park, dataClient } = useUser();
     const { 
         razao_social, 
         name,

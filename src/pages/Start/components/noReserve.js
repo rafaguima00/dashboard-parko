@@ -1,7 +1,7 @@
 import { AlignText, Line } from "../style";
 import { theme } from "../../../theme/theme";
 
-const NoReservation = ({children}) => {
+const NoReservation = ({ children }) => {
 
     const { neutralColor } = theme;
 

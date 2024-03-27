@@ -3,34 +3,19 @@ import { FiEye } from "react-icons/fi";
 
 const Register = (props) => {
 
-    const { neutralColor, primaryColor } = props;
+    const { neutralColor, primaryColor, formOccurrence } = props;
+    const { selectOccurrence } = props.array;
 
     return (
         <RegisterArea>
-            <Item>
-                <Text textcolor={neutralColor}>Ocorrência TK001</Text>
-                <Icon buttoncolor={primaryColor}>
-                    <FiEye size={22} color="#fff" />
-                </Icon>
-            </Item>
-            <Item>
-                <Text textcolor={neutralColor}>Ocorrência TK001</Text>
-                <Icon buttoncolor={primaryColor}>
-                    <FiEye size={22} color="#fff" />
-                </Icon>
-            </Item>
-            <Item>
-                <Text textcolor={neutralColor}>Ocorrência TK001</Text>
-                <Icon buttoncolor={primaryColor}>
-                    <FiEye size={22} color="#fff" />
-                </Icon>
-            </Item>
-            <Item>
-                <Text textcolor={neutralColor}>Ocorrência TK001</Text>
-                <Icon buttoncolor={primaryColor}>
-                    <FiEye size={22} color="#fff" />
-                </Icon>
-            </Item>
+            {selectOccurrence.map(item => (
+                <Item>
+                    <Text textcolor={neutralColor}>Ocorrência {item.cod}</Text>
+                    <Icon onClick={() => formOccurrence(item)} buttoncolor={primaryColor}>
+                        <FiEye size={22} color="#fff" />
+                    </Icon>
+                </Item>
+            ))}
         </RegisterArea>
     )
 }

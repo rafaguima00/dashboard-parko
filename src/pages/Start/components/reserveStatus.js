@@ -11,7 +11,7 @@ import { RxInfoCircled } from "react-icons/rx";
 import PendingReserve from "./pendingReserve";
 import ConfirmedReserve from "./confirmedReserve";
 import RefusedReserve from "./refusedReserve";
-import Top from "../../../components/top/top";
+import Top from "../../../components/top";
 
 const ReservationStatus = (props) => {
 

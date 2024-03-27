@@ -1,6 +1,6 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useContext } from "react";
 
-export const GlobalContext = createContext({});
+const GlobalContext = createContext({});
 
 export const InfoProvider = ({ children }) => {
 
@@ -12,6 +12,9 @@ export const InfoProvider = ({ children }) => {
     const [priceTable, setPriceTable] = useState({});
     const [selectedClient, setSelectedClient] = useState({});
     const [ratings, setRatings] = useState([]);
+    const [occurrences, setOccurrences] = useState([]);
+    const [patrimonio, setPatrimonio] = useState([]);
+    const [accounts, setAccounts] = useState([]);
 
     const value = {
         dataClient, 
@@ -29,7 +32,13 @@ export const InfoProvider = ({ children }) => {
         priceTable,
         setPriceTable,
         ratings,
-        setRatings
+        setRatings,
+        occurrences,
+        setOccurrences,
+        patrimonio,
+        setPatrimonio,
+        accounts,
+        setAccounts
     };
 
     return (
@@ -37,4 +46,6 @@ export const InfoProvider = ({ children }) => {
             {children}
         </GlobalContext.Provider>
     )
-}
+};
+
+export const useUser = () => useContext(GlobalContext);

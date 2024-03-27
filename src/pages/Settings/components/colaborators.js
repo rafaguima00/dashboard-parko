@@ -11,18 +11,24 @@ import {
 } from "../style";
 import { theme } from "../../../theme/theme";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react"; 
-import { GlobalContext } from "../../../context/globalContext";
+import { useUser } from "../../../context/globalContext";
 
 const Colaborators = () => {
 
-    const { colaborators } = useContext(GlobalContext);
+    const { colaborators, dataClient } = useUser();
+    const { type_colaborator } = dataClient;
     const { neutralColor } = theme;
+
+    const coordenador = type_colaborator === "Coordenador(a)";
 
     const navigate = useNavigate();
 
     const routeScreen = () => {
-        return navigate("/settings/colaborators");
+        if(coordenador) {
+            alert("Você não tem permissão para editar os dados dos colaboradores");
+        } else {
+            return navigate("/settings/colaborators");
+        }
     }
 
     return (

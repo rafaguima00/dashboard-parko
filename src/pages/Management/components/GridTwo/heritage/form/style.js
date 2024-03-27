@@ -46,6 +46,33 @@ export const Input = styled.input`
     }
 `
 
+export const InputNumber = styled.input`
+    padding: .5rem;
+    background: none;
+    border: 1px solid ${props => props.bordercolor};
+    border-radius: .5rem;
+    width: ${props => props.largura};
+    height: 2.5rem;
+    -moz-appearance: textfield;
+    appearance: textfield;
+
+    &::-webkit-inner-spin-button { 
+        -webkit-appearance: none;
+    }
+
+    &::placeholder {
+        color: #7d7d7d;
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &:disabled {
+        background-color: #c4c4c4;
+    }
+`
+
 export const Select = styled.select`
     font-size: 12px;
     color: #7d7d7d;

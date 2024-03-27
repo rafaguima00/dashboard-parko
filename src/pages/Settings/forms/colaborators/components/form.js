@@ -1,5 +1,3 @@
-import { useContext, useEffect } from "react";
-import { GlobalContext } from "../../../../../context/globalContext";
 import { 
     DivInput,
     Label,
@@ -14,18 +12,16 @@ import {
     Image, 
     Edit
 } from "../style";
-import avatar from "../../../../../assets/avatar.png";
+//import avatar from "../../../../../assets/avatar.png";
 import { FaRegEdit } from "react-icons/fa";
-import GlobalButton from "../../../../../components/button/button";
+import GlobalButton from "../../../../../components/button";
 import { useNavigate } from "react-router-dom";
 
 const FormColaborator = (props) => {
 
     const { primaryColor, neutralColor, cancelColor, greenColor } = props.theme;
     const { selected, newColaborator, setNewColaborator, dataClient } = props.state;
-    const { handleUpdate } = props;
-
-    const { colaborators } = useContext(GlobalContext);
+    const { handleUpdate, selecionarCargo, tipoContratacao } = props;
 
     const navigate = useNavigate();
 
@@ -74,31 +70,10 @@ const FormColaborator = (props) => {
     const telDigitado = newColaborator.tel;
     const formataTel = telDigitado.replace(/(\d{2})(\d{5})(\d{4})/g, '($1) $2-$3');
 
-    const selecionarCargo = (value) => {
-
-        if(value === "Funcionário(a)") {
-            setNewColaborator({ ...newColaborator, e_admin: 1 })
-        } else if (value === "Coordenador(a)") {
-            setNewColaborator({ ...newColaborator, e_admin: 2 })
-        } else if (value === "Administrador(a)") {
-            setNewColaborator({ ...newColaborator, e_admin: 3 })
-        }
-    }
-
-    const tipoContratacao = (value) => {
-        if(value === "Carteira assinada") {
-            setNewColaborator({ ...newColaborator, tipo_contratacao: 1 })
-        } else if (value === "Autônomo (PJ)") {
-            setNewColaborator({ ...newColaborator, tipo_contratacao: 2 })
-        }else if (value === "MEI") {
-            setNewColaborator({ ...newColaborator, tipo_contratacao: 3 })
-        }
-    }
-
     return (
         <FormContent>
             <DivImage>
-                <Image src={avatar} alt="Avatar" />
+                <Image src={{}} alt="Avatar" />
                 <Edit background={primaryColor} onClick={e => e.preventDefault()}>
                     <FaRegEdit size={17} color="#fff"/>
                 </Edit>

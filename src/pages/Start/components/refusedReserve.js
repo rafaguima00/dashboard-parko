@@ -1,5 +1,5 @@
-import { useState, useContext } from "react";
-import { GlobalContext } from "../../../context/globalContext";
+import { useState } from "react";
+import { useUser } from "../../../context/globalContext";
 import Modal from "../../../components/Modal";
 import { 
     ListBody,
@@ -15,7 +15,7 @@ const RefusedReserve = () => {
 
     const [open, setOpen] = useState(false);
 
-    const { reservations } = useContext(GlobalContext);
+    const { reservations } = useUser();
 
     return (
         <>

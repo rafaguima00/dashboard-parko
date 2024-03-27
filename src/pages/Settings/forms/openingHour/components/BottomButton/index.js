@@ -1,4 +1,4 @@
-import GlobalButton from "../../../../../../components/button/button";
+import GlobalButton from "../../../../../../components/button";
 import { DivButton } from "../../../style";
 import { useNavigate } from "react-router-dom";
 

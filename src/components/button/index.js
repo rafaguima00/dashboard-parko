@@ -8,7 +8,8 @@ const GlobalButton = ({
     altura,
     bold,
     btborder,
-    aoPressionar
+    aoPressionar,
+    disabled
 }) => {
     return (
         <Button 
@@ -19,6 +20,7 @@ const GlobalButton = ({
             bold={bold}
             btborder={btborder}
             onClick={aoPressionar}
+            disabled={disabled}
         >
             {children}
         </Button>

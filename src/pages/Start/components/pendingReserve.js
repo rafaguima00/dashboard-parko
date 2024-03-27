@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { GlobalContext } from "../../../context/globalContext";
+import { useUser } from "../../../context/globalContext";
 import { 
     ListBody,
     ElementList,
@@ -11,7 +10,7 @@ import NoReservation from "./noReserve";
 
 const PendingReserve = () => {
 
-    const { reservations } = useContext(GlobalContext);
+    const { reservations } = useUser();
 
     const handleUpdate = async (id) => {
         const findUser = reservations.find(item => item.id === id);

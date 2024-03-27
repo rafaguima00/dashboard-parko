@@ -2,14 +2,14 @@ import {
     Container
 } from "./style";
 import Rate from "./components/rate";
-import Top from "../../components/top/top";
+import Top from "../../components/top";
 import api from "../../services/api/server";
-import { useEffect, useContext } from "react";
-import { GlobalContext } from "../../context/globalContext";
+import { useEffect } from "react";
+import { useUser } from "../../context/globalContext";
 
 const Ratings = () => {
 
-    const { ratings, setRatings, dataClient } = useContext(GlobalContext);
+    const { ratings, setRatings, dataClient } = useUser();
 
     const recuperarDados = async () => {
         await api.get("/ratings")

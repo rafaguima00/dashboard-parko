@@ -12,20 +12,26 @@ import {
 import parking from "../../../assets/estacionamento.png";
 import { theme } from "../../../theme/theme";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react"; 
-import { GlobalContext } from "../../../context/globalContext";
+import { useUser } from "../../../context/globalContext";
 
 const Establishment = () => {
 
     const { neutralColor } = theme;
 
+    const { park, dataClient } = useUser();
+    const { type_colaborator } = dataClient;
+
     const navigate = useNavigate();
 
-    const routerScreen = () => {
-        return navigate("/settings/establishment")
-    }
+    const coordenador = type_colaborator === "Coordenador(a)";
 
-    const { park } = useContext(GlobalContext);
+    const routerScreen = () => {
+        if(coordenador) {
+            alert("Você não tem permissão para editar as informações do estacionamento");
+        } else {
+            return navigate("/settings/establishment");
+        }
+    };
 
     return (
         <ContentInfo gridcolumn={1} gridrow={"span 3"}>
@@ -39,39 +45,39 @@ const Establishment = () => {
                 <InfoEstablishment>
                     <TextArea textcolor={neutralColor}>
                         <P>Nome do Estabelecimento:</P>
-                        <Name>{park.name}</Name>
+                        <Name>{coordenador ? "" : park.name}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>Razão Social:</P>
-                        <Name>{park.razao_social}</Name>
+                        <Name>{coordenador ? "" : park.razao_social}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>CNPJ:</P>
-                        <Name>{park.cnpj}</Name>
+                        <Name>{coordenador ? "" : park.cnpj}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>Telefone:</P>
-                        <Name>{park.contato}</Name>
+                        <Name>{coordenador ? "" : park.contato}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>E-mail:</P>
-                        <Name>{park.email}</Name>
+                        <Name>{coordenador ? "" : park.email}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>CEP:</P>
-                        <Name>{park.cep}</Name>
+                        <Name>{coordenador ? "" : park.cep}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>Endereço:</P>
-                        <Name>{park.end}</Name>
+                        <Name>{coordenador ? "" : park.end}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>Bairro:</P>
-                        <Name>{park.bairro}</Name>
+                        <Name>{coordenador ? "" : park.bairro}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>Cidade:</P>
-                        <Name>{park.cidade}</Name>
+                        <Name>{coordenador ? "" : park.cidade}</Name>
                     </TextArea>
                 </InfoEstablishment>
             </MenuEstablishment>

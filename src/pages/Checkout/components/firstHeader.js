@@ -4,7 +4,7 @@ import {
     IconGroup,
     Icon
 } from "../style";
-import Top from "../../../components/top/top";
+import Top from "../../../components/top";
 
 const FirstHeader = () => {
     return (

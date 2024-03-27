@@ -9,14 +9,14 @@ import {
 import { theme } from "../../../theme/theme";
 import { useNavigate } from "react-router-dom";
 import api from "../../../services/api/server";
-import { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../../../context/globalContext";
+import { useEffect } from "react";
+import { useUser } from "../../../context/globalContext";
 import { formatCurrency } from "../../../services/formatCurrency";
 
 const PriceTable = () => {
     
     const { neutralColor, primaryColor, cancelColor } = theme;
-    const { dataClient, priceTable, setPriceTable } = useContext(GlobalContext);
+    const { dataClient, priceTable, setPriceTable } = useUser();
     
     const navigate = useNavigate();
 

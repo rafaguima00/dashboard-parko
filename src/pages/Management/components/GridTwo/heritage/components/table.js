@@ -8,22 +8,32 @@ import {
     ListHeader, 
     Text
 } from "../style";
-import { heritage } from "../../../../../../mocks/patrimonio";
+import api from "../../../../../../services/api/server";
 
 const TableAccount = (props) => {
 
-    const { neutralColor, setEditItem, setChosenItem } = props;
+    const { neutralColor, setEditItem, setChosenItem, filtrarPatrimonio } = props;
 
     const returnData = ({ item }) => {
         setChosenItem({
             id: item.id,
             code: item.code,
-            item:  item.item,
+            name: item.name,
             category: item.category,
-            quantity: item.quantity
+            date_registry: item.date_registry,
+            quantity: item.quantity,
+            unit_measurement: item.unit_measurement,
+            value: item.value,
+            id_establishment: item.id_establishment
         })
         setEditItem(true)
-    }
+    };
+
+    const handleDeleteItem = async (id) => {
+        await api.delete(`/heritage/${id}`)
+        .then(() => alert("Item excluído da lista"))
+        .catch(e => console.log(e))
+    };
 
     return (
         <List>
@@ -35,7 +45,7 @@ const TableAccount = (props) => {
                 <Text textcolor="#bababa">Ação</Text>
             </ListHeader>
             <ListBody>
-                {heritage.map(item => (
+                {filtrarPatrimonio.map(item => (
                     <ElementList key={item.id}>
                         <Text textcolor="#7c7c7c">{item.code}</Text>
                         <Text textcolor="#7c7c7c">{item.category}</Text>
@@ -45,7 +55,7 @@ const TableAccount = (props) => {
                             <button onClick={() => returnData({item})}>
                                 <FiEdit color={neutralColor} size={19}/>
                             </button>
-                            <button>
+                            <button onClick={() => handleDeleteItem(item.id)}>
                                 <AiOutlineDelete color={neutralColor} size={19}/>
                             </button>
                         </GroupButton> 

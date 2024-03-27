@@ -5,7 +5,7 @@ import {
     Icon
 } from "../style";
 import { FiDownload, FiPlus } from "react-icons/fi";
-import Top from "../../../components/top/top";
+import Top from "../../../components/top";
 
 const TopContent = () => {
     return (

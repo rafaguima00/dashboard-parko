@@ -7,7 +7,7 @@ import {
 import { BiEdit } from "react-icons/bi";
 import { BsCalendar4, BsDownload } from "react-icons/bs";
 import { theme } from "../../../theme/theme";
-import Top from "../../../components/top/top";
+import Top from "../../../components/top";
 
 const SecondHeader = () => {
 

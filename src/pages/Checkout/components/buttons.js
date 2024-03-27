@@ -1,12 +1,14 @@
 import {
     ButtonGroup
 } from "../style";
-import GlobalButton from "../../../components/button/button";
+import GlobalButton from "../../../components/button";
 import { theme } from "../../../theme/theme";
+import { useUser } from "../../../context/globalContext";
 
 const Buttons = ({ setOpen, setOpenRetirada }) => {
 
     const { cancelColor, primaryColor } = theme;
+    const { dataClient } = useUser();
 
     return (
         <>
@@ -21,12 +23,14 @@ const Buttons = ({ setOpen, setOpenRetirada }) => {
                     background={primaryColor}
                     largura={"7rem"}
                     aoPressionar={() => setOpen(true)}
+                    disabled={dataClient.type_colaborator === "Funcionário(a)" ? true : false}
                 />
                 <GlobalButton 
                     children="Retirada"
                     background={primaryColor}
                     largura={"7rem"}
                     aoPressionar={() => setOpenRetirada(true)}
+                    disabled={dataClient.type_colaborator === "Funcionário(a)" ? true : false}
                 />
             </ButtonGroup>
         </>
