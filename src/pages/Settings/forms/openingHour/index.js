@@ -1,12 +1,14 @@
 import TopForm from "../../components/topForm";
 import { ContainerForm } from "../style";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParking } from "../../../../context/parkingContext";
 import { useUser } from "../../../../context/globalContext";
 import { theme } from "../../../../theme/theme";
 import FormArea from "./components/FormArea";
 import BottomButton from "./components/BottomButton";
 import api from "../../../../services/api/server";
+import { jwtDecode } from "jwt-decode";
+import ReadApi from "../../../../services/readData";
 
 const FormOpening = () => {
 
@@ -22,7 +24,8 @@ const FormOpening = () => {
         setChecked, 
         checked 
     } = useParking();
-    const { dataClient } = useUser();
+    const { dataClient, setDataClient, reservations } = useUser();
+    const { listColaborators, listReservations, loadData } = ReadApi();
 
     const { 
         cancelColor, 
@@ -148,6 +151,21 @@ const FormOpening = () => {
             })
         }
     };
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if(token) {
+            const decoded = jwtDecode(token);
+            setDataClient(decoded.user)
+        }
+    }, []);
+
+    useEffect(() => {
+        loadData(dataClient.id_establishment);
+        listColaborators(dataClient.id_establishment);
+        listReservations(dataClient.id_establishment);
+    }, [dataClient, reservations]);
 
     return (
         <ContainerForm>

@@ -7,19 +7,15 @@ import {
 } from "./style";
 import ReservationStatus from "./components/reserveStatus";
 import InfoReserve from "./components/infoReservation";
-import api from "../../services/api/server";
 import { jwtDecode } from "jwt-decode";
+import ReadApi from "../../services/readData";
 
 const Start = () => {
 
-    const { 
-        setDataClient,
-        dataClient, 
-        setPark,
-        setColaborators,
-        setReservations
-    } = useUser();
+    const { setDataClient, dataClient, reservations } = useUser();
     const { colaborator } = dataClient;
+
+    const { listReservations, loadData, listColaborators } = ReadApi();
 
     const [selected, setSelected] = useState(1);
 
@@ -38,36 +34,6 @@ const Start = () => {
         }
     ];
 
-    const loadData = async (id) => {
-        await api.get(`/establishments/${id}`)
-        .then(response => {
-            setPark(response.data[0]);
-        })
-        .catch(e => {
-            console.log(e)
-        })
-    };
-
-    const listColaborators = async (id) => {
-        await api.get(`/colaborators/${id}`)
-        .then(response => {
-            setColaborators(response.data);
-        })
-        .catch(e => {
-            console.log(e);
-        })
-    };
-
-    const listReservations = async (id) => {
-        await api.get(`/reservations/parking/${id}`)
-        .then(response => {
-            setReservations(response.data)
-        })
-        .catch(e => {
-            console.log(e.response.data.message)
-        })
-    };
-
     useEffect(() => {
         const token = localStorage.getItem("token");
 
@@ -81,7 +47,7 @@ const Start = () => {
         loadData(dataClient.id_establishment);
         listColaborators(dataClient.id_establishment);
         listReservations(dataClient.id_establishment);
-    }, [dataClient]);
+    }, [dataClient, reservations]);
 
     return (
         <Container>

@@ -43,8 +43,8 @@ export const ButtonEdit = styled.button`
 `
 
 export const Image = styled.img`
-    width: 80%;
-    height: 60%;
+    max-width: 22rem;
+    max-height: 9rem;
     border-radius: 1.5rem;
 `
 

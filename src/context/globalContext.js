@@ -15,6 +15,8 @@ export const InfoProvider = ({ children }) => {
     const [occurrences, setOccurrences] = useState([]);
     const [patrimonio, setPatrimonio] = useState([]);
     const [accounts, setAccounts] = useState([]);
+    const [aportes, setAportes] = useState([]);
+    const [retiradas, setRetiradas] = useState([]);
 
     const value = {
         dataClient, 
@@ -38,7 +40,11 @@ export const InfoProvider = ({ children }) => {
         patrimonio,
         setPatrimonio,
         accounts,
-        setAccounts
+        setAccounts,
+        aportes,
+        setAportes,
+        retiradas,
+        setRetiradas
     };
 
     return (

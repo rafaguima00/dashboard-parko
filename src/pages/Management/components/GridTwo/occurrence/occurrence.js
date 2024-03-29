@@ -38,9 +38,7 @@ const Occurrence = (props) => {
         setOccurrenceItem(item);
     };
 
-    useEffect(() => {
-        readOccurrences();
-    }, []);
+    useEffect(() => { readOccurrences() }, [occurrences]);
 
     useEffect(() => console.log(occurrenceItem), [occurrenceItem]);
 

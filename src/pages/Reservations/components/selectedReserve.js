@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../../../context/globalContext";
 import {
     Content,
@@ -15,34 +15,53 @@ import {
     Receive
 } from "../style";
 import { formatCurrency } from "../../../services/formatCurrency";
-import Top from "../../../components/top";
+import Top from "../../../components/Top";
 import { theme } from "../../../theme/theme";
 import Modal from "../../../components/Modal";
 import EditModal from "../form/edit";
 import DebtPayment from "../form/debtPayment";
+import api from "../../../services/api/server";
 
 const SelectedReserve = (props) => {
 
     const { getDebtById } = props;
     const { neutralColor } = theme;
 
-    const { selectedClient } = useUser();
-    const { id } = selectedClient;
+    const { selectedClient, setSelectedClient } = useUser();
 
     const [openEdit, setOpenEdit] = useState(false);
     const [openDebt, setOpenDebt] = useState(false);
 
+    const handleUpdate = async (id) => {
+        await api.put(`reservations/${id}`, {
+            data_entrada: selectedClient.data_entrada,
+            hora_entrada: selectedClient.hora_entrada,
+            data_saida: selectedClient.data_saida,
+            hora_saida: selectedClient.hora_saida,
+            value: selectedClient.value,
+            status: 1,
+            id_vehicle: selectedClient.id_vehicle
+        })
+        .then(() => {
+            alert("Reserva atualizada com sucesso.");
+            setOpenEdit(false);
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    };
+
     const valorTotal = () => {
         if(selectedClient.value !== undefined) {
             if(getDebtById !== undefined) {
-                return selectedClient.value + getDebtById.value
+                return selectedClient.value + getDebtById.value;
             } else {
-                return selectedClient.value
+                return selectedClient.value;
             }
         } else {
             return 0;
         }
-    }
+    };
 
     const total = valorTotal();
 
@@ -81,11 +100,11 @@ const SelectedReserve = (props) => {
                     <Modal
                         isOpen={openEdit}
                         setOpen={setOpenEdit}
-                        title={`Nº ${id}`}
+                        title={`Nº ${selectedClient.id}`}
                         maxWidth={"52rem"}
-                        funcao={() => {console.log("item salvo ok")}}
+                        funcao={() => handleUpdate(selectedClient.id)} 
                     >
-                        <EditModal selectedClient={selectedClient} />
+                        <EditModal states={{ selectedClient, setSelectedClient }} />
                     </Modal>
                 </section>
                 <SecondSection>

@@ -6,7 +6,7 @@ import {
     InfoCheckout,
     Info
 } from "../style";
-import camera from "../../../assets/camera.png";
+import avatar from "../../../assets/avatar.png";
 import { theme } from "../../../theme/theme";
 import { formatCurrency } from "../../../services/formatCurrency";
 
@@ -27,7 +27,7 @@ const SummaryContent = (props) => {
     return (
         <Summary>
             <Header>
-                <img src={camera} alt="Avatar" />
+                <img src={dataClient.image ? dataClient.image : avatar} alt="Avatar" />
                 <div>
                     <Pg><strong>Responsável: </strong>{colaborator}</Pg>
                     <Pg><strong>E-mail: </strong>{email}</Pg>

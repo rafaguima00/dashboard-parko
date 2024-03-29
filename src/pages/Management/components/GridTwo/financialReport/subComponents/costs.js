@@ -1,4 +1,4 @@
-import Top from "../../../../../../components/top";
+import Top from "../../../../../../components/Top";
 import { costs } from "../../../../map/tableCosts";
 import { Table, Icon, Body } from "../style";
 import { FiEye } from "react-icons/fi";

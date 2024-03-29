@@ -15,29 +15,34 @@ import Modal from "../../components/Modal";
 import Contribution from "./form/contribution";
 import Retirada from "./form/retirada";
 import api from "../../services/api/server";
-import { recuperarApi } from "../../services/chamarApi";
+import ReadApi from "../../services/readData";
 
 ChartJS.register(ArcElement, BarElement, CategoryScale, LinearScale, Title);
 
 const Checkout = () => {
 
     const { primaryColor, neutralColor } = theme;
-    const { reservations, dataClient } = useUser();
+    const { reservations, dataClient, aportes, retiradas } = useUser();
+    const { readAportes, readRetiradas, listReservations } = ReadApi();
 
     const [open, setOpen] = useState(false);
     const [openRetirada, setOpenRetirada] = useState(false);
-    const [aportes, setAportes] = useState([]);
     const [novoAporte, setNovoAporte] = useState({});
-    const [retiradas, setRetiradas] = useState([]);
     const [novaRetirada, setNovaRetirada] = useState({});
+    const [text, setText] = useState("");
 
     const reservaConfirmada = reservations.filter(item => item.status === "Confirmado");
+    const filterReserv = reservaConfirmada.filter(
+        item => item.name.toLowerCase().includes(text.toLowerCase()) ||
+        item.license_plate.toLowerCase().includes(text.toLowerCase())
+    );
 
     const calcularValorPorEstacionamento = (data, idEstacionamento) => {
 
         const filtrarItem = (array) => array.filter(item => item.id_establishment === idEstacionamento);
 
-        const calcularSoma = (array) => array.map(item => item.value).reduce((prev, current) => {
+        const calcularSoma = (array) => array.map(item => item.value)
+        .reduce((prev, current) => {
             return prev + current;
         }, 0); 
 
@@ -90,9 +95,9 @@ const Checkout = () => {
     };
 
     useEffect(() => {
-        recuperarApi("get", "aportes", setAportes);
-        recuperarApi("get", "retiradas", setRetiradas);
-    }, []);
+        readRetiradas();
+        readAportes();
+    }, [aportes, retiradas]);
 
     const { 
         valoresTotal, 
@@ -114,8 +119,8 @@ const Checkout = () => {
                     fechamentoCaixa
                 }}
             />
-            <SecondHeader />
-            <ListReserve reservaConfirmada={reservaConfirmada} />
+            <SecondHeader states={{ text, setText }} />
+            <ListReserve reservaConfirmada={filterReserv} />
             <Buttons setOpen={setOpen} setOpenRetirada={setOpenRetirada}/>
 
             <Graphics background={primaryColor}>

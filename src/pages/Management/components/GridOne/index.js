@@ -1,4 +1,4 @@
-import Top from "../../../../components/top";
+import Top from "../../../../components/Top";
 import {
     Financial,
     Button,

@@ -6,7 +6,7 @@ import {
     FormArea, 
     DivButton 
 } from "./style";
-import GlobalButton from "../button";
+import GlobalButton from "../Button";
 import { theme } from "../../theme/theme";
 
 function Modal({ 

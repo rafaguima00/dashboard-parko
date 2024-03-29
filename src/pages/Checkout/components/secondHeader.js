@@ -7,17 +7,24 @@ import {
 import { BiEdit } from "react-icons/bi";
 import { BsCalendar4, BsDownload } from "react-icons/bs";
 import { theme } from "../../../theme/theme";
-import Top from "../../../components/top";
+import Top from "../../../components/Top";
 
-const SecondHeader = () => {
+const SecondHeader = (props) => {
 
     const { primaryColor } = theme;
+    const { text, setText } = props.states;
 
     return (
         <SecondTitle>
             <Top children="Reservas Fechadas" font={19} />
             <IconGroup>
-                <InputSearch inputcolor={primaryColor} type="text" placeholder="Procurar" />
+                <InputSearch 
+                    inputcolor={primaryColor} 
+                    type="text" 
+                    placeholder="Procurar" 
+                    value={text}
+                    onChange={e => setText(e.target.value)}
+                />
                 <Icon><BiEdit size={19} color="#545454" /></Icon>
                 <Icon><BsCalendar4 size={16} color="#545454" /></Icon>
                 <Icon><BsDownload size={16} color="#545454" /></Icon>

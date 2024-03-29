@@ -3,7 +3,7 @@ import {
     FormArea, 
     GroupButton
 } from "../style";
-import GlobalButton from "../../../../../../components/button";
+import GlobalButton from "../../../../../../components/Button";
 import FormList from "./formList";
 import MissTicket from "../forms/missTicket";
 import TheftCostumer from "../forms/theftCostumer";

@@ -10,7 +10,7 @@ import {
     Time,
     DateStyle
 } from "../../style";
-import Top from "../../../../../../components/top";
+import Top from "../../../../../../components/Top";
 
 const FormArea = (props) => {
 

@@ -12,11 +12,13 @@ import api from "../../../services/api/server";
 import { useEffect } from "react";
 import { useUser } from "../../../context/globalContext";
 import { formatCurrency } from "../../../services/formatCurrency";
+import ReadApi from "../../../services/readData";
 
 const PriceTable = () => {
     
     const { neutralColor, primaryColor, cancelColor } = theme;
-    const { dataClient, priceTable, setPriceTable } = useUser();
+    const { dataClient, priceTable } = useUser();
+    const { getPriceTable } = ReadApi();
     
     const navigate = useNavigate();
 
@@ -24,19 +26,9 @@ const PriceTable = () => {
         return navigate("/settings/table");
     };
 
-    const getPriceTable = async () => {
-        await api.get(`/tabela_preco/${dataClient.id_establishment}`)
-        .then(res => {
-            setPriceTable(res.data[0]);
-        }) 
-        .catch(e => {
-            console.log(e);
-        })
-    };
-
     useEffect(() => {
-        getPriceTable();
-    }, []);
+        getPriceTable(dataClient.id_establishment);
+    }, [priceTable]);
 
     const tempoTolerancia = () => {
         if(priceTable !== undefined) {
@@ -52,17 +44,13 @@ const PriceTable = () => {
 
     const tempo = tempoTolerancia();
 
-    const valorHora = () => {
-        const valueHour = priceTable.valor_hora;
-
+    const valorHora = (valueHour) => {
         if(valueHour !== undefined) {
             return formatCurrency(valueHour, 'BRL');
         } else {
-            return "";
+            return formatCurrency(0, 'BRL');
         }
     };
-
-    const valor = valorHora();
 
     return (
         <ContentInfo gridcolumn={3} gridrow={4}>
@@ -71,7 +59,7 @@ const PriceTable = () => {
             </ButtonEdit>
             <Menu>
                 <Warning textcolor={neutralColor}>Valor da hora</Warning>
-                <Hour textcolor={primaryColor}>{valor}</Hour>
+                <Hour textcolor={primaryColor}>{valorHora(priceTable.valor_hora)}</Hour>
                 <hr/>
                 <Warning textcolor={cancelColor}>{tempo}</Warning>
             </Menu>

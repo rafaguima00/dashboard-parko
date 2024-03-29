@@ -7,8 +7,9 @@ import {
     P,
     GroupButton
 } from "../style";
-import GlobalButton from "../../../../../components/button";
+import GlobalButton from "../../../../../components/Button";
 import { useUser } from "../../../../../context/globalContext"; 
+import avatar from "../../../../../assets/avatar.png";
 
 const ListColaborators = (props) => {
 
@@ -33,7 +34,7 @@ const ListColaborators = (props) => {
                         background={selected === item.id ? primaryColor : "none"} 
                         onClick={() => handleClick(item)}
                     >
-                        <ImageProfile src={item.img} alt={item.colaborator} />
+                        <ImageProfile src={item.image ? item.image : avatar} alt={item.colaborator} />
                         <InfoUser textcolor={"#fff"}>
                             <Name>{item.colaborator}</Name>
                             <P>{item.type_colaborator}</P>

@@ -14,7 +14,7 @@ import {
     Name,
     Select
 } from "../style";
-import camera from "../../../assets/camera.png";
+import avatar from "../../../assets/avatar.png";
 import logo from "../../../assets/logo-parko.png";
 import { AiOutlineHome } from "react-icons/ai";
 import { LiaCarSideSolid } from "react-icons/lia";
@@ -117,7 +117,7 @@ const NavigationBar = (props) => {
                     </Select>
                 </span> */}
                 <Profile>
-                    <ImageProfile src={camera} />
+                    <ImageProfile src={dataClient.image ? dataClient.image : avatar} />
                     <div>
                         <UserName>{colaborator ? colaborator : "[user_name]"}</UserName>
                         <Logout onClick={handleLogout}>Logout</Logout>

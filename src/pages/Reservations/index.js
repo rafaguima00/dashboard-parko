@@ -1,21 +1,22 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../../context/globalContext";
-import {
-    Container,
-    ItemReservation,
-    CloseReserve
-} from "./style";
+import { Container, ItemReservation, CloseReserve } from "./style";
 import TopContent from "./components/top";
 import ListConfirmedReserve from "./components/listConfirmed";
 import TimingReserve from "./components/timing";
 import SelectedReserve from "./components/selectedReserve";
 import { theme } from "../../theme/theme";
-import GlobalButton from "../../components/button";
+import GlobalButton from "../../components/Button";
 import api from "../../services/api/server";
+import ReadApi from "../../services/readData";
+import { jwtDecode } from "jwt-decode";
 
 const Reservations = () => {
 
+    const [text, setText] = useState("");
+
     const { 
+        setDataClient,
         dataClient, 
         selectedClient, 
         setSelectedClient, 
@@ -25,6 +26,8 @@ const Reservations = () => {
     } = useUser();
     const { colaborator } = dataClient;
     const { cancelColor, greenColor } = theme;
+
+    const { listReservations, loadData, listColaborators } = ReadApi();
 
     const recuperarDividas = async () => {
         await api.get("/debts")
@@ -43,21 +46,41 @@ const Reservations = () => {
 
     const debtByIdCostumer = getDebtById();
     const reservaPendente = reservations.filter(item => item.status === "Pendente");
+    const filterReserv = reservaPendente.filter(
+        item => item.name.toLowerCase().includes(text.toLowerCase()) ||
+        item.license_plate.toLowerCase().includes(text.toLowerCase())
+    );
 
     useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if(token) {
+            const decoded = jwtDecode(token);
+            setDataClient(decoded.user)
+        }
+
         recuperarDividas();
+    }, []);
+    
+    useEffect(() => {
+        loadData(dataClient.id_establishment);
+        listColaborators(dataClient.id_establishment);
+        listReservations(dataClient.id_establishment);
+    }, [dataClient]);
+
+    useEffect(() => {
         const indexOf = reservaPendente.values().next().value;
         setSelectedClient(indexOf);
-    }, []);
+    }, [selectedClient]);
 
     return (
         <Container>
             <ItemReservation>
-                <TopContent />
-                <ListConfirmedReserve reservaPendente={reservaPendente} />
+                <TopContent states={{ text, setText }} />
+                <ListConfirmedReserve reservaPendente={filterReserv} />
                 <TimingReserve name={colaborator} />
             </ItemReservation>
-            <SelectedReserve debts={debts} getDebtById={debtByIdCostumer} />
+            <SelectedReserve reservaPendente={reservaPendente} getDebtById={debtByIdCostumer} />
             <CloseReserve>
                 <GlobalButton 
                     children="Cancelar"

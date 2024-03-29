@@ -7,7 +7,7 @@ import {
 } from "../style";
 import { useState } from "react";
 import { useUser } from "../../../../../context/globalContext";
-import GlobalButton from "../../../../../components/button";
+import GlobalButton from "../../../../../components/Button";
 import { useNavigate } from "react-router-dom";
 import api from "../../../../../services/api/server";
 import cepService from "../../../../../services/api/cep";
@@ -30,7 +30,7 @@ const FormParking = (props) => {
         bairro,
         email
     } = park;
-
+        
     const [parkInfo, setParkInfo] = useState({
         razao_social: razao_social, 
         name: name,
@@ -50,7 +50,7 @@ const FormParking = (props) => {
 
     const screenBack = () => {
         return navigate("/settings")
-    }
+    };
 
     const handleUpdate = async () => {
         await api.patch(`/establishments/${dataClient.id_establishment}`, parkInfo)
@@ -60,7 +60,7 @@ const FormParking = (props) => {
         .catch(e => {
             console.log(e);
         });
-    }
+    };
 
     const atualizarCep = async ({ e }) => {
         const cep = e.target.value;
@@ -68,6 +68,7 @@ const FormParking = (props) => {
         await cepService.get(`/${cep}/json/`)
         .then(response => {
             setParkInfo({
+                ...parkInfo,
                 end: response.data.logradouro,
                 estado: response.data.uf,
                 cidade: response.data.localidade,
@@ -77,7 +78,7 @@ const FormParking = (props) => {
         .catch(e => {
             console.log(e);
         })
-    }
+    };
 
     return (
         <>
@@ -126,7 +127,6 @@ const FormParking = (props) => {
                         bordercolor={primaryColor} 
                         largura={324}
                         required
-                        disabled
                         value={parkInfo.cnpj}
                         onChange={e => setParkInfo({ ...parkInfo, cnpj: e.target.value })}
                     />
@@ -139,7 +139,6 @@ const FormParking = (props) => {
                         bordercolor={primaryColor} 
                         largura={324}
                         required
-                        disabled
                         value={parkInfo.inscricao_estadual}
                         onChange={e => setParkInfo({ ...parkInfo, inscricao_estadual: e.target.value })}
                     />
@@ -152,7 +151,6 @@ const FormParking = (props) => {
                         bordercolor={primaryColor} 
                         largura={324}
                         required
-                        disabled
                         value={parkInfo.inscricao_municipal}
                         onChange={e => setParkInfo({ ...parkInfo, inscricao_municipal: e.target.value })}
                     />

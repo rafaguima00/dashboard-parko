@@ -112,8 +112,6 @@ export const Select = styled.select`
 export const ImageProfile = styled.img`
     width: 45px; 
     height: 45px;
-    background-color: #fff;
-    padding: 6px;
     border-radius: 10px;
 `
 

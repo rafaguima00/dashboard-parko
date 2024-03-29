@@ -40,7 +40,7 @@ const OpeningHours = () => {
 
     useEffect(() => {
         recuperarDados();
-    }, []);
+    }, [horaAbertura, horaFechamento]);
 
     return (
         <ContentInfo gridcolumn={"span 2"} gridrow={"span 1"}>

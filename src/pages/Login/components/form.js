@@ -21,35 +21,10 @@ const Form = () => {
     const [error, setError] = useState(false);
     const [messageError, setMessageError] = useState("");
 
-    const { 
-        setDataClient, 
-        dataClient, 
-        setPark, 
-        setColaborators
-    } = useUser();
+    const { setDataClient, dataClient } = useUser();
     const { primaryColor } = theme;
 
     const navigate = useNavigate();
-
-    const loadData = async () => {
-        await api.get(`/establishments/${dataClient.id_establishment}`)
-        .then(response => {
-            setPark(response.data[0]);
-        })
-        .catch(e => {
-            console.log(e)
-        })
-    };
-
-    const listColaborators = async () => {
-        await api.get(`/colaborators/${dataClient.id_establishment}`)
-        .then(response => {
-            setColaborators(response.data);
-        })
-        .catch(e => {
-            console.log(e);
-        })
-    };
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -59,9 +34,7 @@ const Form = () => {
             password: dataClient.password
         })
         .then(response => {    
-            localStorage.setItem("token", JSON.stringify(response.data))
-            loadData();
-            listColaborators();
+            localStorage.setItem("token", JSON.stringify(response.data));
         })
         .then(() => {
             return navigate("/start");

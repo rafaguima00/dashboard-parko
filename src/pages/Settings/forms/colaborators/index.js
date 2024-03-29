@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../../../../context/globalContext";
 import TopForm from "../../components/topForm";
 import { ContainerForm } from "../style";
@@ -7,10 +7,13 @@ import { theme } from "../../../../theme/theme";
 import FormColaborator from "./components/form";
 import ListColaborators from "./components/listColaborators";
 import api from "../../../../services/api/server";
+import { jwtDecode } from "jwt-decode";
+import ReadApi from "../../../../services/readData";
 
 const ColaboratorsForm = () => {
 
-    const { dataClient } = useUser();
+    const { dataClient, setDataClient } = useUser();
+    const { listColaborators, listReservations, loadData } = ReadApi();
 
     const [selected, setSelected] = useState(null);
     const [newColaborator, setNewColaborator] = useState({
@@ -87,6 +90,21 @@ const ColaboratorsForm = () => {
             alert("Selecione um usuário para atualizar informações")
         }
     }
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if(token) {
+            const decoded = jwtDecode(token);
+            setDataClient(decoded.user)
+        }
+    }, []);
+
+    useEffect(() => {
+        loadData(dataClient.id_establishment);
+        listColaborators(dataClient.id_establishment);
+        listReservations(dataClient.id_establishment);
+    }, [dataClient]);
 
     return (
         <ContainerForm>

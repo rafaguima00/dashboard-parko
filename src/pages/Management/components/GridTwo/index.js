@@ -3,7 +3,7 @@ import Accounts from "./accounts/accounts";
 import Heritage from "./heritage/heritage";
 import Occurrence from "./occurrence/occurrence";
 import { Financial } from "../../style";
-import Top from "../../../../components/top";
+import Top from "../../../../components/Top";
 import { useUser } from "../../../../context/globalContext";
 
 const GridTwo = (props) => {

@@ -12,9 +12,9 @@ import {
     Image, 
     Edit
 } from "../style";
-//import avatar from "../../../../../assets/avatar.png";
+import avatar from "../../../../../assets/avatar.png";
 import { FaRegEdit } from "react-icons/fa";
-import GlobalButton from "../../../../../components/button";
+import GlobalButton from "../../../../../components/Button";
 import { useNavigate } from "react-router-dom";
 
 const FormColaborator = (props) => {
@@ -73,7 +73,7 @@ const FormColaborator = (props) => {
     return (
         <FormContent>
             <DivImage>
-                <Image src={{}} alt="Avatar" />
+                <Image src={dataClient.image ? dataClient.image : avatar} alt="Avatar" />
                 <Edit background={primaryColor} onClick={e => e.preventDefault()}>
                     <FaRegEdit size={17} color="#fff"/>
                 </Edit>

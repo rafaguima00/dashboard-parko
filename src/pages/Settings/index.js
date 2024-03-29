@@ -3,14 +3,16 @@ import Establishment from "./components/establishment";
 import Colaborators from "./components/colaborators";
 import PriceTable from "./components/priceTable";
 import OpeningHours from "./components/openingHours";
-import Top from "../../components/top";
+import Top from "../../components/Top";
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useUser } from "../../context/globalContext";
-
+import ReadApi from "../../services/readData";
+ 
 const Settings = () => {
 
-    const { setDataClient } = useUser();
+    const { setDataClient, dataClient, park, colaborators } = useUser();
+    const { listColaborators, listReservations, loadData } = ReadApi();
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -20,6 +22,12 @@ const Settings = () => {
             setDataClient(decoded.user)
         }
     }, []);
+
+    useEffect(() => {
+        loadData(dataClient.id_establishment);
+        listColaborators(dataClient.id_establishment);
+        listReservations(dataClient.id_establishment);
+    }, [dataClient, park, colaborators]);
     
     return (
         <Container>

@@ -12,6 +12,7 @@ import {
 import { theme } from "../../../theme/theme";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../../context/globalContext";
+import avatar from "../../../assets/avatar.png";
 
 const Colaborators = () => {
 
@@ -37,7 +38,7 @@ const Colaborators = () => {
                 {colaborators.map(item => ( 
                     <Profile key={item.id}>
                         <span>
-                            <ImageProfile src={item.img} alt={item.colaborator} />
+                            <ImageProfile src={item.image ? item.image : avatar} alt={item.colaborator} />
                             <InfoUser textcolor={neutralColor}>
                                 <Name>{item.colaborator}</Name>
                                 <P>{item.type_colaborator}</P>

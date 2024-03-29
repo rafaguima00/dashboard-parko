@@ -1,12 +1,14 @@
-let yes = 64;
-let no = 100 - yes;
+let reservas = 5;
+let reservasDaParko = 0;
+let subReserva = reservas - reservasDaParko;
+let valorTotal = (reservas / reservasDaParko) * 100;
 
 export const data = {
   labels: ["Yes", "No"],
   datasets: [
     {
-      label: "Formas de Pagamento",
-      data: [yes, no],
+      label: "Reservas feitas pelo App da Parko",
+      data: [reservasDaParko, subReserva],
       weight: 10,
       borderColor: "transparent",
       backgroundColor: ["white", "#381B7A"]
@@ -51,7 +53,7 @@ export const plugins = [
       ctx.fillStyle = "#fff";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(`${yes}%`, centerX, centerY);
+      ctx.fillText(`${0}%`, centerX, centerY);
     }
   }
 ];

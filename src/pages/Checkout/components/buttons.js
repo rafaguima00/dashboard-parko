@@ -1,7 +1,7 @@
 import {
     ButtonGroup
 } from "../style";
-import GlobalButton from "../../../components/button";
+import GlobalButton from "../../../components/Button";
 import { theme } from "../../../theme/theme";
 import { useUser } from "../../../context/globalContext";
 

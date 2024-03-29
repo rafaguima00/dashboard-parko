@@ -12,7 +12,7 @@ import {
 import { formatCurrency } from "../../../services/formatCurrency";
 import { CgNotes } from "react-icons/cg";
 import { FaRightLeft } from "react-icons/fa6";
-import GlobalButton from "../../../components/button";
+import GlobalButton from "../../../components/Button";
 import { theme } from "../../../theme/theme";
 import { Chart as ChartJS, ArcElement, Title } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
@@ -117,7 +117,8 @@ const InfoReserve = () => {
             value: 10, 
             id_costumer: idUser,
             id_vehicle: idVehicle, 
-            id_establishment: dataClient.id_establishment 
+            id_establishment: dataClient.id_establishment,
+            parko_app: 0
         })
         .then(() => {
             console.log("Operação realizada com sucesso")

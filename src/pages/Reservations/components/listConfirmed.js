@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../../../context/globalContext";
 import {
     List,
@@ -9,6 +9,7 @@ import {
     ItemList
 } from "../style";
 import { formatCurrency } from "../../../services/formatCurrency";
+import ReadApi from "../../../services/readData";
 
 const ListConfirmedReserve = (props) => {
 
@@ -16,25 +17,17 @@ const ListConfirmedReserve = (props) => {
 
     const [clicked, setClicked] = useState(0);
 
-    const { setSelectedClient } = useUser();
+    const { setSelectedClient, dataClient, reservations } = useUser();
+    const { listReservations } = ReadApi();
 
     const handleOnClick = ({ index, item }) => {
-        setClicked(index)
-
-        setSelectedClient({
-            id: item.id,
-            id_costumer: item.id_costumer,
-            name: item.name,
-            tel: item.tel,
-            hora_entrada: item.hora_entrada,
-            data_entrada: item.data_entrada,
-            data_saida: item.data_saida,
-            name_vehicle: item.name_vehicle,
-            color: item.color,
-            license_plate: item.license_plate,
-            value: item.value
-        })
+        setClicked(index);
+        setSelectedClient(item);
     };
+
+    useEffect(() => {
+        listReservations(dataClient.id_establishment);
+    }, [reservaPendente, reservations]);
 
     return (
         <List>
@@ -47,8 +40,7 @@ const ListConfirmedReserve = (props) => {
                 <Text>Valor</Text>
             </ListHeader>
             {
-                reservaPendente.length === 0 ?
-                <div>Nenhuma reserva aberta no momento</div> :
+                reservaPendente ?
                 reservaPendente.map((item, index) => (
                     <ListBody key={item.id}>
                         <ElementList
@@ -64,7 +56,8 @@ const ListConfirmedReserve = (props) => {
                             <ItemList>{formatCurrency(item.value, 'BRL')}</ItemList>
                         </ElementList>
                     </ListBody>
-                ))
+                )) :
+                <div>Nenhuma reserva aberta no momento</div> 
             }
         </List>
     )

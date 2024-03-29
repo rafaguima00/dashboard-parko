@@ -65,9 +65,7 @@ const Heritage = () => {
         item.name.toLowerCase().includes(text.toLowerCase())
     );
 
-    useEffect(() => {
-        readPatrimonio();
-    }, []);
+    useEffect(() => { readPatrimonio() }, [patrimonio]);
 
     return (
         <Span>

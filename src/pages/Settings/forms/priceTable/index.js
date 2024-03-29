@@ -10,16 +10,25 @@ import {
     InputNumber
 } from "./style";
 import { theme } from "../../../../theme/theme";
-import GlobalButton from "../../../../components/button";
+import GlobalButton from "../../../../components/Button";
 import { useUser } from "../../../../context/globalContext";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../../../../services/api/server";
+import { jwtDecode } from "jwt-decode";
+import ReadApi from "../../../../services/readData";
 
 const PriceTableForm = () => {
 
     const { primaryColor, cancelColor, greenColor } = theme;
-    const { dataClient, priceTable, setPriceTable } = useUser();
+    const { listColaborators, listReservations, loadData, getPriceTable } = ReadApi();
+    const { 
+        dataClient, 
+        priceTable, 
+        setPriceTable,
+        setDataClient, 
+        reservations 
+    } = useUser();
 
     const navigate = useNavigate();
 
@@ -55,7 +64,7 @@ const PriceTableForm = () => {
 
             await api.put(`/tabela_preco/${dataClient.id_establishment}`, priceTable)
             .then(() => {
-                console.log("Informações atualizadas");
+                alert("Informações atualizadas");
             })
             .catch(e => {
                 console.log(e);
@@ -63,6 +72,28 @@ const PriceTableForm = () => {
 
         }
     };
+
+    useEffect(() => {
+        getPriceTable(dataClient.id_establishment);
+        if(priceTable.tempo_tolerancia) {
+            setValue("yes")
+        }
+    }, [priceTable]);
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if(token) {
+            const decoded = jwtDecode(token);
+            setDataClient(decoded.user)
+        }
+    }, []);
+
+    useEffect(() => {
+        loadData(dataClient.id_establishment);
+        listColaborators(dataClient.id_establishment);
+        listReservations(dataClient.id_establishment);
+    }, [dataClient, reservations]);
 
     return (
         <ContainerForm>
@@ -77,7 +108,7 @@ const PriceTableForm = () => {
                                     type="radio" 
                                     name="tolerance" 
                                     value="yes" 
-                                    onChange={handleOnChange} 
+                                    onChange={handleOnChange}
                                 />
                                 <Label font={14} textcolor={"#7d7d7d"}>Sim</Label>
                             </div>

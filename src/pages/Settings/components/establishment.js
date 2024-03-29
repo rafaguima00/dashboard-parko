@@ -9,17 +9,19 @@ import {
     P,
     Name
 } from "../style";
-import parking from "../../../assets/estacionamento.png";
+import camera from "../../../assets/camera.png";
 import { theme } from "../../../theme/theme";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../../context/globalContext";
+import { useEffect } from "react";
+import ReadApi from "../../../services/readData";
 
 const Establishment = () => {
 
-    const { neutralColor } = theme;
-
+    const { loadData } = ReadApi();
     const { park, dataClient } = useUser();
     const { type_colaborator } = dataClient;
+    const { neutralColor } = theme;
 
     const navigate = useNavigate();
 
@@ -33,6 +35,18 @@ const Establishment = () => {
         }
     };
 
+    const renderItem = (data) => {
+        if(coordenador) {
+            return "";
+        } else {
+            if(park) {
+                return park[data];
+            } else {
+                return "...";
+            }
+        }
+    };
+
     return (
         <ContentInfo gridcolumn={1} gridrow={"span 3"}>
             <ButtonEdit
@@ -41,43 +55,43 @@ const Establishment = () => {
                 <BiEdit size={22} color="#545454" />
             </ButtonEdit>
             <MenuEstablishment>
-                <Image src={parking} alt="Bela Park"/>
+                <Image src={park.image ? renderItem("image") : camera} alt={renderItem("name")}/>
                 <InfoEstablishment>
                     <TextArea textcolor={neutralColor}>
                         <P>Nome do Estabelecimento:</P>
-                        <Name>{coordenador ? "" : park.name}</Name>
+                        <Name>{renderItem("name")}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>Razão Social:</P>
-                        <Name>{coordenador ? "" : park.razao_social}</Name>
+                        <Name>{renderItem("razao_social")}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>CNPJ:</P>
-                        <Name>{coordenador ? "" : park.cnpj}</Name>
+                        <Name>{renderItem("cnpj")}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>Telefone:</P>
-                        <Name>{coordenador ? "" : park.contato}</Name>
+                        <Name>{renderItem("contato")}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>E-mail:</P>
-                        <Name>{coordenador ? "" : park.email}</Name>
+                        <Name>{renderItem("email")}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>CEP:</P>
-                        <Name>{coordenador ? "" : park.cep}</Name>
+                        <Name>{renderItem("cep")}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>Endereço:</P>
-                        <Name>{coordenador ? "" : park.end}</Name>
+                        <Name>{renderItem("end")}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>Bairro:</P>
-                        <Name>{coordenador ? "" : park.bairro}</Name>
+                        <Name>{renderItem("bairro")}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>Cidade:</P>
-                        <Name>{coordenador ? "" : park.cidade}</Name>
+                        <Name>{renderItem("cidade")}</Name>
                     </TextArea>
                 </InfoEstablishment>
             </MenuEstablishment>

@@ -58,7 +58,7 @@ const Accounts = () => {
         item.date_created.includes(text)
     );
 
-    useEffect(() => { readAccounts() }, []);
+    useEffect(() => { readAccounts() }, [accounts]);
 
     return (
         <Span>
