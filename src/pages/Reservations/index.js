@@ -58,6 +58,9 @@ const Reservations = () => {
             const decoded = jwtDecode(token);
             setDataClient(decoded.user)
         }
+        
+        const indexOf = reservaPendente.values().next().value;
+        setSelectedClient(indexOf);
 
         recuperarDividas();
     }, []);
@@ -67,11 +70,6 @@ const Reservations = () => {
         listColaborators(dataClient.id_establishment);
         listReservations(dataClient.id_establishment);
     }, [dataClient]);
-
-    useEffect(() => {
-        const indexOf = reservaPendente.values().next().value;
-        setSelectedClient(indexOf);
-    }, [selectedClient]);
 
     return (
         <Container>
