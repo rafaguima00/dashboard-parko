@@ -75,9 +75,6 @@ const PriceTableForm = () => {
 
     useEffect(() => {
         getPriceTable(dataClient.id_establishment);
-        if(priceTable.tempo_tolerancia) {
-            setValue("yes")
-        }
     }, [priceTable]);
 
     useEffect(() => {

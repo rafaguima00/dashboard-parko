@@ -29,7 +29,7 @@ const Form = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
 
-        await api.post("/colaborators/login", {
+        await api.post("/login", {
             email: dataClient.email,
             password: dataClient.password
         })
@@ -40,10 +40,9 @@ const Form = () => {
             return navigate("/start");
         })
         .catch(e => {
-            if(e.response.status === 400) {
-                setError(true)
-                setMessageError(e.response.data.message)
-            }
+            console.log(e)
+            setError(true)
+            setMessageError(e.response.data.message)
         })
     };
 
