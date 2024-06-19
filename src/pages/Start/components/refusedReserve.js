@@ -9,7 +9,7 @@ import {
     State 
 } from "../style";
 import Confirmation from "../form/confirmation";
-import NoReservation from "./noReserve";
+import EmptyMessage from "../../../components/EmptyMessage";
 
 const RefusedReserve = () => {
 
@@ -22,7 +22,7 @@ const RefusedReserve = () => {
             <ListBody>
             {
                 reservations.filter(item => item.status === "Recusado").length === 0 ?
-                <NoReservation>Nenhuma reserva recusada neste estacionamento.</NoReservation> :
+                <EmptyMessage>Nenhuma reserva recusada neste estacionamento.</EmptyMessage> :
                 reservations.filter(item => item.status === "Recusado").map(item => (
                     <ElementList key={item.id}>
                         <InputPin onClick={() => setOpen(true)}>PIN</InputPin>

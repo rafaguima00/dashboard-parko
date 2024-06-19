@@ -164,7 +164,7 @@ const InfoReserve = () => {
                 </Info>
                 <Info>
                     <span>
-                        <TitleLine>n/a</TitleLine>
+                        <TitleLine>Sem avaliações</TitleLine>
                         <Subtitle>Satisfação do cliente</Subtitle>
                     </span>
                     <div style={{ width: 64, height: 64 }}>

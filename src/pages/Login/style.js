@@ -53,7 +53,7 @@ export const AreaForm = styled.div`
     border-bottom-left-radius: 18px;
 `
 
-export const FormContent = styled.div`
+export const FormContent = styled.form`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -103,7 +103,7 @@ export const TextPassword = styled.p`
     padding-right: 4px;
 `
 
-export const BtPassword = styled.button`
+export const BtPassword = styled.p`
     background: none;
     border: none;
     font-size: 12px;

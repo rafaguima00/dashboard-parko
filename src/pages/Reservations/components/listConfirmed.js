@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useUser } from "../../../context/globalContext";
+import { useEffect, useState } from "react"
+import { useUser } from "../../../context/globalContext"
 import {
     List,
     ListHeader,
@@ -7,27 +7,28 @@ import {
     ListBody,
     ElementList,
     ItemList
-} from "../style";
-import { formatCurrency } from "../../../services/formatCurrency";
-import ReadApi from "../../../services/readData";
+} from "../style"
+import { formatCurrency } from "../../../services/formatCurrency"
+import ReadApi from "../../../services/readData"
+import EmptyMessage from "../../../components/EmptyMessage"
 
 const ListConfirmedReserve = (props) => {
 
-    const { reservaPendente } = props;
+    const { reservaPendente } = props
 
-    const [clicked, setClicked] = useState(0);
+    const [clicked, setClicked] = useState(0)
 
-    const { setSelectedClient, dataClient, reservations } = useUser();
-    const { listReservations } = ReadApi();
+    const { setSelectedClient, dataClient, reservations } = useUser()
+    const { listReservations } = ReadApi()
 
     const handleOnClick = ({ index, item }) => {
-        setClicked(index);
-        setSelectedClient(item);
-    };
+        setClicked(index)
+        setSelectedClient(item)
+    }
 
     useEffect(() => {
-        listReservations(dataClient.id_establishment);
-    }, [reservaPendente, reservations]);
+        listReservations(dataClient.id_establishment)
+    }, [reservaPendente, reservations])
 
     return (
         <List>
@@ -40,7 +41,7 @@ const ListConfirmedReserve = (props) => {
                 <Text>Valor</Text>
             </ListHeader>
             {
-                reservaPendente ?
+                reservaPendente.length !== 0 ?
                 reservaPendente.map((item, index) => (
                     <ListBody key={item.id}>
                         <ElementList
@@ -57,7 +58,7 @@ const ListConfirmedReserve = (props) => {
                         </ElementList>
                     </ListBody>
                 )) :
-                <div>Nenhuma reserva aberta no momento</div> 
+                <EmptyMessage>Nenhuma reserva aberta no momento</EmptyMessage> 
             }
         </List>
     )

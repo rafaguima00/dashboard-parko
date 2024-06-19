@@ -1,21 +1,21 @@
-import { Container, Image } from "./style";
-import bgImage from "../../assets/bg-image-login.png";
-import Welcome from "./components/welcome";
-import Form from "./components/form";
-import { theme } from "../../theme/theme";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { Container, Image } from "./style"
+import bgImage from "../../assets/bg-image-login.png"
+import Welcome from "./components/welcome"
+import Form from "./components/form"
+import { theme } from "../../theme/theme"
+import { useNavigate } from "react-router-dom"
+import { useEffect } from "react"
 
 const Login = () => {
 
-    const { primaryColor } = theme;
+    const { primaryColor } = theme
     const token = localStorage.getItem("token")
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     useEffect(() => {
         if(token) {
-            return navigate("/start");
+            return navigate("/start")
         }
     }, [navigate, token])
 
@@ -28,4 +28,4 @@ const Login = () => {
     )
 }   
 
-export default Login;
+export default Login

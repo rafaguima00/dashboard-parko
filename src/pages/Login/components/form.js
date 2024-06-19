@@ -9,46 +9,58 @@ import {
     TextPassword,
     BtPassword,
     Login
-} from "../style";
-import { useState } from "react";
-import { useUser } from "../../../context/globalContext";
-import { useNavigate } from "react-router-dom";
-import { theme } from "../../../theme/theme";
-import api from "../../../services/api/server";
+} from "../style"
+import { useState } from "react"
+import { useUser } from "../../../context/globalContext"
+import { useNavigate } from "react-router-dom"
+import { theme } from "../../../theme/theme"
+import api from "../../../services/api/server"
+import { Dots } from "react-activity"
+import "react-activity/dist/library.css"
 
 const Form = () => {
 
-    const [error, setError] = useState(false);
-    const [messageError, setMessageError] = useState("");
+    const [error, setError] = useState(false)
+    const [messageError, setMessageError] = useState("")
+    const [title, setTitle] = useState("Login")
 
-    const { setDataClient, dataClient } = useUser();
-    const { primaryColor } = theme;
+    const { setDataClient, dataClient } = useUser()
+    const { primaryColor } = theme
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const handleLogin = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
+
+        setTitle(<Dots color={"#f4f4f4"} />)
 
         await api.post("/login", {
             email: dataClient.email,
             password: dataClient.password
         })
         .then(response => {    
-            localStorage.setItem("token", JSON.stringify(response.data));
+            localStorage.setItem("token", JSON.stringify(response.data))
         })
         .then(() => {
-            return navigate("/start");
+            setTitle("Login")
+            return navigate("/start")
         })
         .catch(e => {
+            setTitle("Login")
             console.log(e)
             setError(true)
             setMessageError(e.response.data.message)
         })
-    };
+    }
+
+    const createPassword = e => {
+        e.preventDefault()
+        console.log("Cria nova senha")
+    }
 
     return (
         <AreaForm>
-            <FormContent>
+            <FormContent onSubmit={e => handleLogin(e)}>
                 <div>
                     <TextField>
                         <Label>E-mail</Label>
@@ -74,9 +86,15 @@ const Form = () => {
                 }
                 <NewPassword>
                     <TextPassword textcolor={primaryColor}>Esqueceu a senha?</TextPassword>
-                    <BtPassword>Crie uma nova</BtPassword>
+                    <BtPassword onClick={e => createPassword(e)}>Crie uma nova</BtPassword>
                 </NewPassword>
-                <Login btcolor={primaryColor} type="submit" onClick={(e) => handleLogin(e)}>Login</Login>
+                <Login 
+                    btcolor={primaryColor} 
+                    type="submit" 
+                    onClick={e => handleLogin(e)}
+                >
+                    {title}
+                </Login>
             </FormContent>
         </AreaForm>
     )

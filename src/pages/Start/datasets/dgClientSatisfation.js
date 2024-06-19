@@ -2,7 +2,7 @@ import { theme } from "../../../theme/theme";
 
 const { primaryColor } = theme;
 
-let satisfied = 72.1;
+let satisfied = 0;
 let notSatisfied = 100 - satisfied;
 
 export const dataCliente = {

@@ -6,7 +6,7 @@ import {
     State 
 } from "../style";
 import api from "../../../services/api/server";
-import NoReservation from "./noReserve";
+import EmptyMessage from "../../../components/EmptyMessage";
 
 const ConfirmedReserve = () => {
 
@@ -38,7 +38,7 @@ const ConfirmedReserve = () => {
         <ListBody>
         {
             reservations.filter(item => item.status === "Confirmado").length === 0 ?
-            <NoReservation>Nenhuma reserva confirmada até o momento.</NoReservation> :
+            <EmptyMessage>Nenhuma reserva confirmada até o momento.</EmptyMessage> :
             reservations.filter(item => item.status === "Confirmado").map(item => (
                 <ElementList key={item.id}>
                     <input type="checkbox" checked={true} onClick={() => handleUpdate(item.id)} />

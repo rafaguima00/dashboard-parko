@@ -1,22 +1,22 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext } from "react"
 
-const GlobalContext = createContext({});
+const GlobalContext = createContext({})
 
 export const InfoProvider = ({ children }) => {
 
-    const [dataClient, setDataClient] = useState({});
-    const [park, setPark] = useState({});
-    const [colaborators, setColaborators] = useState([]);
-    const [reservations, setReservations] = useState([]);
-    const [debts, setDebts] = useState([]);
-    const [priceTable, setPriceTable] = useState({});
-    const [selectedClient, setSelectedClient] = useState({});
-    const [ratings, setRatings] = useState([]);
-    const [occurrences, setOccurrences] = useState([]);
-    const [patrimonio, setPatrimonio] = useState([]);
-    const [accounts, setAccounts] = useState([]);
-    const [aportes, setAportes] = useState([]);
-    const [retiradas, setRetiradas] = useState([]);
+    const [dataClient, setDataClient] = useState({})
+    const [park, setPark] = useState({})
+    const [colaborators, setColaborators] = useState([])
+    const [reservations, setReservations] = useState([])
+    const [debts, setDebts] = useState([])
+    const [priceTable, setPriceTable] = useState({})
+    const [selectedClient, setSelectedClient] = useState({})
+    const [ratings, setRatings] = useState([])
+    const [occurrences, setOccurrences] = useState([])
+    const [patrimonio, setPatrimonio] = useState([])
+    const [accounts, setAccounts] = useState([])
+    const [aportes, setAportes] = useState([])
+    const [retiradas, setRetiradas] = useState([])
 
     const value = {
         dataClient, 
@@ -45,7 +45,7 @@ export const InfoProvider = ({ children }) => {
         setAportes,
         retiradas,
         setRetiradas
-    };
+    }
 
     return (
         <GlobalContext.Provider value={value}>

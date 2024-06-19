@@ -6,7 +6,7 @@ import {
     State 
 } from "../style";
 import api from "../../../services/api/server";
-import NoReservation from "./noReserve";
+import EmptyMessage from "../../../components/EmptyMessage";
 
 const PendingReserve = () => {
 
@@ -38,7 +38,7 @@ const PendingReserve = () => {
         <ListBody>
         {
             reservations.filter(item => item.status === "Pendente").length === 0 ? 
-            <NoReservation>Nenhuma reserva pendente neste estacionamento.</NoReservation> :
+            <EmptyMessage>Nenhuma reserva pendente neste estacionamento.</EmptyMessage> :
             reservations.filter(item => item.status === "Pendente").map(item => (
                 <ElementList key={item.id}>
                     <input type="checkbox" checked={false} onClick={() => handleUpdate(item.id)} />

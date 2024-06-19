@@ -1,16 +1,16 @@
-import { createBrowserRouter } from "react-router-dom";
-import Login from "../pages/Login";
-import Menu from "../pages/Menu";
-import Start from "../pages/Start";
-import Reservations from "../pages/Reservations";
-import Checkout from "../pages/Checkout";
-import Management from "../pages/Management";
-import Settings from "../pages/Settings";
-import Ratings from "../pages/Ratings";
-import FormEstablishment from "../pages/Settings/forms/establishment";
-import FormOpening from "../pages/Settings/forms/openingHour";
-import ColaboratorsForm from "../pages/Settings/forms/colaborators";
-import PriceTableForm from "../pages/Settings/forms/priceTable";
+import { createBrowserRouter } from "react-router-dom"
+import Login from "../pages/Login"
+import Menu from "../pages/Menu"
+import Start from "../pages/Start"
+import Reservations from "../pages/Reservations"
+import Checkout from "../pages/Checkout"
+import Management from "../pages/Management"
+import Settings from "../pages/Settings"
+import Ratings from "../pages/Ratings"
+import FormEstablishment from "../pages/Settings/forms/establishment"
+import FormOpening from "../pages/Settings/forms/openingHour"
+import ColaboratorsForm from "../pages/Settings/forms/colaborators"
+import PriceTableForm from "../pages/Settings/forms/priceTable"
 
 export const router = createBrowserRouter([
     {

@@ -24,7 +24,7 @@ import api from "../../../services/api/server";
 
 const SelectedReserve = (props) => {
 
-    const { getDebtById } = props;
+    const { getDebtById, reservaPendente } = props;
     const { neutralColor } = theme;
 
     const { selectedClient, setSelectedClient } = useUser();
@@ -52,18 +52,25 @@ const SelectedReserve = (props) => {
     };
 
     const valorTotal = () => {
-        if(selectedClient.value !== undefined) {
-            if(getDebtById !== undefined) {
-                return selectedClient.value + getDebtById.value;
+        if(reservaPendente) {
+            if(getDebtById) {
+                return formatCurrency(selectedClient.value + getDebtById.value, 'BRL') 
             } else {
-                return selectedClient.value;
+                return formatCurrency(0, 'BRL') 
             }
         } else {
-            return 0;
+            return 0
         }
     };
 
     const total = valorTotal();
+
+    useEffect(() => {
+        if(reservaPendente) {
+            const indexOf = reservaPendente.values().next().value
+            setSelectedClient(indexOf)
+        }
+    }, [])
 
     return (
         <Content>
@@ -73,34 +80,34 @@ const SelectedReserve = (props) => {
                     <GridItems>
                         <InfoReservation>
                             <strong>Número reserva: </strong>
-                            <p>{selectedClient.id}</p>
+                            <p>{selectedClient ? selectedClient.id : ""}</p>
                         </InfoReservation>
                         <InfoReservation>
                             <strong>Placa: </strong>
-                            <p>{selectedClient.license_plate}</p>
+                            <p>{selectedClient ? selectedClient.license_plate : ""}</p>
                         </InfoReservation>
                         <InfoReservation>
                             <strong>Cliente: </strong>
-                            <p>{selectedClient.name}</p>
+                            <p>{selectedClient ? selectedClient.name : ""}</p>
                         </InfoReservation>
                         <InfoReservation>
                             <strong>Entrada: </strong>
-                            <p>{selectedClient.data_entrada}</p>
+                            <p>{selectedClient ? selectedClient.data_entrada : ""}</p>
                         </InfoReservation>
                         <InfoReservation>
                             <strong>Veículo: </strong>
-                            <p>{selectedClient.name_vehicle}</p>
+                            <p>{selectedClient ? selectedClient.name_vehicle : ""}</p>
                         </InfoReservation>
                         <InfoReservation>
                             <strong>Saída: </strong>
-                            <p>{selectedClient.data_saida}</p>
+                            <p>{selectedClient ? selectedClient.data_saida : ""}</p>
                         </InfoReservation>
                     </GridItems>
                     <Edit onClick={() => setOpenEdit(true)}>Editar</Edit>
                     <Modal
                         isOpen={openEdit}
                         setOpen={setOpenEdit}
-                        title={`Nº ${selectedClient.id}`}
+                        title={selectedClient ? `Nº ${selectedClient.id}` : ""}
                         maxWidth={"52rem"}
                         funcao={() => handleUpdate(selectedClient.id)} 
                     >
@@ -111,7 +118,10 @@ const SelectedReserve = (props) => {
                     {getDebtById !== undefined &&
                         <div>
                             <TextOption>
-                                Dívida Total <strong style={{ color: neutralColor }}>{formatCurrency(getDebtById.value, 'BRL')}</strong>
+                                Dívida Total {"\n"}
+                                <strong style={{ color: neutralColor }}>
+                                    {formatCurrency(getDebtById.value, 'BRL')}
+                                </strong>
                             </TextOption>
                             <Payment>
                                 <Select defaultValue="personal">
@@ -142,11 +152,15 @@ const SelectedReserve = (props) => {
                     <div>
                         <Receive>
                             <TextOption>
-                                Valor a receber <strong>{formatCurrency(total, 'BRL')}</strong>
+                                Valor a receber {"\n"}
+                                <strong>
+                                    {total}
+                                </strong>
                             </TextOption>
                             {getDebtById !== undefined &&
                                 <TextOption>
-                                    Dívida a receber <strong style={{ color: '#d64d4d' }}>
+                                    Dívida a receber {"\n"}
+                                    <strong style={{ color: '#d64d4d' }}>
                                         {formatCurrency(getDebtById.value, 'BRL')}
                                     </strong>
                                 </TextOption>
@@ -161,15 +175,21 @@ const SelectedReserve = (props) => {
                                 <option value="personal">Dívida Pessoal</option>
                                 <option value="money">Dinheiro</option>
                             </Select>
-                            <Price>{formatCurrency(total, 'BRL')}</Price>
+                            <Price>{total}</Price>
                             <Add>+</Add>
                         </Payment>
                     </div>
                     <TextOption>
-                        Total recebido <strong>{formatCurrency(0, 'BRL')}</strong>
+                        Total recebido {"\n"}
+                        <strong>
+                            {formatCurrency(0, 'BRL')}
+                        </strong>
                     </TextOption>
                     <TextOption>
-                        Troco <strong>{formatCurrency(0, 'BRL')}</strong>
+                        Troco {"\n"}
+                        <strong>
+                            {formatCurrency(0, 'BRL')}
+                        </strong>
                     </TextOption>
                 </SecondSection>
             </List>

@@ -1,23 +1,23 @@
-import { useEffect, useState } from "react";
-import { useUser } from "../../context/globalContext";
+import { useEffect, useState } from "react"
+import { useUser } from "../../context/globalContext"
 import { 
     Container, 
     Welcome, 
     Grid
-} from "./style";
-import ReservationStatus from "./components/reserveStatus";
-import InfoReserve from "./components/infoReservation";
-import { jwtDecode } from "jwt-decode";
-import ReadApi from "../../services/readData";
+} from "./style"
+import ReservationStatus from "./components/reserveStatus"
+import InfoReserve from "./components/infoReservation"
+import { jwtDecode } from "jwt-decode"
+import ReadApi from "../../services/readData"
 
 const Start = () => {
 
-    const { setDataClient, dataClient, reservations } = useUser();
-    const { colaborator } = dataClient;
+    const { setDataClient, dataClient, reservations } = useUser()
+    const { colaborator } = dataClient
 
-    const { listReservations, loadData, listColaborators } = ReadApi();
+    const { listReservations, loadData, listColaborators } = ReadApi()
 
-    const [selected, setSelected] = useState(1);
+    const [selected, setSelected] = useState(1)
 
     const btReservations = [
         {
@@ -32,7 +32,7 @@ const Start = () => {
             id: 3,
             name: "Recusadas"
         }
-    ];
+    ]
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -41,13 +41,13 @@ const Start = () => {
             const decoded = jwtDecode(token);
             setDataClient(decoded.user)
         }
-    }, []);
+    }, [])
 
     useEffect(() => {
         loadData(dataClient.id_establishment);
         listColaborators(dataClient.id_establishment);
         listReservations(dataClient.id_establishment);
-    }, [dataClient, reservations]);
+    }, [dataClient, reservations])
 
     return (
         <Container>
