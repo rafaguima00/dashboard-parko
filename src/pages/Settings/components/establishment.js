@@ -1,4 +1,4 @@
-import { BiEdit } from "react-icons/bi";
+import { BiEdit } from "react-icons/bi"
 import { 
     ContentInfo, 
     ButtonEdit, 
@@ -8,44 +8,31 @@ import {
     TextArea,
     P,
     Name
-} from "../style";
-import camera from "../../../assets/camera.png";
-import { theme } from "../../../theme/theme";
-import { useNavigate } from "react-router-dom";
-import { useUser } from "../../../context/globalContext";
-import { useEffect } from "react";
-import ReadApi from "../../../services/readData";
+} from "../style"
+import camera from "../../../assets/camera.png"
+import { theme } from "../../../theme/theme"
+import { useNavigate } from "react-router-dom"
+import { useUser } from "../../../context/globalContext"
+import ReadApi from "../../../services/readData"
 
 const Establishment = () => {
 
-    const { loadData } = ReadApi();
-    const { park, dataClient } = useUser();
-    const { type_colaborator } = dataClient;
-    const { neutralColor } = theme;
+    const { loadData } = ReadApi()
+    const { park, dataClient } = useUser()
+    const { type_colaborator } = dataClient
+    const { neutralColor } = theme
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
-    const coordenador = type_colaborator === "Coordenador(a)";
+    const coordenador = type_colaborator === "Coordenador(a)"
 
     const routerScreen = () => {
         if(coordenador) {
-            alert("Você não tem permissão para editar as informações do estacionamento");
+            alert("Você não tem permissão para editar as informações do estacionamento")
         } else {
-            return navigate("/settings/establishment");
+            return navigate("/settings/establishment")
         }
-    };
-
-    const renderItem = (data) => {
-        if(coordenador) {
-            return "";
-        } else {
-            if(park) {
-                return park[data];
-            } else {
-                return "...";
-            }
-        }
-    };
+    }
 
     return (
         <ContentInfo gridcolumn={1} gridrow={"span 3"}>
@@ -55,43 +42,43 @@ const Establishment = () => {
                 <BiEdit size={22} color="#545454" />
             </ButtonEdit>
             <MenuEstablishment>
-                <Image src={park.image ? renderItem("image") : camera} alt={renderItem("name")}/>
+                <Image src={park?.image ?? camera} alt={park?.name ?? "..."}/>
                 <InfoEstablishment>
                     <TextArea textcolor={neutralColor}>
                         <P>Nome do Estabelecimento:</P>
-                        <Name>{renderItem("name")}</Name>
+                        <Name>{park?.name ?? "..."}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>Razão Social:</P>
-                        <Name>{renderItem("razao_social")}</Name>
+                        <Name>{park?.razao_social ?? "..."}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>CNPJ:</P>
-                        <Name>{renderItem("cnpj")}</Name>
+                        <Name>{park?.cnpj ?? "..."}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>Telefone:</P>
-                        <Name>{renderItem("contato")}</Name>
+                        <Name>{park?.contato ?? "..."}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>E-mail:</P>
-                        <Name>{renderItem("email")}</Name>
+                        <Name>{park?.email ?? "..."}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>CEP:</P>
-                        <Name>{renderItem("cep")}</Name>
+                        <Name>{park?.cep ?? "..."}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>Endereço:</P>
-                        <Name>{renderItem("end")}</Name>
+                        <Name>{park?.end ?? "..."}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>Bairro:</P>
-                        <Name>{renderItem("bairro")}</Name>
+                        <Name>{park?.bairro ?? "..."}</Name>
                     </TextArea>
                     <TextArea textcolor={neutralColor}>
                         <P>Cidade:</P>
-                        <Name>{renderItem("cidade")}</Name>
+                        <Name>{park?.cidade ?? "..."}</Name>
                     </TextArea>
                 </InfoEstablishment>
             </MenuEstablishment>
@@ -99,4 +86,4 @@ const Establishment = () => {
     )
 }
 
-export default Establishment;
+export default Establishment

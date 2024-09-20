@@ -1,20 +1,26 @@
 import {
     FormItem, 
     Span,
-    Header, 
+    Header,
+    PriceTableOf, 
     Div,
     Item,
     Table,
     WeekDay,
     Checkbox,
     Time,
-    DateStyle
-} from "../../style";
-import Top from "../../../../../../components/Top";
+    DateStyle,
+    Add
+} from "../../style"
+import Top from "../../../../../../components/Top"
 
 const FormArea = (props) => {
 
-    const { neutralColor, primaryColor, setChecked, table, date } = props;
+    const { neutralColor, primaryColor, setChecked, table, date } = props
+
+    const handleAdd = (e) => {
+        e.preventDefault()
+    }
 
     return (
         <FormItem>
@@ -28,7 +34,7 @@ const FormArea = (props) => {
             <Span>
                 <Table>
                     {table.map(item => (
-                        <Div key={item.id}>
+                        <PriceTableOf key={item.id}>
                             <WeekDay textcolor={neutralColor}>
                                 {item.week}
                             </WeekDay>
@@ -47,7 +53,7 @@ const FormArea = (props) => {
                                 disabled={item.checked === true ? true : false} 
                                 onChange={e => item.onChangeClose(e)}
                             />
-                        </Div>
+                        </PriceTableOf>
                     ))}
                 </Table>
             </Span>
@@ -61,14 +67,17 @@ const FormArea = (props) => {
                 </Header>
                 <Div>
                     {/* Por enquanto, desabilitado */}
-                    <DateStyle type="date" min={date} disabled={true} />
-                    <Checkbox type="checkbox" disabled={true}/>
-                    <Time type="time" bordercolor={primaryColor} disabled={true} />
-                    <Time type="time" bordercolor={primaryColor} disabled={true} />
+                    <div>
+                        <DateStyle type="date" min={date} disabled={true} />
+                        <Checkbox type="checkbox" disabled={true}/>
+                        <Time type="time" bordercolor={primaryColor} disabled={true} />
+                        <Time type="time" bordercolor={primaryColor} disabled={true} />
+                    </div>
+                    <Add onClick={handleAdd}>+</Add>
                 </Div>
             </Span>
         </FormItem>
     )
 }
 
-export default FormArea;
+export default FormArea

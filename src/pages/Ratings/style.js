@@ -1,4 +1,7 @@
-import styled from "styled-components";
+import styled from "styled-components"
+import { theme } from "../../theme/theme"
+
+const { neutralColor } = theme
 
 export const Container = styled.div`
     margin: 10rem auto 0;
@@ -61,6 +64,8 @@ export const Body = styled.div`
     padding: 1rem;
     border-radius: 1rem;
     min-height: 10rem;
+    display: flex;
+    flex-direction: column;
 `
 
 export const Comments = styled.div`
@@ -94,4 +99,10 @@ export const Div = styled.div`
 export const Note = styled.p`
     color: #7d7d7d;
     font-size: 14px;
+`
+
+export const Warning = styled.p`
+    color: ${neutralColor};
+    font-size: 16px;
+    margin: auto;
 `

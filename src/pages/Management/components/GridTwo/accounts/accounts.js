@@ -1,37 +1,41 @@
-import { Div, Span } from "../../../style";
-import { theme } from "../../../../../theme/theme";
-import InputGroup from "./components/groupInput";
-import TableAccount from "./components/table";
-import Modal from "../../../../../components/Modal";
-import { useState, useEffect } from "react";
-import { useUser } from "../../../../../context/globalContext";
-import FilterDate from "./form/filterDate";
-import NovaConta from "./form/novaConta";
-import api from "../../../../../services/api/server";
+import { Div, Span } from "../../../style"
+import { theme } from "../../../../../theme/theme"
+import InputGroup from "./components/groupInput"
+import TableAccount from "./components/table"
+import Modal from "../../../../../components/Modal"
+import { useState, useEffect } from "react"
+import { useUser } from "../../../../../context/globalContext"
+import FilterDate from "./form/filterDate"
+import NovaConta from "./form/novaConta"
+import api from "../../../../../services/api/server"
 
 const Accounts = () => {
 
-    const { accounts, setAccounts, dataClient } = useUser();
-    const { neutralColor, primaryColor } = theme;
+    const { accounts, setAccounts, dataClient } = useUser()
+    const { neutralColor, primaryColor } = theme
 
-    const [filterDate, setFilterDate] = useState(false);
-    const [count, setCount] = useState(false);
-    const [text, setText] = useState("");
-    const [chosenAcc, setChosenAcc] = useState({});
-    const [radioValue, setRadioValue] = useState("");
-    const [cost, setCost] = useState("");
+    const [filterDate, setFilterDate] = useState(false)
+    const [count, setCount] = useState(false)
+    const [text, setText] = useState("")
+    const [chosenAcc, setChosenAcc] = useState({})
+    const [radioValue, setRadioValue] = useState("")
+    const [cost, setCost] = useState("")
+    const [loading, setLoading] = useState(false)
 
     const readAccounts = async () => {
         await api.get("/accounts")
         .then(res => {
-            setAccounts(res.data);
+            setAccounts(res.data)
         })
         .catch(e => {
-            console.log(e);
+            console.log(e)
         })
-    };
+    }
 
-    const createAccounts = async () => {
+    const createAccounts = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+
         await api.post("/accounts", {
             category: chosenAcc.category, 
             desc_item: chosenAcc.desc_item, 
@@ -43,22 +47,29 @@ const Accounts = () => {
             id_establishment: dataClient.id_establishment
         })
         .then(() => {
-            alert("Criado com sucesso");
-            setCount(false);
+            setLoading(false)
+            alert("Criado com sucesso")
+            setCount(false)
         })
         .catch(e => {
-            console.log(e);
+            setLoading(false)
+            console.log(e)
         })
-    };
+    }
 
-    const filtrar = accounts.filter(item => item.id_establishment === dataClient.id_establishment);
+    const filtrarData = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+    }
+
+    const filtrar = accounts.filter(item => item.id_establishment === dataClient.id_establishment)
     const filterAccounts = filtrar.filter(
         item => item.category.toLowerCase().includes(text.toLowerCase()) || 
         item.desc_item.toLowerCase().includes(text.toLowerCase()) || 
         item.date_created.includes(text)
-    );
+    )
 
-    useEffect(() => { readAccounts() }, [accounts]);
+    useEffect(() => { readAccounts() }, [accounts])
 
     return (
         <Span>
@@ -80,6 +91,8 @@ const Accounts = () => {
                     setOpen={setFilterDate}
                     title={"Filtrar Datas"}
                     maxWidth={"30rem"}
+                    funcao={filtrarData}
+                    isLoading={loading}
                 >
                     <FilterDate colors={{ primaryColor, neutralColor }} />
                 </Modal>
@@ -89,6 +102,7 @@ const Accounts = () => {
                     title={"Nova Conta"}
                     maxWidth={"52rem"}
                     funcao={createAccounts}
+                    isLoading={loading}
                 >
                     <NovaConta 
                         colors={{ primaryColor, neutralColor }}
@@ -100,4 +114,4 @@ const Accounts = () => {
     )
 }
 
-export default Accounts;
+export default Accounts

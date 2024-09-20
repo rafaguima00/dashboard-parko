@@ -1,34 +1,38 @@
-import { useState, useEffect } from "react";
-import { useUser } from "../../../../../context/globalContext";
-import { Div, Span } from "../../../style";
-import { theme } from "../../../../../theme/theme";
-import InputGroup from "./components/groupInput";
-import TableAccount from "./components/table";
-import Modal from "../../../../../components/Modal";
-import NewHeritage from "./form/new";
-import EditHeritage from "./form/edit";
-import api from "../../../../../services/api/server";
+import { useState, useEffect } from "react"
+import { useUser } from "../../../../../context/globalContext"
+import { Div, Span } from "../../../style"
+import { theme } from "../../../../../theme/theme"
+import InputGroup from "./components/groupInput"
+import TableAccount from "./components/table"
+import Modal from "../../../../../components/Modal"
+import NewHeritage from "./form/new"
+import EditHeritage from "./form/edit"
+import api from "../../../../../services/api/server"
 
 const Heritage = () => {
-    const { patrimonio, setPatrimonio, dataClient } = useUser();
-    const { neutralColor, primaryColor } = theme;
+    const { patrimonio, setPatrimonio, dataClient } = useUser()
+    const { neutralColor, primaryColor } = theme
 
-    const [newItem, setNewItem] = useState(false);
-    const [editItem, setEditItem] = useState(false);
-    const [chosenItem, setChosenItem] = useState({});
-    const [text, setText] = useState("");
+    const [newItem, setNewItem] = useState(false)
+    const [editItem, setEditItem] = useState(false)
+    const [chosenItem, setChosenItem] = useState({})
+    const [text, setText] = useState("")
+    const [loading, setLoading] = useState(false)
 
     const readPatrimonio = async () => {
         await api.get("/heritage")
         .then(res => {
-            setPatrimonio(res.data);
+            setPatrimonio(res.data)
         })
         .catch(e => {
-            console.log(e);
+            console.log(e)
         })
-    };
+    }
 
-    const createPatrimonio = async () => {
+    const createPatrimonio = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+
         await api.post("/heritage", {
             code: chosenItem.code, 
             name: chosenItem.name, 
@@ -40,32 +44,39 @@ const Heritage = () => {
             id_establishment: dataClient.id_establishment
         })
         .then(() => {
-            alert("Criado com sucesso");
-            setNewItem(false);
+            alert("Criado com sucesso")
+            setLoading(false)
+            setNewItem(false)
         })
         .catch(e => {
-            console.log(e);
+            console.log(e)
+            setLoading(false)
         })
-    };
+    }
 
-    const updatePatrimonio = async () => {
+    const updatePatrimonio = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+
         await api.put(`/heritage/${chosenItem.id}`, chosenItem)
         .then(() => {
-            alert("Atualizado com sucesso");
-            setEditItem(false);
+            alert("Atualizado com sucesso")
+            setEditItem(false)
+            setLoading(false)
         })
         .catch(e => {
-            console.log(e);
+            console.log(e)
+            setLoading(false)
         }) 
-    };
+    }
 
-    const filtrar = patrimonio.filter(item => item.id_establishment === dataClient.id_establishment);
+    const filtrar = patrimonio.filter(item => item.id_establishment === dataClient.id_establishment)
     const filtrarPatrimonio = filtrar.filter(
         item => item.category.toLowerCase().includes(text.toLowerCase()) || 
         item.name.toLowerCase().includes(text.toLowerCase())
-    );
+    )
 
-    useEffect(() => { readPatrimonio() }, [patrimonio]);
+    useEffect(() => { readPatrimonio() }, [patrimonio])
 
     return (
         <Span>
@@ -91,6 +102,7 @@ const Heritage = () => {
                     title={"Novo Patrimônio"}
                     maxWidth={"52rem"}
                     funcao={createPatrimonio}
+                    isLoading={loading}
                 >
                     <NewHeritage 
                         colors={{ primaryColor, neutralColor }} 
@@ -103,6 +115,7 @@ const Heritage = () => {
                     title={"Editar Patrimônio"}
                     maxWidth={"52rem"}
                     funcao={updatePatrimonio}
+                    isLoading={loading}
                 >
                     <EditHeritage 
                         colors={{ primaryColor, neutralColor }} 
@@ -114,4 +127,4 @@ const Heritage = () => {
     )
 }
 
-export default Heritage;
+export default Heritage

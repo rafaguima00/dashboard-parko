@@ -1,21 +1,23 @@
-import { useState } from "react";
-import { useUser } from "../../../context/globalContext";
-import Modal from "../../../components/Modal";
+import { useState } from "react"
+import { useUser } from "../../../context/globalContext"
+import Modal from "../../../components/Modal"
 import { 
     ListBody,
     ElementList,
     InputPin,
     ItemList,
     State 
-} from "../style";
-import Confirmation from "../form/confirmation";
-import EmptyMessage from "../../../components/EmptyMessage";
+} from "../style"
+import Confirmation from "../form/confirmation"
+import EmptyMessage from "../../../components/EmptyMessage"
+import { theme } from "../../../theme/theme"
 
 const RefusedReserve = () => {
 
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false)
 
-    const { reservations } = useUser();
+    const { reservations } = useUser()
+    const { primaryColor } = theme
 
     return (
         <>
@@ -29,7 +31,7 @@ const RefusedReserve = () => {
                         <ItemList>{item.hora_entrada}</ItemList>
                         <ItemList>{item.name_vehicle}</ItemList>
                         <ItemList>{item.license_plate}</ItemList>
-                        <State></State>
+                        <State cor={primaryColor}></State>
                     </ElementList>
                 ))
             }
@@ -46,4 +48,4 @@ const RefusedReserve = () => {
     )
 }
 
-export default RefusedReserve;
+export default RefusedReserve

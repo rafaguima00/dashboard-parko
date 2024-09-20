@@ -35,18 +35,18 @@ const Start = () => {
     ]
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token")
 
         if(token) {
-            const decoded = jwtDecode(token);
+            const decoded = jwtDecode(token)
             setDataClient(decoded.user)
         }
     }, [])
 
     useEffect(() => {
-        loadData(dataClient.id_establishment);
-        listColaborators(dataClient.id_establishment);
-        listReservations(dataClient.id_establishment);
+        loadData(dataClient.id_establishment)
+        listColaborators(dataClient.id_establishment)
+        listReservations(dataClient.id_establishment)
     }, [dataClient, reservations])
 
     return (
@@ -66,4 +66,4 @@ const Start = () => {
     )
 }
 
-export default Start;
+export default Start

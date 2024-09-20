@@ -1,5 +1,5 @@
-import api from "./api/server";
-import { useUser } from "../context/globalContext";
+import api from "./api/server"
+import { useUser } from "../context/globalContext"
 
 const ReadApi = () => {
 
@@ -10,7 +10,7 @@ const ReadApi = () => {
         setAportes, 
         setRetiradas,
         setPriceTable
-    } = useUser();
+    } = useUser()
 
     const listReservations = async (id) => {
         await api.get(`/reservations/parking/${id}`)
@@ -20,57 +20,57 @@ const ReadApi = () => {
         .catch(e => {
             console.log(e.response.data.message)
         })
-    };
+    }
 
     const loadData = async (id) => {
         await api.get(`/establishments/${id}`)
         .then(response => {
-            setPark(response.data[0]);
+            setPark(response.data[0])
         })
         .catch(e => {
             console.log(e)
         })
-    };
+    }
 
     const listColaborators = async (id) => {
         await api.get(`/colaborators/${id}`)
         .then(response => {
-            setColaborators(response.data);
+            setColaborators(response.data)
         })
         .catch(e => {
-            console.log(e);
+            console.log(e)
         })
-    };
+    }
 
     const readAportes = async () => {
         await api.get("/aportes")
         .then(response => {
-            setAportes(response.data);
+            setAportes(response.data)
         })
         .catch(e => {
-            console.log(e);
+            console.log(e)
         })
-    };
+    }
 
     const readRetiradas = async () => {
         await api.get("/retiradas")
         .then(response => {
-            setRetiradas(response.data);
+            setRetiradas(response.data)
         })
         .catch(e => {
-            console.log(e);
+            console.log(e)
         })
-    };
+    }
 
     const getPriceTable = async (id) => {
         await api.get(`/tabela_preco/${id}`)
         .then(res => {
-            setPriceTable(res.data[0]);
+            setPriceTable(res.data[0])
         }) 
         .catch(e => {
-            console.log(e);
+            console.log(e)
         })
-    };
+    }
     
     return { 
         listReservations, 
@@ -79,7 +79,7 @@ const ReadApi = () => {
         readAportes, 
         readRetiradas,
         getPriceTable
-    };
-};
+    }
+}
 
-export default ReadApi;
+export default ReadApi

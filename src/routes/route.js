@@ -11,6 +11,7 @@ import FormEstablishment from "../pages/Settings/forms/establishment"
 import FormOpening from "../pages/Settings/forms/openingHour"
 import ColaboratorsForm from "../pages/Settings/forms/colaborators"
 import PriceTableForm from "../pages/Settings/forms/priceTable"
+import ErrorPage from "../pages/Error"
 
 export const router = createBrowserRouter([
     {
@@ -24,44 +25,54 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: "/start",
-                element: <Start />
+                element: <Start />,
+                errorElement: <ErrorPage />
             },
             {
                 path: "/reservations",
-                element: <Reservations />
+                element: <Reservations />,
+                errorElement: <ErrorPage />
             },
             {
                 path: "/checkout",
-                element: <Checkout />
+                element: <Checkout />,
+                errorElement: <ErrorPage />
             },
             {
                 path: "/management",
-                element: <Management />
+                element: <Management />,
+                errorElement: <ErrorPage />
             },
             {
                 path: "/settings",
-                element: <Settings />
+                element: <Settings />,
+                errorElement: <ErrorPage />
             },
             {
                 path: "/settings/establishment",
-                element: <FormEstablishment />
+                element: <FormEstablishment />,
+                errorElement: <ErrorPage />
             },
             {
                 path: "/settings/funcionamento",
-                element: <FormOpening />
+                element: <FormOpening />,
+                errorElement: <ErrorPage />
             },
             {
                 path: "/settings/colaborators",
-                element: <ColaboratorsForm />
+                element: <ColaboratorsForm />,
+                errorElement: <ErrorPage />
             },
             {
                 path: "/settings/table",
-                element: <PriceTableForm />
+                element: <PriceTableForm />,
+                errorElement: <ErrorPage />
             },
             {
                 path: "/rating",
-                element: <Ratings />
+                element: <Ratings />,
+                errorElement: <ErrorPage />
             }
         ]
     }
-]);
+])

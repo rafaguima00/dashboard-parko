@@ -6,18 +6,27 @@ import {
     ListHeader,
     Text,
     TextState
-} from "../style";
-import { RxInfoCircled } from "react-icons/rx";
-import PendingReserve from "./pendingReserve";
-import ConfirmedReserve from "./confirmedReserve";
-import RefusedReserve from "./refusedReserve";
-import Top from "../../../components/Top";
+} from "../style"
+import { RxInfoCircled } from "react-icons/rx"
+import PendingReserve from "./pendingReserve"
+import ConfirmedReserve from "./confirmedReserve"
+import RefusedReserve from "./refusedReserve"
+import Top from "../../../components/Top"
+import { theme } from "../../../theme/theme"
+import LoadingScreen from "../../../components/Loading"
+import { useState } from "react"
+import Modal from "../../../components/Modal"
 
 const ReservationStatus = (props) => {
 
-    const { btReservations, selected, setSelected } = props;
+    const { btReservations, selected, setSelected } = props
+    const { primaryColor } = theme
 
-    return (
+    const [open, setOpen] = useState(false)
+    const [openRefuse, setOpenRefuse] = useState(false)
+    const [loading, setLoading] = useState(false)
+
+    return <>
         <ReserveStatus>
             <TextReservations>
                 <Top children={"Reservas Clientes Parko"} font={17} />
@@ -27,8 +36,12 @@ const ReservationStatus = (props) => {
                 {
                     btReservations.map(item => (
                         <BtReservations
-                            textcolor={selected === item.id ? "#D64D4D" : "#c4c4c4"}
-                            borderbottom={selected === item.id ? "#D64D4D" : "transparent"}
+                            textcolor={
+                                selected === item.id ? primaryColor : "#c4c4c4"
+                            }
+                            borderbottom={
+                                selected === item.id ? primaryColor : "transparent"
+                            }
                             key={item.id}
                             onClick={() => setSelected(item.id)}
                         >
@@ -45,12 +58,23 @@ const ReservationStatus = (props) => {
                     <Text>Placa</Text>
                     <TextState>Legenda</TextState>
                 </ListHeader>
-                {selected === 1 && <PendingReserve />}
-                {selected === 2 && <ConfirmedReserve />}
+                {selected === 1 && 
+                    <PendingReserve 
+                        states={{ 
+                            setOpen, 
+                            open,
+                            setOpenRefuse,
+                            openRefuse,
+                            setLoading
+                        }} 
+                    />
+                }
+                {selected === 2 && <ConfirmedReserve states={{ setLoading }} />}
                 {selected === 3 && <RefusedReserve />}
             </div>
         </ReserveStatus>
-    )
+        <LoadingScreen isOpen={loading} />
+    </>
 }
 
-export default ReservationStatus;
+export default ReservationStatus

@@ -6,49 +6,61 @@ import {
     Body,
     Comments,
     Div,
-    Note
-} from "../style";
-import camera from "../../../assets/camera.png";
-import { FaStar } from "react-icons/fa6";
-import { theme } from "../../../theme/theme";
+    Note,
+    Warning
+} from "../style"
+import camera from "../../../assets/camera.png"
+import { FaStar } from "react-icons/fa6"
+import { theme } from "../../../theme/theme"
 
 const Rate = (props) => {
 
-    const { neutralColor, primaryColor } = theme;
-    const { ratings, dataClient } = props;
+    const { neutralColor, primaryColor } = theme
+    const { ratings, dataClient } = props
 
     const renderItems = () => {
-        const findRate = ratings.filter(item => item.id_establishment === dataClient.id_establishment);
+        const findRate = ratings.filter(item => item.id_establishment === dataClient.id_establishment)
 
-        return { findRate };
-    };
+        return { findRate }
+    }
 
-    const { findRate } = renderItems();
+    const { findRate } = renderItems()
 
-    return (
-        <section>
-            {findRate.map((item) => (
-                <Body key={item.id}>
-                    <Profile>
-                        <ImageProfile src={camera} />
-                        <Space>
-                            <UserName textcolor={neutralColor}>{item.name_costumer}</UserName>
-                            <Div>
-                                <FaStar color={primaryColor} children={item.rate} />
-                                <Note>{item.rate}</Note>
-                            </Div>
-                        </Space>
-                    </Profile>
-                    <hr />
-                    <Comments>
-                        <p>{item.comments !== "" ? item.comments : "Sem comentários"}</p>
-                    </Comments>
+    if(findRate.length === 0) {
+        return (
+            <section>
+                <Body>
+                    <Warning>Nenhuma avaliação disponível</Warning>
                 </Body>
-            ))
+            </section>
 
-            }
-        </section>
-    )
+        )
+    }
+
+    if(findRate) {
+        return (
+            <section>
+                {findRate.map((item) => (
+                    <Body key={item.id}>
+                        <Profile>
+                            <ImageProfile src={camera} />
+                            <Space>
+                                <UserName textcolor={neutralColor}>{item.name_costumer}</UserName>
+                                <Div>
+                                    <FaStar color={primaryColor} children={item.rate} />
+                                    <Note>{item.rate}</Note>
+                                </Div>
+                            </Space>
+                        </Profile>
+                        <hr />
+                        <Comments>
+                            <p>{item.comments !== "" ? item.comments : "Sem comentários"}</p>
+                        </Comments>
+                    </Body>
+                ))}
+            </section>
+        )
+    }
 }
 
-export default Rate;
+export default Rate

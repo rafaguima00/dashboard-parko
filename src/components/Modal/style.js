@@ -12,6 +12,8 @@ export const Background = styled.div`
     right: 0;
     bottom: 0;
     left: 0;
+    opacity: 1;
+    transition: visibility 0.3s linear, opacity 0.3s linear;
 `
 
 export const Content = styled.div`
@@ -36,7 +38,7 @@ export const Header = styled.div`
     }
 `
 
-export const Spacing = styled.div`
+export const Spacing = styled.form`
     display: flex;
     flex-direction: column;
     gap: 1rem;

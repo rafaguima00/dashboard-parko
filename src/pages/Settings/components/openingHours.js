@@ -1,46 +1,46 @@
-import { BiEdit } from "react-icons/bi";
+import { BiEdit } from "react-icons/bi"
 import { 
     ContentInfo, 
     ButtonEdit,
     Menu,
     Warning,
     Hour
-} from "../style";
-import { theme } from "../../../theme/theme";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { useUser } from "../../../context/globalContext";
-import api from "../../../services/api/server";
+} from "../style"
+import { theme } from "../../../theme/theme"
+import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { useUser } from "../../../context/globalContext"
+import api from "../../../services/api/server"
 
 const OpeningHours = () => {
 
-    const { neutralColor, primaryColor, cancelColor } = theme;
+    const { neutralColor, primaryColor, cancelColor } = theme
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const routeScreen = () => {
-        return navigate("/settings/funcionamento");
+        return navigate("/settings/funcionamento")
     }
 
-    const { dataClient } = useUser();
+    const { dataClient } = useUser()
 
-    const [horaAbertura, setHoraAbertura] = useState(null);
-    const [horaFechamento, setHoraFechamento] = useState(null);
+    const [horaAbertura, setHoraAbertura] = useState(null)
+    const [horaFechamento, setHoraFechamento] = useState(null)
 
     const recuperarDados = async () => {
         await api.get(`/hora_funcionamento/${dataClient.id_establishment}`)
         .then(res => {
-            setHoraAbertura(res.data[0].hora_abertura);
-            setHoraFechamento(res.data[0].hora_fechamento);
+            setHoraAbertura(res.data[0])
+            setHoraFechamento(res.data[0])
         })
         .catch(e => {
-            console.log(e);
+            console.log(e)
         })
-    };
+    }
 
     useEffect(() => {
-        recuperarDados();
-    }, [horaAbertura, horaFechamento]);
+        recuperarDados()
+    }, [horaAbertura, horaFechamento])
 
     return (
         <ContentInfo gridcolumn={"span 2"} gridrow={"span 1"}>
@@ -50,7 +50,7 @@ const OpeningHours = () => {
             <Menu>
                 <Warning textcolor={neutralColor}>Em funcionamento de <strong>Segunda à Sábado</strong></Warning>
                 <Hour textcolor={primaryColor}>
-                    {horaAbertura}h - {horaFechamento}h
+                    {horaAbertura?.hora_abertura ?? "00:00"}h - {horaFechamento?.hora_fechamento ?? "00:00"}h
                 </Hour>
                 <hr/>
                 <Warning textcolor={cancelColor}><strong>Não funcionamos nos feriados</strong></Warning>
@@ -59,4 +59,4 @@ const OpeningHours = () => {
     )
 }
 
-export default OpeningHours;
+export default OpeningHours

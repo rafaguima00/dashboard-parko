@@ -1,5 +1,5 @@
-import { AlignText, Line } from "../../pages/Start/style";
-import { theme } from "../../theme/theme";
+import { AlignText, Line } from "../../pages/Start/style"
+import { theme } from "../../theme/theme"
 
 const EmptyMessage = ({ children }) => {
 
@@ -12,4 +12,4 @@ const EmptyMessage = ({ children }) => {
     )
 }
 
-export default EmptyMessage;
+export default EmptyMessage

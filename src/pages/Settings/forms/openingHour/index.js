@@ -1,20 +1,21 @@
-import TopForm from "../../components/topForm";
-import { ContainerForm } from "../style";
-import { useEffect, useState } from "react";
-import { useParking } from "../../../../context/parkingContext";
-import { useUser } from "../../../../context/globalContext";
-import { theme } from "../../../../theme/theme";
-import FormArea from "./components/FormArea";
-import BottomButton from "./components/BottomButton";
-import api from "../../../../services/api/server";
-import { jwtDecode } from "jwt-decode";
-import ReadApi from "../../../../services/readData";
+import TopForm from "../../components/topForm"
+import { ContainerForm } from "../style"
+import { useEffect, useState } from "react"
+import { useParking } from "../../../../context/parkingContext"
+import { useUser } from "../../../../context/globalContext"
+import { theme } from "../../../../theme/theme"
+import FormArea from "./components/FormArea"
+import BottomButton from "./components/BottomButton"
+import api from "../../../../services/api/server"
+import { jwtDecode } from "jwt-decode"
+import ReadApi from "../../../../services/readData"
 
 const FormOpening = () => {
 
-    const date = new Date().toLocaleDateString();
+    const date = new Date().toLocaleDateString()
 
-    const [dados, setDados] = useState([]);
+    const [dados, setDados] = useState([])
+    const [loading, setLoading] = useState(false)
 
     const { 
         openHour, 
@@ -23,16 +24,16 @@ const FormOpening = () => {
         setCloseHour, 
         setChecked, 
         checked 
-    } = useParking();
-    const { dataClient, setDataClient, reservations } = useUser();
-    const { listColaborators, listReservations, loadData } = ReadApi();
+    } = useParking()
+    const { dataClient, setDataClient, reservations } = useUser()
+    const { listColaborators, listReservations, loadData } = ReadApi()
 
     const { 
         cancelColor, 
         greenColor, 
         neutralColor, 
         primaryColor 
-    } = theme;
+    } = theme
 
     const table = [
         {
@@ -105,33 +106,37 @@ const FormOpening = () => {
             checked: checked.sunday,
             id_estacionamento: dataClient.id_establishment
         }
-    ];
+    ]
 
-    const recuperarDados = async () => {
+    const recuperarDados = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+
         await api.get(`/hora_funcionamento/${dataClient.id_establishment}`)
         .then(res => {
-            setDados(res.data);
-            verificarDados(table);
+            setDados(res.data)
+            verificarDados(table)
         })
         .catch(e => {
-            console.log(e);
+            console.log(e)
+            setLoading(false)
         })
-    };
+    }
 
     const verificarDados = async (data) => {
-        const filtrarItens = data.filter(item => item.checked === false);
+        const filtrarItens = data.filter(item => item.checked === false)
         const dados = filtrarItens.map(item => ({
             "dia_semana": item.week,
             "hora_abertura": item.open,
             "hora_fechamento": item.close,
             "id_estacionamento": item.id_estacionamento
-        }));
+        }))
 
         const dadosAtualizados = filtrarItens.map(item => ({
             "dia_semana": item.week,
             "hora_abertura": item.open,
             "hora_fechamento": item.close
-        }));
+        }))
 
         if(dados == []) {
             await api.post("/hora_funcionamento", dados)
@@ -139,7 +144,7 @@ const FormOpening = () => {
                 alert("Dados enviados com sucesso.")
             })
             .catch(e => {
-                console.log(e);
+                console.log(e)
             })
         } else {
             await api.put(`/hora_funcionamento/${dataClient.id_establishment}`, dadosAtualizados)
@@ -147,25 +152,27 @@ const FormOpening = () => {
                 alert("Dados atualizados com sucesso")
             })
             .catch(e => {
-                console.log(e);
+                console.log(e)
             })
         }
-    };
+
+        setLoading(false)
+    }
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token")
 
         if(token) {
-            const decoded = jwtDecode(token);
+            const decoded = jwtDecode(token)
             setDataClient(decoded.user)
         }
-    }, []);
+    }, [])
 
     useEffect(() => {
-        loadData(dataClient.id_establishment);
-        listColaborators(dataClient.id_establishment);
-        listReservations(dataClient.id_establishment);
-    }, [dataClient, reservations]);
+        loadData(dataClient.id_establishment)
+        listColaborators(dataClient.id_establishment)
+        listReservations(dataClient.id_establishment)
+    }, [dataClient, reservations])
 
     return (
         <ContainerForm>
@@ -181,9 +188,10 @@ const FormOpening = () => {
                 cancelColor={cancelColor}
                 greenColor={greenColor}
                 recuperarDados={recuperarDados}
+                loading={loading}
             />
         </ContainerForm>
     )
 }
 
-export default FormOpening;
+export default FormOpening

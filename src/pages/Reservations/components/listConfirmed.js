@@ -11,10 +11,12 @@ import {
 import { formatCurrency } from "../../../services/formatCurrency"
 import ReadApi from "../../../services/readData"
 import EmptyMessage from "../../../components/EmptyMessage"
+import { theme } from "../../../theme/theme"
 
 const ListConfirmedReserve = (props) => {
 
-    const { reservaPendente } = props
+    const { primaryColor } = theme
+    const { reservaAberta } = props
 
     const [clicked, setClicked] = useState(0)
 
@@ -28,7 +30,7 @@ const ListConfirmedReserve = (props) => {
 
     useEffect(() => {
         listReservations(dataClient.id_establishment)
-    }, [reservaPendente, reservations])
+    }, [reservaAberta, reservations])
 
     return (
         <List>
@@ -41,11 +43,11 @@ const ListConfirmedReserve = (props) => {
                 <Text>Valor</Text>
             </ListHeader>
             {
-                reservaPendente.length !== 0 ?
-                reservaPendente.map((item, index) => (
+                reservaAberta.length !== 0 ?
+                reservaAberta.map((item, index) => (
                     <ListBody key={item.id}>
                         <ElementList
-                            backgroundcolor={clicked === index ? "#523499" : "#f4f4f4"}
+                            backgroundcolor={clicked === index ? primaryColor : "#f4f4f4"}
                             textcolor={clicked === index ? "#fff" : "#7c7c7c"}
                             onClick={() => handleOnClick({ index, item })}
                         >
@@ -58,10 +60,10 @@ const ListConfirmedReserve = (props) => {
                         </ElementList>
                     </ListBody>
                 )) :
-                <EmptyMessage>Nenhuma reserva aberta no momento</EmptyMessage> 
+                <EmptyMessage>Nenhuma reserva encontrada</EmptyMessage> 
             }
         </List>
     )
 }
 
-export default ListConfirmedReserve;
+export default ListConfirmedReserve

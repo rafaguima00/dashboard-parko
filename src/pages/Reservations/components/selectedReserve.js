@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useUser } from "../../../context/globalContext";
+import { useEffect, useState } from "react"
+import { useUser } from "../../../context/globalContext"
 import {
     Content,
     List,
@@ -13,26 +13,32 @@ import {
     Price,
     Add,
     Receive
-} from "../style";
-import { formatCurrency } from "../../../services/formatCurrency";
-import Top from "../../../components/Top";
-import { theme } from "../../../theme/theme";
-import Modal from "../../../components/Modal";
-import EditModal from "../form/edit";
-import DebtPayment from "../form/debtPayment";
-import api from "../../../services/api/server";
+} from "../style"
+import { formatCurrency } from "../../../services/formatCurrency"
+import Top from "../../../components/Top"
+import { theme } from "../../../theme/theme"
+import Modal from "../../../components/Modal"
+import EditModal from "../form/edit"
+import DebtPayment from "../form/debtPayment"
+import api from "../../../services/api/server"
 
 const SelectedReserve = (props) => {
 
-    const { getDebtById, reservaPendente } = props;
-    const { neutralColor } = theme;
+    const { getDebtById, reservaAberta } = props
+    const { neutralColor } = theme
+    const { selectedClient, setSelectedClient } = useUser()
 
-    const { selectedClient, setSelectedClient } = useUser();
+    const [openEdit, setOpenEdit] = useState(false)
+    const [openDebt, setOpenDebt] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [valor, setValor] = useState({
+        valor1: null
+    })
 
-    const [openEdit, setOpenEdit] = useState(false);
-    const [openDebt, setOpenDebt] = useState(false);
+    const handleUpdate = async (id, e) => {
+        e.preventDefault()
+        setLoading(true)
 
-    const handleUpdate = async (id) => {
         await api.put(`reservations/${id}`, {
             data_entrada: selectedClient.data_entrada,
             hora_entrada: selectedClient.hora_entrada,
@@ -43,31 +49,35 @@ const SelectedReserve = (props) => {
             id_vehicle: selectedClient.id_vehicle
         })
         .then(() => {
-            alert("Reserva atualizada com sucesso.");
-            setOpenEdit(false);
+            setLoading(false)
+            alert("Reserva atualizada com sucesso.")
+            setOpenEdit(false)
         })
         .catch(e => {
-            console.log(e);
+            setLoading(false)
+            console.log(e)
         })
-    };
+    }
 
     const valorTotal = () => {
-        if(reservaPendente) {
+        if(reservaAberta && selectedClient) {
             if(getDebtById) {
                 return formatCurrency(selectedClient.value + getDebtById.value, 'BRL') 
-            } else {
-                return formatCurrency(0, 'BRL') 
-            }
-        } else {
-            return 0
-        }
-    };
+            } 
 
-    const total = valorTotal();
+            return formatCurrency(selectedClient?.value ?? 0, 'BRL') 
+        } 
+    }
+
+    const addPayment = () => {
+        console.log(`pagamento de ${selectedClient?.name ?? "usuário"} selecionado`)
+    }
+
+    const total = valorTotal()
 
     useEffect(() => {
-        if(reservaPendente) {
-            const indexOf = reservaPendente.values().next().value
+        if(reservaAberta) {
+            const indexOf = reservaAberta.values().next().value
             setSelectedClient(indexOf)
         }
     }, [])
@@ -75,41 +85,46 @@ const SelectedReserve = (props) => {
     return (
         <Content>
             <Top children="Reserva Selecionada" font={19}/>
-            <List>
+            <List padding={"2.4rem 4rem"}>
                 <section>
                     <GridItems>
                         <InfoReservation>
                             <strong>Número reserva: </strong>
-                            <p>{selectedClient ? selectedClient.id : ""}</p>
+                            <p>{selectedClient?.id ?? ""}</p>
                         </InfoReservation>
                         <InfoReservation>
                             <strong>Placa: </strong>
-                            <p>{selectedClient ? selectedClient.license_plate : ""}</p>
+                            <p>{selectedClient?.license_plate ?? ""}</p>
                         </InfoReservation>
                         <InfoReservation>
                             <strong>Cliente: </strong>
-                            <p>{selectedClient ? selectedClient.name : ""}</p>
+                            <p>{selectedClient?.name ?? ""}</p>
                         </InfoReservation>
                         <InfoReservation>
                             <strong>Entrada: </strong>
-                            <p>{selectedClient ? selectedClient.data_entrada : ""}</p>
+                            <p>{selectedClient?.data_entrada ?? ""}</p>
                         </InfoReservation>
                         <InfoReservation>
                             <strong>Veículo: </strong>
-                            <p>{selectedClient ? selectedClient.name_vehicle : ""}</p>
+                            <p>{selectedClient?.name_vehicle ?? ""}</p>
                         </InfoReservation>
                         <InfoReservation>
                             <strong>Saída: </strong>
-                            <p>{selectedClient ? selectedClient.data_saida : ""}</p>
+                            <p>{selectedClient?.data_saida ?? ""}</p>
                         </InfoReservation>
                     </GridItems>
+                    {/* 
+                        Desabilitar edição do horário de entrada para clientes com reserva confirmada e  
+                        clientes Parko. Habilitar edição apenas para clientes não-parko com reserva PENDENTE
+                    */}
                     <Edit onClick={() => setOpenEdit(true)}>Editar</Edit>
                     <Modal
                         isOpen={openEdit}
                         setOpen={setOpenEdit}
                         title={selectedClient ? `Nº ${selectedClient.id}` : ""}
                         maxWidth={"52rem"}
-                        funcao={() => handleUpdate(selectedClient.id)} 
+                        funcao={e => handleUpdate(selectedClient.id, e)} 
+                        isLoading={loading}
                     >
                         <EditModal states={{ selectedClient, setSelectedClient }} />
                     </Modal>
@@ -132,7 +147,9 @@ const SelectedReserve = (props) => {
                                     <option value="personal" selected>Dívida Pessoal</option>
                                     <option value="money">Dinheiro</option>
                                 </Select>
-                                <Price>{formatCurrency(getDebtById.value, 'BRL')}</Price>
+                                <Price>
+                                    <p>{formatCurrency(getDebtById.value, 'BRL')}</p>
+                                </Price>
                                 <Add
                                     onClick={() => setOpenDebt(true)}
                                 >
@@ -175,20 +192,27 @@ const SelectedReserve = (props) => {
                                 <option value="personal">Dívida Pessoal</option>
                                 <option value="money">Dinheiro</option>
                             </Select>
-                            <Price>{total}</Price>
-                            <Add>+</Add>
+                            <Price 
+                                type="number" 
+                                placeholder="Valor (R$)" 
+                                value={valor.valor1}
+                                onChange={e => setValor({ ...valor, valor1: e.target.value })} 
+                            />
+                            <Add onClick={() => addPayment()}>
+                                +
+                            </Add>
                         </Payment>
                     </div>
                     <TextOption>
                         Total recebido {"\n"}
                         <strong>
-                            {formatCurrency(0, 'BRL')}
+                            {total}
                         </strong>
                     </TextOption>
                     <TextOption>
                         Troco {"\n"}
                         <strong>
-                            {formatCurrency(0, 'BRL')}
+                            {total}
                         </strong>
                     </TextOption>
                 </SecondSection>
@@ -197,4 +221,4 @@ const SelectedReserve = (props) => {
     )
 }
 
-export default SelectedReserve;
+export default SelectedReserve

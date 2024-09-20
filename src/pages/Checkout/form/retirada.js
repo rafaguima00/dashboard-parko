@@ -7,12 +7,13 @@ const Retirada = ({ primaryColor, neutralColor, state }) => {
     return (
         <Form>
             <DivInput largura={"45%"}>
-                <Label textcolor={neutralColor}>Valor</Label>
+                <Label textcolor={neutralColor}>Valor (R$)</Label>
                 <Input 
                     type="text" 
                     bordercolor={primaryColor} 
                     value={novaRetirada.value}
                     onChange={e => setNovaRetirada({ ...novaRetirada, value: e.target.value })}
+                    required
                 />
             </DivInput>
             <DivInput largura={"45%"}>
@@ -22,6 +23,7 @@ const Retirada = ({ primaryColor, neutralColor, state }) => {
                     bordercolor={primaryColor} 
                     value={novaRetirada.created_at}
                     onChange={e => setNovaRetirada({ ...novaRetirada, created_at: e.target.value })}
+                    required
                 />
             </DivInput>
             <DivInput largura={"100%"}>
@@ -31,6 +33,7 @@ const Retirada = ({ primaryColor, neutralColor, state }) => {
                     bordercolor={primaryColor} 
                     value={novaRetirada.description}
                     onChange={e => setNovaRetirada({ ...novaRetirada, description: e.target.value })}
+                    required
                 />
             </DivInput>
         </Form>

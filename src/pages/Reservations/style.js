@@ -1,9 +1,12 @@
-import styled from "styled-components";
+import styled from "styled-components"
+import { theme } from "../../theme/theme"
+
+const { neutralColor } = theme
 
 export const Container = styled.div`
-    margin: 4rem 4rem 0 0;
+    margin: 4rem 5.11rem 0 0;
     display: grid;
-    grid-template-rows: 45% 45% 10%;
+    grid-template-rows: 45% 45% 4%;
 `
 
 export const Content = styled.div`
@@ -112,13 +115,28 @@ export const List = styled.div`
     grid-row: 2;
     grid-column: span 2;
     border-radius: 20px;
-    padding: 1rem;
+    padding: ${props => props.padding ? props.padding : "1rem"};
+    overflow-y: scroll;
+    box-sizing: border-box;
 
     &:last-child {
         grid-column: span 3;
         display: flex;
         flex-direction: row;
         gap: 10rem;
+    }
+
+    &::-webkit-scrollbar {
+            width: .25rem;
+        }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: ${neutralColor};
+        border-radius: 3px;
     }
 `
 
@@ -160,7 +178,7 @@ export const Clock = styled.div`
 export const TitleReservation = styled.p`
     grid-column: span 3;
     font-size: 19px;
-    color: #545454;
+    color: ${neutralColor};
 `
 
 export const ListHeader = styled.div`
@@ -181,11 +199,10 @@ export const ListBody = styled.div`
     display: flex;
     flex-direction: column;
     gap: .8rem;
-    max-height: 23rem;
     overflow-y: auto;
     scrollbar-width: 0.5rem;
     scrollbar-color: #e7e7e7 #7c7c7c;
-    padding-top: 6px;
+    padding-top: .5rem;
 
     &::-webkit-scrollbar {
         width: .5rem;
@@ -208,9 +225,11 @@ export const ElementList = styled.button`
     display: grid;
     grid-template-columns: 50px repeat(2, 120px) 60px 140px 50px;
     justify-content: space-evenly;
+    align-items: center;
     border-radius: 8px;
     border: none;
     padding: 8px 0;
+    height: 2.2rem;
 
     &:hover {
         cursor: pointer;
@@ -245,10 +264,22 @@ export const GridItems = styled.div`
     display: grid;
     grid-template-rows: repeat(3, 60px);
     grid-template-columns: 144px 160px;
+    row-gap: .7rem;
+    column-gap: 2.5rem;
 `
 
 export const InfoReservation = styled.div`
-    color: #545454;
+    color: ${neutralColor};
+
+    strong {
+        font-size: 1.1rem;
+    }
+
+    p{
+        max-height: 68%;
+        overflow: hidden;
+        font-size: 1rem;
+    }
 `
 
 export const Edit = styled.button`
@@ -269,7 +300,9 @@ export const Edit = styled.button`
 
 export const TextOption = styled.p`
     font-weight: 700;
-    color: #545454;
+    color: ${neutralColor};
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
 
     strong {
         color: #523499;
@@ -286,44 +319,58 @@ export const Payment = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 8px;
+    gap: 1rem;
     margin-top: 4px;
+    margin-bottom: 1rem;
 `
 
 export const Select = styled.select`
-    font-size: 12px;
+    font-size: .8rem;
     color: #7d7d7d;
-    border-radius: 6px;
+    border-radius: 10px;
     border: solid 1px #523499;
-    padding: 8px 0;
-    width: 240px;
+    padding: 12px;
+    height: 48px;
+    width: 300px;
 
     &:focus {
         outline: solid 1.5px #523499;
     }
 `
 
-export const Price = styled.span`
-    font-size: 12px;
+export const Price = styled.input`
+    font-size: .8rem;
     color: #7d7d7d;
-    border-radius: 6px;
+    border-radius: 10px;
     border: solid 1px #523499;
-    padding: 10px 32px 10px 16px;
     box-sizing: border-box;
+    padding: 12px;
+    width: 100px;
+    height: 48px;
+    display: flex;
+    align-items: center; 
+    -moz-appearance: textfield;
+    appearance: textfield;
 
-    &:hover {
-        cursor: default;
+    &::-webkit-inner-spin-button { 
+        -webkit-appearance: none;
+    }
+
+    &:focus {
+        outline: solid 1.5px #523499;
     }
 `
 
 export const Add = styled.button`
     background-color: #fff;
-    font-size: 24px;
-    color: #545454;
+    font-size: 32px;
+    color: ${neutralColor};
     padding: 4px 10px;
     border: none;
-    border-radius: 6px;
-    box-shadow: 0 2px 2px #545454;
+    border-radius: 10px;
+    box-shadow: 0 1.5px 1.5px ${neutralColor};
+    height: 48px;
+    width: 48px;
 
     &:hover {
         cursor: pointer;

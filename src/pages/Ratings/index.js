@@ -1,47 +1,47 @@
-import {
-    Container
-} from "./style";
-import Rate from "./components/rate";
-import Top from "../../components/Top";
-import api from "../../services/api/server";
-import { useEffect } from "react";
-import { useUser } from "../../context/globalContext";
-import { jwtDecode } from "jwt-decode";
-import ReadApi from "../../services/readData";
+import { Container } from "./style"
+import Rate from "./components/rate"
+import Top from "../../components/Top"
+import api from "../../services/api/server"
+import { useEffect } from "react"
+import { useUser } from "../../context/globalContext"
+import { jwtDecode } from "jwt-decode"
+import ReadApi from "../../services/readData"
 
 const Ratings = () => {
 
-    const { ratings, setRatings, dataClient, setDataClient } = useUser();
-    const { loadData, listColaborators, listReservations } = ReadApi();
+    const { ratings, setRatings, dataClient, setDataClient } = useUser()
+    const { loadData, listColaborators, listReservations } = ReadApi()
 
     const recuperarDados = async () => {
         await api.get("/ratings")
         .then(res => {
-            setRatings(res.data);
+            setRatings(res.data)
         })
         .catch(e => {
-            console.log(e);
+            console.log(e.response.data.error.message)
         })
-    };
+    }
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token")
 
         if(token) {
-            const decoded = jwtDecode(token);
+            const decoded = jwtDecode(token)
             setDataClient(decoded.user)
         }
 
-        recuperarDados();
-    }, []);
+        recuperarDados()
+    }, [])
 
-    useEffect(() => { recuperarDados() }, [ratings]);
+    useEffect(() => { 
+        recuperarDados() 
+    }, [ratings])
 
     useEffect(() => {
-        loadData(dataClient.id_establishment);
-        listColaborators(dataClient.id_establishment);
-        listReservations(dataClient.id_establishment);
-    }, [dataClient]);
+        loadData(dataClient.id_establishment)
+        listColaborators(dataClient.id_establishment)
+        listReservations(dataClient.id_establishment)
+    }, [dataClient])
 
     return (
         <Container>
@@ -51,4 +51,4 @@ const Ratings = () => {
     )
 }
 
-export default Ratings;
+export default Ratings

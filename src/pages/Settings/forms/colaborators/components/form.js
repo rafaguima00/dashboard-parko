@@ -5,25 +5,27 @@ import {
     InputNumber,
     DivButton,
     Select
-} from "../../style";
+} from "../../style"
 import { 
     FormContent,
     DivImage, 
     Image, 
     Edit
-} from "../style";
-import avatar from "../../../../../assets/avatar.png";
-import { FaRegEdit } from "react-icons/fa";
-import GlobalButton from "../../../../../components/Button";
-import { useNavigate } from "react-router-dom";
+} from "../style"
+import avatar from "../../../../../assets/avatar.png"
+import { FaRegEdit } from "react-icons/fa"
+import GlobalButton from "../../../../../components/Button"
+import { useNavigate } from "react-router-dom"
+import { Bounce } from "react-activity"
+import "react-activity/dist/library.css"
 
 const FormColaborator = (props) => {
 
-    const { primaryColor, neutralColor, cancelColor, greenColor } = props.theme;
-    const { selected, newColaborator, setNewColaborator, dataClient } = props.state;
-    const { handleUpdate, selecionarCargo, tipoContratacao } = props;
+    const { primaryColor, neutralColor, cancelColor, greenColor } = props.theme
+    const { selected, newColaborator, setNewColaborator, dataClient, loading } = props.state
+    const { handleUpdate, selecionarCargo, tipoContratacao } = props
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const screenBack = () => {
         return navigate("/settings")
@@ -67,16 +69,26 @@ const FormColaborator = (props) => {
         }
     ]
 
-    const telDigitado = newColaborator.tel;
-    const formataTel = telDigitado.replace(/(\d{2})(\d{5})(\d{4})/g, '($1) $2-$3');
+    const uploadImage = (e) => {
+        e.preventDefault()
+    }
+
+    const telDigitado = newColaborator.tel
+    const formataTel = telDigitado.replace(/(\d{2})(\d{5})(\d{4})/g, '($1) $2-$3')
+
+    const cpfDigitado = newColaborator.cpf
+    const formataCpf = cpfDigitado.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, "$1.$2.$3-$4")
 
     return (
         <FormContent>
             <DivImage>
                 <Image src={dataClient.image ? dataClient.image : avatar} alt="Avatar" />
-                <Edit background={primaryColor} onClick={e => e.preventDefault()}>
+                {/* <Edit 
+                    background={primaryColor} 
+                    onClick={e => uploadImage(e)}
+                >
                     <FaRegEdit size={17} color="#fff"/>
-                </Edit>
+                </Edit> */}
             </DivImage>
             
             <DivInput>
@@ -160,7 +172,7 @@ const FormColaborator = (props) => {
                     bordercolor={primaryColor} 
                     largura={220}
                     required
-                    value={newColaborator.cpf}
+                    value={formataCpf}
                     onChange={e => setNewColaborator({ ...newColaborator, cpf: e.target.value })}
                 />
             </DivInput>
@@ -222,7 +234,7 @@ const FormColaborator = (props) => {
                     aoPressionar={screenBack}
                 />
                 <GlobalButton 
-                    children="Salvar"
+                    children={loading ? <Bounce /> : "Salvar"}
                     background={greenColor}
                     largura={"12rem"}
                     altura={"2.8rem"}
@@ -233,4 +245,4 @@ const FormColaborator = (props) => {
     )
 }
 
-export default FormColaborator;
+export default FormColaborator

@@ -1,8 +1,8 @@
-import styled from "styled-components";
+import styled from "styled-components"
 
 export const Container = styled.div`
     margin-top: 2rem;
-    margin-right: 2rem;
+    margin-right: 3rem;
 `
 
 export const Welcome = styled.p`
@@ -135,7 +135,7 @@ export const ItemList = styled.p`
 export const State = styled.span`
     width: 15px;
     height: 15px;
-    background-color: #523499;
+    background-color: ${props => props.cor};
     align-self: center;
     justify-self: center;
     border-radius: 50%;
@@ -216,3 +216,5 @@ export const Line = styled.p`
     text-align: center;
     color: ${props => props.textcolor};
 `
+
+export const Message = styled.p``

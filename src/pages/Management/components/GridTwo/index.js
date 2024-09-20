@@ -1,20 +1,20 @@
-import FinancialReport from "./financialReport/financialReport";
-import Accounts from "./accounts/accounts";
-import Heritage from "./heritage/heritage";
-import Occurrence from "./occurrence/occurrence";
-import { Financial } from "../../style";
-import Top from "../../../../components/Top";
-import { useUser } from "../../../../context/globalContext";
+import FinancialReport from "./financialReport/financialReport"
+import Accounts from "./accounts/accounts"
+import Heritage from "./heritage/heritage"
+import Occurrence from "./occurrence/occurrence"
+import { Financial } from "../../style"
+import Top from "../../../../components/Top"
+import { useUser } from "../../../../context/globalContext"
 
 const GridTwo = (props) => {
 
-    const { selected, bqSelected } = props.states;
+    const { selected, bqSelected } = props.states
     const { 
         dataClient, 
         occurrences, 
         setOccurrences 
-    } = useUser();
-    const { type_colaborator } = dataClient;
+    } = useUser()
+    const { type_colaborator } = dataClient
 
     const titleSelected = () => {
         if(selected === 0) {
@@ -28,7 +28,7 @@ const GridTwo = (props) => {
         }
     }
 
-    const title = titleSelected();
+    const title = titleSelected()
     
     return (
         <>
@@ -45,4 +45,4 @@ const GridTwo = (props) => {
     )
 }
 
-export default GridTwo;
+export default GridTwo

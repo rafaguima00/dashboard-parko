@@ -1,7 +1,7 @@
-import { RouterProvider } from "react-router-dom";
-import { router } from "./routes/route";
-import { InfoProvider } from "./context/globalContext";
-import { ParkProvider } from "./context/parkingContext";
+import { RouterProvider } from "react-router-dom"
+import { router } from "./routes/route"
+import { InfoProvider } from "./context/globalContext"
+import { ParkProvider } from "./context/parkingContext"
 
 const App = () => {
   return (

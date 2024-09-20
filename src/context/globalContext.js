@@ -17,6 +17,8 @@ export const InfoProvider = ({ children }) => {
     const [accounts, setAccounts] = useState([])
     const [aportes, setAportes] = useState([])
     const [retiradas, setRetiradas] = useState([])
+    const [horaAbertura, setHoraAbertura] = useState("")
+    const [horaFechamento, setHoraFechamento] = useState("")
 
     const value = {
         dataClient, 

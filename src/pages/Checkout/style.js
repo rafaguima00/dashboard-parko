@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-    margin: 4rem 4rem 4rem 0;
+    margin: 4rem 5.11rem 4rem 0;
     display: grid;
     grid-template-columns: 368px repeat(2, auto);
     grid-template-rows: 2.5rem auto 8rem 2.5rem;
@@ -170,13 +170,17 @@ export const ListBody = styled.div`
 `
 
 export const ElementList = styled.button`
-    background-color: #f4f4f4;
+    background-color: ${props => props.backgroundcolor};
+    color: ${props => props.textcolor};
     display: grid;
     grid-template-columns: 50px repeat(2, 120px) 60px 140px 50px auto;
     justify-content: space-evenly;
+    align-items: center;
     border-radius: 8px;
     border: none;
     padding: 8px 0;
+    height: 2.2rem;
+    overflow: hidden;
 
     &:hover {
         cursor: pointer;
@@ -188,7 +192,6 @@ export const ElementList = styled.button`
 `
 
 export const ItemList = styled.p`
-    color: #7c7c7c;
     font-size: 13px;
     justify-self: center;
 `

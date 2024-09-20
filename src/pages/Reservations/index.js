@@ -10,10 +10,13 @@ import GlobalButton from "../../components/Button"
 import api from "../../services/api/server"
 import ReadApi from "../../services/readData"
 import { jwtDecode } from "jwt-decode"
+import { Bounce } from "react-activity"
+import "react-activity/dist/library.css"
 
 const Reservations = () => {
 
     const [text, setText] = useState("")
+    const [loading, setLoading] = useState(false)
 
     const { 
         setDataClient,
@@ -35,7 +38,7 @@ const Reservations = () => {
             setDebts(res.data)
         })
         .catch(e => {
-            console.log(e)
+            //alert(e.response.data.message)
         })
     }
 
@@ -47,11 +50,42 @@ const Reservations = () => {
     }
 
     const debtByIdCostumer = getDebtById()
-    const reservaPendente = reservations.filter(item => item.status === "Pendente")
-    const filterReserv = reservaPendente.filter(
+
+    const reservaAberta = reservations.filter(
+        item => item.status === "Pendente" || 
+        item.status === "Confirmado" || 
+        item.status === "Recusado"
+    )
+
+    const filterReserv = reservaAberta.filter(
         item => item.name.toLowerCase().includes(text.toLowerCase()) ||
         item.license_plate.toLowerCase().includes(text.toLowerCase())
     )
+
+    const fecharReserva = async (id, e) => {
+        e.preventDefault()
+        setLoading(true)
+
+        if(window.confirm(`Deseja concluir a reserva de ${selectedClient.name}?`) === true) {
+            await api.put(`/reservations/${id}`, { 
+                data_entrada: selectedClient.data_entrada, 
+                hora_entrada: selectedClient.hora_entrada, 
+                data_saida: selectedClient.data_saida, 
+                hora_saida: selectedClient.hora_saida, 
+                value: selectedClient.value, 
+                status: 4, 
+                id_vehicle: selectedClient.id_vehicle
+            })
+            .then(() => {
+                alert("Reserva concluída com sucesso!")
+            })
+            .catch(e => {
+                alert("Erro ao concluir reserva", e)
+            })
+        }
+
+        setLoading(false)
+    }
 
     useEffect(() => {
         const token = localStorage.getItem("token")
@@ -61,17 +95,13 @@ const Reservations = () => {
             setDataClient(decoded.user)
         }
         
-        if(reservaPendente) {
-            const indexOf = reservaPendente.values().next().value
+        if(reservaAberta) {
+            const indexOf = reservaAberta.values().next().value
             setSelectedClient(indexOf)
         }
 
         recuperarDividas()
     }, [])
-
-    useEffect(() => {
-        console.log(selectedClient)
-    }, [selectedClient])
     
     useEffect(() => {
         loadData(dataClient.id_establishment)
@@ -83,10 +113,13 @@ const Reservations = () => {
         <Container>
             <ItemReservation>
                 <TopContent states={{ text, setText }} />
-                <ListConfirmedReserve reservaPendente={filterReserv} />
+                <ListConfirmedReserve reservaAberta={filterReserv} />
                 <TimingReserve name={colaborator} />
             </ItemReservation>
-            <SelectedReserve reservaPendente={reservaPendente} getDebtById={debtByIdCostumer} />
+            <SelectedReserve 
+                reservaAberta={reservaAberta} 
+                getDebtById={debtByIdCostumer} 
+            />
             <CloseReserve>
                 <GlobalButton 
                     children="Cancelar"
@@ -95,10 +128,11 @@ const Reservations = () => {
                     altura={"2.8rem"}
                 />
                 <GlobalButton 
-                    children="Fechar Reserva"
+                    children={loading ? <Bounce color="#f4f4f4" /> : "Fechar Reserva"}
                     background={greenColor}
                     largura={"12rem"}
                     altura={"2.8rem"}
+                    aoPressionar={e => fecharReserva(selectedClient.id, e)}
                 />
             </CloseReserve>
         </Container>

@@ -31,20 +31,20 @@ const SummaryContent = (props) => {
                 <div>
                     <Pg><strong>Responsável: </strong>{colaborator}</Pg>
                     <Pg><strong>E-mail: </strong>{email}</Pg>
-                    <Pg><strong>Abertura do caixa: </strong>{/* data e hora de login */}</Pg>
-                    <Pg><strong>Fechamento do caixa: </strong>{/* data e hora do último logout (se possível) */}</Pg>
-                    <Pg><strong>Valor da abertura (dinheiro): </strong>{formatCurrency(aberturaCaixa, 'BRL')}</Pg>
-                    <Pg><strong>Valor do fechamento (dinheiro): </strong>{formatCurrency(fechamentoCaixa, 'BRL')}</Pg>
+                    <Pg><strong>Abertura do caixa: </strong>{/* data e hora */}</Pg>
+                    <Pg><strong>Fechamento do caixa: </strong>{/* data e hora */}</Pg>
+                    <Pg><strong>Valor da abertura (dinheiro): </strong>{formatCurrency(0, 'BRL')}</Pg>
+                    <Pg><strong>Valor do fechamento (dinheiro): </strong>{formatCurrency(0, 'BRL')}</Pg>
                 </div>
             </Header><hr/>
             <InfoCheckout>
                 <Info pricetxtcolor={neutralColor} textcolor={neutralColor}>
                     <p>Abertura do caixa</p>
-                    <p>{formatCurrency(aberturaCaixa, 'BRL')}</p>
+                    <p>{formatCurrency(0, 'BRL')}</p>
                 </Info>
                 <Info pricetxtcolor={primaryColor} textcolor={neutralColor}>
                     <p>Vendas em dinheiro</p>
-                    <p>{formatCurrency(valoresTotal, 'BRL')}</p>
+                    <p>{formatCurrency(0, 'BRL')}</p>
                 </Info>
                 <Info pricetxtcolor={primaryColor} textcolor={neutralColor}>
                     <p>Recebimento de dívidas (dinheiro)</p>
@@ -60,7 +60,7 @@ const SummaryContent = (props) => {
                 </Info>
                 <Info pricetxtcolor={neutralColor} textcolor="#000">
                     <p>Fechamento do caixa</p>
-                    <p>{formatCurrency(fechamentoCaixa, 'BRL')}</p>
+                    <p>{formatCurrency(0, 'BRL')}</p>
                 </Info>
             </InfoCheckout><hr/>
             <InfoCheckout>

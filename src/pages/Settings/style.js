@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-    margin: 2rem 4rem 1.5rem 0;
+    margin: 2rem 5.11rem 1.5rem 0;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: 3% 1fr 3% 1fr;

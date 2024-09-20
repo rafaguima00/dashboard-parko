@@ -2,7 +2,7 @@ import { theme } from "../../../theme/theme";
 
 const { primaryColor } = theme;
 
-const dataLabel = [800, 900, 700, 500];
+const dataLabel = [0, 0, 0, 0];
 
 const maxIndex = dataLabel.indexOf(Math.max(...dataLabel));
 

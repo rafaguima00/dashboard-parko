@@ -1,66 +1,85 @@
-import { useState, useEffect } from "react";
-import { useUser } from "../../context/globalContext";
-import { Container, Graphics } from "./style";
-import Buttons from "./components/buttons";
-import FirstHeader from "./components/firstHeader";
-import SecondHeader from "./components/secondHeader";
-import SummaryContent from "./components/summaryContent";
-import ListReserve from "./components/list";
-import { theme } from "../../theme/theme";
-import { Chart as ChartJS, ArcElement, BarElement, CategoryScale, LinearScale, Title } from "chart.js";
-import { Doughnut, Bar } from 'react-chartjs-2';
-import { data, options, plugins } from "./datasets/doughnut";
-import { dataBar, optionsBar } from "./datasets/bar";
-import Modal from "../../components/Modal";
-import Contribution from "./form/contribution";
-import Retirada from "./form/retirada";
-import api from "../../services/api/server";
-import ReadApi from "../../services/readData";
+import { useState, useEffect } from "react"
+import { useUser } from "../../context/globalContext"
+import { Container, Graphics } from "./style"
+import Buttons from "./components/buttons"
+import FirstHeader from "./components/firstHeader"
+import SecondHeader from "./components/secondHeader"
+import SummaryContent from "./components/summaryContent"
+import ListReserve from "./components/list"
+import { theme } from "../../theme/theme"
+import { Chart as ChartJS, ArcElement, BarElement, CategoryScale, LinearScale, Title } from "chart.js"
+import { Doughnut, Bar } from 'react-chartjs-2'
+import { data, options, plugins } from "./datasets/doughnut"
+import { dataBar, optionsBar } from "./datasets/bar"
+import Modal from "../../components/Modal"
+import Contribution from "./form/contribution"
+import Retirada from "./form/retirada"
+import api from "../../services/api/server"
+import ReadApi from "../../services/readData"
 
-ChartJS.register(ArcElement, BarElement, CategoryScale, LinearScale, Title);
+ChartJS.register(ArcElement, BarElement, CategoryScale, LinearScale, Title)
 
 const Checkout = () => {
 
-    const { primaryColor, neutralColor } = theme;
-    const { reservations, dataClient, aportes, retiradas } = useUser();
-    const { readAportes, readRetiradas, listReservations } = ReadApi();
+    const { primaryColor, neutralColor } = theme
+    const { reservations, dataClient, aportes, retiradas } = useUser()
+    const { readAportes, readRetiradas, listReservations, loadData } = ReadApi()
 
-    const [open, setOpen] = useState(false);
-    const [openRetirada, setOpenRetirada] = useState(false);
-    const [novoAporte, setNovoAporte] = useState({});
-    const [novaRetirada, setNovaRetirada] = useState({});
-    const [text, setText] = useState("");
+    const [open, setOpen] = useState(false)
+    const [openRetirada, setOpenRetirada] = useState(false)
+    const [novoAporte, setNovoAporte] = useState({
+        created_at: "",
+        value: "",
+        description: ""
+    })
+    const [novaRetirada, setNovaRetirada] = useState({
+        created_at: "",
+        value: "",
+        description: ""
+    })
+    const [text, setText] = useState("")
+    const [loading, setLoading] = useState(false)
+    const [messageError, setMessageError] = useState("")
 
-    const reservaConfirmada = reservations.filter(item => item.status === "Confirmado");
-    const filterReserv = reservaConfirmada.filter(
+    const reservaFechada = reservations.filter(item => item.status === "Finalizado")
+    const filterReserv = reservaFechada.filter(
         item => item.name.toLowerCase().includes(text.toLowerCase()) ||
         item.license_plate.toLowerCase().includes(text.toLowerCase())
-    );
+    )
 
     const calcularValorPorEstacionamento = (data, idEstacionamento) => {
 
-        const filtrarItem = (array) => array.filter(item => item.id_establishment === idEstacionamento);
+        const filtrarItem = (array) => array.filter(item => item.id_establishment === idEstacionamento)
 
         const calcularSoma = (array) => array.map(item => item.value)
         .reduce((prev, current) => {
-            return prev + current;
-        }, 0); 
+            return prev + current
+        }, 0) 
 
-        const valoresTotal = calcularSoma(data);
+        const valoresTotal = calcularSoma(data)
 
-        const findIdAportes = filtrarItem(aportes);
-        const valoresAporte = calcularSoma(findIdAportes);
+        const findIdAportes = filtrarItem(aportes)
+        const valoresAporte = calcularSoma(findIdAportes)
 
-        const findIdRetiradas = filtrarItem(retiradas);
-        const valoresRetiradas = calcularSoma(findIdRetiradas);
+        const findIdRetiradas = filtrarItem(retiradas)
+        const valoresRetiradas = calcularSoma(findIdRetiradas)
 
-        let aberturaCaixa = valoresTotal + valoresAporte;
-        let fechamentoCaixa = aberturaCaixa - valoresRetiradas;
+        return { valoresTotal, valoresAporte, valoresRetiradas }
+    }
 
-        return { valoresTotal, fechamentoCaixa, aberturaCaixa, valoresAporte, valoresRetiradas };
-    };
+    const criarAporte = async (setOpen, e) => {
+        e.preventDefault()
+        setLoading(true)
 
-    const criarAporte = async (setOpen) => {
+        //Fazer isso no código backend
+        if(
+            novoAporte.created_at === "" ||
+            novoAporte.value === "" ||
+            novoAporte.description === "" 
+        ) {
+            setMessageError("Preencha o campo vazio")
+        }
+
         await api.post("/aportes", {
             id_establishment: dataClient.id_establishment,
             id_colaborator: dataClient.id,
@@ -69,15 +88,22 @@ const Checkout = () => {
             description: novoAporte.description
         })
         .then(() => {
-            alert("Aporte realizado com sucesso");
-            setOpen(false);
+            alert("Aporte realizado com sucesso")
+            setOpen(false)
+            setLoading(false)
+            setNovoAporte({})
         })
         .catch(e => {
-            console.log(e);
+            console.log(e)
+            setLoading(false)
         })
-    };
+    }
 
-    const criarRetirada = async (setOpenRetirada) => {
+    const criarRetirada = async (setOpenRetirada, e) => {
+        e.preventDefault()
+
+        setLoading(true)
+
         await api.post("/retiradas", {
             id_establishment: dataClient.id_establishment,
             id_colaborator: dataClient.id,
@@ -86,41 +112,45 @@ const Checkout = () => {
             description: novaRetirada.description
         })
         .then(() => {
-            alert("Retirada realizada com sucesso");
-            setOpenRetirada(false);
+            alert("Retirada realizada com sucesso")
+            setOpenRetirada(false)
+            setLoading(false)
+            setNovaRetirada({})
         })
         .catch(e => {
-            console.log(e);
+            console.log(e)
+            setLoading(false)
         })
-    };
+    }
 
     useEffect(() => {
-        readRetiradas();
-        readAportes();
-    }, [aportes, retiradas]);
+        readRetiradas()
+        readAportes()
+    }, [aportes, retiradas])
+
+    useEffect(() => {
+        loadData(dataClient.id_establishment)
+        listReservations(dataClient.id_establishment)
+    }, [dataClient])
 
     const { 
         valoresTotal, 
-        fechamentoCaixa, 
-        aberturaCaixa, 
         valoresAporte, 
         valoresRetiradas 
-    } = calcularValorPorEstacionamento(reservations, dataClient.id_establishment);
+    } = calcularValorPorEstacionamento(reservations, dataClient.id_establishment)
 
     return (
         <Container>
             <FirstHeader />
             <SummaryContent 
                 resumo={{
-                    aberturaCaixa,
                     valoresTotal,
                     valoresAporte,
-                    valoresRetiradas,
-                    fechamentoCaixa
+                    valoresRetiradas
                 }}
             />
             <SecondHeader states={{ text, setText }} />
-            <ListReserve reservaConfirmada={filterReserv} />
+            <ListReserve reservaFechada={filterReserv} />
             <Buttons setOpen={setOpen} setOpenRetirada={setOpenRetirada}/>
 
             <Graphics background={primaryColor}>
@@ -144,7 +174,8 @@ const Checkout = () => {
                 setOpen={setOpen}
                 title={"Aporte de Dinheiro"}
                 maxWidth={"30rem"}
-                funcao={() => criarAporte(setOpen)}
+                funcao={e => criarAporte(setOpen, e)}
+                isLoading={loading}
             >
                 <Contribution 
                     neutralColor={neutralColor} 
@@ -153,6 +184,7 @@ const Checkout = () => {
                         setNovoAporte,
                         novoAporte
                     }}
+                    messageError={messageError}
                 />
             </Modal>
             
@@ -161,7 +193,8 @@ const Checkout = () => {
                 setOpen={setOpenRetirada}
                 title={"Retirada de Dinheiro"}
                 maxWidth={"30rem"}
-                funcao={() => criarRetirada(setOpenRetirada)}
+                funcao={e => criarRetirada(setOpenRetirada, e)}
+                isLoading={loading}
             >
                 <Retirada 
                     neutralColor={neutralColor} 
@@ -170,6 +203,7 @@ const Checkout = () => {
                         setNovaRetirada,
                         novaRetirada
                     }}
+                    messageError={messageError}
                 />
             </Modal>
 
@@ -177,4 +211,4 @@ const Checkout = () => {
     )
 }
 
-export default Checkout;
+export default Checkout

@@ -1,12 +1,14 @@
-import GlobalButton from "../../../../../../components/Button";
-import { DivButton } from "../../../style";
-import { useNavigate } from "react-router-dom";
+import { Bounce } from "react-activity"
+import "react-activity/dist/library.css"
+import GlobalButton from "../../../../../../components/Button"
+import { DivButton } from "../../../style"
+import { useNavigate } from "react-router-dom"
 
 const BottomButton = (props) => {
 
-    const { cancelColor, greenColor, recuperarDados } = props;
+    const { cancelColor, greenColor, recuperarDados, loading } = props
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const screenBack = () => {
         return navigate("/settings")
@@ -22,7 +24,7 @@ const BottomButton = (props) => {
                 aoPressionar={screenBack}
             />
             <GlobalButton 
-                children="Salvar"
+                children={loading ? <Bounce color="#f4f4f4" /> : "Salvar"}
                 background={greenColor}
                 largura={"12rem"}
                 altura={"2.8rem"}
@@ -32,4 +34,4 @@ const BottomButton = (props) => {
     )
 }
 
-export default BottomButton;
+export default BottomButton

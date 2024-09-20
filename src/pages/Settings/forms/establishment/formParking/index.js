@@ -4,18 +4,20 @@ import {
     DivInput,
     Label,
     Input
-} from "../style";
-import { useState } from "react";
-import { useUser } from "../../../../../context/globalContext";
-import GlobalButton from "../../../../../components/Button";
-import { useNavigate } from "react-router-dom";
-import api from "../../../../../services/api/server";
-import cepService from "../../../../../services/api/cep";
+} from "../style"
+import { useEffect, useState } from "react"
+import { useUser } from "../../../../../context/globalContext"
+import GlobalButton from "../../../../../components/Button"
+import { useNavigate } from "react-router-dom"
+import api from "../../../../../services/api/server"
+import cepService from "../../../../../services/api/cep"
+import { Bounce } from "react-activity"
+import "react-activity/dist/library.css"
 
 const FormParking = (props) => {
 
-    const { neutralColor, primaryColor, cancelColor, greenColor } = props.colors;
-    const { park, dataClient } = useUser();
+    const { neutralColor, primaryColor, cancelColor, greenColor } = props.colors
+    const { park, dataClient } = useUser()
     const { 
         razao_social, 
         name,
@@ -29,7 +31,7 @@ const FormParking = (props) => {
         cidade,
         bairro,
         email
-    } = park;
+    } = park
         
     const [parkInfo, setParkInfo] = useState({
         razao_social: razao_social, 
@@ -44,26 +46,32 @@ const FormParking = (props) => {
         estado: estado,
         cidade: cidade,
         bairro: bairro
-    });
+    })
+    const [loading, setLoading] = useState(false)
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const screenBack = () => {
         return navigate("/settings")
-    };
+    }
 
-    const handleUpdate = async () => {
+    const handleUpdate = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+
         await api.patch(`/establishments/${dataClient.id_establishment}`, parkInfo)
         .then(() => {
             alert("As informações foram atualizadas com sucesso.")
         })
         .catch(e => {
-            console.log(e);
-        });
-    };
+            console.log(e)
+        })
+
+        setLoading(false)
+    }
 
     const atualizarCep = async ({ e }) => {
-        const cep = e.target.value;
+        const cep = e.target.value
 
         await cepService.get(`/${cep}/json/`)
         .then(response => {
@@ -73,12 +81,29 @@ const FormParking = (props) => {
                 estado: response.data.uf,
                 cidade: response.data.localidade,
                 bairro: response.data.bairro
-            });
+            })
         })
         .catch(e => {
-            console.log(e);
+            console.log(e)
         })
-    };
+    }
+
+    useEffect(() => {
+        setParkInfo({
+            razao_social: razao_social, 
+            name: name,
+            contato: contato,
+            email: email,
+            cnpj: cnpj,
+            inscricao_estadual: inscricao_estadual,
+            inscricao_municipal: inscricao_municipal,
+            end: end,
+            cep: cep,
+            estado: estado,
+            cidade: cidade,
+            bairro: bairro
+        })
+    }, [])
 
     return (
         <>
@@ -91,7 +116,7 @@ const FormParking = (props) => {
                         bordercolor={primaryColor} 
                         largura={255}
                         required
-                        value={parkInfo.razao_social}
+                        value={parkInfo?.razao_social ?? ""}
                         onChange={e => setParkInfo({ ...parkInfo, razao_social: e.target.value })}
                     />
                 </DivInput>
@@ -103,7 +128,7 @@ const FormParking = (props) => {
                         bordercolor={primaryColor} 
                         largura={487}
                         required
-                        value={parkInfo.name}
+                        value={parkInfo?.name ?? ""}
                         onChange={e => setParkInfo({ ...parkInfo, name: e.target.value })}
                     />
                 </DivInput>
@@ -115,7 +140,7 @@ const FormParking = (props) => {
                         bordercolor={primaryColor} 
                         largura={242}
                         required
-                        value={parkInfo.contato}
+                        value={parkInfo?.contato ?? ""}
                         onChange={e => setParkInfo({ ...parkInfo, contato: e.target.value })}
                     />
                 </DivInput>
@@ -127,7 +152,7 @@ const FormParking = (props) => {
                         bordercolor={primaryColor} 
                         largura={324}
                         required
-                        value={parkInfo.cnpj}
+                        value={parkInfo?.cnpj ?? ""}
                         onChange={e => setParkInfo({ ...parkInfo, cnpj: e.target.value })}
                     />
                 </DivInput>
@@ -139,7 +164,7 @@ const FormParking = (props) => {
                         bordercolor={primaryColor} 
                         largura={324}
                         required
-                        value={parkInfo.inscricao_estadual}
+                        value={parkInfo?.inscricao_estadual ?? ""}
                         onChange={e => setParkInfo({ ...parkInfo, inscricao_estadual: e.target.value })}
                     />
                 </DivInput>
@@ -151,7 +176,7 @@ const FormParking = (props) => {
                         bordercolor={primaryColor} 
                         largura={324}
                         required
-                        value={parkInfo.inscricao_municipal}
+                        value={parkInfo?.inscricao_municipal ?? ""}
                         onChange={e => setParkInfo({ ...parkInfo, inscricao_municipal: e.target.value })}
                     />
                 </DivInput>
@@ -163,20 +188,8 @@ const FormParking = (props) => {
                         bordercolor={primaryColor} 
                         largura={670}
                         required
-                        value={parkInfo.email}
+                        value={parkInfo?.email ?? ""}
                         onChange={e => setParkInfo({ ...parkInfo, email: e.target.value })}
-                    />
-                </DivInput>
-                <DivInput>
-                    <Label textcolor={neutralColor}>Endereço</Label>
-                    <Input 
-                        type="text"
-                        placeholder="Seu Endereço"
-                        bordercolor={primaryColor} 
-                        largura={670}
-                        required
-                        value={parkInfo.end}
-                        onChange={e => setParkInfo({ ...parkInfo, end: e.target.value })}
                     />
                 </DivInput>
                 <DivInput>
@@ -187,9 +200,33 @@ const FormParking = (props) => {
                         bordercolor={primaryColor} 
                         largura={324}
                         required
-                        value={parkInfo.cep}
+                        value={parkInfo?.cep ?? ""}
                         onChange={e => setParkInfo({ ...parkInfo, cep: e.target.value })}
                         onBlur={(e) => atualizarCep({ e })}
+                    />
+                </DivInput>
+                <DivInput>
+                    <Label textcolor={neutralColor}>Endereço</Label>
+                    <Input 
+                        type="text"
+                        placeholder="Seu Endereço"
+                        bordercolor={primaryColor} 
+                        largura={670}
+                        required
+                        value={parkInfo?.end ?? ""}
+                        onChange={e => setParkInfo({ ...parkInfo, end: e.target.value })}
+                    />
+                </DivInput>
+                <DivInput>
+                    <Label textcolor={neutralColor}>Número</Label>
+                    <Input 
+                        type="text"
+                        placeholder="Número"
+                        bordercolor={primaryColor} 
+                        largura={324}
+                        required
+                        value={parkInfo?.numero ?? ""}
+                        onChange={e => setParkInfo({ ...parkInfo, numero: e.target.value })}
                     />
                 </DivInput>
                 <DivInput>
@@ -200,7 +237,7 @@ const FormParking = (props) => {
                         bordercolor={primaryColor} 
                         largura={324}
                         required
-                        value={parkInfo.estado}
+                        value={parkInfo?.estado ?? ""}
                         onChange={e => setParkInfo({ ...parkInfo, estado: e.target.value })}
                     />
                 </DivInput>
@@ -212,7 +249,7 @@ const FormParking = (props) => {
                         bordercolor={primaryColor} 
                         largura={324}
                         required
-                        value={parkInfo.cidade}
+                        value={parkInfo?.cidade ?? ""}
                         onChange={e => setParkInfo({ ...parkInfo, cidade: e.target.value })}
                     />
                 </DivInput>
@@ -224,7 +261,7 @@ const FormParking = (props) => {
                         bordercolor={primaryColor} 
                         largura={324}
                         required
-                        value={parkInfo.bairro}
+                        value={parkInfo?.bairro ?? ""}
                         onChange={e => setParkInfo({ ...parkInfo, bairro: e.target.value })}
                     />
                 </DivInput>
@@ -239,7 +276,7 @@ const FormParking = (props) => {
                     aoPressionar={screenBack}
                 />
                 <GlobalButton 
-                    children="Salvar"
+                    children={loading ? <Bounce color="#f4f4f4" /> : "Salvar"}
                     background={greenColor}
                     largura={"12rem"}
                     altura={"2.8rem"}
@@ -250,4 +287,4 @@ const FormParking = (props) => {
     )
 }
 
-export default FormParking;
+export default FormParking

@@ -6,22 +6,24 @@ import {
     Name,
     P,
     GroupButton
-} from "../style";
-import GlobalButton from "../../../../../components/Button";
-import { useUser } from "../../../../../context/globalContext"; 
-import avatar from "../../../../../assets/avatar.png";
+} from "../style"
+import GlobalButton from "../../../../../components/Button"
+import { useUser } from "../../../../../context/globalContext" 
+import avatar from "../../../../../assets/avatar.png"
+import { Bounce } from "react-activity"
+import "react-activity/dist/library.css"
 
 const ListColaborators = (props) => {
 
-    const { primaryColor, neutralColor } = props.theme;
-    const { selected, setSelected, newColaborator, setNewColaborator } = props.state;
-    const { handleCreateColaborator, deleteColaborator } = props;
+    const { primaryColor, neutralColor } = props.theme
+    const { selected, setSelected, newColaborator, setNewColaborator, loadingAdd, loadingDel } = props.state
+    const { handleCreateColaborator, deleteColaborator } = props
 
-    const { colaborators } = useUser();
+    const { colaborators } = useUser()
 
     const handleClick = (item) => {
-        setSelected(item.id);
-        setNewColaborator(item);
+        setSelected(item.id)
+        setNewColaborator(item)
     }
 
     return (
@@ -45,22 +47,22 @@ const ListColaborators = (props) => {
             <GroupButton>
                 <GlobalButton 
                     background={primaryColor}
-                    children="Adicionar"
+                    children={loadingAdd ? <Bounce color="#f4f4f4" /> : "Adicionar"}
                     altura={"2.6rem"}
                     bold={true}
                     aoPressionar={e => handleCreateColaborator(e, newColaborator)}
                 />
                 <GlobalButton 
                     background={"transparent"}
-                    children="Remover"
+                    children={loadingDel ? <Bounce color="#f4f4f4" /> : "Remover"}
                     altura={"2.6rem"}
                     bold={true}
                     btborder={`2px solid ${primaryColor}`}
-                    aoPressionar={() => deleteColaborator(selected)}
+                    aoPressionar={e => deleteColaborator(selected, e)}
                 />
             </GroupButton>
         </ColaboratorsView>
     )
 }
 
-export default ListColaborators;
+export default ListColaborators

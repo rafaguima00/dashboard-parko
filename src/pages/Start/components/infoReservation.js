@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
-import { useUser } from "../../../context/globalContext";
+import { useState, useEffect } from "react"
+import { useUser } from "../../../context/globalContext"
+import { useNavigate } from "react-router-dom"
 import {
     InfoReservation,
     GroupInfo,
@@ -7,51 +8,57 @@ import {
     Subtitle,
     Info,
     TextAligned,
-    GroupButton
-} from "../style";
-import { formatCurrency } from "../../../services/formatCurrency";
-import { CgNotes } from "react-icons/cg";
-import { FaRightLeft } from "react-icons/fa6";
-import GlobalButton from "../../../components/Button";
-import { theme } from "../../../theme/theme";
-import { Chart as ChartJS, ArcElement, Title } from "chart.js";
-import { Doughnut } from "react-chartjs-2";
-import { datachart, options } from "../datasets/doughnut";
-import { dataCliente, optionsClient } from "../datasets/dgClientSatisfation";
-import Modal from "../../../components/Modal";
-import NewReservation from "../form/newReservation";
-import api from "../../../services/api/server";
+    GroupButton,
+    Line
+} from "../style"
+import { formatCurrency } from "../../../services/formatCurrency"
+import { CgNotes } from "react-icons/cg"
+import { FaRightLeft } from "react-icons/fa6"
+import GlobalButton from "../../../components/Button"
+import { theme } from "../../../theme/theme"
+import { Chart as ChartJS, ArcElement, Title } from "chart.js"
+import { Doughnut } from "react-chartjs-2"
+import { datachart, options } from "../datasets/doughnut"
+import { dataCliente, optionsClient } from "../datasets/dgClientSatisfation"
+import Modal from "../../../components/Modal"
+import NewReservation from "../form/newReservation"
+import api from "../../../services/api/server"
 
-ChartJS.register(ArcElement, Title);
+ChartJS.register(ArcElement, Title)
 
 const InfoReserve = () => {
 
-    const heightButton = "2.4rem";
-
+    const heightButton = "2.4rem"
     const styleIcon = {
         position: "absolute",
         right: 0,
         top: 0,
         margin: 10
     }
+    const { primaryColor, cancelColor, neutralColor } = theme
+    const navigate = useNavigate()
 
-    const { primaryColor, cancelColor } = theme;
+    const [open, setOpen] = useState(false)
+    const [data, setData] = useState({})
+    const [vehicles, setVehicles] = useState([])
+    const [users, setUsers] = useState([])
+    const [carregando, setCarregando] = useState(false)
+    const [modalAbrirCx, setModalAbrirCx] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [modalFecharCx, setModalFecharCx] = useState(false)
+    const [caixaAberto, setCaixaAberto] = useState({})
+    const [numeroCaixa, setNumeroCaixa] = useState(null)
 
-    const [open, setOpen] = useState(false);
-    const [data, setData] = useState({});
-    const [vehicles, setVehicles] = useState([]);
-    const [users, setUsers] = useState([]);
-
-    const { dataClient } = useUser();
+    const { dataClient, park, reservations } = useUser()
 
     //função para guardar os dados de todos os veículos cadastrados na const 'vehicles'
     const verifyVehicles = async () => {
         await api.get("/vehicles")
         .then(response => {
-            setVehicles(response.data);
+            setVehicles(response.data)
         })
         .catch(e => {
-            console.log(e);
+            console.log(e)
         })
     }
 
@@ -59,15 +66,19 @@ const InfoReserve = () => {
     const verifyUsers = async () => {
         await api.get("/users")
         .then(response => {
-            setUsers(response.data);
+            setUsers(response.data)
         })
         .catch(e => {
-            console.log(e);
+            console.log(e)
         })
     }
 
     //1- pegar as informações do usuário e criar no banco de dados
-    const createUser = async () => {
+    const createUser = async (e) => {
+        e.preventDefault()
+
+        setCarregando(true)
+
         await api.post("/users", { 
             tel: data.tel,
             name_user: data.name_user, 
@@ -78,11 +89,13 @@ const InfoReserve = () => {
             password: ""
         })
         .then(() => {
-            const idUser = users.at(-1).id;
-            createVehicle(idUser);
+            const idUser = users.at(-1).id
+            createVehicle(idUser)
         })
         .catch(e => {
-            console.log(e);
+            console.log(e)
+            setCarregando(false)
+            setData({})
         })
     }
 
@@ -95,25 +108,24 @@ const InfoReserve = () => {
             license_plate: data.license_plate
         })
         .then(() => {
-            createReservation();
+            createReservation()
         })
         .catch(e => {
-            console.log(e);
-        })
-        .finally(() => {
-            setOpen(false)
+            console.log(e)
+            setCarregando(false)
+            setData({})
         })
     }
 
     //3- feito isso, cadastrar a reserva no banco de dados
     const createReservation = async () => {
-        const idUser = users.at(-1).id+1;
-        const idVehicle = vehicles.at(-1).id+1;
+        const idUser = users.at(-1).id+1
+        const idVehicle = vehicles.at(-1).id+1
         await api.post("/reservations", {
             data_entrada: data.data_entrada,
             hora_entrada: data.hora_entrada,
-            data_saida: data.data_entrada, //A data de saída é a mesma da entrada
-            hora_saida: data.hora_saida,
+            data_saida: "", 
+            hora_saida: "",
             value: 10, 
             id_costumer: idUser,
             id_vehicle: idVehicle, 
@@ -121,24 +133,123 @@ const InfoReserve = () => {
             parko_app: 0
         })
         .then(() => {
-            console.log("Operação realizada com sucesso")
+            setCarregando(false)
+            setOpen(false)
+            alert("Reserva realizada com sucesso")
+            setData({})
         })
         .catch(e => {
-            console.log(e);
-        });
+            console.log(e)
+            setCarregando(false)
+            setData({})
+        })
     }
 
+    const verificarSeEstaAberto = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+
+        await api.get(`/abertura_caixa/parking/${dataClient.id_establishment}`)
+        .then(res => {
+            setCaixaAberto(res.data.at(-1))
+        })
+        .then(() => {
+            abrirCaixa()
+        })
+        .catch(e => {
+            console.log(e)
+            setLoading(false)
+        })
+    }
+
+    useEffect(() => { 
+        setNumeroCaixa(caixaAberto.id)
+    }, [caixaAberto])
+
+    // const verificarSeEstaFechado = async (e) => {
+    //     e.preventDefault()
+    //     setLoading(true)
+
+    //     await api.get(`/abertura_caixa/parking/${dataClient.id_establishment}`)
+    //     .then(res => {
+    //         setCaixaAberto(res.data.at(-1))
+    //     })
+    //     .then(() => {
+    //         if(caixaAberto.aberto === 0) {
+    //             alert("O caixa já está fechado")
+    //         } else {
+    //             fecharCaixa()
+    //         }
+    //     })
+    //     .catch(e => {
+    //         console.log(e)
+    //     })
+
+    //     setLoading(false)
+    // }  
+
+    const abrirCaixa = async () => {
+        setLoading(true)
+
+        await api.post("/abertura_caixa", { 
+            id_establishment: dataClient.id_establishment,
+            id_colaborator: dataClient.id,
+            value: 545.73
+        })
+        .then(() => {
+            alert("Caixa aberto")
+            return navigate("/checkout")
+        })
+        .catch(e => {
+            alert("Erro ao abrir caixa")
+            console.log(e)
+        })
+
+        setLoading(false)
+    }
+
+    const fecharCaixa = async (e) => {
+        e.preventDefault()
+
+        await api.put(`/abertura_caixa/${numeroCaixa}`, { 
+            id_establishment: dataClient.id_establishment,
+            id_colaborator: dataClient.id,
+            value: 918.45
+        })
+        .then(() => {
+            alert("Caixa aberto")
+            return navigate("/checkout")
+        })
+        .catch(e => {
+            alert("Erro ao abrir caixa")
+            console.log(e)
+        })
+
+        setLoading(false)
+    }
+
+    const quantidadeVagas = () => {
+        let quantidade = park?.numero_vagas ?? 0
+        let vagas_disponiveis = quantidade - park?.vagas_ocupadas ?? 0
+
+        return { vagas_disponiveis }
+    }
+
+    const { vagas_disponiveis } = quantidadeVagas()
+
     useEffect(() => {
-        verifyVehicles();
-        verifyUsers();
-    }, []);
+        verifyVehicles()
+        verifyUsers()
+    }, [])
 
     return (
         <InfoReservation>
             <GroupInfo>
                 <Info>
                     <span>
-                        <TitleLine>xx/xx</TitleLine>
+                        <TitleLine>
+                            {vagas_disponiveis}/{park?.numero_vagas ?? 0}
+                        </TitleLine>
                         <Subtitle style={{ color: "#f4f4f4" }}>Vagas disponíveis</Subtitle>
                     </span>
                     <div style={{ width: 64, height: 64 }}>
@@ -186,31 +297,57 @@ const InfoReserve = () => {
                     background={primaryColor}
                     children="Abrir Caixa"
                     altura={heightButton}
+                    aoPressionar={() => setModalAbrirCx(true)}
                 />
                 <GlobalButton
                     background={cancelColor}
                     children="Fechar Caixa"
                     altura={heightButton}
+                    aoPressionar={() => {}}
                 />
             </GroupButton>
+
             <Modal 
                 isOpen={open} 
                 setOpen={setOpen} 
                 title={"Nova Reserva"}
                 maxWidth={"52rem"}
                 funcao={createUser}
+                isLoading={carregando}
             >
                 <NewReservation 
                     state={{
                         data, 
                         setData,
-                        vehicles,
+                        reservations,
                         setVehicles
                     }}
                 />
+            </Modal>
+
+            <Modal
+                isOpen={modalAbrirCx}
+                setOpen={setModalAbrirCx}
+                title={"Abrir Caixa"}
+                maxWidth={"52rem"}
+                funcao={verificarSeEstaAberto}
+                isLoading={loading}
+            >
+                <Line textcolor={neutralColor}>Deseja abrir caixa agora?</Line>
+            </Modal>
+
+            <Modal
+                isOpen={modalFecharCx}
+                setOpen={setModalFecharCx}
+                title={"Fechar Caixa"}
+                maxWidth={"52rem"}
+                funcao={fecharCaixa}
+                isLoading={loading}
+            >
+                <Line textcolor={neutralColor}>Deseja fechar caixa agora?</Line>
             </Modal>
         </InfoReservation>
     )
 }
 
-export default InfoReserve;
+export default InfoReserve

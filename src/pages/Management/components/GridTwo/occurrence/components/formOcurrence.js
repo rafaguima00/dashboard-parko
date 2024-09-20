@@ -1,24 +1,30 @@
-import { useUser } from "../../../../../../context/globalContext";
+import { useUser } from "../../../../../../context/globalContext"
 import { 
     FormArea, 
     GroupButton
-} from "../style";
-import GlobalButton from "../../../../../../components/Button";
-import FormList from "./formList";
-import MissTicket from "../forms/missTicket";
-import TheftCostumer from "../forms/theftCostumer";
-import TheftHeritage from "../forms/theftHeritageItems";
-import api from "../../../../../../services/api/server";
+} from "../style"
+import GlobalButton from "../../../../../../components/Button"
+import FormList from "./formList"
+import MissTicket from "../forms/missTicket"
+import TheftCostumer from "../forms/theftCostumer"
+import TheftHeritage from "../forms/theftHeritageItems"
+import api from "../../../../../../services/api/server"
+import { Bounce } from "react-activity"
+import "react-activity/dist/library.css"
+import { useState } from "react"
 
 const FormOcurrence = (props) => {
 
-    const { dataClient } = useUser();
+    const [loading, setLoading] = useState(false)
 
-    const { id_establishment } = dataClient;
-    const { cancelColor, greenColor, primaryColor } = props.colors;
-    const { formActive, setFormActive, occurrenceItem, setOccurrenceItem } = props.state;
+    const { dataClient } = useUser()
+    const { id_establishment } = dataClient
+    const { cancelColor, greenColor, primaryColor } = props.colors
+    const { formActive, setFormActive, occurrenceItem, setOccurrenceItem } = props.state
 
-    const handleSave = async (idOccurrence) => {
+    const handleSave = async (idOccurrence, e) => {
+        e.preventDefault()
+        setLoading(true)
 
         await api.post("/occurrence", {
             local: occurrenceItem.local,
@@ -40,12 +46,14 @@ const FormOcurrence = (props) => {
             id_establishment: id_establishment
         })
         .then(() => {
-            alert("Sucesso");
+            alert("Sucesso")
+            setLoading(false)
         })
         .catch(e => {
-            console.log(e);
+            console.log(e)
+            setLoading(false)
         })
-    };
+    }
 
     return (
         <FormArea>
@@ -86,14 +94,14 @@ const FormOcurrence = (props) => {
                     aoPressionar={() => setFormActive(0)}
                 />
                 <GlobalButton 
-                    children="Salvar" 
+                    children={loading ? <Bounce color="#f4f4f4" /> : "Salvar"} 
                     background={greenColor} 
                     largura={"100%"}
-                    aoPressionar={() => handleSave(formActive)}
+                    aoPressionar={e => handleSave(formActive, e)}
                 />
             </GroupButton>
         </FormArea>
     )
 }
 
-export default FormOcurrence;
+export default FormOcurrence

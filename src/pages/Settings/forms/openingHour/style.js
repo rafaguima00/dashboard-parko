@@ -1,4 +1,7 @@
-import styled from "styled-components";
+import styled from "styled-components"
+import { theme } from "../../../../theme/theme"
+
+const { neutralColor } = theme
 
 export const FormItem = styled.form`
     width: auto;
@@ -34,9 +37,21 @@ export const Table = styled.div`
     margin: 1.5rem 0;
 `
 
-export const Div = styled.div`
+export const PriceTableOf = styled.div`
     display: grid;
     grid-template-columns: repeat(4, 7rem);
+`
+
+export const Div = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    div {
+        display: grid;
+        grid-template-columns: repeat(4, 7rem);
+        justify-content: space-between;
+    }
 `
 
 export const WeekDay = styled.p`
@@ -69,4 +84,24 @@ export const DateStyle = styled.input`
     border: 1px solid ${props => props.bordercolor ? props.bordercolor : "#000"};
     outline-color: #523499;
     padding-left: .5rem;
+`
+
+export const Add = styled.button`
+    background-color: #fff;
+    font-size: 26px;
+    color: ${neutralColor};
+    padding: 4px 10px;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 1.5px 1.5px ${neutralColor};
+    height: 36px;
+    width: 36px;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &:active {
+        opacity: 0.7;
+    }
 `

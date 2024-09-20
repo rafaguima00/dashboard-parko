@@ -5,9 +5,11 @@ import {
     Spacing, 
     FormArea, 
     DivButton 
-} from "./style";
-import GlobalButton from "../Button";
-import { theme } from "../../theme/theme";
+} from "./style"
+import GlobalButton from "../Button"
+import { theme } from "../../theme/theme"
+import { Bounce } from "react-activity"
+import "react-activity/dist/library.css"
 
 function Modal({ 
     isOpen,
@@ -15,10 +17,17 @@ function Modal({
     title,
     children,
     maxWidth,
-    funcao
+    funcao,
+    isLoading,
+    aoCancelar
 }) {
 
-    const { greenColor, cancelColor, primaryColor } = theme;
+    const { greenColor, cancelColor, primaryColor } = theme
+
+    const closeModal = (e) => {
+        e.preventDefault()
+        setOpen(false)
+    }
 
     if(isOpen) {
         return (
@@ -35,12 +44,12 @@ function Modal({
                             <GlobalButton 
                                 children={"Cancelar"} 
                                 background={cancelColor} 
-                                aoPressionar={() => setOpen(false)}
+                                aoPressionar={aoCancelar ? aoCancelar : closeModal}
                                 largura={"12rem"}
                                 altura={"2.8rem"}
                             />
                             <GlobalButton 
-                                children={"Salvar"} 
+                                children={isLoading ? <Bounce color="#f4f4f4" /> : "Salvar"} 
                                 background={greenColor} 
                                 aoPressionar={funcao}
                                 largura={"12rem"}
@@ -54,4 +63,4 @@ function Modal({
     }
 }
 
-export default Modal;
+export default Modal

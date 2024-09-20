@@ -38,7 +38,7 @@ export const Slogan = styled.p`
     padding: 48px 0;
 `
 
-export const AreaForm = styled.div`
+export const AreaForm = styled.form`
     width: 50vw;
     height: 100vh;
     background-color: white;
@@ -53,13 +53,17 @@ export const AreaForm = styled.div`
     border-bottom-left-radius: 18px;
 `
 
-export const FormContent = styled.form`
+export const FormContent = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 35%;
-    height: 50%;
+    width: 18rem;
+    max-height: 20rem;
+
+    div {
+        width: 100%;
+    }
 `
 
 export const TextField = styled.div`
@@ -67,18 +71,19 @@ export const TextField = styled.div`
     flex-direction: column;
     gap: 8px;
     margin-bottom: 1rem;
-    width: 19rem;
+    width: 18rem;
 `
 
 export const Label = styled.label`
     color: #7d7d7d;
     font-size: 12px;
+    width: 18rem;
 `
 
 export const Input = styled.input`
     width: 100%;
     padding: 12px;
-    border: 2px solid #7d7d7d;
+    border: 2px solid ${props => props.bordercolor ? props.bordercolor : "#7d7d7d"};
     border-radius: 10px;
 `
 
@@ -118,6 +123,7 @@ export const BtPassword = styled.p`
 
 export const Login = styled.button`
     width: 18rem;
+    height: 2.7rem;
     padding: 12px;
     border: none;
     border-radius: 10px;
@@ -128,4 +134,33 @@ export const Login = styled.button`
     &:hover {
         cursor: pointer;
     }
+`
+
+export const Div = styled.div`
+    width: 18rem;
+    margin-bottom: 2rem;
+    padding-right: 2rem;
+
+    p {
+        color: ${props => props.textcolor};
+        font-size: 32px;
+        text-align: start;
+        letter-spacing: .75px;
+        margin-top: 4px;
+    }
+`
+
+export const Message = styled.p`
+    color: #7d7d7d;
+    font-size: 12px;
+`
+
+export const Back = styled.button`
+    background: transparent;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
 `

@@ -1,21 +1,21 @@
-import { useEffect, useState } from "react";
-import { useUser } from "../../../../context/globalContext";
-import TopForm from "../../components/topForm";
-import { ContainerForm } from "../style";
-import { ContentView } from "./style";
-import { theme } from "../../../../theme/theme";
-import FormColaborator from "./components/form";
-import ListColaborators from "./components/listColaborators";
-import api from "../../../../services/api/server";
-import { jwtDecode } from "jwt-decode";
-import ReadApi from "../../../../services/readData";
+import { useEffect, useState } from "react"
+import { useUser } from "../../../../context/globalContext"
+import TopForm from "../../components/topForm"
+import { ContainerForm } from "../style"
+import { ContentView } from "./style"
+import { theme } from "../../../../theme/theme"
+import FormColaborator from "./components/form"
+import ListColaborators from "./components/listColaborators"
+import api from "../../../../services/api/server"
+import { jwtDecode } from "jwt-decode"
+import ReadApi from "../../../../services/readData"
 
 const ColaboratorsForm = () => {
 
-    const { dataClient, setDataClient } = useUser();
-    const { listColaborators, listReservations, loadData } = ReadApi();
+    const { dataClient, setDataClient } = useUser()
+    const { listColaborators, listReservations, loadData } = ReadApi()
 
-    const [selected, setSelected] = useState(null);
+    const [selected, setSelected] = useState(null)
     const [newColaborator, setNewColaborator] = useState({
         colaborator: "",
         cpf: "",
@@ -28,7 +28,10 @@ const ColaboratorsForm = () => {
         tel: "",
         tipo_contratacao: null,
         unidade: dataClient.id_establishment
-    });
+    })
+    const [loading, setLoading] = useState(false)
+    const [loadingAdd, setLoadingAdd] = useState(false)
+    const [loadingDel, setLoadingDel] = useState(false)
 
     const selecionarCargo = (value) => {
 
@@ -53,58 +56,75 @@ const ColaboratorsForm = () => {
 
     //Adicionar colaborator (POST)
     const handleCreateColaborator = async (e, item) => {
-        e.preventDefault();
+        e.preventDefault()
+        setLoadingAdd(true)
 
         await api.post("/colaborators", item)
         .then(() => {
-            alert(`Colaborador ${item.colaborator} registrado`);
+            alert(`Colaborador ${item.colaborator} registrado`)
+            setLoadingAdd(false)
         })
         .catch(e => {
-            alert(e.response.data.message);
+            alert(e.response.data.message)
+            setLoadingAdd(false)
         })
     }
 
     //Excluir colaborador (DELETE)
-    const deleteColaborator = async (id) => {
+    const deleteColaborator = async (id, e) => {
+        e.preventDefault()
+        setLoadingDel(true)
+
+        if(!selected) {
+            setLoadingDel(false)
+            return alert("Selecione um usuário")
+        }
+
         if(window.confirm("Tem certeza que deseja excluir esta conta?") === true) {
             await api.delete(`/colaborators/${id}`)
             .catch(e => {
                 alert(`Erro ao deletar conta ${e.response.data.message}`)
             })
-        } 
+        }
+        
+        setLoadingDel(false)
     }
 
     //Atualizar colaborador (PUT)
     const handleUpdate = async (e, selected) => {
-        e.preventDefault();
+        e.preventDefault()
+        setLoading(true)
 
         if(selected) {
             await api.put(`/colaborators/${selected}`, newColaborator)
             .then(() => {
-                alert("Usuário atualizado com sucesso.");
+                alert("Usuário atualizado com sucesso.")
+                setLoading(false)
             })
             .catch(e => {
-                alert(e.response.data.message);
+                alert(e.response.data.message)
+                setLoading(false)
             })
         } else {
             alert("Selecione um usuário para atualizar informações")
+            setLoading(false)
         }
     }
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token")
 
         if(token) {
-            const decoded = jwtDecode(token);
+            const decoded = jwtDecode(token)
             setDataClient(decoded.user)
         }
-    }, []);
+    }, [])
 
     useEffect(() => {
-        loadData(dataClient.id_establishment);
-        listColaborators(dataClient.id_establishment);
-        listReservations(dataClient.id_establishment);
-    }, [dataClient]);
+        loadData(dataClient.id_establishment)
+        listColaborators(dataClient.id_establishment)
+        listReservations(dataClient.id_establishment)
+    }, [dataClient])
 
     return (
         <ContainerForm>
@@ -117,6 +137,8 @@ const ColaboratorsForm = () => {
                         setSelected,
                         newColaborator,
                         setNewColaborator,
+                        loadingAdd,
+                        loadingDel
                     }}
                     handleCreateColaborator={handleCreateColaborator}
                     deleteColaborator={deleteColaborator}
@@ -128,7 +150,8 @@ const ColaboratorsForm = () => {
                         setSelected,
                         newColaborator,
                         setNewColaborator,
-                        dataClient
+                        dataClient,
+                        loading
                     }}
                     handleUpdate={handleUpdate}
                     selecionarCargo={selecionarCargo}
@@ -139,4 +162,4 @@ const ColaboratorsForm = () => {
     )
 }
 
-export default ColaboratorsForm;
+export default ColaboratorsForm

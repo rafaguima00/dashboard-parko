@@ -1,4 +1,4 @@
-import { Button } from "./style";
+import { Button } from "./style"
 
 const GlobalButton = ({ 
     children,
@@ -27,4 +27,4 @@ const GlobalButton = ({
     )
 }
 
-export default GlobalButton;
+export default GlobalButton

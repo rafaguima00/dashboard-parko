@@ -3,7 +3,7 @@ import { theme } from "../../../../theme/theme";
 
 const { neutralColor } = theme;
 
-export const Form = styled.div`
+export const Form = styled.form`
     width: auto;
     height: 502px;
     display: flex;

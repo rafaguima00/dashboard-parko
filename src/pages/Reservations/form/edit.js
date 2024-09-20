@@ -82,6 +82,7 @@ const EditModal = (props) => {
                     largura={"245px"}
                     value={selectedClient.data_entrada}
                     onChange={e => setSelectedClient({ ...selectedClient, data_entrada: e.target.value })}
+                    disabled={selectedClient.parko_app == 0 ? true : false}
                 />
             </DivInput>
             <DivInput>
@@ -92,6 +93,7 @@ const EditModal = (props) => {
                     largura={"245px"}
                     value={selectedClient.hora_entrada}
                     onChange={e => setSelectedClient({ ...selectedClient, hora_entrada: e.target.value })}
+                    disabled={selectedClient.parko_app == 0 ? true : false}
                 />
             </DivInput>
             <DivInput>

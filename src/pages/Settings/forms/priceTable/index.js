@@ -1,5 +1,5 @@
-import { ContainerForm, DivButton } from "../style";
-import TopForm from "../../components/topForm";
+import { ContainerForm, DivButton } from "../style"
+import TopForm from "../../components/topForm"
 import { 
     Form, 
     Label,
@@ -8,41 +8,46 @@ import {
     Column,
     Block,
     InputNumber
-} from "./style";
-import { theme } from "../../../../theme/theme";
-import GlobalButton from "../../../../components/Button";
-import { useUser } from "../../../../context/globalContext";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import api from "../../../../services/api/server";
-import { jwtDecode } from "jwt-decode";
-import ReadApi from "../../../../services/readData";
+} from "./style"
+import { theme } from "../../../../theme/theme"
+import GlobalButton from "../../../../components/Button"
+import { useUser } from "../../../../context/globalContext"
+import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import api from "../../../../services/api/server"
+import { jwtDecode } from "jwt-decode"
+import ReadApi from "../../../../services/readData"
+import { Bounce } from "react-activity"
+import "react-activity/dist/library.css"
 
 const PriceTableForm = () => {
 
-    const { primaryColor, cancelColor, greenColor } = theme;
-    const { listColaborators, listReservations, loadData, getPriceTable } = ReadApi();
+    const { primaryColor, cancelColor, greenColor } = theme
+    const { listColaborators, listReservations, loadData, getPriceTable } = ReadApi()
     const { 
         dataClient, 
         priceTable, 
         setPriceTable,
         setDataClient, 
         reservations 
-    } = useUser();
+    } = useUser()
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const screenBack = () => {
-        return navigate("/settings");
-    };
+        return navigate("/settings")
+    }
 
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState("")
+    const [loading, setLoading] = useState(false)
 
     const handleOnChange = (e) => {
-        setValue(e.target.value);
-    };
+        setValue(e.target.value)
+    }
 
-    const onSave = async () => {
+    const onSave = async (e) => {
+        e.preventDefault()
+        setLoading(true)
 
         if(!priceTable.id_estacionamento) {
 
@@ -53,44 +58,46 @@ const PriceTableForm = () => {
                 valor_fracao_hora: priceTable.valor_fracao_hora
             })
             .then(() => {
-                alert("Valores salvos com sucesso.");
-                screenBack();
+                alert("Valores salvos com sucesso.")
+                screenBack()
             })
             .catch(e => {
-                console.log(e);
+                console.log(e)
             })
 
         } else {
 
             await api.put(`/tabela_preco/${dataClient.id_establishment}`, priceTable)
             .then(() => {
-                alert("Informações atualizadas");
+                alert("Informações atualizadas")
             })
             .catch(e => {
-                console.log(e);
+                console.log(e)
             }) 
 
         }
-    };
+
+        setLoading(false)
+    }
 
     useEffect(() => {
-        getPriceTable(dataClient.id_establishment);
-    }, [priceTable]);
+        getPriceTable(dataClient.id_establishment)
+    }, [priceTable])
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token")
 
         if(token) {
-            const decoded = jwtDecode(token);
+            const decoded = jwtDecode(token)
             setDataClient(decoded.user)
         }
-    }, []);
+    }, [])
 
     useEffect(() => {
-        loadData(dataClient.id_establishment);
-        listColaborators(dataClient.id_establishment);
-        listReservations(dataClient.id_establishment);
-    }, [dataClient, reservations]);
+        loadData(dataClient.id_establishment)
+        listColaborators(dataClient.id_establishment)
+        listReservations(dataClient.id_establishment)
+    }, [dataClient, reservations])
 
     return (
         <ContainerForm>
@@ -179,7 +186,7 @@ const PriceTableForm = () => {
                             aoPressionar={screenBack}
                         />
                         <GlobalButton 
-                            children="Salvar"
+                            children={loading ? <Bounce color="#f4f4f4" /> : "Salvar"}
                             background={greenColor}
                             largura={"12rem"}
                             altura={"2.8rem"}
@@ -192,4 +199,4 @@ const PriceTableForm = () => {
     )
 }
 
-export default PriceTableForm;
+export default PriceTableForm
