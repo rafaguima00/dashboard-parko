@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import { theme } from "../../../../theme/theme";
+import styled from "styled-components"
+import { theme } from "../../../../theme/theme"
 
-const { neutralColor } = theme;
+const { neutralColor, primaryColor } = theme
 
 export const Form = styled.form`
     width: auto;
@@ -95,5 +95,87 @@ export const Column = styled.div`
 
 export const Block = styled.div`
     display: block;
-    margin: auto;
+    margin: 3rem auto;
+`
+
+export const HoraFracao = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+`
+
+export const Table = styled.div`
+    width: 471px;
+    color: ${neutralColor};
+`
+
+export const Header = styled.div`
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    gap: .8rem;
+    margin-bottom: 1rem;
+
+    p {
+        width: 120px;
+        text-align: start;
+    }
+`
+
+export const Body = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 1rem;
+`
+
+export const RowTable = styled.div`
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: .8rem;
+`
+
+export const Square = styled.input`
+    border: 1px solid ${primaryColor};
+    width: 120px;
+    height: 35px;
+    border-radius: 10px;
+    background: none;
+    box-sizing: border-box;
+    padding: 8px;
+    -moz-appearance: textfield;
+    appearance: textfield;
+
+    &::-webkit-inner-spin-button { 
+        -webkit-appearance: none;
+    }
+`
+
+export const Add = styled.button`
+    background-color: #fff;
+    font-size: 26px;
+    color: ${neutralColor};
+    padding: 4px 10px;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 1.5px 1.5px ${neutralColor};
+    height: 36px;
+    width: 36px;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &:active {
+        opacity: 0.7;
+    }
+`
+
+export const ColumnTable = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 `

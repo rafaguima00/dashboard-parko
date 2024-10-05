@@ -1,4 +1,4 @@
-import { Text } from "./style";
+import { Text } from "./style"
 
 const Top = ({ 
     children,
@@ -8,8 +8,8 @@ const Top = ({
     gridcolumn
 }) => {
 
-    const firstWord = children.split(" ")[0];
-    const removeFirstWord = children.replace(firstWord, "");
+    const firstWord = children.split(" ")[0]
+    const removeFirstWord = children.replace(firstWord, "")
 
     return (
         <Text 
@@ -23,4 +23,4 @@ const Top = ({
     )
 }  
 
-export default Top;
+export default Top

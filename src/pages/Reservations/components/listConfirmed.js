@@ -16,21 +16,39 @@ import { theme } from "../../../theme/theme"
 const ListConfirmedReserve = (props) => {
 
     const { primaryColor } = theme
-    const { reservaAberta } = props
-
-    const [clicked, setClicked] = useState(0)
+    const { filterReserv, priceTable } = props
 
     const { setSelectedClient, dataClient, reservations } = useUser()
     const { listReservations } = ReadApi()
+
+    const [clicked, setClicked] = useState(0)
 
     const handleOnClick = ({ index, item }) => {
         setClicked(index)
         setSelectedClient(item)
     }
 
+    const mapValue = (item) => {
+        let converterDataCliente = new Date(item.data_entrada+" "+item.hora_entrada).getTime()
+
+        const tempoAtual = new Date().getTime()
+        const diferenca = tempoAtual - converterDataCliente
+        const totalHoras = ((new Date(diferenca).getUTCDate() - 1) * 24) + (new Date(diferenca).getUTCHours())
+
+        if(diferenca <= 0) {
+            return formatCurrency(0, 'BRL')
+        }
+        
+        if(totalHoras >= 1) {
+            return formatCurrency(((priceTable?.valor_fracao_hora ?? "") * totalHoras) + (item.value), 'BRL')
+        }
+        
+        return formatCurrency(item.value, 'BRL')
+    }
+
     useEffect(() => {
         listReservations(dataClient.id_establishment)
-    }, [reservaAberta, reservations])
+    }, [filterReserv, reservations])
 
     return (
         <List>
@@ -43,8 +61,8 @@ const ListConfirmedReserve = (props) => {
                 <Text>Valor</Text>
             </ListHeader>
             {
-                reservaAberta.length !== 0 ?
-                reservaAberta.map((item, index) => (
+                filterReserv.length !== 0 ?
+                filterReserv.map((item, index) => (
                     <ListBody key={item.id}>
                         <ElementList
                             backgroundcolor={clicked === index ? primaryColor : "#f4f4f4"}
@@ -56,7 +74,7 @@ const ListConfirmedReserve = (props) => {
                             <ItemList>{item.name_vehicle}</ItemList>
                             <ItemList>{item.license_plate}</ItemList>
                             <ItemList>{item.data_entrada}, {item.hora_entrada}</ItemList>
-                            <ItemList>{formatCurrency(item.value, 'BRL')}</ItemList>
+                            <ItemList>{mapValue(item)}</ItemList>
                         </ElementList>
                     </ListBody>
                 )) :

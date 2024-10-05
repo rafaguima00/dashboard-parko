@@ -5,7 +5,7 @@ export const buttons = [
     },
     {
         id: 1,
-        name: "Registros de Contas"
+        name: "Registros de Movimentações Financeiras"
     },
     {
         id: 2,

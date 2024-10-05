@@ -73,3 +73,15 @@ export const SmallText = styled.p`
     text-align: center;
     padding: 0 6.5rem;
 `
+
+export const Square = styled.input`
+    background-color: #D9D9D9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    font-size: 48px;
+    font-weight: 700;
+`

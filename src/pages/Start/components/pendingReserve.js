@@ -14,12 +14,24 @@ import { useState } from "react"
 
 const PendingReserve = (props) => {
 
-    const { reservations } = useUser()
+    const { reservations, park, dataClient } = useUser()
     const { primaryColor, neutralColor } = theme
     const { setOpen, open, setOpenRefuse, openRefuse } = props.states
 
     const [user, setUser] = useState("")
     const [loading, setLoading] = useState(false)
+
+    const vagasOcupadas = async (id) => {
+        await api.put(`/vagas_ocupadas/${id}`, {
+            vagas_ocupadas: park.vagas_ocupadas + 1
+        })
+        .then(() => {
+            return "ok"
+        })
+        .catch(e => {
+            return e
+        })
+    }
 
     const getReservation = async (id) => {
         const findUser = reservations.find(item => item.id === id)
@@ -54,6 +66,7 @@ const PendingReserve = (props) => {
             id_vehicle: id_vehicle
         })
         .then(() => {
+            vagasOcupadas(dataClient.id_establishment)
             alert("Reserva confirmada com sucesso.")
         })
         .catch(e => {
@@ -75,8 +88,6 @@ const PendingReserve = (props) => {
             id, 
             data_entrada, 
             hora_entrada,
-            data_saida,
-            hora_saida,
             value,
             id_vehicle
         } = user
@@ -87,8 +98,8 @@ const PendingReserve = (props) => {
         await api.put(`reservations/${id}`, {
             data_entrada: data_entrada,
             hora_entrada: hora_entrada,
-            data_saida: data_saida,
-            hora_saida: hora_saida,
+            data_saida: "",
+            hora_saida: "",
             value: value,
             status: 3,
             id_vehicle: id_vehicle

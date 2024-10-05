@@ -71,15 +71,6 @@ const Checkout = () => {
         e.preventDefault()
         setLoading(true)
 
-        //Fazer isso no código backend
-        if(
-            novoAporte.created_at === "" ||
-            novoAporte.value === "" ||
-            novoAporte.description === "" 
-        ) {
-            setMessageError("Preencha o campo vazio")
-        }
-
         await api.post("/aportes", {
             id_establishment: dataClient.id_establishment,
             id_colaborator: dataClient.id,
@@ -94,14 +85,13 @@ const Checkout = () => {
             setNovoAporte({})
         })
         .catch(e => {
-            console.log(e)
+            setMessageError(e.response.data.message)
             setLoading(false)
         })
     }
 
     const criarRetirada = async (setOpenRetirada, e) => {
         e.preventDefault()
-
         setLoading(true)
 
         await api.post("/retiradas", {
@@ -118,10 +108,12 @@ const Checkout = () => {
             setNovaRetirada({})
         })
         .catch(e => {
-            console.log(e)
+            setMessageError(e.response.data.message)
             setLoading(false)
         })
     }
+
+    // carregar as informações de reserva fechada e informações do caixa ao abrir página com useEffect
 
     useEffect(() => {
         readRetiradas()
@@ -152,7 +144,6 @@ const Checkout = () => {
             <SecondHeader states={{ text, setText }} />
             <ListReserve reservaFechada={filterReserv} />
             <Buttons setOpen={setOpen} setOpenRetirada={setOpenRetirada}/>
-
             <Graphics background={primaryColor}>
                 <div style={{ padding: 10 }}>
                     <Bar 
@@ -187,7 +178,6 @@ const Checkout = () => {
                     messageError={messageError}
                 />
             </Modal>
-            
             <Modal
                 isOpen={openRetirada}
                 setOpen={setOpenRetirada}
@@ -206,7 +196,6 @@ const Checkout = () => {
                     messageError={messageError}
                 />
             </Modal>
-
         </Container>
     )
 }

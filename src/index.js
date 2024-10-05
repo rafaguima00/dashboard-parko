@@ -10,19 +10,16 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     text-decoration: none;
-  }
-
-  body {
     font-family: 'Roboto Flex', sans-serif;
   }
 `
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
     <GlobalStyle />
     <App />
   </React.StrictMode>
-);
+)
 
-reportWebVitals();
+reportWebVitals()

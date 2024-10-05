@@ -1,8 +1,8 @@
-import { DivInput, Form, Input, Label } from "./style";
+import { DivInput, Form, Input, Label } from "./style"
 
 const FilterDate = (props) => {
 
-    const { primaryColor, neutralColor } = props.colors;
+    const { primaryColor, neutralColor } = props.colors
 
     return (
         <Form>
@@ -24,4 +24,4 @@ const FilterDate = (props) => {
     )
 }
 
-export default FilterDate;
+export default FilterDate

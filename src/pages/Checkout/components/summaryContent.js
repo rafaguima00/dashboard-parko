@@ -1,28 +1,26 @@
-import { useUser } from "../../../context/globalContext";
+import { useUser } from "../../../context/globalContext"
 import {
     Summary,
     Header,
     Pg,
     InfoCheckout,
     Info
-} from "../style";
-import avatar from "../../../assets/avatar.png";
-import { theme } from "../../../theme/theme";
-import { formatCurrency } from "../../../services/formatCurrency";
+} from "../style"
+import avatar from "../../../assets/avatar.png"
+import { theme } from "../../../theme/theme"
+import { formatCurrency } from "../../../services/formatCurrency"
 
 const SummaryContent = (props) => {
 
-    const { dataClient } = useUser();
-    const { email, colaborator } = dataClient;
+    const { dataClient } = useUser()
+    const { email, colaborator } = dataClient
     const { 
         valoresTotal, 
         valoresAporte, 
-        valoresRetiradas, 
-        aberturaCaixa,
-        fechamentoCaixa
-    } = props.resumo;
+        valoresRetiradas
+    } = props.resumo
 
-    const { cancelColor, neutralColor, primaryColor } = theme;
+    const { cancelColor, neutralColor, primaryColor } = theme
 
     return (
         <Summary>
@@ -82,10 +80,6 @@ const SummaryContent = (props) => {
                     <p>{formatCurrency(0, 'BRL')}</p>
                 </Info>
                 <Info pricetxtcolor={neutralColor} textcolor={neutralColor}>
-                    <p>Parko Débito</p>
-                    <p>{formatCurrency(0, 'BRL')}</p>
-                </Info>
-                <Info pricetxtcolor={neutralColor} textcolor={neutralColor}>
                     <p>A pagar</p>
                     <p>{formatCurrency(0, 'BRL')}</p>
                 </Info>
@@ -98,4 +92,4 @@ const SummaryContent = (props) => {
     )
 }
 
-export default SummaryContent;
+export default SummaryContent

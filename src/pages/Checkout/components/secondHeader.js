@@ -25,9 +25,9 @@ const SecondHeader = (props) => {
                     value={text}
                     onChange={e => setText(e.target.value)}
                 />
-                <Icon><BiEdit size={19} color="#545454" /></Icon>
-                <Icon><BsCalendar4 size={16} color="#545454" /></Icon>
-                <Icon><BsDownload size={16} color="#545454" /></Icon>
+                <Icon><BiEdit size={17} color="#545454" /></Icon>
+                <Icon><BsCalendar4 size={14} color="#545454" /></Icon>
+                <Icon><BsDownload size={14} color="#545454" /></Icon>
             </IconGroup>
         </SecondTitle>
     )

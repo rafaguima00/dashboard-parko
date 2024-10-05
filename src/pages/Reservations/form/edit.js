@@ -1,10 +1,62 @@
-import { Form, DivInput, Input, Label } from "./style";
-import { theme } from "../../../theme/theme";
+import { Form, DivInput, Input, Label } from "./style"
+import { theme } from "../../../theme/theme"
+import { useEffect, useState } from "react"
 
 const EditModal = (props) => {
 
-    const { neutralColor, primaryColor } = theme;
-    const { selectedClient, setSelectedClient } = props.states;
+    const { neutralColor, primaryColor } = theme
+    const { selectedClient, setSelectedClient, setStatus } = props.states
+
+    const reservaNaoParko = selectedClient.parko_app === 0
+    const reservaPendente = selectedClient.status === "Pendente"
+    const reservaConfirmada = selectedClient.status === "Confirmado"
+    const reservaRecusada = selectedClient.status === "Recusado"
+
+    const date = new Date().getDate()
+    const month = new Date().getMonth()+1
+    const year = new Date().getFullYear()
+    const hour = new Date().getHours()
+    const minute = new Date().getMinutes()
+
+    const converterHora = (hour<10 ? "0"+hour : hour) + ":" + (minute<10 ? "0"+minute : minute)
+    const converterData = (year) + "-" + (month<10 ? "0"+month : month) + "-" + (date<10 ? "0"+date : date)
+    const finalFormating = `${converterData}T${converterHora}`
+
+    const [disabled, setDisabled] = useState(false)
+
+    const verificarAtividade = () => {
+        //data e hora de entrada editável
+        if(
+            (reservaNaoParko && reservaPendente) ||
+            (reservaNaoParko && reservaRecusada)
+        ) {
+            setDisabled(false)
+        }
+
+        //data e hora de entrada não editável
+        if(!reservaNaoParko || reservaConfirmada) {
+            setDisabled(true)
+        }
+    }
+
+    useEffect(() => {
+        verificarAtividade()
+    }, [selectedClient])
+
+    useEffect(() => {
+        switch(selectedClient.status) {
+            case "Pendente" :
+                setStatus(1)
+                break;
+            case "Confirmado" : 
+                setStatus(2)
+                break;
+            case "Recusado" : 
+                setStatus(3)
+                break;
+            default : setStatus(0)
+        }
+    }, [])
 
     return (
         <Form>
@@ -82,7 +134,7 @@ const EditModal = (props) => {
                     largura={"245px"}
                     value={selectedClient.data_entrada}
                     onChange={e => setSelectedClient({ ...selectedClient, data_entrada: e.target.value })}
-                    disabled={selectedClient.parko_app == 0 ? true : false}
+                    disabled={disabled}
                 />
             </DivInput>
             <DivInput>
@@ -93,21 +145,22 @@ const EditModal = (props) => {
                     largura={"245px"}
                     value={selectedClient.hora_entrada}
                     onChange={e => setSelectedClient({ ...selectedClient, hora_entrada: e.target.value })}
-                    disabled={selectedClient.parko_app == 0 ? true : false}
+                    disabled={disabled}
                 />
             </DivInput>
             <DivInput>
                 <Label textcolor={neutralColor}>Hora de Saída</Label>
                 <Input 
-                    type="time" 
+                    type="datetime-local"
                     bordercolor={primaryColor} 
                     largura={"245px"}
                     value={selectedClient.hora_saida}
                     onChange={e => setSelectedClient({ ...selectedClient, hora_saida: e.target.value })}
+                    min={finalFormating}
                 />
             </DivInput>
         </Form>
     )
 }
 
-export default EditModal;
+export default EditModal

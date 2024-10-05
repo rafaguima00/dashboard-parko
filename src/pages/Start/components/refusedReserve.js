@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useUser } from "../../../context/globalContext"
 import Modal from "../../../components/Modal"
 import { 
@@ -18,6 +18,42 @@ const RefusedReserve = () => {
 
     const { reservations } = useUser()
     const { primaryColor } = theme
+
+    const [otp, setOtp] = useState("");
+    const [numeroSorteado, setNumeroSorteado] = useState(null);
+
+    function sortearNumero() {
+        const numero = Math.floor(Math.random() * 10000);
+
+        if (numero >= 0 && numero < 10){
+            return "000" + numero
+        }
+
+        if (numero >= 10 && numero < 100){
+            return "00" + numero
+        }
+
+        if (numero >= 100 && numero < 1000){
+            return "0" + numero
+        }
+
+        return numero
+    }
+
+    useEffect(() => {
+        const numero = sortearNumero();
+        setNumeroSorteado(numero);
+    }, []);
+
+    const confirmCode = e => {
+        e.preventDefault();
+        
+        if (numeroSorteado === parseInt(otp)) {
+            console.log(true);
+        } else {
+            console.log(false);
+        }
+    };
 
     return (
         <>
@@ -41,8 +77,9 @@ const RefusedReserve = () => {
                 maxWidth={"30rem"}
                 isOpen={open}
                 setOpen={setOpen}
+                funcao={confirmCode}
             >
-                <Confirmation />
+                <Confirmation otp={otp} setOtp={setOtp} />
             </Modal>
         </>
     )

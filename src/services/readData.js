@@ -9,7 +9,9 @@ const ReadApi = () => {
         setColaborators, 
         setAportes, 
         setRetiradas,
-        setPriceTable
+        setPriceTable,
+        setDebts,
+        setTabelaFixa
     } = useUser()
 
     const listReservations = async (id) => {
@@ -18,7 +20,7 @@ const ReadApi = () => {
             setReservations(response.data)
         })
         .catch(e => {
-            console.log(e.response.data.message)
+            console.log(e)
         })
     }
 
@@ -63,12 +65,35 @@ const ReadApi = () => {
     }
 
     const getPriceTable = async (id) => {
+
         await api.get(`/tabela_preco/${id}`)
         .then(res => {
             setPriceTable(res.data[0])
         }) 
         .catch(e => {
             console.log(e)
+        })
+    }
+
+    const listDividas = async () => {
+        await api.get("/debts")
+        .then(res => {
+            setDebts(res.data)
+        })
+        .catch(e => {
+            alert(e.response.data.message)
+        })
+    }
+
+    const getTabelaFixa = async (id) => {
+
+        // id do estacionamento como parâmetro
+        await api.get(`/tabela_fixa/${id}`)
+        .then(res => {
+            setTabelaFixa(res.data)
+        })
+        .catch(e => {
+            return e
         })
     }
     
@@ -78,7 +103,9 @@ const ReadApi = () => {
         listColaborators, 
         readAportes, 
         readRetiradas,
-        getPriceTable
+        getPriceTable,
+        listDividas,
+        getTabelaFixa
     }
 }
 

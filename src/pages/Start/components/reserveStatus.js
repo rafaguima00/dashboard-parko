@@ -15,7 +15,6 @@ import Top from "../../../components/Top"
 import { theme } from "../../../theme/theme"
 import LoadingScreen from "../../../components/Loading"
 import { useState } from "react"
-import Modal from "../../../components/Modal"
 
 const ReservationStatus = (props) => {
 

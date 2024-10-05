@@ -1,10 +1,12 @@
-import styled from "styled-components";
+import styled from "styled-components"
+import { theme } from "../../theme/theme"
+
+const { cancelColor, blueColor } = theme
 
 export const Container = styled.div`
     margin: 4rem 5.11rem 4rem 0;
     display: grid;
-    grid-template-columns: 368px repeat(2, auto);
-    grid-template-rows: 2.5rem auto 8rem 2.5rem;
+    grid-template-rows: 5% auto 16% 5%;
     gap: 1rem;
 `
 
@@ -53,7 +55,7 @@ export const Summary = styled.span`
     grid-column: span 1;
     grid-row: span 2;
     padding: 1rem;
-    border-radius: 1rem;
+    border-radius: 20px;
     overflow-y: auto;
     height: 100%;
 
@@ -77,7 +79,7 @@ export const Header = styled.div`
     flex-direction: row;
     align-items: center;
     gap: 1rem;
-    padding-bottom: 1rem;
+    padding-bottom: 1.5rem;
 
     img {
         width: 90px;
@@ -99,8 +101,8 @@ export const Pg = styled.p`
 export const InfoCheckout = styled.div`
     display: flex;
     flex-direction: column;
-    gap: .3rem;
-    padding: 12px 0;
+    gap: .4rem;
+    padding: 1rem 0;
 
     h3 {
         color: #545454;
@@ -128,9 +130,9 @@ export const List = styled.span`
     background: #fff;
     grid-column: span 2;
     padding: 1rem;
-    border-radius: 1rem;
-    overflow-y: auto;
-    height: 100%;
+    border-radius: 20px;
+    overflow-y: scroll;
+    max-height: 527px;
 
     &::-webkit-scrollbar {
         width: .25rem;
@@ -179,8 +181,91 @@ export const ElementList = styled.button`
     border-radius: 8px;
     border: none;
     padding: 8px 0;
-    height: 2.2rem;
+    height: 2.3rem;
     overflow: hidden;
+    font-family: 'Roboto Flex', sans-serif;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &:active {
+        opacity: 0.7;
+    }
+`
+
+export const DebtClient = styled.div`
+    background-color: ${cancelColor};
+    color: #fff;
+    height: 2.3rem;
+    display: grid;
+    grid-template-columns: 104px 200px 200px 121px auto;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 8px;
+    border: none;
+    overflow: hidden;
+    font-family: 'Roboto Flex', sans-serif;
+    font-size: 14px;
+`
+
+export const CreditClient = styled.div`
+    background-color: ${blueColor};
+    color: #fff;
+    height: 2.3rem;
+    display: grid;
+    grid-template-columns: 104px 200px 200px auto;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 8px;
+    border: none;
+    overflow: hidden;
+    font-family: 'Roboto Flex', sans-serif;
+    font-size: 14px;
+`
+
+export const NameClient = styled.p`
+    text-align: start;
+`
+
+export const DivDebt = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+
+    cursor: default;
+`
+
+export const Receive = styled.button`
+    width: 121px;
+    height: 27px;
+    font-family: 'Roboto Flex', sans-serif;
+    border-radius: 8px;
+    border: none;
+    background-color: #A62727;
+    color: #fff;
+    
+    &:hover {
+        cursor: pointer;
+    }
+
+    &:active {
+        opacity: 0.7;
+    }
+`
+
+export const Back = styled.button`
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 0 5px;
 
     &:hover {
         cursor: pointer;
@@ -232,7 +317,7 @@ export const Graphics = styled.div`
     div {
         background-color: #fff;
         width: 100%;
-        border-radius: 18px;
+        border-radius: 20px;
         display: flex;
         flex-direction: row;
         align-items: center;

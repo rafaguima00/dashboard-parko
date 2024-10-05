@@ -10,6 +10,7 @@ export const InfoProvider = ({ children }) => {
     const [reservations, setReservations] = useState([])
     const [debts, setDebts] = useState([])
     const [priceTable, setPriceTable] = useState({})
+    const [tabelaFixa, setTabelaFixa] = useState([])
     const [selectedClient, setSelectedClient] = useState({})
     const [ratings, setRatings] = useState([])
     const [occurrences, setOccurrences] = useState([])
@@ -46,7 +47,9 @@ export const InfoProvider = ({ children }) => {
         aportes,
         setAportes,
         retiradas,
-        setRetiradas
+        setRetiradas,
+        tabelaFixa,
+        setTabelaFixa
     }
 
     return (
@@ -54,6 +57,6 @@ export const InfoProvider = ({ children }) => {
             {children}
         </GlobalContext.Provider>
     )
-};
+}
 
-export const useUser = () => useContext(GlobalContext);
+export const useUser = () => useContext(GlobalContext)

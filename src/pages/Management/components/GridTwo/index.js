@@ -20,7 +20,7 @@ const GridTwo = (props) => {
         if(selected === 0) {
             return "Relatórios Financeiros"
         } else if (selected === 1) {
-            return "Registros de Contas"
+            return "Registros de Movimentações Financeiras"
         } else if (selected === 2) {
             return "Registro de Patrimônio"
         } else {

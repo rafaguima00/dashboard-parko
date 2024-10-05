@@ -1,4 +1,7 @@
-import styled from "styled-components";
+import styled from "styled-components"
+import { theme } from "../../theme/theme"
+
+const { neutralColor } = theme
 
 export const Container = styled.div`
     margin: 2rem 5.11rem 1.5rem 0;
@@ -15,6 +18,7 @@ export const ContentInfo = styled.div`
     border-radius: 1rem;
     padding: 1rem;
     position: relative;
+    max-height: ${props => props.altura};
 `
 
 export const Title = styled.p`
@@ -118,7 +122,7 @@ export const Section = styled.section`
     flex-direction: column;
     gap: 1rem;
     overflow-y: scroll;
-    height: 100%;
+    max-height: 275px;
 
     &::-webkit-scrollbar {
         width: .25rem;
@@ -172,4 +176,63 @@ export const InfoUser = styled.div`
     p {
         color: ${props => props.textcolor};
     }
+`
+
+export const NewColaborator = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 1.3rem;
+    right: 0;
+    left: 0;
+`
+
+export const BtNewColaborator = styled.button`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: none;
+    border: none;
+
+    p {
+        color: ${props => props.textcolor};
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &:active {
+        opacity: 0.7;
+    }
+`
+
+export const Add = styled.button`
+    background-color: #fff;
+    font-size: 26px;
+    color: ${neutralColor};
+    padding: 4px 10px;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 1.5px 1.5px ${neutralColor};
+    height: 36px;
+    width: 36px;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &:active {
+        opacity: 0.7;
+    }
+`
+
+export const Text = styled.p`
+    font-size: 16px;
+    color: ${props => props.textcolor};
+    font-family: 'Roboto Flex', sans-serif;
 `

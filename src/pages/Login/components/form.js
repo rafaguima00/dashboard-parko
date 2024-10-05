@@ -8,7 +8,7 @@ import Confirmation from "./confirmation"
 
 const Form = () => {
 
-    const [page, setPage] = useState(5)
+    const [page, setPage] = useState(1)
 
     return (
         <AreaForm>

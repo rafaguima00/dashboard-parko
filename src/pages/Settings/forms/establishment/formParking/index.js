@@ -30,7 +30,9 @@ const FormParking = (props) => {
         estado,
         cidade,
         bairro,
-        email
+        email,
+        numero,
+        numero_vagas
     } = park
         
     const [parkInfo, setParkInfo] = useState({
@@ -45,7 +47,9 @@ const FormParking = (props) => {
         cep: cep,
         estado: estado,
         cidade: cidade,
-        bairro: bairro
+        bairro: bairro,
+        numero: numero,
+        numero_vagas: numero_vagas
     })
     const [loading, setLoading] = useState(false)
 
@@ -101,7 +105,9 @@ const FormParking = (props) => {
             cep: cep,
             estado: estado,
             cidade: cidade,
-            bairro: bairro
+            bairro: bairro,
+            numero: numero,
+            numero_vagas: numero_vagas
         })
     }, [])
 
@@ -193,12 +199,24 @@ const FormParking = (props) => {
                     />
                 </DivInput>
                 <DivInput>
+                    <Label textcolor={neutralColor}>Quantidade de vagas</Label>
+                    <Input 
+                        type="number"
+                        placeholder="Quantidade de vagas"
+                        bordercolor={primaryColor} 
+                        largura={324}
+                        required
+                        value={parkInfo?.numero_vagas ?? ""}
+                        onChange={e => setParkInfo({ ...parkInfo, numero_vagas: e.target.value })}
+                    />
+                </DivInput>
+                <DivInput>
                     <Label textcolor={neutralColor}>CEP</Label>
                     <Input 
                         type="text"
                         placeholder="xxxxx-xxx"
                         bordercolor={primaryColor} 
-                        largura={324}
+                        largura={244}
                         required
                         value={parkInfo?.cep ?? ""}
                         onChange={e => setParkInfo({ ...parkInfo, cep: e.target.value })}
@@ -211,7 +229,7 @@ const FormParking = (props) => {
                         type="text"
                         placeholder="Seu Endereço"
                         bordercolor={primaryColor} 
-                        largura={670}
+                        largura={491}
                         required
                         value={parkInfo?.end ?? ""}
                         onChange={e => setParkInfo({ ...parkInfo, end: e.target.value })}
@@ -223,7 +241,7 @@ const FormParking = (props) => {
                         type="text"
                         placeholder="Número"
                         bordercolor={primaryColor} 
-                        largura={324}
+                        largura={234}
                         required
                         value={parkInfo?.numero ?? ""}
                         onChange={e => setParkInfo({ ...parkInfo, numero: e.target.value })}

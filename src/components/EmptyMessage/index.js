@@ -3,7 +3,7 @@ import { theme } from "../../theme/theme"
 
 const EmptyMessage = ({ children }) => {
 
-    const { neutralColor } = theme;
+    const { neutralColor } = theme
 
     return (
         <AlignText>

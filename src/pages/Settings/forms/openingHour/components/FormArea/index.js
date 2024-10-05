@@ -10,25 +10,43 @@ import {
     Checkbox,
     Time,
     DateStyle,
-    Add
+    Add,
+    DivColumn,
+    DivRow
 } from "../../style"
 import Top from "../../../../../../components/Top"
+import { useState } from "react"
 
 const FormArea = (props) => {
 
-    const { neutralColor, primaryColor, setChecked, table, date } = props
+    const { neutralColor, primaryColor, setChecked, table, date, dados } = props
+
+    const [linha, setLinha] = useState(1)
 
     const handleAdd = (e) => {
         e.preventDefault()
+        setLinha((prevLinha) => prevLinha + 1)
+    }
+
+    const renderItem = () => {
+        return Array.from({ length: linha }, (_, i) => (
+            <DivRow key={i}>
+                <DateStyle bordercolor={primaryColor} type="date" min={date} />
+                <Checkbox type="checkbox" />
+                <Time type="time" bordercolor={primaryColor} />
+                <Time type="time" bordercolor={primaryColor} />
+            </DivRow>
+        ))
     }
 
     return (
         <FormItem>
             <Span>
                 <Header>
-                    <Item gridcolumn={2} textcolor={neutralColor} justify>Fechado?</Item>
-                    <Item gridcolumn={3} textcolor={neutralColor}>De</Item>
-                    <Item gridcolumn={4} textcolor={neutralColor}>Até</Item>
+                    <p></p>
+                    <Item textcolor={neutralColor} justify>Fechado?</Item>
+                    <Item textcolor={neutralColor}>De</Item>
+                    <Item textcolor={neutralColor}>Até</Item>
                 </Header>
             </Span>
             <Span>
@@ -60,19 +78,16 @@ const FormArea = (props) => {
             <Span>
                 <Top children="Horário Especial" fontsize={19} />
                 <Header>
-                    <Item gridcolumn={1} textcolor={neutralColor}>Data</Item>
-                    <Item gridcolumn={2} textcolor={neutralColor} justify={true}>Fechado?</Item>
-                    <Item gridcolumn={3} textcolor={neutralColor}>De</Item>
-                    <Item gridcolumn={4} textcolor={neutralColor}>Até</Item>
+                    <Item textcolor={neutralColor}>Data</Item>
+                    <Item textcolor={neutralColor}>Fechado?</Item>
+                    <Item textcolor={neutralColor}>De</Item>
+                    <Item textcolor={neutralColor}>Até</Item>
+                    <p></p>
                 </Header>
                 <Div>
-                    {/* Por enquanto, desabilitado */}
-                    <div>
-                        <DateStyle type="date" min={date} disabled={true} />
-                        <Checkbox type="checkbox" disabled={true}/>
-                        <Time type="time" bordercolor={primaryColor} disabled={true} />
-                        <Time type="time" bordercolor={primaryColor} disabled={true} />
-                    </div>
+                    <DivColumn>
+                        {renderItem()}
+                    </DivColumn>
                     <Add onClick={handleAdd}>+</Add>
                 </Div>
             </Span>

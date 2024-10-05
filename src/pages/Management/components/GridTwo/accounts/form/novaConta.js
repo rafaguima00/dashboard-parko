@@ -7,21 +7,21 @@ import {
     DivCheckbox,
     DivRadio,
     InputNumber
-} from "./style";
+} from "./style"
 
 const NovaConta = (props) => {
 
-    const { primaryColor, neutralColor } = props.colors;
-    const { chosenAcc, setChosenAcc, setRadioValue, setCost } = props.state;
+    const { primaryColor, neutralColor } = props.colors
+    const { chosenAcc, setChosenAcc, setRadioValue, setCost } = props.state
 
     return (
         <RowForm>
             <DivInput>
-                <Label textcolor={neutralColor}>Descrição da Conta</Label>
+                <Label textcolor={neutralColor}>Descrição</Label>
                 <Input 
                     type="text"
                     bordercolor={primaryColor}
-                    placeholder="Coelba - Jan/2020"
+                    placeholder="Descrição da Conta"
                     largura={"23.5rem"}
                     value={chosenAcc.desc_item}
                     onChange={e => setChosenAcc({ ...chosenAcc, desc_item: e.target.value })}
@@ -36,6 +36,8 @@ const NovaConta = (props) => {
                     <option></option>
                     <option>Energia</option>
                     <option>Contabilidade</option>
+                    <option>Aporte</option>
+                    <option>Retirada</option>
                 </Select>
             </DivInput>
             <DivInput>
@@ -124,4 +126,4 @@ const NovaConta = (props) => {
     )
 }
 
-export default NovaConta;
+export default NovaConta

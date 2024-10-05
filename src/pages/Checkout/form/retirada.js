@@ -1,8 +1,10 @@
-import { Form, DivInput, Input, Label } from "./style";
+import { theme } from "../../../theme/theme"
+import { Form, DivInput, Input, Label } from "./style"
 
-const Retirada = ({ primaryColor, neutralColor, state }) => {
+const Retirada = ({ primaryColor, neutralColor, state, messageError }) => {
 
-    const { setNovaRetirada, novaRetirada } = state;
+    const { setNovaRetirada, novaRetirada } = state
+    const { cancelColor } = theme
 
     return (
         <Form>
@@ -15,6 +17,7 @@ const Retirada = ({ primaryColor, neutralColor, state }) => {
                     onChange={e => setNovaRetirada({ ...novaRetirada, value: e.target.value })}
                     required
                 />
+                <Label textcolor={cancelColor}>{messageError}</Label>
             </DivInput>
             <DivInput largura={"45%"}>
                 <Label textcolor={neutralColor}>Data e hora da retirada</Label>
@@ -40,4 +43,4 @@ const Retirada = ({ primaryColor, neutralColor, state }) => {
     )
 }
 
-export default Retirada;
+export default Retirada

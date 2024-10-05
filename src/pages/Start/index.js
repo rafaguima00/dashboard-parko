@@ -12,10 +12,10 @@ import ReadApi from "../../services/readData"
 
 const Start = () => {
 
-    const { setDataClient, dataClient, reservations } = useUser()
+    const { setDataClient, dataClient, reservations, park } = useUser()
     const { colaborator } = dataClient
 
-    const { listReservations, loadData, listColaborators } = ReadApi()
+    const { listReservations, loadData, listColaborators, getPriceTable } = ReadApi()
 
     const [selected, setSelected] = useState(1)
 
@@ -47,7 +47,8 @@ const Start = () => {
         loadData(dataClient.id_establishment)
         listColaborators(dataClient.id_establishment)
         listReservations(dataClient.id_establishment)
-    }, [dataClient, reservations])
+        getPriceTable(dataClient.id_establishment)
+    }, [dataClient, reservations, park])
 
     return (
         <Container>

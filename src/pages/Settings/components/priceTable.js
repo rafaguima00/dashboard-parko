@@ -45,11 +45,7 @@ const PriceTable = () => {
     const tempo = tempoTolerancia()
 
     const valorHora = (valueHour) => {
-        if(valueHour !== undefined) {
-            return formatCurrency(valueHour, 'BRL')
-        } else {
-            return formatCurrency(0, 'BRL')
-        }
+        return formatCurrency(valueHour, 'BRL')
     }
 
     return (

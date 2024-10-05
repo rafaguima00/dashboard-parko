@@ -1,23 +1,21 @@
 import styled from "styled-components"
 import { theme } from "../../theme/theme"
 
-const { neutralColor } = theme
+const { neutralColor, primaryColor, cancelColor } = theme
 
 export const Container = styled.div`
     margin: 4rem 5.11rem 0 0;
     display: grid;
-    grid-template-rows: 45% 45% 4%;
+    grid-template-rows: 4% 37% 4% 37% 5%;
+    grid-template-columns: 68% 31%;
+    gap: 1rem;
+    align-items: flex-start;
 `
 
 export const Content = styled.div`
     display: grid;
-    grid-template-rows: 40px 15rem;
     grid-template-columns: repeat(2, 1fr) 22vw;
-    column-gap: 1rem;
-
-    &:first-child {
-        margin-bottom: 12rem;
-    }
+    grid-column: span 2;
 
     &:last-child {
         display: flex;
@@ -29,35 +27,19 @@ export const Content = styled.div`
 
 export const ItemReservation = styled.div`
     display: grid;
-    grid-template-rows: 2.5rem 17rem;
-    grid-template-columns: repeat(2, 1fr) 22vw;
+    grid-template-columns: 1fr 22vw;
+    grid-column: span 2;
     column-gap: 1rem;
-
-    &:first-child {
-        margin-bottom: 12rem;
-    }
-
-    &:last-child {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-end;
-        align-items: center;
-    }
 `
 
 export const CloseReserve = styled.div`
     column-gap: 1rem;
-
-    &:first-child {
-        margin-bottom: 12rem;
-    }
-
-    &:last-child {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-end;
-        align-items: center;
-    }
+    grid-column: 2;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    
 `
 
 export const TopItem = styled.div`
@@ -65,7 +47,14 @@ export const TopItem = styled.div`
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
-    grid-column: span 2;
+    grid-column: 1;
+    width: 100%;
+`
+
+export const TopTwo = styled.div`
+    grid-column: 1;
+    display: flex;
+    align-items: flex-start;
 `
 
 export const InputGroup = styled.div`
@@ -113,7 +102,7 @@ export const List = styled.div`
     height: 19rem;
     background-color: #fff;
     grid-row: 2;
-    grid-column: span 2;
+    grid-column: 1;
     border-radius: 20px;
     padding: ${props => props.padding ? props.padding : "1rem"};
     overflow-y: scroll;
@@ -127,8 +116,8 @@ export const List = styled.div`
     }
 
     &::-webkit-scrollbar {
-            width: .25rem;
-        }
+        width: .25rem;
+    }
 
     &::-webkit-scrollbar-track {
         background: transparent;
@@ -143,15 +132,15 @@ export const List = styled.div`
 export const Timing = styled.div`
     background-color: ${props => props.background};
     grid-row: 2;
-    grid-column: 3;
+    grid-column: 2;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 2rem;
+    gap: .75rem;
     color: #fff;
-    height: 19rem;
+    height: 100%;
 `
 
 export const View = styled.div`
@@ -162,11 +151,15 @@ export const View = styled.div`
 `
 
 export const Clock = styled.div`
+    height: 193px;
+    width: 193px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    border-radius: 50%;
     font-size: 12px;
+    background-color: #381B7A;
 
     p:last-child {
         padding-top: 4px;
@@ -305,7 +298,7 @@ export const TextOption = styled.p`
     margin-bottom: 1rem;
 
     strong {
-        color: #523499;
+        color: ${props => props.textcolor ? props.textcolor : primaryColor};
     }
 `
 
@@ -318,7 +311,7 @@ export const SecondSection = styled.section`
 export const Payment = styled.div`
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-end;
     gap: 1rem;
     margin-top: 4px;
     margin-bottom: 1rem;
@@ -382,6 +375,27 @@ export const Add = styled.button`
 `
 
 export const Receive = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+`
+
+export const MessageError = styled.p`
+    color: ${cancelColor};
+`
+
+export const DivError = styled.div`
+    width: 30rem;
+`
+
+export const DivPayment = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+`
+
+export const ArrayElement = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;

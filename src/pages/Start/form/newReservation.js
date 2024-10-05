@@ -6,6 +6,11 @@ const NewReservation = (props) => {
     const { neutralColor, primaryColor } = theme
     const { data, setData, reservations } = props.state
 
+    const date = new Date().getDate()
+    const month = new Date().getMonth()+1
+    const year = new Date().getFullYear()
+    const converterData = (year) + "-" + (month<10 ? "0"+month : month) + "-" + (date<10 ? "0"+date : date)
+
     return (
         <Form>
             <DivInput>
@@ -35,6 +40,7 @@ const NewReservation = (props) => {
                     type="number"
                     bordercolor={primaryColor} 
                     placeholder="(xx) xxxxx-xxxx"
+                    largura={219}
                     value={data.tel}
                     onChange={e => setData({ ...data, tel: e.target.value })}
                     required
@@ -83,6 +89,7 @@ const NewReservation = (props) => {
                     bordercolor={primaryColor} 
                     largura={245}
                     onChange={e => setData({ ...data, data_entrada: e.target.value })}
+                    min={converterData}
                     required
                 />
             </DivInput>

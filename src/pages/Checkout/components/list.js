@@ -3,35 +3,70 @@ import {
     List,
     ListHeader,
     Text,
-    ListBody,
-    ElementList,
-    ItemList
+    ListBody
 } from "../style"
-import { formatCurrency } from "../../../services/formatCurrency"
 import EmptyMessage from "../../../components/EmptyMessage"
 import ReadApi from "../../../services/readData"
 import { useEffect, useState } from "react"
-import { theme } from "../../../theme/theme"
+import api from "../../../services/api/server"
+import RenderItem from "./renderItem"
 
 const ListReserve = (props) => {
 
     const { reservaFechada } = props
-    const { primaryColor, blueColor } = theme
-    const { dataClient, reservations, setSelectedClient, selectedClient } = useUser()
-    const { listReservations } = ReadApi()
+    const { dataClient, reservations, debts } = useUser()
+    const { listReservations, listDividas } = ReadApi()
 
     const firstWord = dataClient?.colaborator ?? ""
 
     const [clicked, setClicked] = useState(0)
+    const [debtClient, setDebtClient] = useState()
+    const [valuesDebt, setValuesDebt] = useState(0)
 
+    // Selecionar cada reserva
     const handleOnClick = (item) => {
         const { id } = item
         setClicked(id)
     }
 
+    // Assim que clicar em um item a função vai retornar a reserva selecionada
+    const verificarDividas = () => {
+
+        // Verificar se o cliente possui dívidas
+        const filterReserve = reservations.find(item => item.id === clicked)
+        const filterDebts = debts.filter(
+            item => item.id_costumer === filterReserve?.id_costumer && 
+            item.status === "Pendente"
+        )
+        
+        // Caso tenha dívida, a função vai retornar o valor da dívida
+        if (filterDebts) {
+            const encontrarValores = filterDebts.map(item => item.value)
+
+            // Se possuir mais de uma dívida, fazer a soma dos valores e retornar o total
+            if(encontrarValores.length >= 1) {
+                setDebtClient(true)
+                const somarValores = encontrarValores.reduce((acc, current) => {
+                    return acc + current
+                })
+                setValuesDebt(somarValores)
+            } else {
+                setDebtClient(false)
+            }
+        }
+    }
+
     useEffect(() => {
         listReservations(dataClient.id_establishment)
     }, [reservaFechada, reservations])
+
+    useEffect(() => {
+        verificarDividas()
+    }, [clicked])
+
+    useEffect(() => {
+        listDividas()
+    }, [])
 
     return (
         <List>
@@ -48,23 +83,18 @@ const ListReserve = (props) => {
                 reservaFechada.length !== 0 ? 
                 reservaFechada.map((item) => (
                     <ListBody key={item.id}>
-                        <ElementList 
-                            backgroundcolor={clicked === item.id ? blueColor : "#f4f4f4"}
-                            textcolor={clicked === item.id ? "#fff" : "#7c7c7c"}
-                            onClick={() => handleOnClick(item)}
-                        >
-                            <ItemList>{item.id}</ItemList>
-                            <ItemList>{item.name}</ItemList>
-                            <ItemList>{item.name_vehicle}</ItemList>
-                            <ItemList>{item.license_plate}</ItemList>
-                            <ItemList>{item.data_entrada}, {item.hora_entrada}</ItemList>
-                            <ItemList>{formatCurrency(item.value, 'BRL')}</ItemList>
-                            <ItemList>{firstWord.split(" ")[0]}</ItemList>
-                        </ElementList>
+                        <RenderItem 
+                            valuesDebt={valuesDebt}
+                            item={item} 
+                            clicked={clicked}
+                            setClicked={setClicked}
+                            firstWord={firstWord}
+                            debtClient={debtClient}
+                            handleOnClick={handleOnClick}
+                        />
                     </ListBody>
                 )) :
                 <EmptyMessage>Nenhuma reserva fechada no momento</EmptyMessage> 
-                
             }
         </List>
     )

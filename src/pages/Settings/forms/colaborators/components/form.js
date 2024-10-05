@@ -111,9 +111,11 @@ const FormColaborator = (props) => {
                     required
                     onChange={e => selecionarCargo(e.target.value)}
                 >
-                    {cargo.map(item => (
-                        <option key={item.id}>{item.cargo}</option>
-                    ))}
+                    {
+                        cargo.map(item => (
+                            <option key={item.id}>{item.cargo}</option>
+                        ))
+                    }
                 </Select>
             </DivInput>
             <DivInput>

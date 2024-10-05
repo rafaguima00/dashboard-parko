@@ -12,11 +12,23 @@ import { useNavigate } from "react-router-dom"
 
 const ConfirmedReserve = (props) => {
 
-    const { reservations } = useUser()
+    const { reservations, park, dataClient } = useUser()
     const { primaryColor } = theme
     const { setLoading } = props.states
 
     const navigate = useNavigate()
+
+    const vagasOcupadas = async (id) => {
+        await api.put(`/vagas_ocupadas/${id}`, {
+            vagas_ocupadas: park.vagas_ocupadas - 1
+        })
+        .then(() => {
+            console.log("ok")
+        })
+        .catch(e => {
+            console.log(e)
+        })
+    }
 
     const handleUpdate = async (id) => {
         const findUser = reservations.find(item => item.id === id)
@@ -35,6 +47,9 @@ const ConfirmedReserve = (props) => {
             })
             .then(() => {
                 setLoading(false)
+                vagasOcupadas(dataClient.id_establishment)
+            })
+            .then(() => {
                 return navigate("/checkout")
             })
             .catch(e => {

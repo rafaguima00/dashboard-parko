@@ -5,7 +5,6 @@ const { neutralColor } = theme
 
 export const FormItem = styled.form`
     width: auto;
-    height: 500px;
     display: flex;
     flex-direction: column;
 `
@@ -13,21 +12,20 @@ export const FormItem = styled.form`
 export const Span = styled.span`
     display: block;
     margin: 0 auto;
+    width: 100%;
 `
 
 export const Header = styled.div`
-    display: grid;
-    grid-template-columns: repeat(4, 7rem);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     margin: 1rem 0 .7rem;
 `
 
 export const Item = styled.p`
-    grid-column: ${props => props.gridcolumn};
-    width: 5rem;
     font-size: 15px;
     color: ${props => props.textcolor};
-    display: flex;
-    justify-self: ${props => props.justify === true ? "center" : "normal"};
+    text-align: start;
 `
 
 export const Table = styled.div`
@@ -45,13 +43,10 @@ export const PriceTableOf = styled.div`
 export const Div = styled.div`
     display: flex;
     flex-direction: row;
-    align-items: center;
-
-    div {
-        display: grid;
-        grid-template-columns: repeat(4, 7rem);
-        justify-content: space-between;
-    }
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+    width: 100%;
 `
 
 export const WeekDay = styled.p`
@@ -104,4 +99,19 @@ export const Add = styled.button`
     &:active {
         opacity: 0.7;
     }
+`
+
+export const DivColumn = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 1rem;
+    width: 100%;
+`
+
+export const DivRow = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 `

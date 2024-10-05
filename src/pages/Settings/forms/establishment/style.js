@@ -28,7 +28,7 @@ export const Input = styled.input`
     border: 1px solid ${props => props.bordercolor};
     border-radius: .5rem;
     width: ${props => props.largura}px;
-    height: 2.5rem;
+    height: 2.6rem;
 
     &::placeholder {
         color: #7d7d7d;

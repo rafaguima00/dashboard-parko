@@ -22,6 +22,48 @@ const Accounts = () => {
     const [cost, setCost] = useState("")
     const [loading, setLoading] = useState(false)
 
+    const verifyCategory = async (acc) => {
+        const { category, value, desc_item, date_created } = acc
+
+        if(category === "Aporte") {
+            await api.post("/aportes", {
+                id_establishment: dataClient.id_establishment,
+                id_colaborator: dataClient.id,
+                created_at: date_created,
+                value: value,
+                description: desc_item
+            })
+            .then(() => {
+                console.log("Aporte realizado")
+                setLoading(false)
+                setCount(false)
+            })
+            .catch(e => {
+                console.log("Erro ao realizar aporte")
+                setLoading(false)
+            })
+        }
+
+        if(category === "Retirada") {
+            await api.post("/retiradas", {
+                id_establishment: dataClient.id_establishment,
+                id_colaborator: dataClient.id,
+                created_at: date_created,
+                value: value,
+                description: desc_item
+            })
+            .then(() => {
+                console.log("Retirada realizada")
+                setLoading(false)
+                setCount(false)
+            })
+            .catch(e => {
+                console.log("Erro ao realizar retirada")
+                setLoading(false)
+            })
+        }
+    }
+
     const readAccounts = async () => {
         await api.get("/accounts")
         .then(res => {
@@ -47,8 +89,11 @@ const Accounts = () => {
             id_establishment: dataClient.id_establishment
         })
         .then(() => {
-            setLoading(false)
+            verifyCategory(chosenAcc)
+        })
+        .then(() => {
             alert("Criado com sucesso")
+            setLoading(false)
             setCount(false)
         })
         .catch(e => {

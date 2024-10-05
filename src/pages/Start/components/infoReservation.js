@@ -12,7 +12,6 @@ import {
     Line
 } from "../style"
 import { formatCurrency } from "../../../services/formatCurrency"
-import { CgNotes } from "react-icons/cg"
 import { FaRightLeft } from "react-icons/fa6"
 import GlobalButton from "../../../components/Button"
 import { theme } from "../../../theme/theme"
@@ -23,6 +22,7 @@ import { dataCliente, optionsClient } from "../datasets/dgClientSatisfation"
 import Modal from "../../../components/Modal"
 import NewReservation from "../form/newReservation"
 import api from "../../../services/api/server"
+import ReadApi from "../../../services/readData"
 
 ChartJS.register(ArcElement, Title)
 
@@ -49,31 +49,38 @@ const InfoReserve = () => {
     const [caixaAberto, setCaixaAberto] = useState({})
     const [numeroCaixa, setNumeroCaixa] = useState(null)
 
-    const { dataClient, park, reservations } = useUser()
+    const { 
+        dataClient, 
+        park, 
+        reservations, 
+        priceTable 
+    } = useUser()
 
-    //função para guardar os dados de todos os veículos cadastrados na const 'vehicles'
-    const verifyVehicles = async () => {
+    const valorDaHora = priceTable?.valor_hora ?? null
+
+    // Função para guardar os dados de todos os veículos cadastrados na const 'vehicles'
+    const verifyVehicles = async (idUser) => {
         await api.get("/vehicles")
-        .then(response => {
-            setVehicles(response.data)
+        .then(res => {
+            createReservation(res.data[res.data.length - 1], idUser)
         })
         .catch(e => {
             console.log(e)
         })
     }
 
-    //função para guardar os dados de todos os usuários cadastrados na const 'users'
+    // Função para guardar os dados de todos os usuários cadastrados na const 'users'
     const verifyUsers = async () => {
         await api.get("/users")
-        .then(response => {
-            setUsers(response.data)
+        .then(res => {
+            createVehicle(res.data[res.data.length - 1].id)
         })
         .catch(e => {
             console.log(e)
         })
     }
 
-    //1- pegar as informações do usuário e criar no banco de dados
+    // 1- pegar as informações do usuário e criar no banco de dados
     const createUser = async (e) => {
         e.preventDefault()
 
@@ -89,46 +96,47 @@ const InfoReserve = () => {
             password: ""
         })
         .then(() => {
-            const idUser = users.at(-1).id
-            createVehicle(idUser)
+            verifyUsers()
+            setData({})
         })
         .catch(e => {
-            console.log(e)
+            console.log(e.response.data.message)
             setCarregando(false)
             setData({})
         })
     }
 
-    //2- pegar as informações do veículo e criar no banco de dados
-    const createVehicle = async (id) => {
+    // 2- pegar as informações do veículo e criar no banco de dados
+    const createVehicle = async (idUser) => {
+
         await api.post("/vehicles", {
-            id_costumer: id+1, 
+            id_costumer: idUser, 
             name_vehicle: data.name_vehicle, 
             color: data.color,
             license_plate: data.license_plate
         })
         .then(() => {
-            createReservation()
+            verifyVehicles(idUser)
+            setData({})
         })
         .catch(e => {
-            console.log(e)
+            console.log(e.response.data.message)
             setCarregando(false)
             setData({})
         })
     }
 
-    //3- feito isso, cadastrar a reserva no banco de dados
-    const createReservation = async () => {
-        const idUser = users.at(-1).id+1
-        const idVehicle = vehicles.at(-1).id+1
+    // 3- feito isso, cadastrar a reserva no banco de dados
+    const createReservation = async (idVehicle, idUser) => {
+
         await api.post("/reservations", {
             data_entrada: data.data_entrada,
             hora_entrada: data.hora_entrada,
             data_saida: "", 
             hora_saida: "",
-            value: 10, 
+            value: valorDaHora, 
             id_costumer: idUser,
-            id_vehicle: idVehicle, 
+            id_vehicle: idVehicle.id, 
             id_establishment: dataClient.id_establishment,
             parko_app: 0
         })
@@ -139,7 +147,7 @@ const InfoReserve = () => {
             setData({})
         })
         .catch(e => {
-            console.log(e)
+            console.log(e.response.data.message)
             setCarregando(false)
             setData({})
         })
@@ -166,7 +174,7 @@ const InfoReserve = () => {
         setNumeroCaixa(caixaAberto.id)
     }, [caixaAberto])
 
-    // const verificarSeEstaFechado = async (e) => {
+    //const verificarSeEstaFechado = async (e) => {
     //     e.preventDefault()
     //     setLoading(true)
 
@@ -229,19 +237,13 @@ const InfoReserve = () => {
     }
 
     const quantidadeVagas = () => {
-        let quantidade = park?.numero_vagas ?? 0
-        let vagas_disponiveis = quantidade - park?.vagas_ocupadas ?? 0
+        let vagas_disponiveis = (park?.numero_vagas ?? 0) - (park?.vagas_ocupadas ?? 0)
 
         return { vagas_disponiveis }
     }
 
     const { vagas_disponiveis } = quantidadeVagas()
-
-    useEffect(() => {
-        verifyVehicles()
-        verifyUsers()
-    }, [])
-
+    
     return (
         <InfoReservation>
             <GroupInfo>
@@ -260,7 +262,7 @@ const InfoReserve = () => {
                     </div>
                 </Info>
                 <Info>
-                    <CgNotes color="#545454" size={16} title="Checkout" style={styleIcon} />
+                    <FaRightLeft color="#545454" size={16} title="Arrow" style={styleIcon} />
                     <TextAligned>
                         <TitleLine>{formatCurrency(0, 'BRL')}</TitleLine>
                         <Subtitle>Faturamento diário</Subtitle>

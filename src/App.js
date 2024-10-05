@@ -10,7 +10,7 @@ const App = () => {
         <RouterProvider router={router} />
       </ParkProvider>
     </InfoProvider>
-  );
+  )
 }
 
-export default App;
+export default App

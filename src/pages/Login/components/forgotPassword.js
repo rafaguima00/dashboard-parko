@@ -25,10 +25,14 @@ const ForgotPassword = (props) => {
     const handleClick = e => {
         e.preventDefault()
 
-        dataClient.email !== "" ?
-        setPage(3) :
-        setError(true)
-        setMessageError("Preencha o campo vazio")
+        if(dataClient.email === "") {
+            setError(true)
+            setMessageError("Preencha o campo vazio")
+            return
+        }
+        
+        setDataClient({ ...dataClient, email: "" })
+        setPage(3) 
     }
 
     const goBack = e => {
@@ -56,7 +60,6 @@ const ForgotPassword = (props) => {
                         required
                         value={dataClient.email}
                         onChange={e => setDataClient({ ...dataClient, email: e.target.value })}
-                        bordercolor={""}
                     />
                 </TextField>
             </div>

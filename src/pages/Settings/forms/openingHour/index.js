@@ -25,7 +25,7 @@ const FormOpening = () => {
         setChecked, 
         checked 
     } = useParking()
-    const { dataClient, setDataClient, reservations } = useUser()
+    const { dataClient, setDataClient } = useUser()
     const { listColaborators, listReservations, loadData } = ReadApi()
 
     const { 
@@ -172,7 +172,7 @@ const FormOpening = () => {
         loadData(dataClient.id_establishment)
         listColaborators(dataClient.id_establishment)
         listReservations(dataClient.id_establishment)
-    }, [dataClient, reservations])
+    }, [])
 
     return (
         <ContainerForm>

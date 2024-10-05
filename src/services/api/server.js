@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const api = axios.create({
-    baseURL: "https://parko-server.vercel.app/api/"
+    baseURL: "http://192.168.0.122:3300/api"
 })
-
+//https://parko-server.vercel.app/api/
 export default api

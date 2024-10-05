@@ -36,8 +36,8 @@ export const SideBar = styled.div`
 `
 
 export const Image = styled.img`
-    height: 2rem;
-    width: 7.5rem;
+    height: 3.5rem;
+    width: 9rem;
     margin: 3rem auto 4rem;
     display: block;
 `

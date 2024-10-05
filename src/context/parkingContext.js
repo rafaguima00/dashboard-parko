@@ -1,6 +1,6 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState } from "react"
 
-const ParkingContext = createContext({});
+const ParkingContext = createContext({})
 
 export const ParkProvider = ({ children }) => {
 
@@ -12,7 +12,7 @@ export const ParkProvider = ({ children }) => {
         friday: "",
         saturday: "",
         sunday: ""
-    });
+    })
 
     const [closeHour, setCloseHour] = useState({
         monday: "",
@@ -22,7 +22,7 @@ export const ParkProvider = ({ children }) => {
         friday: "",
         saturday: "",
         sunday: ""
-    });
+    })
 
     const [checked, setChecked] = useState({
         monday: false,
@@ -32,7 +32,7 @@ export const ParkProvider = ({ children }) => {
         friday: false,
         saturday: false,
         sunday: true
-    });
+    })
 
     const value = { 
         openHour, 
@@ -41,13 +41,13 @@ export const ParkProvider = ({ children }) => {
         setCloseHour,
         checked, 
         setChecked
-    };
+    }
 
     return (
         <ParkingContext.Provider value={value}>
             {children}
         </ParkingContext.Provider>
     )
-};
+}
 
-export const useParking = () => useContext(ParkingContext);
+export const useParking = () => useContext(ParkingContext)

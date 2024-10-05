@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useLocation } from "react-router-dom"
 import { useUser } from "../../../../context/globalContext"
 import TopForm from "../../components/topForm"
 import { ContainerForm } from "../style"
@@ -14,6 +15,9 @@ const ColaboratorsForm = () => {
 
     const { dataClient, setDataClient } = useUser()
     const { listColaborators, listReservations, loadData } = ReadApi()
+
+    const location = useLocation()
+    let selectedColaborator = location.state?.selectedColaborator
 
     const [selected, setSelected] = useState(null)
     const [newColaborator, setNewColaborator] = useState({
@@ -117,6 +121,11 @@ const ColaboratorsForm = () => {
         if(token) {
             const decoded = jwtDecode(token)
             setDataClient(decoded.user)
+        }
+
+        if(selectedColaborator) {
+            setSelected(selectedColaborator.id)
+            setNewColaborator(selectedColaborator)
         }
     }, [])
 
