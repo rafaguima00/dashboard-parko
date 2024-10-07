@@ -8,7 +8,6 @@ import {
 import EmptyMessage from "../../../components/EmptyMessage"
 import ReadApi from "../../../services/readData"
 import { useEffect, useState } from "react"
-import api from "../../../services/api/server"
 import RenderItem from "./renderItem"
 
 const ListReserve = (props) => {

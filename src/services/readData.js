@@ -4,10 +4,10 @@ import { useUser } from "../context/globalContext"
 const ReadApi = () => {
 
     const { 
-        setReservations, 
-        setPark, 
-        setColaborators, 
-        setAportes, 
+        setReservations,
+        setPark,
+        setColaborators,
+        setAportes,
         setRetiradas,
         setPriceTable,
         setDebts,
@@ -16,8 +16,8 @@ const ReadApi = () => {
 
     const listReservations = async (id) => {
         await api.get(`/reservations/parking/${id}`)
-        .then(response => {
-            setReservations(response.data)
+        .then(res => {
+            setReservations(res.data)
         })
         .catch(e => {
             console.log(e)
@@ -26,8 +26,8 @@ const ReadApi = () => {
 
     const loadData = async (id) => {
         await api.get(`/establishments/${id}`)
-        .then(response => {
-            setPark(response.data[0])
+        .then(res => {
+            setPark(res.data[0])
         })
         .catch(e => {
             console.log(e)
@@ -36,8 +36,8 @@ const ReadApi = () => {
 
     const listColaborators = async (id) => {
         await api.get(`/colaborators/${id}`)
-        .then(response => {
-            setColaborators(response.data)
+        .then(res => {
+            setColaborators(res.data)
         })
         .catch(e => {
             console.log(e)
@@ -46,8 +46,8 @@ const ReadApi = () => {
 
     const readAportes = async () => {
         await api.get("/aportes")
-        .then(response => {
-            setAportes(response.data)
+        .then(res => {
+            setAportes(res.data)
         })
         .catch(e => {
             console.log(e)
@@ -56,8 +56,8 @@ const ReadApi = () => {
 
     const readRetiradas = async () => {
         await api.get("/retiradas")
-        .then(response => {
-            setRetiradas(response.data)
+        .then(res => {
+            setRetiradas(res.data)
         })
         .catch(e => {
             console.log(e)

@@ -1,7 +1,7 @@
-import { Outlet, useNavigate } from "react-router-dom";
-import NavigationBar from "./components/navigationBar";
-import { Container, Notification } from "./style";
-import { IoNotificationsOutline } from "react-icons/io5";
+import { Outlet, useNavigate } from "react-router-dom"
+import NavigationBar from "./components/navigationBar"
+import { Container, Notification } from "./style"
+import { IoNotificationsOutline } from "react-icons/io5"
 
 const Menu = () => {
 
@@ -29,13 +29,13 @@ const Menu = () => {
         color: "#545454"
     }
     
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const handleLogout = () => {
-        alert("Você saiu da sua conta");
-        localStorage.removeItem("token");
+        alert("Você saiu da sua conta")
+        localStorage.removeItem("token")
 
-        return navigate("/");
+        return navigate("/login")
     }
 
     return (
@@ -53,4 +53,4 @@ const Menu = () => {
     )
 }
 
-export default Menu;
+export default Menu

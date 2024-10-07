@@ -1,18 +1,18 @@
-import { Div, Label, Login } from "../style"
+import { AreaForm, Div, Label, Login } from "../style"
 import { theme } from "../../../theme/theme"
+import { useNavigate } from "react-router-dom"
 
-const SendLink = (props) => {
+const SendLink = () => {
 
     const { neutralColor, primaryColor } = theme
-    const { setPage } = props
+    const navigate = useNavigate()
 
     const handleBack = e => {
         e.preventDefault()
-    
-        setPage(1)
+        return navigate("/")
     }
 
-    return <>
+    return <AreaForm>
         <Div textcolor={neutralColor}>
             <p>Link de alteração de senha enviado!</p>
             <Label>
@@ -27,7 +27,7 @@ const SendLink = (props) => {
         >
             Voltar
         </Login>
-    </>
+    </AreaForm>
 }
 
 export default SendLink

@@ -41,7 +41,16 @@ const Checkout = () => {
     const [loading, setLoading] = useState(false)
     const [messageError, setMessageError] = useState("")
 
-    const reservaFechada = reservations.filter(item => item.status === "Finalizado")
+
+    const date = new Date().getDate()
+    const month = new Date().getMonth()+1
+    const year = new Date().getFullYear()
+    const converterData = (year) + "-" + (month<10 ? "0"+month : month) + "-" + (date<10 ? "0"+date : date)
+
+    const reservaFechada = reservations.filter(
+        item => item.status === "Finalizado" &&
+        item.hora_saida.slice(0, 10) === converterData
+    )
     const filterReserv = reservaFechada.filter(
         item => item.name.toLowerCase().includes(text.toLowerCase()) ||
         item.license_plate.toLowerCase().includes(text.toLowerCase())

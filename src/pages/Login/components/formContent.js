@@ -7,7 +7,8 @@ import {
     NewPassword,
     TextPassword,
     BtPassword,
-    Login
+    Login,
+    AreaForm
 } from "../style"
 import { useState } from "react"
 import { useUser } from "../../../context/globalContext"
@@ -17,7 +18,7 @@ import api from "../../../services/api/server"
 import { Dots } from "react-activity"
 import "react-activity/dist/library.css"
 
-const ContentForm = (props) => {
+const ContentForm = () => {
 
     const [error, setError] = useState(false)
     const [messageError, setMessageError] = useState("")
@@ -25,7 +26,6 @@ const ContentForm = (props) => {
 
     const { setDataClient, dataClient } = useUser()
     const { primaryColor } = theme
-    const { setPage } = props
 
     const navigate = useNavigate()
 
@@ -47,7 +47,6 @@ const ContentForm = (props) => {
         })
         .catch(e => {
             setTitle("Login")
-            console.log(e)
             setError(true)
             setMessageError(e.response.data.error.message)
         })
@@ -55,11 +54,11 @@ const ContentForm = (props) => {
 
     const createPassword = e => {
         e.preventDefault()
-        setPage(2)
+        return navigate("/forgot-password")
     }
 
     return <>
-        <FormContent onSubmit={handleLogin}>
+        <AreaForm onSubmit={handleLogin}>
             <div>
                 <TextField>
                     <Label>E-mail</Label>
@@ -94,7 +93,7 @@ const ContentForm = (props) => {
             >
                 {title}
             </Login>
-        </FormContent>
+        </AreaForm>
     </>
 }
 

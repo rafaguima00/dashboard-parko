@@ -148,6 +148,7 @@ export const Square = styled.input`
     padding: 8px;
     -moz-appearance: textfield;
     appearance: textfield;
+    color: ${neutralColor};
 
     &::-webkit-inner-spin-button { 
         -webkit-appearance: none;

@@ -1,20 +1,20 @@
-import { Div, Input, Label, Login, TextField } from "../style"
+import { AreaForm, Div, Input, Label, Login, TextField } from "../style"
 import { theme } from "../../../theme/theme"
 import { useUser } from "../../../context/globalContext"
+import { useNavigate } from "react-router-dom"
 
-const NewPassword = (props) => {
+const NewPassword = () => {
 
     const { neutralColor, primaryColor } = theme
-    const { setPage } = props
     const { dataClient, setDataClient } = useUser()
+    const navigate = useNavigate()
 
     const handleSave = e => {
         e.preventDefault()
-    
-        setPage(5)
+        return navigate("/confirmation")
     }
 
-    return <>
+    return <AreaForm>
         <Div textcolor={neutralColor}>
             <p>Qual a sua nova senha?</p>
             <Label>
@@ -49,7 +49,7 @@ const NewPassword = (props) => {
         >
             Salvar
         </Login>
-    </>
+    </AreaForm>
 }
 
 export default NewPassword

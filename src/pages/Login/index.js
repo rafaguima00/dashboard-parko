@@ -1,9 +1,8 @@
 import { Container, Image } from "./style"
 import bgImage from "../../assets/bg-image-login.png"
 import Welcome from "./components/welcome"
-import Form from "./components/form"
 import { theme } from "../../theme/theme"
-import { useNavigate } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import { useEffect } from "react"
 
 const Login = () => {
@@ -23,7 +22,7 @@ const Login = () => {
         <Container>
             <Image backgroundimg={primaryColor} src={bgImage} />
             <Welcome />
-            <Form />
+            <Outlet />
         </Container>
     )
 }   

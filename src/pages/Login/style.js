@@ -5,6 +5,8 @@ export const Container = styled.div`
     padding: 0;
     box-sizing: border-box;
     position: relative;
+    display: flex;
+    align-items: center;
 `
 
 export const Image = styled.img`
@@ -49,20 +51,22 @@ export const AreaForm = styled.form`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-top-left-radius: 18px;    
-    border-bottom-left-radius: 18px;
 `
 
 export const FormContent = styled.div`
+    width: 50vw;
+    height: 100vh;
+    background-color: white;
+    position: absolute;
+    right: 0;
+    top: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 18rem;
-    max-height: 20rem;
 
     div {
-        width: 100%;
+        width: 18rem;
     }
 `
 
