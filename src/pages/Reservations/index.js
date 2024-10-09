@@ -26,6 +26,7 @@ const Reservations = () => {
     const [error, setError] = useState(false)
     const [messageError, setMessageError] = useState("")
     const [linhas, setLinhas] = useState([{ valorPgto: "", valueSelect: "credit-parko" }])
+    const [dateTime, setDateTime] = useState("")
 
     const { 
         setDataClient,
@@ -109,7 +110,7 @@ const Reservations = () => {
         })
     }
 
-    const fecharReserva = async (id, e, index) => {
+    const fecharReserva = async (id, e) => {
         e.preventDefault()
 
         setLoading(true)
@@ -211,7 +212,7 @@ const Reservations = () => {
                 hora_entrada: selectedClient.hora_entrada,
                 data_saida: selectedClient.data_saida,
                 hora_saida: selectedClient.hora_saida,
-                value: selectedClient.value,
+                value: unformatCurrency(total)/100,
                 status: 4,
                 id_vehicle: selectedClient.id_vehicle
             })
@@ -237,7 +238,7 @@ const Reservations = () => {
         if(reservaAberta && selectedClient) {
             if(hasDebt) {
                 return formatCurrency((valorDaReservaAtual) + (valuesDebt), 'BRL') 
-            } 
+            }
 
             return formatCurrency(valorDaReservaAtual, 'BRL') 
         } 
@@ -276,7 +277,6 @@ const Reservations = () => {
 
     useEffect(() => {
         getDebtById()
-        console.log(selectedClient)
     }, [selectedClient])
 
     return (
@@ -314,7 +314,9 @@ const Reservations = () => {
                     priceTable,
                     totalHoras,
                     valorDaReservaAtual,
-                    diferenca
+                    diferenca,
+                    setDateTime,
+                    dateTime
                 }}
             />
             <CloseReserve>

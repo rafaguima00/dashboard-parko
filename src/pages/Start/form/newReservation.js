@@ -1,15 +1,12 @@
 import { Form, DivInput, Input, Label, InputNumber } from "./style"
 import { theme } from "../../../theme/theme"
+import { converter } from "../../../services/converterData"
 
 const NewReservation = (props) => {
 
     const { neutralColor, primaryColor } = theme
     const { data, setData, reservations } = props.state
-
-    const date = new Date().getDate()
-    const month = new Date().getMonth()+1
-    const year = new Date().getFullYear()
-    const converterData = (year) + "-" + (month<10 ? "0"+month : month) + "-" + (date<10 ? "0"+date : date)
+    const { converterData } = converter()
 
     return (
         <Form>
@@ -95,9 +92,9 @@ const NewReservation = (props) => {
             </DivInput>
             <DivInput>
                 <Label textcolor={neutralColor}>Hora de Entrada *</Label>
-                <Input 
-                    type="time" 
-                    bordercolor={primaryColor} 
+                <Input
+                    type="time"
+                    bordercolor={primaryColor}
                     largura={245}
                     onChange={e => setData({ ...data, hora_entrada: e.target.value })}
                     required

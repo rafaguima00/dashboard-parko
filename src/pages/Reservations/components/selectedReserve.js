@@ -38,7 +38,9 @@ const SelectedReserve = (props) => {
         valorDaReservaAtual,
         diferenca,
         linhas, 
-        setLinhas
+        setLinhas,
+        dateTime,
+        setDateTime
     } = props.state
     const { cancelColor } = theme
     const { selectedClient, setSelectedClient } = useUser()
@@ -63,18 +65,31 @@ const SelectedReserve = (props) => {
         e.preventDefault()
         setLoading(true)
 
+        // Constante para gravar a data e hora da saída
+        const converter = new Date(dateTime)
+        const date = converter.getDate()
+        const month = converter.getMonth()+1
+        const year = converter.getFullYear()
+        const hour = converter.getHours()
+        const minute = converter.getMinutes()
+    
+        const converterHora = (hour<10 ? "0"+hour : hour) + ":" + (minute<10 ? "0"+minute : minute)
+        const converterData = (year) + "-" + (month<10 ? "0"+month : month) + "-" + (date<10 ? "0"+date : date)
+
         await api.put(`reservations/${id}`, {
             data_entrada: selectedClient.data_entrada,
             hora_entrada: selectedClient.hora_entrada,
-            data_saida: selectedClient.data_saida,
-            hora_saida: selectedClient.hora_saida,
+            data_saida: converterData,
+            hora_saida: converterHora,
             value: valorDaReservaAtual,
             status: status,
             id_vehicle: selectedClient.id_vehicle
         })
         .then(() => {
-            setLoading(false)
             alert("Reserva atualizada com sucesso.")
+            setSelectedClient({ ...selectedClient, hora_saida: converterHora })
+            setLoading(false)
+            setDateTime("")
             setOpenEdit(false)
         })
         .catch(e => {
@@ -182,8 +197,6 @@ const SelectedReserve = (props) => {
         alterarLinhas()
     }, [linhas])
 
-    useEffect(() => {console.log(status)}, [status])
-
     return (
         <Content>
             <List padding={"2.4rem 4rem"}>
@@ -203,9 +216,11 @@ const SelectedReserve = (props) => {
                     >
                         <EditModal 
                             states={{ 
-                                selectedClient, 
+                                selectedClient,
                                 setSelectedClient,
-                                setStatus
+                                setStatus,
+                                dateTime,
+                                setDateTime
                             }} 
                         />
                     </Modal>

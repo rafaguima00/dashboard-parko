@@ -2,6 +2,7 @@ import { Outlet, useNavigate } from "react-router-dom"
 import NavigationBar from "./components/navigationBar"
 import { Container, Notification } from "./style"
 import { IoNotificationsOutline } from "react-icons/io5"
+import { theme } from "../../theme/theme"
 
 const Menu = () => {
 
@@ -28,6 +29,8 @@ const Menu = () => {
     const textSelected = {
         color: "#545454"
     }
+
+    const { primaryColor } = theme
     
     const navigate = useNavigate()
 
@@ -35,7 +38,7 @@ const Menu = () => {
         alert("Você saiu da sua conta")
         localStorage.removeItem("token")
 
-        return navigate("/login")
+        return navigate("/")
     }
 
     return (
@@ -47,7 +50,7 @@ const Menu = () => {
             />
             <Outlet />
             <Notification onClick={() => {}}>
-                <IoNotificationsOutline size={18} color="#523499" />
+                <IoNotificationsOutline size={18} color={primaryColor} />
             </Notification>
         </Container>
     )

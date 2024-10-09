@@ -16,6 +16,7 @@ import Contribution from "./form/contribution"
 import Retirada from "./form/retirada"
 import api from "../../services/api/server"
 import ReadApi from "../../services/readData"
+import { converter } from "../../services/converterData"
 
 ChartJS.register(ArcElement, BarElement, CategoryScale, LinearScale, Title)
 
@@ -24,6 +25,7 @@ const Checkout = () => {
     const { primaryColor, neutralColor } = theme
     const { reservations, dataClient, aportes, retiradas } = useUser()
     const { readAportes, readRetiradas, listReservations, loadData } = ReadApi()
+    const { converterData } = converter()
 
     const [open, setOpen] = useState(false)
     const [openRetirada, setOpenRetirada] = useState(false)
@@ -40,16 +42,14 @@ const Checkout = () => {
     const [text, setText] = useState("")
     const [loading, setLoading] = useState(false)
     const [messageError, setMessageError] = useState("")
-
-
-    const date = new Date().getDate()
-    const month = new Date().getMonth()+1
-    const year = new Date().getFullYear()
-    const converterData = (year) + "-" + (month<10 ? "0"+month : month) + "-" + (date<10 ? "0"+date : date)
+    const [filtrarPorData, setFiltrarPorData] = useState({
+        resumo: converterData,
+        lista: converterData
+    })
 
     const reservaFechada = reservations.filter(
         item => item.status === "Finalizado" &&
-        item.hora_saida.slice(0, 10) === converterData
+        item.data_saida === filtrarPorData.lista
     )
     const filterReserv = reservaFechada.filter(
         item => item.name.toLowerCase().includes(text.toLowerCase()) ||
@@ -58,7 +58,10 @@ const Checkout = () => {
 
     const calcularValorPorEstacionamento = (data, idEstacionamento) => {
 
-        const filtrarItem = (array) => array.filter(item => item.id_establishment === idEstacionamento)
+        const filtrarItem = (array) => array.filter(
+            item => item.id_establishment === idEstacionamento &&
+            item.created_at.slice(0, 10) === filtrarPorData.resumo
+        )
 
         const calcularSoma = (array) => array.map(item => item.value)
         .reduce((prev, current) => {
@@ -122,8 +125,6 @@ const Checkout = () => {
         })
     }
 
-    // carregar as informações de reserva fechada e informações do caixa ao abrir página com useEffect
-
     useEffect(() => {
         readRetiradas()
         readAportes()
@@ -134,15 +135,24 @@ const Checkout = () => {
         listReservations(dataClient.id_establishment)
     }, [dataClient])
 
+    useEffect(() => {
+        calcularValorPorEstacionamento(reservations, dataClient.id_establishment)
+    }, [reservations])
+
     const { 
-        valoresTotal, 
-        valoresAporte, 
-        valoresRetiradas 
+        valoresTotal,
+        valoresAporte,
+        valoresRetiradas
     } = calcularValorPorEstacionamento(reservations, dataClient.id_establishment)
 
     return (
         <Container>
-            <FirstHeader />
+            <FirstHeader
+                states={{
+                    setFiltrarPorData,
+                    filtrarPorData
+                }}
+            />
             <SummaryContent 
                 resumo={{
                     valoresTotal,
@@ -150,7 +160,14 @@ const Checkout = () => {
                     valoresRetiradas
                 }}
             />
-            <SecondHeader states={{ text, setText }} />
+            <SecondHeader 
+                states={{ 
+                    text, 
+                    setText,
+                    filtrarPorData,
+                    setFiltrarPorData
+                }} 
+            />
             <ListReserve reservaFechada={filterReserv} />
             <Buttons setOpen={setOpen} setOpenRetirada={setOpenRetirada}/>
             <Graphics background={primaryColor}>

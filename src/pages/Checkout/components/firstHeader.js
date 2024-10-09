@@ -2,20 +2,57 @@ import { BsCalendar4, BsPrinter, BsDownload } from "react-icons/bs"
 import {
     Title,
     IconGroup,
-    Icon
+    Icon,
+    DivInput,
+    Label,
+    Input
 } from "../style"
 import Top from "../../../components/Top"
+import Modal from "../../../components/Modal"
+import { useState } from "react"
+import { theme } from "../../../theme/theme"
 
-const FirstHeader = () => {
+const FirstHeader = (props) => {
+
+    const { setFiltrarPorData, filtrarPorData } = props.states
+    const { neutralColor, primaryColor } = theme
+
+    const [abrirModal, setAbrirModal] = useState(false)
+    const [dataSelecionada, setDataSelecionada] = useState("")
+
+    function setData(e, value) {
+        e.preventDefault()
+
+        setFiltrarPorData({ ...filtrarPorData, resumo: value })
+        setAbrirModal(false)
+    }
+    
     return <>
         <Title>
             <Top children="Caixa Aberto" font={19} />
             <IconGroup>
                 <Icon><BsPrinter size={14} color="#545454"/></Icon>
                 <Icon><BsDownload size={14} color="#545454"/></Icon>
-                <Icon onClick={() => {}}><BsCalendar4 size={14} color="#545454"/></Icon>
+                <Icon onClick={() => setAbrirModal(true)}><BsCalendar4 size={14} color="#545454"/></Icon>
             </IconGroup>
         </Title>
+
+        <Modal
+            isOpen={abrirModal}
+            setOpen={setAbrirModal}
+            title="Filtrar por Data"
+            funcao={e => setData(e, dataSelecionada)}
+        >
+            <DivInput>
+                <Label textcolor={neutralColor}>Data de Início</Label>
+                <Input 
+                    type="date"
+                    bordercolor={primaryColor}
+                    value={dataSelecionada}
+                    onChange={e => setDataSelecionada(e.target.value)}
+                />
+            </DivInput>
+        </Modal>
     </>
 }
 

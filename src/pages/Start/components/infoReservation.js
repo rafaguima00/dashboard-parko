@@ -22,7 +22,6 @@ import { dataCliente, optionsClient } from "../datasets/dgClientSatisfation"
 import Modal from "../../../components/Modal"
 import NewReservation from "../form/newReservation"
 import api from "../../../services/api/server"
-import ReadApi from "../../../services/readData"
 
 ChartJS.register(ArcElement, Title)
 
@@ -40,36 +39,23 @@ const InfoReserve = () => {
 
     const [open, setOpen] = useState(false)
     const [data, setData] = useState({})
-    const [vehicles, setVehicles] = useState([])
-    const [users, setUsers] = useState([])
     const [carregando, setCarregando] = useState(false)
     const [modalAbrirCx, setModalAbrirCx] = useState(false)
     const [loading, setLoading] = useState(false)
     const [modalFecharCx, setModalFecharCx] = useState(false)
-    const [caixaAberto, setCaixaAberto] = useState({})
-    const [numeroCaixa, setNumeroCaixa] = useState(null)
 
     const { 
         dataClient, 
         park, 
         reservations, 
-        priceTable 
+        priceTable,
+        setCaixaAberto,
+        caixaAberto
     } = useUser()
 
     const valorDaHora = priceTable?.valor_hora ?? null
 
-    // Função para guardar os dados de todos os veículos cadastrados na const 'vehicles'
-    const verifyVehicles = async (idUser) => {
-        await api.get("/vehicles")
-        .then(res => {
-            createReservation(res.data[res.data.length - 1], idUser)
-        })
-        .catch(e => {
-            console.log(e)
-        })
-    }
-
-    // Função para guardar os dados de todos os usuários cadastrados na const 'users'
+    // Ao clicar em 'Nova reserva' cadastrar o cliente e retornar o id
     const verifyUsers = async () => {
         await api.get("/users")
         .then(res => {
@@ -80,7 +66,18 @@ const InfoReserve = () => {
         })
     }
 
-    // 1- pegar as informações do usuário e criar no banco de dados
+    // Depois de criar o cliente cadastrar o veículo e retornar o id
+    const verifyVehicles = async (idUser) => {
+        await api.get("/vehicles")
+        .then(res => {
+            createReservation(res.data[res.data.length - 1], idUser)
+        })
+        .catch(e => {
+            console.log(e)
+        })
+    }
+
+    // 1- Pegar as informações do usuário e criar no banco de dados
     const createUser = async (e) => {
         e.preventDefault()
 
@@ -106,7 +103,7 @@ const InfoReserve = () => {
         })
     }
 
-    // 2- pegar as informações do veículo e criar no banco de dados
+    // 2- Pegar as informações do veículo e criar no banco de dados
     const createVehicle = async (idUser) => {
 
         await api.post("/vehicles", {
@@ -126,7 +123,7 @@ const InfoReserve = () => {
         })
     }
 
-    // 3- feito isso, cadastrar a reserva no banco de dados
+    // 3- Feito isso, cadastrar a reserva no banco de dados
     const createReservation = async (idVehicle, idUser) => {
 
         await api.post("/reservations", {
@@ -153,56 +150,37 @@ const InfoReserve = () => {
         })
     }
 
-    const verificarSeEstaAberto = async (e) => {
-        e.preventDefault()
-        setLoading(true)
-
+    const verificarSeEstaAberto = async () => {
         await api.get(`/abertura_caixa/parking/${dataClient.id_establishment}`)
         .then(res => {
-            setCaixaAberto(res.data.at(-1))
-        })
-        .then(() => {
-            abrirCaixa()
+            if (res.data && res.data.length > 0) {
+                setCaixaAberto(res.data[res.data.length - 1])
+                return
+            }
+
+            console.log('Nenhum dado encontrado')
         })
         .catch(e => {
             console.log(e)
-            setLoading(false)
         })
     }
 
-    useEffect(() => { 
-        setNumeroCaixa(caixaAberto.id)
-    }, [caixaAberto])
+    const abrirCaixa = async (e) => {
+        e.preventDefault()
 
-    //const verificarSeEstaFechado = async (e) => {
-    //     e.preventDefault()
-    //     setLoading(true)
-
-    //     await api.get(`/abertura_caixa/parking/${dataClient.id_establishment}`)
-    //     .then(res => {
-    //         setCaixaAberto(res.data.at(-1))
-    //     })
-    //     .then(() => {
-    //         if(caixaAberto.aberto === 0) {
-    //             alert("O caixa já está fechado")
-    //         } else {
-    //             fecharCaixa()
-    //         }
-    //     })
-    //     .catch(e => {
-    //         console.log(e)
-    //     })
-
-    //     setLoading(false)
-    // }  
-
-    const abrirCaixa = async () => {
         setLoading(true)
+
+        if(caixaAberto?.aberto === 1) {
+            alert("O caixa já está aberto")
+            setModalAbrirCx(false)
+            setLoading(false)
+            return
+        }
 
         await api.post("/abertura_caixa", { 
             id_establishment: dataClient.id_establishment,
             id_colaborator: dataClient.id,
-            value: 545.73
+            value: caixaAberto?.value
         })
         .then(() => {
             alert("Caixa aberto")
@@ -210,6 +188,7 @@ const InfoReserve = () => {
         })
         .catch(e => {
             alert("Erro ao abrir caixa")
+            setModalAbrirCx(false)
             console.log(e)
         })
 
@@ -219,18 +198,26 @@ const InfoReserve = () => {
     const fecharCaixa = async (e) => {
         e.preventDefault()
 
-        await api.put(`/abertura_caixa/${numeroCaixa}`, { 
-            id_establishment: dataClient.id_establishment,
-            id_colaborator: dataClient.id,
-            value: 918.45
+        setLoading(true)
+
+        if(caixaAberto?.aberto === 0) {
+            alert("O caixa já está fechado")
+            setModalFecharCx(false)
+            setLoading(false)
+            return
+        }
+
+        await api.put(`/abertura_caixa/${caixaAberto.id}`, { 
+            aberto: 0,
+            value: caixaAberto.value
         })
         .then(() => {
-            alert("Caixa aberto")
-            return navigate("/checkout")
+            alert("Caixa fechado")
+            setModalFecharCx(false)
         })
-        .catch(e => {
-            alert("Erro ao abrir caixa")
-            console.log(e)
+        .catch(() => {
+            alert("Erro ao fechar caixa")
+            setModalFecharCx(false)
         })
 
         setLoading(false)
@@ -243,6 +230,12 @@ const InfoReserve = () => {
     }
 
     const { vagas_disponiveis } = quantidadeVagas()
+
+    useEffect(() => {
+        if (dataClient.id_establishment) {
+            verificarSeEstaAberto()
+        }
+    }, [dataClient.id_establishment])
     
     return (
         <InfoReservation>
@@ -305,7 +298,7 @@ const InfoReserve = () => {
                     background={cancelColor}
                     children="Fechar Caixa"
                     altura={heightButton}
-                    aoPressionar={() => {}}
+                    aoPressionar={() => setModalFecharCx(true)}
                 />
             </GroupButton>
 
@@ -321,8 +314,7 @@ const InfoReserve = () => {
                     state={{
                         data, 
                         setData,
-                        reservations,
-                        setVehicles
+                        reservations
                     }}
                 />
             </Modal>
@@ -332,7 +324,7 @@ const InfoReserve = () => {
                 setOpen={setModalAbrirCx}
                 title={"Abrir Caixa"}
                 maxWidth={"52rem"}
-                funcao={verificarSeEstaAberto}
+                funcao={abrirCaixa}
                 isLoading={loading}
             >
                 <Line textcolor={neutralColor}>Deseja abrir caixa agora?</Line>

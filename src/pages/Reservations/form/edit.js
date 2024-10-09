@@ -5,7 +5,13 @@ import { useEffect, useState } from "react"
 const EditModal = (props) => {
 
     const { neutralColor, primaryColor } = theme
-    const { selectedClient, setSelectedClient, setStatus } = props.states
+    const { 
+        selectedClient, 
+        setSelectedClient, 
+        setStatus,
+        dateTime,
+        setDateTime
+    } = props.states
 
     const reservaNaoParko = selectedClient.parko_app === 0
     const reservaPendente = selectedClient.status === "Pendente"
@@ -88,6 +94,7 @@ const EditModal = (props) => {
                     placeholder="(xx) xxxxx-xxxx"
                     value={selectedClient.tel}
                     disabled
+                    largura={"219px"}
                 />
             </DivInput>
             <DivInput>
@@ -150,12 +157,12 @@ const EditModal = (props) => {
             </DivInput>
             <DivInput>
                 <Label textcolor={neutralColor}>Hora de Saída</Label>
-                <Input 
+                <Input
                     type="datetime-local"
-                    bordercolor={primaryColor} 
+                    bordercolor={primaryColor}
                     largura={"245px"}
-                    value={selectedClient.hora_saida}
-                    onChange={e => setSelectedClient({ ...selectedClient, hora_saida: e.target.value })}
+                    value={dateTime}
+                    onChange={e => setDateTime(e.target.value)}
                     min={finalFormating}
                 />
             </DivInput>

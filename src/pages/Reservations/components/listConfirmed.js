@@ -46,6 +46,11 @@ const ListConfirmedReserve = (props) => {
         return formatCurrency(item.value, 'BRL')
     }
 
+    const mapDateTime = (item) => {
+        const dataDaReserva = new Date(`${item.data_entrada}, ${item.hora_entrada}`)
+        return `${dataDaReserva.toLocaleDateString()}, ${dataDaReserva.toLocaleTimeString()}`
+    }
+
     useEffect(() => {
         listReservations(dataClient.id_establishment)
     }, [filterReserv, reservations])
@@ -73,7 +78,7 @@ const ListConfirmedReserve = (props) => {
                             <ItemList>{item.name}</ItemList>
                             <ItemList>{item.name_vehicle}</ItemList>
                             <ItemList>{item.license_plate}</ItemList>
-                            <ItemList>{item.data_entrada}, {item.hora_entrada}</ItemList>
+                            <ItemList>{mapDateTime(item)}</ItemList>
                             <ItemList>{mapValue(item)}</ItemList>
                         </ElementList>
                     </ListBody>

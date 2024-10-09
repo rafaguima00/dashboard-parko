@@ -9,10 +9,12 @@ import {
 import avatar from "../../../assets/avatar.png"
 import { theme } from "../../../theme/theme"
 import { formatCurrency } from "../../../services/formatCurrency"
+import { useEffect } from "react"
+import api from "../../../services/api/server"
 
 const SummaryContent = (props) => {
 
-    const { dataClient } = useUser()
+    const { dataClient, caixaAberto, setCaixaAberto } = useUser()
     const { email, colaborator } = dataClient
     const { 
         valoresTotal, 
@@ -22,6 +24,22 @@ const SummaryContent = (props) => {
 
     const { cancelColor, neutralColor, primaryColor } = theme
 
+    async function verificarCaixa() {
+        await api.get(`/abertura_caixa/parking/${dataClient.id_establishment}`)
+        .then(res => {
+            setCaixaAberto(res.data[res.data.length - 1])
+        })
+        .catch(e => {
+            console.log(e)
+        })
+    }
+
+    useEffect(() => {
+        if(dataClient.id_establishment) {
+            verificarCaixa()
+        }
+    }, [caixaAberto, dataClient.id_establishment])
+
     return (
         <Summary>
             <Header>
@@ -29,8 +47,14 @@ const SummaryContent = (props) => {
                 <div>
                     <Pg><strong>Responsável: </strong>{colaborator}</Pg>
                     <Pg><strong>E-mail: </strong>{email}</Pg>
-                    <Pg><strong>Abertura do caixa: </strong>{/* data e hora */}</Pg>
-                    <Pg><strong>Fechamento do caixa: </strong>{/* data e hora */}</Pg>
+                    <Pg>
+                        <strong>Abertura do caixa: </strong>
+                        {`${caixaAberto?.data_abertura ?? ""}, ${caixaAberto?.hora_abertura ?? ""}`}
+                    </Pg>
+                    <Pg>
+                        <strong>Fechamento do caixa: </strong>
+                        {`${caixaAberto?.data_fechamento ?? ""}, ${caixaAberto?.hora_fechamento ?? ""}`}
+                    </Pg>
                     <Pg><strong>Valor da abertura (dinheiro): </strong>{formatCurrency(0, 'BRL')}</Pg>
                     <Pg><strong>Valor do fechamento (dinheiro): </strong>{formatCurrency(0, 'BRL')}</Pg>
                 </div>

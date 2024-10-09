@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import { useUser } from "../../../context/globalContext";
+import { Link } from "react-router-dom"
+import { useState } from "react"
+import { useUser } from "../../../context/globalContext"
 import {
     SideBar,
     Image,
@@ -13,24 +13,24 @@ import {
     Bottom,
     Name,
     Select
-} from "../style";
-import avatar from "../../../assets/avatar.png";
-import logo from "../../../assets/logo-parko.png";
-import { AiOutlineHome } from "react-icons/ai";
-import { LiaCarSideSolid } from "react-icons/lia";
-import { CgNotes } from "react-icons/cg";
-import { RiMoneyDollarCircleLine, RiSettings5Line } from "react-icons/ri";
-import { FiStar } from "react-icons/fi";
-import { theme } from "../../../theme/theme";
+} from "../style"
+import avatar from "../../../assets/avatar.png"
+import logo from "../../../assets/logo-parko.png"
+import { AiOutlineHome } from "react-icons/ai"
+import { LiaCarSideSolid } from "react-icons/lia"
+import { CgNotes } from "react-icons/cg"
+import { RiMoneyDollarCircleLine, RiSettings5Line } from "react-icons/ri"
+import { FiStar } from "react-icons/fi"
+import { theme } from "../../../theme/theme"
 
 const NavigationBar = (props) => {
 
-    const { dataClient } = useUser();
-    const { colaborator, type_colaborator } = dataClient;
-    const { primaryColor, neutralColor } = theme;
-    const { styles, textSelected, handleLogout } = props;
+    const { dataClient } = useUser()
+    const { colaborator, type_colaborator } = dataClient
+    const { primaryColor, neutralColor } = theme
+    const { styles, textSelected, handleLogout } = props
 
-    const [linkSeletected, setLinkSelected] = useState(1);
+    const [linkSeletected, setLinkSelected] = useState(1)
 
     const links = [
         {
@@ -75,11 +75,11 @@ const NavigationBar = (props) => {
             text: "Avaliações",
             icon: FiStar
         }
-    ];
+    ]
 
     const handleSelectItem = (id) => {
         setLinkSelected(id)
-    };
+    }
 
     return (
         <SideBar background={primaryColor}>
@@ -128,4 +128,4 @@ const NavigationBar = (props) => {
     )
 }
 
-export default NavigationBar;
+export default NavigationBar

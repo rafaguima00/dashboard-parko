@@ -32,11 +32,6 @@ const TimingReserve = (props) => {
         const tempoAtual = new Date().getTime()
         const diferenca = tempoAtual - converterData
 
-        if(converterData > tempoAtual) {
-            setTempo("00:00:00")
-            return
-        }
-
         // Verificar se a diferença é válida
         if (isNaN(diferenca) || diferenca < 0) return
 

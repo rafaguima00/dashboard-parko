@@ -13,6 +13,11 @@ const RenderItem = (props) => {
         valuesDebt
     } = props
 
+    const mapDateTime = (item) => {
+        const dataDaReserva = new Date(`${item.data_entrada}, ${item.hora_entrada}`)
+        return `${dataDaReserva.toLocaleDateString()}, ${dataDaReserva.toLocaleTimeString()}`
+    }
+
     return <>
         {clicked === item.id ? 
             <DividaCliente 
@@ -30,7 +35,7 @@ const RenderItem = (props) => {
                 <ItemList>{item.name}</ItemList>
                 <ItemList>{item.name_vehicle}</ItemList>
                 <ItemList>{item.license_plate}</ItemList>
-                <ItemList>{item.data_entrada}, {item.hora_entrada}</ItemList>
+                <ItemList>{mapDateTime(item)}</ItemList>
                 <ItemList>{formatCurrency(item.value, 'BRL')}</ItemList>
                 <ItemList>{firstWord.split(" ")[0]}</ItemList>
             </ElementList>
