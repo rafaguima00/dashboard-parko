@@ -79,7 +79,7 @@ const ListReserve = (props) => {
                 <Text>Caixa</Text>
             </ListHeader>
             {
-                reservaFechada.length !== 0 ? 
+                reservaFechada.length > 0 ? 
                 reservaFechada.map((item) => (
                     <ListBody key={item.id}>
                         <RenderItem 

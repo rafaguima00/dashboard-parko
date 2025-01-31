@@ -3,13 +3,13 @@ import {
     InputGroup,
     InputSearch,
     Icon
-} from "../style";
-import { FiDownload, FiPlus } from "react-icons/fi";
-import Top from "../../../components/Top";
+} from "../style"
+import { FiDownload, FiPlus } from "react-icons/fi"
+import Top from "../../../components/Top"
 
 const TopContent = (props) => {
 
-    const { text, setText } = props.states;
+    const { text, setText } = props.states
 
     return (
         <TopItem>
@@ -32,4 +32,4 @@ const TopContent = (props) => {
     )
 }
 
-export default TopContent;
+export default TopContent

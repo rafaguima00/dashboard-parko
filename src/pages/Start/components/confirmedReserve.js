@@ -15,6 +15,7 @@ const ConfirmedReserve = (props) => {
     const { reservations, park, dataClient } = useUser()
     const { primaryColor } = theme
     const { setLoading } = props.states
+    const { listReservations } = props
 
     const navigate = useNavigate()
 
@@ -48,6 +49,7 @@ const ConfirmedReserve = (props) => {
             .then(() => {
                 setLoading(false)
                 vagasOcupadas(dataClient.id_establishment)
+                listReservations()
             })
             .then(() => {
                 return navigate("/checkout")

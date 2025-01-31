@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useUser } from "../../../context/globalContext"
 import Modal from "../../../components/Modal"
 import { 
@@ -11,6 +11,7 @@ import {
 import Confirmation from "../form/confirmation"
 import EmptyMessage from "../../../components/EmptyMessage"
 import { theme } from "../../../theme/theme"
+import api from "../../../services/api/server"
 
 const RefusedReserve = () => {
 
@@ -19,41 +20,50 @@ const RefusedReserve = () => {
     const { reservations } = useUser()
     const { primaryColor } = theme
 
-    const [otp, setOtp] = useState("");
-    const [numeroSorteado, setNumeroSorteado] = useState(null);
+    const [otp, setOtp] = useState("")
+    const [idReservation, setIdReservation] = useState(null)
 
-    function sortearNumero() {
-        const numero = Math.floor(Math.random() * 10000);
-
-        if (numero >= 0 && numero < 10){
-            return "000" + numero
-        }
-
-        if (numero >= 10 && numero < 100){
-            return "00" + numero
-        }
-
-        if (numero >= 100 && numero < 1000){
-            return "0" + numero
-        }
-
-        return numero
+    function openModal(item) {
+        setIdReservation(item)
+        setOpen(true)
     }
 
-    useEffect(() => {
-        const numero = sortearNumero();
-        setNumeroSorteado(numero);
-    }, []);
+    async function updateStatusReservation(reserv) {
+        const { id, data_entrada, hora_entrada, data_saida, hora_saida, value, id_vehicle } = reserv
 
-    const confirmCode = e => {
-        e.preventDefault();
-        
-        if (numeroSorteado === parseInt(otp)) {
-            console.log(true);
-        } else {
-            console.log(false);
-        }
-    };
+        await api.put(`/reservations/${id}`, { 
+            data_entrada: data_entrada, 
+            hora_entrada: hora_entrada, 
+            data_saida: data_saida, 
+            hora_saida: hora_saida, 
+            value: value, 
+            status: 4, 
+            id_vehicle: id_vehicle 
+        })
+        .then(() => {
+            setOtp("")
+            setOpen(false)
+            alert("Reserva concluída")
+        })
+        .catch(e => {
+            alert(e.response.data.message)
+        })
+    }
+
+    async function verifyReservation(e) {
+        e.preventDefault()
+
+        await api.post("/verify-code", {
+            id_reservation: idReservation.id, 
+            code: Number(otp)
+        })
+        .then(() => {
+            updateStatusReservation(idReservation)
+        })
+        .catch(e => {
+            alert(e.response.data.message)
+        })
+    }
 
     return (
         <>
@@ -63,7 +73,7 @@ const RefusedReserve = () => {
                 <EmptyMessage>Nenhuma reserva recusada neste estacionamento.</EmptyMessage> :
                 reservations.filter(item => item.status === "Recusado").map(item => (
                     <ElementList key={item.id}>
-                        <InputPin onClick={() => setOpen(true)}>PIN</InputPin>
+                        <InputPin onClick={() => openModal(item)}>PIN</InputPin>
                         <ItemList>{item.hora_entrada}</ItemList>
                         <ItemList>{item.name_vehicle}</ItemList>
                         <ItemList>{item.license_plate}</ItemList>
@@ -77,7 +87,7 @@ const RefusedReserve = () => {
                 maxWidth={"30rem"}
                 isOpen={open}
                 setOpen={setOpen}
-                funcao={confirmCode}
+                funcao={e => verifyReservation(e)}
             >
                 <Confirmation otp={otp} setOtp={setOtp} />
             </Modal>

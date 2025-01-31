@@ -47,7 +47,8 @@ const InfoReserve = () => {
     const { 
         dataClient, 
         park, 
-        reservations, 
+        reservations,
+        setReservations, 
         priceTable,
         setCaixaAberto,
         caixaAberto
@@ -94,12 +95,10 @@ const InfoReserve = () => {
         })
         .then(() => {
             verifyUsers()
-            setData({})
         })
         .catch(e => {
-            console.log(e.response.data.message)
+            console.log(e)
             setCarregando(false)
-            setData({})
         })
     }
 
@@ -114,12 +113,10 @@ const InfoReserve = () => {
         })
         .then(() => {
             verifyVehicles(idUser)
-            setData({})
         })
         .catch(e => {
-            console.log(e.response.data.message)
+            console.log(e)
             setCarregando(false)
-            setData({})
         })
     }
 
@@ -135,18 +132,18 @@ const InfoReserve = () => {
             id_costumer: idUser,
             id_vehicle: idVehicle.id, 
             id_establishment: dataClient.id_establishment,
-            parko_app: 0
+            parko_app: 0,
+            status_reservation: 1
         })
-        .then(() => {
+        .then(res => {
             setCarregando(false)
             setOpen(false)
             alert("Reserva realizada com sucesso")
-            setData({})
+            setReservations([ ...reservations, res.data ])
         })
         .catch(e => {
-            console.log(e.response.data.message)
+            console.log(e)
             setCarregando(false)
-            setData({})
         })
     }
 
@@ -157,8 +154,6 @@ const InfoReserve = () => {
                 setCaixaAberto(res.data[res.data.length - 1])
                 return
             }
-
-            console.log('Nenhum dado encontrado')
         })
         .catch(e => {
             console.log(e)
@@ -180,7 +175,7 @@ const InfoReserve = () => {
         await api.post("/abertura_caixa", { 
             id_establishment: dataClient.id_establishment,
             id_colaborator: dataClient.id,
-            value: caixaAberto?.value
+            value: caixaAberto?.value ?? 0
         })
         .then(() => {
             alert("Caixa aberto")
@@ -226,10 +221,8 @@ const InfoReserve = () => {
     const quantidadeVagas = () => {
         let vagas_disponiveis = (park?.numero_vagas ?? 0) - (park?.vagas_ocupadas ?? 0)
 
-        return { vagas_disponiveis }
+        return `${vagas_disponiveis}/${park?.numero_vagas ?? 0}`
     }
-
-    const { vagas_disponiveis } = quantidadeVagas()
 
     useEffect(() => {
         if (dataClient.id_establishment) {
@@ -243,7 +236,7 @@ const InfoReserve = () => {
                 <Info>
                     <span>
                         <TitleLine>
-                            {vagas_disponiveis}/{park?.numero_vagas ?? 0}
+                            {quantidadeVagas()}
                         </TitleLine>
                         <Subtitle style={{ color: "#f4f4f4" }}>Vagas disponíveis</Subtitle>
                     </span>

@@ -47,13 +47,12 @@ const ListConfirmedReserve = (props) => {
     }
 
     const mapDateTime = (item) => {
-        const dataDaReserva = new Date(`${item.data_entrada}, ${item.hora_entrada}`)
-        return `${dataDaReserva.toLocaleDateString()}, ${dataDaReserva.toLocaleTimeString()}`
+        return `${item.data_entrada}, ${item.hora_entrada}`
     }
 
     useEffect(() => {
         listReservations(dataClient.id_establishment)
-    }, [filterReserv, reservations])
+    }, [])
 
     return (
         <List>

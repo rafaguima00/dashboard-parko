@@ -9,7 +9,7 @@ import ReadApi from "../../services/readData"
 
 const Ratings = () => {
 
-    const { ratings, setRatings, dataClient, setDataClient } = useUser()
+    const { ratings, setRatings, dataClient, setDataClient, park } = useUser()
     const { loadData, listColaborators, listReservations } = ReadApi()
 
     const recuperarDados = async () => {
@@ -39,8 +39,6 @@ const Ratings = () => {
 
     useEffect(() => {
         loadData(dataClient.id_establishment)
-        listColaborators(dataClient.id_establishment)
-        listReservations(dataClient.id_establishment)
     }, [dataClient])
 
     return (

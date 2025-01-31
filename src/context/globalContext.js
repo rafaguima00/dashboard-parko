@@ -19,6 +19,7 @@ export const InfoProvider = ({ children }) => {
     const [aportes, setAportes] = useState([])
     const [retiradas, setRetiradas] = useState([])
     const [caixaAberto, setCaixaAberto] = useState({})
+    const [requests, setRequests] = useState([])
 
     const value = {
         dataClient, 
@@ -50,7 +51,9 @@ export const InfoProvider = ({ children }) => {
         tabelaFixa,
         setTabelaFixa,
         caixaAberto,
-        setCaixaAberto
+        setCaixaAberto,
+        requests,
+        setRequests
     }
 
     return (

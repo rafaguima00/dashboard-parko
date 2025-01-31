@@ -1,4 +1,7 @@
 import styled from "styled-components"
+import { theme } from "../../theme/theme"
+
+const { neutralColor } = theme
 
 export const Container = styled.div`
     margin-top: 2rem;
@@ -76,10 +79,8 @@ export const ListBody = styled.div`
     display: flex;
     flex-direction: column;
     gap: .8rem;
-    max-height: 23rem;
+    max-height: 40rem;
     overflow-y: auto;
-    scrollbar-width: 0.5rem;
-    scrollbar-color: #e7e7e7 #7c7c7c;
     padding-top: 6px;
 
     &::-webkit-scrollbar {
@@ -87,13 +88,12 @@ export const ListBody = styled.div`
     }
 
     &::-webkit-scrollbar-track {
-        background: #e7e7e7;
-        border-radius: 0.8rem;
+        background: transparent;
     }
 
     &::-webkit-scrollbar-thumb {
-        background: #7c7c7c;
-        border-radius: 0.8rem;
+        background: ${neutralColor};
+        border-radius: 3px;
     }
 `
 

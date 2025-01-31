@@ -23,7 +23,7 @@ ChartJS.register(ArcElement, BarElement, CategoryScale, LinearScale, Title)
 const Checkout = () => {
 
     const { primaryColor, neutralColor } = theme
-    const { reservations, dataClient, aportes, retiradas } = useUser()
+    const { reservations, dataClient, aportes, retiradas, park } = useUser()
     const { readAportes, readRetiradas, listReservations, loadData } = ReadApi()
     const { converterData } = converter()
 
@@ -47,10 +47,16 @@ const Checkout = () => {
         lista: converterData
     })
 
+    const formatoPadrao = () => {
+        const formatar = filtrarPorData.lista.split("-")
+        return `${formatar[2]}/${formatar[1]}/${formatar[0]}`
+    }
+
     const reservaFechada = reservations.filter(
         item => item.status === "Finalizado" &&
-        item.data_saida === filtrarPorData.lista
+        item.data_entrada === formatoPadrao()
     )
+
     const filterReserv = reservaFechada.filter(
         item => item.name.toLowerCase().includes(text.toLowerCase()) ||
         item.license_plate.toLowerCase().includes(text.toLowerCase())
@@ -132,8 +138,13 @@ const Checkout = () => {
 
     useEffect(() => {
         loadData(dataClient.id_establishment)
-        listReservations(dataClient.id_establishment)
     }, [dataClient])
+
+    useEffect(() => {
+        if(park) {
+            listReservations(dataClient.id_establishment)
+        }
+    }, [park])
 
     useEffect(() => {
         calcularValorPorEstacionamento(reservations, dataClient.id_establishment)

@@ -1,34 +1,39 @@
-import { Container } from "./style";
-import Establishment from "./components/establishment";
-import Colaborators from "./components/colaborators";
-import PriceTable from "./components/priceTable";
-import OpeningHours from "./components/openingHours";
-import Top from "../../components/Top";
-import { useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
-import { useUser } from "../../context/globalContext";
-import ReadApi from "../../services/readData";
+import { Container } from "./style"
+import Establishment from "./components/establishment"
+import Colaborators from "./components/colaborators"
+import PriceTable from "./components/priceTable"
+import OpeningHours from "./components/openingHours"
+import Top from "../../components/Top"
+import { useEffect } from "react"
+import { jwtDecode } from "jwt-decode"
+import { useUser } from "../../context/globalContext"
+import ReadApi from "../../services/readData"
  
 const Settings = () => {
 
-    const { setDataClient, dataClient, park, colaborators } = useUser();
-    const { listColaborators, listReservations, loadData } = ReadApi();
+    const { setDataClient, dataClient, park, colaborators } = useUser()
+    const { listColaborators, listReservations, loadData } = ReadApi()
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token")
 
         if(token) {
-            const decoded = jwtDecode(token);
+            const decoded = jwtDecode(token)
             setDataClient(decoded.user)
         }
-    }, []);
+    }, [])
 
     useEffect(() => {
-        loadData(dataClient.id_establishment);
-        listColaborators(dataClient.id_establishment);
-        listReservations(dataClient.id_establishment);
-    }, [dataClient, park, colaborators]);
+        loadData(dataClient.id_establishment)
+    }, [dataClient])
     
+    useEffect(() => {
+        if(park) {
+            listColaborators(dataClient.id_establishment)
+            listReservations(dataClient.id_establishment)
+        }
+    }, [park])
+
     return (
         <Container>
             <Top children="Meu estabelecimento" gridcolumn={1} gridrow={1} font={19}/>
@@ -43,4 +48,4 @@ const Settings = () => {
     )
 }
 
-export default Settings;
+export default Settings

@@ -1,4 +1,31 @@
-import styled from "styled-components";
+import styled from "styled-components"
+import { theme } from "../../theme/theme"
+
+const { neutralColor, primaryColor } = theme
+
+export const style = { 
+    textDecoration: "none",
+    display: "flex",
+    flexDirection: "row",
+    gap: 16,
+    padding: 16,
+    fontWeight: 400
+}
+
+export const styleSelected = {
+    textDecoration: "none",
+    display: "flex",
+    flexDirection: "row",
+    gap: 16,
+    backgroundColor: "#f4f4f4",
+    padding: 16,
+    borderRadius: 12,
+    fontWeight: 400
+}
+
+export const textSelected = {
+    color: "#545454"
+}
 
 export const Container = styled.div`
     background-color: #f4f4f4;
@@ -140,4 +167,26 @@ export const Logout = styled.button`
     &:hover {
         cursor: pointer;
     }
+`
+
+export const DataName = styled.p`
+    color: ${neutralColor};
+`
+
+export const RequestLength = styled.p`
+    color: #fff;
+    font-size: 9px;
+`
+
+export const Span = styled.div`
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: ${primaryColor};
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `

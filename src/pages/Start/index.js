@@ -9,13 +9,14 @@ import ReservationStatus from "./components/reserveStatus"
 import InfoReserve from "./components/infoReservation"
 import { jwtDecode } from "jwt-decode"
 import ReadApi from "../../services/readData"
+import api from "../../services/api/server"
 
 const Start = () => {
 
-    const { setDataClient, dataClient, reservations, park } = useUser()
+    const { setDataClient, dataClient, setReservations, park } = useUser()
     const { colaborator } = dataClient
 
-    const { listReservations, loadData, listColaborators, getPriceTable } = ReadApi()
+    const { loadData, listColaborators, getPriceTable } = ReadApi()
 
     const [selected, setSelected] = useState(1)
 
@@ -34,6 +35,16 @@ const Start = () => {
         }
     ]
 
+    async function listReservations() {
+        await api.get(`/reservations/parking/${dataClient.id_establishment}`)
+        .then(res => {
+            setReservations(res.data)
+        })
+        .catch(e => {
+            console.log(e)
+        })
+    }
+
     useEffect(() => {
         const token = localStorage.getItem("token")
 
@@ -45,10 +56,19 @@ const Start = () => {
 
     useEffect(() => {
         loadData(dataClient.id_establishment)
-        listColaborators(dataClient.id_establishment)
-        listReservations(dataClient.id_establishment)
-        getPriceTable(dataClient.id_establishment)
-    }, [dataClient, reservations, park])
+    }, [dataClient])
+
+    useEffect(() => {
+        if(park) {
+            listColaborators(dataClient.id_establishment)
+            getPriceTable(dataClient.id_establishment)
+            listReservations()
+
+            const intervalo = setInterval(listReservations, 5000)
+
+            return () => clearInterval(intervalo)
+        }
+    }, [park])
 
     return (
         <Container>
@@ -57,6 +77,7 @@ const Start = () => {
             </Welcome>
             <Grid>
                 <ReservationStatus 
+                    listReservations={listReservations}
                     btReservations={btReservations}
                     selected={selected}
                     setSelected={setSelected}

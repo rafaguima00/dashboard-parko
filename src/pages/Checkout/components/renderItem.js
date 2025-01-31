@@ -14,8 +14,20 @@ const RenderItem = (props) => {
     } = props
 
     const mapDateTime = (item) => {
-        const dataDaReserva = new Date(`${item.data_entrada}, ${item.hora_entrada}`)
-        return `${dataDaReserva.toLocaleDateString()}, ${dataDaReserva.toLocaleTimeString()}`
+
+        if(item.data_entrada === "" && item.hora_entrada === "") {
+            return ""
+        }
+        
+        if(item.data_entrada === "") {
+            return `dd/mm/yyyy, ${item.hora_entrada}`
+        }
+
+        if(item.hora_entrada === "") {
+            return `${item.data_entrada}, 00:00:00`
+        }
+
+        return `${item.data_entrada}, ${item.hora_entrada}`
     }
 
     return <>

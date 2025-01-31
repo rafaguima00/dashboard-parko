@@ -105,7 +105,7 @@ export const List = styled.div`
     grid-column: 1;
     border-radius: 20px;
     padding: ${props => props.padding ? props.padding : "1rem"};
-    overflow-y: scroll;
+    overflow-y: auto;
     box-sizing: border-box;
 
     &:last-child {
@@ -222,7 +222,7 @@ export const ElementList = styled.button`
     border-radius: 8px;
     border: none;
     padding: 8px 0;
-    height: 2.2rem;
+    height: 2.6rem;
 
     &:hover {
         cursor: pointer;

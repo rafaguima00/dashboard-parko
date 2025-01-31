@@ -13,11 +13,9 @@ import camera from "../../../assets/camera.png"
 import { theme } from "../../../theme/theme"
 import { useNavigate } from "react-router-dom"
 import { useUser } from "../../../context/globalContext"
-import ReadApi from "../../../services/readData"
 
 const Establishment = () => {
 
-    const { loadData } = ReadApi()
     const { park, dataClient } = useUser()
     const { type_colaborator } = dataClient
     const { neutralColor } = theme

@@ -1,7 +1,13 @@
 import axios from "axios"
 
-const api = axios.create({
-    baseURL: "https://parko-server.vercel.app/api/"
-})
+let api
+
+if (process.env.REACT_APP_URL_API) {
+    api = axios.create({
+        baseURL: process.env.REACT_APP_URL_API,
+    })
+} else {
+    console.error("⚠️ Variável REACT_APP_URL_API não definida!")
+}
 
 export default api

@@ -1,0 +1,22 @@
+.notification-card {
+    position: absolute;
+    top: 20px;
+    right: 70px;
+    background: white;
+    width: 300px;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+
+.notification-card p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+  
+.notification-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}

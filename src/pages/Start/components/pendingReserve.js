@@ -17,6 +17,7 @@ const PendingReserve = (props) => {
     const { reservations, park, dataClient } = useUser()
     const { primaryColor, neutralColor } = theme
     const { setOpen, open, setOpenRefuse, openRefuse } = props.states
+    const { listReservations } = props
 
     const [user, setUser] = useState("")
     const [loading, setLoading] = useState(false)
@@ -66,6 +67,7 @@ const PendingReserve = (props) => {
             id_vehicle: id_vehicle
         })
         .then(() => {
+            listReservations()
             vagasOcupadas(dataClient.id_establishment)
             alert("Reserva confirmada com sucesso.")
         })
@@ -105,6 +107,7 @@ const PendingReserve = (props) => {
             id_vehicle: id_vehicle
         })
         .then(() => {
+            listReservations()
             alert("Reserva recusada.")
         })
         .catch(e => {

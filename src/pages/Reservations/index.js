@@ -271,8 +271,11 @@ const Reservations = () => {
     
     useEffect(() => {
         loadData(dataClient.id_establishment)
-        listColaborators(dataClient.id_establishment)
-        listReservations(dataClient.id_establishment)
+
+        if(dataClient.id) {
+            listColaborators(dataClient.id_establishment)
+            listReservations(dataClient.id_establishment)
+        }
     }, [dataClient])
 
     useEffect(() => {
