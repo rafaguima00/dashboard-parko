@@ -31,22 +31,47 @@ const EditModal = (props) => {
     const [disabled, setDisabled] = useState(false)
 
     const verificarAtividade = () => {
+        const { data_saida, hora_saida } = selectedClient
+
         //data e hora de entrada editável
-        if(
-            (reservaNaoParko && reservaPendente) ||
-            (reservaNaoParko && reservaRecusada)
-        ) {
+        if(reservaNaoParko && reservaPendente) {
             setDisabled(false)
         }
 
         //data e hora de entrada não editável
-        if(!reservaNaoParko || reservaConfirmada) {
+        if(!reservaNaoParko || reservaConfirmada || reservaRecusada) {
             setDisabled(true)
+        }
+
+        if(!reservaNaoParko && hora_saida) {
+            const separarData = data_saida.split("/")
+            const separarHora = hora_saida.split(":")
+
+            setDateTime(`${separarData[2]}-${separarData[1]}-${separarData[0]}T${separarHora[0]}:${separarHora[1]}`)
+        }
+    }
+
+    function formatarDataHoraParaDate() {
+        let dataStr = selectedClient?.data_entrada
+
+        if (!dataStr) return null
+    
+        // Detecta se o formato é dd/mm/yyyy
+        if (dataStr.includes('/')) {
+            const partes = dataStr.split('/')
+            if (partes.length !== 3) return null
+    
+            const [dia, mes, ano] = partes
+            dataStr = `${ano}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`
+
+            setSelectedClient({ ...selectedClient, data_entrada: dataStr })
         }
     }
 
     useEffect(() => {
         verificarAtividade()
+
+        console.log(selectedClient.data_saida, selectedClient.hora_saida)
     }, [selectedClient])
 
     useEffect(() => {
@@ -62,7 +87,13 @@ const EditModal = (props) => {
                 break;
             default : setStatus(0)
         }
+
+        formatarDataHoraParaDate()
     }, [])
+
+    useEffect(() => {
+        console.log(dateTime)
+    }, [dateTime])
 
     return (
         <Form>

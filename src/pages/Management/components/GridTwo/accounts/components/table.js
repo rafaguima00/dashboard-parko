@@ -10,6 +10,7 @@ import {
     Text
 } from "../style"
 import api from "../../../../../../services/api/server"
+import EmptyMessage from "../../../../../../components/EmptyMessage"
 
 const TableAccount = (props) => {
 
@@ -21,9 +22,9 @@ const TableAccount = (props) => {
         .catch(e => console.log(e))
     }
 
-    const mapDate = (item) => {
-        const converter = new Date(item.date_created)
-        return converter.toLocaleDateString()
+    const mapDate = (dateCreated) => {
+        const formatData = dateCreated.split(",")
+        return formatData[0]
     }
 
     return (
@@ -36,22 +37,26 @@ const TableAccount = (props) => {
                 <Text textcolor="#bababa">Ação</Text>
             </ListHeader>
             <ListBody>
-                {filterAccounts.map(item => (
-                    <ElementList>
-                        <Text textcolor="#7c7c7c">{item.category}</Text>
-                        <Text textcolor="#7c7c7c">{mapDate(item)}</Text>
-                        <Text textcolor="#7c7c7c">{item.desc_item}</Text>
-                        <Text textcolor="#7c7c7c">{formatCurrency(item.value, 'BRL')}</Text>
-                        <GroupButton marginright={".5rem"} largura={"100%"} background="#fff">
-                            <button>
-                                <FiEdit color={neutralColor} size={19}/>
-                            </button>
-                            <button onClick={() => handleDeleteItem(item.id)}>
-                                <AiOutlineDelete color={neutralColor} size={19}/>
-                            </button>
-                        </GroupButton> 
-                    </ElementList>
-                ))}
+                {
+                    filterAccounts.length > 0 ?
+                    filterAccounts.map(item => (
+                        <ElementList>
+                            <Text textcolor="#7c7c7c">{item.category}</Text>
+                            <Text textcolor="#7c7c7c">{mapDate(item.date_created)}</Text>
+                            <Text textcolor="#7c7c7c">{item.desc_item}</Text>
+                            <Text textcolor="#7c7c7c">{formatCurrency(item.value, 'BRL')}</Text>
+                            <GroupButton marginright={".5rem"} largura={"100%"} background="#fff">
+                                <button>
+                                    <FiEdit color={neutralColor} size={19}/>
+                                </button>
+                                <button onClick={() => handleDeleteItem(item.id)}>
+                                    <AiOutlineDelete color={neutralColor} size={19}/>
+                                </button>
+                            </GroupButton> 
+                        </ElementList>
+                    )) :
+                    <EmptyMessage>Sem movimentações financeiras</EmptyMessage>
+                }
             </ListBody>
         </List>
     )

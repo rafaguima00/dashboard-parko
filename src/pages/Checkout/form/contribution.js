@@ -6,15 +6,34 @@ const Contribution = ({ primaryColor, neutralColor, state, messageError }) => {
     const { novoAporte, setNovoAporte } = state
     const { cancelColor } = theme
 
+    const formatNumber = (num) => {
+        if (!num) return ""
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(num)
+    }
+  
+    const unformatCurrency = (num) => {
+        return num.replace(/[^\d]/g, "").slice(0, 6)
+    }
+  
+    const handleChange = (e) => {
+        const rawValue = e.target.value
+        const numericValue = unformatCurrency(rawValue) / 100
+        
+        setNovoAporte({ ...novoAporte, value: formatNumber(numericValue) })
+    }
+
     return (
         <Form>
             <DivInput largura={"45%"}>
                 <Label textcolor={neutralColor}>Valor (R$)</Label>
                 <InputNumber 
-                    type="number" 
+                    type="text"
                     bordercolor={primaryColor} 
                     value={novoAporte.value}
-                    onChange={e => setNovoAporte({ ...novoAporte, value: e.target.value })}
+                    onChange={e => handleChange(e)}
                     required
                 />
                 <Label textcolor={cancelColor}>{messageError}</Label>

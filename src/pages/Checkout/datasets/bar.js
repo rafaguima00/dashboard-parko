@@ -1,52 +1,125 @@
-import { theme } from "../../../theme/theme";
+import { useEffect, useState } from "react"
+import { theme } from "../../../theme/theme"
+import { useUser } from "../../../context/globalContext"
+import api from "../../../services/api/server"
 
-const { primaryColor } = theme;
+const DatasetBar = () => {
 
-const dataLabel = [0, 0, 0, 0];
+  const { resumoVendas, setResumoVendas, dataClient, filtrarPorData } = useUser()
 
-const maxIndex = dataLabel.indexOf(Math.max(...dataLabel));
+  const [dataLabel, setDataLabel] = useState([])
 
-const backgroundColors = dataLabel.map((_value, index) => {
-  return index === maxIndex ? primaryColor : "#c4c4c4";
-});
+  useEffect(() => {
+    async function resumoDeVendas() {
+        await api.get(`/payment/${dataClient.id_establishment}`)
+        .then(res => {
+            setResumoVendas(res.data)
+        })
+        .catch(e => {
+            setResumoVendas(`Erro ao carregar resumo de vendas: ${e}`)
+        })
+    }
 
-export const dataBar = {
-  labels: ["Crédito", "Débito", "Pix", "Dinheiro"],
-  datasets: [
-    {
-      label: "Formas de Pagamento",
-      data: dataLabel,
-      backgroundColor: backgroundColors,
-      indexAxis: "y",
-      borderRadius: 150,
+    resumoDeVendas()
+  }, [])
+
+  useEffect(() => {
+    if(resumoVendas.length > 0) {
+      carregarVendas()
+    }
+  }, [resumoVendas, filtrarPorData.resumo])
+
+  function carregarVendas() {
+      const filtrarDataDePgto = resumoVendas
+        .filter(item => item.data === filtrarPorData.resumo)
+
+      const totais = {
+        "credit_card": 0,
+        "debit_card": 0,
+        "pix": 0,
+        "money": 0
+      }
+
+      filtrarDataDePgto.forEach((item) => {
+          const tipo = item.payment_method?.toLowerCase()
+          const valor = Number(item.value) || 0
+
+          const formatarStringTipo = tipo === "debit-card" || tipo === "credit-card" ? 
+          tipo.replace("-", "_") : 
+          tipo
+          
+          totais[formatarStringTipo] += valor
+      })
+
+      const valores = [
+        totais.credit_card,
+        totais.debit_card,
+        totais.pix,
+        totais.money,
+      ]
+
+      setDataLabel(valores)
+  }
+
+  const { primaryColor } = theme
+
+  const maxIndex = dataLabel.indexOf(Math.max(...dataLabel))
+
+  const backgroundColors = dataLabel.map((_value, index) => {
+    return index === maxIndex ? primaryColor : "#c4c4c4"
+  })
+
+  const dataBar = {
+    labels: ["Crédito", "Débito", "Pix", "Dinheiro"],
+    datasets: [
+      {
+        label: "Forma de Pagamento",
+        data: dataLabel,
+        backgroundColor: backgroundColors,
+        indexAxis: "y",
+        borderRadius: 150
+      }
+    ]
+  }
+
+  const optionsBar = {
+    indexAxis: 'y',
+    scales: {
+      // x: { 
+      //   ticks: { 
+      //     mirror: true 
+      //   } 
+      // }
     },
-  ],
-};
-
-export const optionsBar = {
-  scales: {
-    xAxes: [{ ticks: { mirror: true } }],
-  },
-  plugins: {
-    title: {
-      display: true,
-      text: "Resumo de Vendas (R$)",
-      position: "left",
-      color: "#7d7d7d",
-      font: {
-        family: "sans-serif",
-        size: 12,
-        weight: "bold",
-        lineHeight: 1.2,
+    plugins: {
+      title: {
+        display: true,
+        text: "Resumo de Vendas (R$)",
+        position: "left",
+        color: "#7d7d7d",
+        font: {
+          family: "Roboto Flex",
+          size: 12,
+          weight: "bold",
+          lineHeight: 1.2,
+        }
       },
+      legend: {
+        display: false,
+      },
+      datalabels: {
+        display: false
+      }
     },
-    legend: {
-      display: false,
+    animation: {
+        duration: 100
     },
-    datalabels: {
-      color: "red",
-    },
-  },
-  responsive: true,
-  maintainAspectRatio: false,
-};
+    responsive: true,
+    maintainAspectRatio: false
+  }
+
+  return { dataBar, optionsBar }
+
+}
+
+export default DatasetBar

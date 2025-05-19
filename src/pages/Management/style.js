@@ -84,6 +84,21 @@ export const Div = styled.div`
     padding: 2rem 3rem .5rem;
     border-radius: 1rem;
     position: relative;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+        width: .25rem;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #e7e7e7;
+        border-radius: 0.8rem;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #7c7c7c;
+        border-radius: 0.8rem;
+    }
 `
 
 export const BlockQuote = styled.button`

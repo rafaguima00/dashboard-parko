@@ -32,6 +32,12 @@ const ContentForm = () => {
     const handleLogin = async (e) => {
         e.preventDefault()
 
+        if(dataClient.email === "" || dataClient.password === "") {
+            setError(true)
+            setMessageError("Preencha o campo vazio")
+            return
+        }
+
         setTitle(<Dots color={"#f4f4f4"} />)
 
         await api.post("/login", {
@@ -48,7 +54,7 @@ const ContentForm = () => {
         .catch(e => {
             setTitle("Login")
             setError(true)
-            setMessageError(e.response.data.error.message)
+            setMessageError(e)
         })
     }
 

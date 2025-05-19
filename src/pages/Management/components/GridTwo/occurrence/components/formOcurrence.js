@@ -1,8 +1,5 @@
 import { useUser } from "../../../../../../context/globalContext"
-import { 
-    FormArea, 
-    GroupButton
-} from "../style"
+import { FormArea, GroupButton } from "../style"
 import GlobalButton from "../../../../../../components/Button"
 import FormList from "./formList"
 import MissTicket from "../forms/missTicket"
@@ -11,18 +8,36 @@ import TheftHeritage from "../forms/theftHeritageItems"
 import api from "../../../../../../services/api/server"
 import { Bounce } from "react-activity"
 import "react-activity/dist/library.css"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { theme } from "../../../../../../theme/theme"
 
-const FormOcurrence = (props) => {
+const FormOcurrence = () => {
 
     const [loading, setLoading] = useState(false)
 
-    const { dataClient } = useUser()
+    const { 
+        dataClient, 
+        formActive, 
+        occurrenceItem, 
+        setOccurrenceItem, 
+        setFormActive,
+        setReservations,
+        reservations
+    } = useUser()
     const { id_establishment } = dataClient
-    const { cancelColor, greenColor, primaryColor } = props.colors
-    const { formActive, setFormActive, occurrenceItem, setOccurrenceItem } = props.state
+    const { cancelColor, greenColor, primaryColor } = theme
 
-    const handleSave = async (idOccurrence, e) => {
+    async function getReservations() {
+        await api.get(`/reservations/parking/${dataClient.id_establishment}`)
+        .then(res => {
+            setReservations(res.data)
+        })
+        .catch(e => {
+            setReservations(e)
+        })
+    }
+
+    async function handleSave(idOccurrence, e) {
         e.preventDefault()
         setLoading(true)
 
@@ -47,6 +62,7 @@ const FormOcurrence = (props) => {
         })
         .then(() => {
             alert("Sucesso")
+            setOccurrenceItem({})
             setLoading(false)
         })
         .catch(e => {
@@ -54,6 +70,33 @@ const FormOcurrence = (props) => {
             setLoading(false)
         })
     }
+    
+    function onBlur(numComanda) {
+        if(numComanda) {
+            const selecionarComanda = reservations.filter(item => item.id == numComanda)
+        
+            if(selecionarComanda.length > 0) {
+                const dataEntrada = selecionarComanda[0].data_entrada
+                const [day, month, year] = dataEntrada.split("/") 
+
+                setOccurrenceItem({
+                    ...occurrenceItem,
+                    nome_cliente: selecionarComanda[0].name,
+                    veiculo: selecionarComanda[0].name_vehicle,
+                    cor_veiculo: selecionarComanda[0].color,
+                    placa_veiculo: selecionarComanda[0].license_plate,
+                    data_entrada: `${year}-${month}-${day}`,
+                    hora_entrada: selecionarComanda[0].hora_entrada,
+                })
+            }
+        }
+    }
+
+    useEffect(() => {
+        if(dataClient.id_establishment) {
+            getReservations()
+        }
+    }, [dataClient])
 
     return (
         <FormArea>
@@ -61,30 +104,23 @@ const FormOcurrence = (props) => {
                 // lista de tipos de formulário para ser aberto ao clicar
                 formActive === 0 && 
                 <FormList 
-                    state={{ setFormActive, setOccurrenceItem }} 
                     primaryColor={primaryColor}
                 />
             } 
             { 
                 // Formulário de perda de ticket
                 formActive === 1 && 
-                <MissTicket 
-                    state={{ occurrenceItem, setOccurrenceItem }} 
-                />
+                <MissTicket onBlur={onBlur} />
             }
             {
                 // Formulário de furto de bens do cliente
                 formActive === 2 && 
-                <TheftCostumer 
-                    state={{ occurrenceItem, setOccurrenceItem }} 
-                />
+                <TheftCostumer onBlur={onBlur} />
             } 
             {
                 // Formulário de Furto de itens do patrimônio
                 formActive === 3 && 
-                <TheftHeritage 
-                    state={{ occurrenceItem, setOccurrenceItem }} 
-                />
+                <TheftHeritage />
             }
             <GroupButton>
                 <GlobalButton 

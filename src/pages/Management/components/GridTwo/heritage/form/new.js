@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from "react"
 import { 
     RowForm, 
     DivInput, 
@@ -7,23 +7,52 @@ import {
     Select,
     DivRadio,
     InputNumber
-} from "./style";
+} from "./style"
 
 const NewHeritage = (props) => {
 
-    const { neutralColor, primaryColor } = props.colors;
-    const { chosenItem, setChosenItem, patrimonio } = props.state;
+    const { neutralColor, primaryColor } = props.colors
+    const { chosenItem, setChosenItem, patrimonio } = props.state
 
-    const dateToday = new Date().toLocaleDateString();
+    const dateToday = new Date().toLocaleDateString()
 
     const setStates = () => {
-        setChosenItem({ ...chosenItem, date_registry: dateToday });
-        setChosenItem({ ...chosenItem, code: patrimonio.length+11 });
+        setChosenItem({ 
+            ...chosenItem, 
+            date_registry: dateToday,
+            code: patrimonio.length+11
+        })
+    }
+
+    // Função para formatar o valor com separadores de milhar
+    const formatNumber = (num) => {
+        if (!num) return ""
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(num)
+    }
+  
+    // Função para remover tudo que não for número
+    const unformatCurrency = (num) => {
+        return num.replace(/[^\d]/g, "").slice(0, 7)
+    }
+
+    function handleValue(rawValue) {
+        const numericValue = unformatCurrency(rawValue) / 100
+        
+        setChosenItem({ ...chosenItem, value: formatNumber(numericValue) })
+    }
+
+    function handleQuantity(quantity) {
+        const numeric = unformatCurrency(quantity)
+
+        setChosenItem({ ...chosenItem, quantity: numeric })
     }
 
     useEffect(() => {
-        setStates();
-    }, []);
+        setStates()
+    }, [])
 
     return (
         <RowForm>
@@ -56,14 +85,19 @@ const NewHeritage = (props) => {
                     <option></option>
                     <option>Energia</option>
                     <option>Contabilidade</option>
+                    <option>Estrutura Física</option>
+                    <option>Equipamentos Operacionais</option>
+                    <option>Equipamentos de TI e Informática</option>
+                    <option>Ferramentas e Materiais de Manutenção</option>
+                    <option>Mobiliário</option>
                 </Select>
             </DivInput>
             <DivInput>
                 <Label textcolor={neutralColor}>Quantidade</Label>
                 <Input 
-                    type="number"
+                    type="text"
                     value={chosenItem.quantity}
-                    onChange={e => setChosenItem({ ...chosenItem, quantity: e.target.value })}
+                    onChange={e => handleQuantity(e.target.value)}
                     bordercolor={primaryColor}
                     largura={"8rem"}
                 />
@@ -72,7 +106,7 @@ const NewHeritage = (props) => {
                 <Label textcolor={neutralColor}>Unidade de Medida</Label>
                 <Input 
                     type="text"
-                    placeholder="Prata"
+                    placeholder="Real"
                     bordercolor={primaryColor}
                     largura={"11rem"}
                     value={chosenItem.unit_measurement}
@@ -82,12 +116,12 @@ const NewHeritage = (props) => {
             <DivInput>
                 <Label textcolor={neutralColor}>Valor</Label>
                 <InputNumber 
-                    type="number"
+                    type="text"
                     placeholder="R$ 0,00"
                     bordercolor={primaryColor}
                     largura={"26.5rem"}
                     value={chosenItem.value}
-                    onChange={e => setChosenItem({ ...chosenItem, value: e.target.value })}
+                    onChange={e => handleValue(e.target.value)}
                 />
             </DivInput>
             <DivInput>
@@ -114,4 +148,4 @@ const NewHeritage = (props) => {
     )
 }
 
-export default NewHeritage;
+export default NewHeritage

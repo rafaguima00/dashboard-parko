@@ -1,40 +1,22 @@
 import { useState, useEffect } from "react"
 import { useUser } from "../../../context/globalContext"
 import { useNavigate } from "react-router-dom"
-import {
-    InfoReservation,
-    GroupInfo,
-    TitleLine,
-    Subtitle,
-    Info,
-    TextAligned,
-    GroupButton,
-    Line
-} from "../style"
-import { formatCurrency } from "../../../services/formatCurrency"
-import { FaRightLeft } from "react-icons/fa6"
+import { InfoReservation, GroupButton, Line } from "../style"
 import GlobalButton from "../../../components/Button"
 import { theme } from "../../../theme/theme"
 import { Chart as ChartJS, ArcElement, Title } from "chart.js"
-import { Doughnut } from "react-chartjs-2"
-import { datachart, options } from "../datasets/doughnut"
-import { dataCliente, optionsClient } from "../datasets/dgClientSatisfation"
 import Modal from "../../../components/Modal"
 import NewReservation from "../form/newReservation"
 import api from "../../../services/api/server"
+import Informacoes from "./informacoes"
 
 ChartJS.register(ArcElement, Title)
 
 const InfoReserve = () => {
 
     const heightButton = "2.4rem"
-    const styleIcon = {
-        position: "absolute",
-        right: 0,
-        top: 0,
-        margin: 10
-    }
     const { primaryColor, cancelColor, neutralColor } = theme
+    const { valorDoCaixa } = useUser()
     const navigate = useNavigate()
 
     const [open, setOpen] = useState(false)
@@ -46,7 +28,6 @@ const InfoReserve = () => {
 
     const { 
         dataClient, 
-        park, 
         reservations,
         setReservations, 
         priceTable,
@@ -140,6 +121,7 @@ const InfoReserve = () => {
             setOpen(false)
             alert("Reserva realizada com sucesso")
             setReservations([ ...reservations, res.data ])
+            setData({})
         })
         .catch(e => {
             console.log(e)
@@ -174,8 +156,7 @@ const InfoReserve = () => {
 
         await api.post("/abertura_caixa", { 
             id_establishment: dataClient.id_establishment,
-            id_colaborator: dataClient.id,
-            value: caixaAberto?.value ?? 0
+            id_colaborator: dataClient.id
         })
         .then(() => {
             alert("Caixa aberto")
@@ -204,9 +185,10 @@ const InfoReserve = () => {
 
         await api.put(`/abertura_caixa/${caixaAberto.id}`, { 
             aberto: 0,
-            value: caixaAberto.value
+            valor_fechamento: (caixaAberto?.valor_abertura ?? 0) + valorDoCaixa
         })
-        .then(() => {
+        .then(res => {
+            setCaixaAberto(res.data[0])
             alert("Caixa fechado")
             setModalFecharCx(false)
         })
@@ -218,12 +200,6 @@ const InfoReserve = () => {
         setLoading(false)
     }
 
-    const quantidadeVagas = () => {
-        let vagas_disponiveis = (park?.numero_vagas ?? 0) - (park?.vagas_ocupadas ?? 0)
-
-        return `${vagas_disponiveis}/${park?.numero_vagas ?? 0}`
-    }
-
     useEffect(() => {
         if (dataClient.id_establishment) {
             verificarSeEstaAberto()
@@ -232,48 +208,8 @@ const InfoReserve = () => {
     
     return (
         <InfoReservation>
-            <GroupInfo>
-                <Info>
-                    <span>
-                        <TitleLine>
-                            {quantidadeVagas()}
-                        </TitleLine>
-                        <Subtitle style={{ color: "#f4f4f4" }}>Vagas disponíveis</Subtitle>
-                    </span>
-                    <div style={{ width: 64, height: 64 }}>
-                        <Doughnut
-                            data={datachart}
-                            options={options}
-                        />
-                    </div>
-                </Info>
-                <Info>
-                    <FaRightLeft color="#545454" size={16} title="Arrow" style={styleIcon} />
-                    <TextAligned>
-                        <TitleLine>{formatCurrency(0, 'BRL')}</TitleLine>
-                        <Subtitle>Faturamento diário</Subtitle>
-                    </TextAligned>
-                </Info>
-                <Info>
-                    <FaRightLeft color="#545454" size={16} title="Arrow" style={styleIcon} />
-                    <TextAligned>
-                        <TitleLine>0</TitleLine>
-                        <Subtitle>Número de pessoas no dia</Subtitle>
-                    </TextAligned>
-                </Info>
-                <Info>
-                    <span>
-                        <TitleLine>Sem avaliações</TitleLine>
-                        <Subtitle>Satisfação do cliente</Subtitle>
-                    </span>
-                    <div style={{ width: 64, height: 64 }}>
-                        <Doughnut
-                            data={dataCliente}
-                            options={optionsClient}
-                        />
-                    </div>
-                </Info>
-            </GroupInfo>
+            <Informacoes />
+            
             <GroupButton>
                 <GlobalButton
                     background={primaryColor}

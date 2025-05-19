@@ -14,19 +14,18 @@ import { Bounce } from "react-activity"
 import "react-activity/dist/library.css"
 import Top from "../../components/Top"
 import { formatCurrency } from "../../services/formatCurrency"
-import { unformatCurrency } from "../../services/unformatCurrency"
 
 const Reservations = () => {
 
     const [text, setText] = useState("")
     const [loading, setLoading] = useState(false)
-    const [valueSelectDebt, setValueSelectDebt] = useState("")
     const [valuesDebt, setValuesDebt] = useState(0)
     const [hasDebt, setHasDebt] = useState(false)
     const [error, setError] = useState(false)
     const [messageError, setMessageError] = useState("")
-    const [linhas, setLinhas] = useState([{ valorPgto: "", valueSelect: "credit-parko" }])
+    const [linhas, setLinhas] = useState([{ valorPgto: "", valueSelect: "credit-card" }])
     const [dateTime, setDateTime] = useState("")
+    const [trocoCliente, setTrocoCliente] = useState(0)
 
     const { 
         setDataClient,
@@ -34,12 +33,13 @@ const Reservations = () => {
         selectedClient, 
         setSelectedClient, 
         reservations, 
+        setReservations,
         debts, 
-        park,
-        priceTable
+        priceTable,
+        valorAPagar,
+        valueSelectDebt
     } = useUser()
-    const { colaborator } = dataClient
-    const { cancelColor, greenColor } = theme
+    const { greenColor } = theme
 
     let dataReservaDoCliente = selectedClient?.data_entrada ?? ""
     let horaReservaDoCliente = selectedClient?.hora_entrada ?? ""
@@ -55,9 +55,8 @@ const Reservations = () => {
         selectedClient?.value ?? ""
     )
 
-    const { 
-        listReservations, 
-        loadData, 
+    const {
+        loadData,
         listColaborators, 
         listDividas,
         getPriceTable
@@ -71,7 +70,8 @@ const Reservations = () => {
 
     const filterReserv = reservaAberta.filter(
         item => item.name.toLowerCase().includes(text.toLowerCase()) ||
-        item.license_plate.toLowerCase().includes(text.toLowerCase())
+        item.license_plate.toLowerCase().includes(text.toLowerCase()) ||
+        item.id == text
     )
 
     const getDebtById = () => {
@@ -98,18 +98,6 @@ const Reservations = () => {
         }
     }
 
-    const vagasOcupadas = async (id) => {
-        await api.put(`/vagas_ocupadas/${id}`, {
-            vagas_ocupadas: park.vagas_ocupadas - 1
-        })
-        .then(() => {
-            return "ok"
-        })
-        .catch(e => {
-            return e
-        })
-    }
-
     const fecharReserva = async (id, e) => {
         e.preventDefault()
 
@@ -126,14 +114,14 @@ const Reservations = () => {
 
         if(selectedClient?.status === "Pendente") {
             alert(
-                `Confirme a reserva do cliente ${selectedClient.name} na página principal antes de fechar a reserva`
+                `Esta reserva está marcada como Pendente. Confirme a reserva do cliente ${selectedClient.name} na página principal antes de fechar a reserva`
             )
             setLoading(false)
             return
         }
 
         // 2- Verificar se possui horário de saída
-        if(selectedClient?.hora_saida === "") {
+        if(selectedClient?.data_saida === "" || selectedClient?.hora_saida === "") {
             setError(true)
             setMessageError("É necessário preencher o horário de saída do cliente")
             setLoading(false)
@@ -188,19 +176,17 @@ const Reservations = () => {
 
         if(filtrarDivida.length > 0) {
             const calcularDivida = filtrarDivida
-            .map(item => unformatCurrency(item.valorPgto)/100)
-            .reduce((prev, current) => {
-                return prev + current
-            })
+                .map(item => unformatCurrency(item.valorPgto)/100)
+                .reduce((prev, current) => {
+                    return prev + current
+                })
 
             await api.post(`/debts`, {
                 value: calcularDivida,
                 id_costumer: selectedClient.id_costumer,
                 id_establishment: dataClient.id_establishment
             })
-            .then(() => {
-                return "ok"
-            })
+            .then(() => {})
             .catch(e => {
                 return `erro ao registrar dívida: ${e}`
             })
@@ -214,11 +200,11 @@ const Reservations = () => {
                 hora_saida: selectedClient.hora_saida,
                 value: unformatCurrency(total)/100,
                 status: 4,
-                id_vehicle: selectedClient.id_vehicle
+                id_vehicle: selectedClient.id_vehicle,
+                id_establishment: selectedClient.id_establishment
             })
             .then(() => {
-                alert("Reserva concluída com sucesso!")
-                vagasOcupadas(dataClient.id_establishment)
+                salvarPgto(id)
             })
             .catch(e => {
                 alert("Erro ao concluir reserva", e)
@@ -232,24 +218,91 @@ const Reservations = () => {
         return
     }
 
+    async function salvarPgto(idReservation) {
+
+        const valueToPay = (valueSelect, valorPgto) => {
+            if(valueSelect === "money") {
+                const valorFinal = (unformatCurrency(valorPgto) / 100) - trocoCliente
+                return valorFinal.toFixed(2)
+            }
+            
+            const valorFinal = unformatCurrency(valorPgto) / 100
+            return valorFinal.toFixed(2)
+        }
+
+        const statusPayment = (valueSelect) => {
+            if(valueSelect === "debit") {
+                return "pending"
+            }
+
+            return "approved"
+        }
+
+        if(hasDebt && valuesDebt === valorAPagar) {
+            await api.put(`/debts/${selectedClient.id_costumer}`, { 
+                value: valorAPagar, 
+                id_establishment: selectedClient.id_establishment, 
+                payment_method: valueSelectDebt
+            })
+            .then(() => {
+                listReservations()
+                listDividas()
+                alert("Reserva concluída com sucesso!")
+            })
+            .catch(e => {
+                alert("Erro ao quitar dívida")
+                console.log(e)
+            })
+
+            return
+        }
+
+        const dadosPagamento = linhas.map(item => ({
+            id_customer: selectedClient.id_costumer,
+            id_vehicle: selectedClient.id_vehicle,
+            id_establishment: selectedClient.id_establishment,
+            value: valueToPay(item.valueSelect, item.valorPgto),
+            payment_method: item.valueSelect,
+            id_reservation: idReservation,
+            status: statusPayment(item.valueSelect)
+        }))
+
+        await api.post("/payment-on-db", dadosPagamento)
+        .then(() => {
+            listReservations()
+            alert("Reserva concluída com sucesso!")
+        })
+        .catch(e => {
+            alert("Erro ao salvar pagamento", e)
+        })
+    }
+
+    const unformatCurrency = (num) => {
+        return num.replace(/[^\d]/g, "")
+    }
+
     const valorTotal = () => {
-        if(diferenca < 0) return formatCurrency(0, 'BRL')
+        if(diferenca < 0 && selectedClient?.value) return formatCurrency(selectedClient?.value, 'BRL')
 
         if(reservaAberta && selectedClient) {
             if(hasDebt) {
-                return formatCurrency((valorDaReservaAtual) + (valuesDebt), 'BRL') 
+                return formatCurrency(valorDaReservaAtual + (valuesDebt ? valuesDebt : 0), 'BRL') 
             }
 
             return formatCurrency(valorDaReservaAtual, 'BRL') 
-        } 
+        }
     }
 
     const total = valorTotal()
 
-    const cancelar = e => {
-        e.preventDefault()
-
-        console.log("cancelar")
+    async function listReservations() {
+        await api.get(`/reservations/parking/${dataClient.id_establishment}`)
+        .then(res => {
+            setReservations(res.data)
+        })
+        .catch(e => {
+            console.log(e)
+        })
     }
 
     useEffect(() => {
@@ -258,6 +311,14 @@ const Reservations = () => {
         if(token) {
             const decoded = jwtDecode(token)
             setDataClient(decoded.user)
+
+            if(decoded.user.id_establishment) {
+                listColaborators(dataClient.id_establishment)
+                listReservations()
+
+                const intervalo = setInterval(listReservations, 5000)
+                return () => clearInterval(intervalo)
+            }
         }
         
         if(reservaAberta) {
@@ -265,20 +326,15 @@ const Reservations = () => {
             setSelectedClient(indexOf)
         }
 
-        listDividas()
         getPriceTable(dataClient.id_establishment)
     }, [])
     
     useEffect(() => {
         loadData(dataClient.id_establishment)
-
-        if(dataClient.id) {
-            listColaborators(dataClient.id_establishment)
-            listReservations(dataClient.id_establishment)
-        }
     }, [dataClient])
 
     useEffect(() => {
+        listDividas()
         getDebtById()
     }, [selectedClient])
 
@@ -292,12 +348,10 @@ const Reservations = () => {
                     priceTable={priceTable}
                     totalHoras={totalHoras}
                     valorDaReservaAtual={valorDaReservaAtual}
+                    listReservations={listReservations}
                 />
-                <TimingReserve 
-                    state={{
-                        colaborator,
-                        selectedClient
-                    }}
+                <TimingReserve
+                    state={{ selectedClient, setSelectedClient }}
                 />
             </ItemReservation>
             <TopTwo>
@@ -308,7 +362,6 @@ const Reservations = () => {
                     reservaAberta,
                     valuesDebt,
                     hasDebt,
-                    setValueSelectDebt,
                     linhas,
                     setLinhas,
                     error,
@@ -319,17 +372,13 @@ const Reservations = () => {
                     valorDaReservaAtual,
                     diferenca,
                     setDateTime,
-                    dateTime
+                    dateTime,
+                    setTrocoCliente,
+                    trocoCliente,
+                    listReservations
                 }}
             />
             <CloseReserve>
-                <GlobalButton
-                    children="Cancelar"
-                    background={cancelColor}
-                    largura={"12rem"}
-                    altura={"2.8rem"}
-                    aoPressionar={cancelar}
-                />
                 <GlobalButton
                     children={
                         loading ? 

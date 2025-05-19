@@ -10,24 +10,12 @@ const RenderItem = (props) => {
         firstWord,
         debtClient,
         handleOnClick,
-        valuesDebt
+        valuesDebt,
+        verificarDividas
     } = props
 
     const mapDateTime = (item) => {
-
-        if(item.data_entrada === "" && item.hora_entrada === "") {
-            return ""
-        }
-        
-        if(item.data_entrada === "") {
-            return `dd/mm/yyyy, ${item.hora_entrada}`
-        }
-
-        if(item.hora_entrada === "") {
-            return `${item.data_entrada}, 00:00:00`
-        }
-
-        return `${item.data_entrada}, ${item.hora_entrada}`
+        return `${item.data_saida}, ${item.hora_saida}`
     }
 
     return <>
@@ -37,6 +25,8 @@ const RenderItem = (props) => {
                 item={item} 
                 valuesDebt={valuesDebt}
                 setClicked={setClicked}
+                clicked={clicked}
+                verificarDividas={verificarDividas}
             /> :
             <ElementList 
                 backgroundcolor={"#f4f4f4"}

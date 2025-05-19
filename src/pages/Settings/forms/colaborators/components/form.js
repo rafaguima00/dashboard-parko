@@ -18,6 +18,7 @@ import GlobalButton from "../../../../../components/Button"
 import { useNavigate } from "react-router-dom"
 import { Bounce } from "react-activity"
 import "react-activity/dist/library.css"
+import { cpf } from "cpf-cnpj-validator"
 
 const FormColaborator = (props) => {
 
@@ -34,18 +35,22 @@ const FormColaborator = (props) => {
     const cargo = [
         {
             id: 0,
+            value: "",
             cargo: ""
         },
         {
             id: 1,
+            value: "Funcionário",
             cargo: "Funcionário(a)"
         },
         {
             id: 2,
+            value: "Coordenador",
             cargo: "Coordenador(a)"
         },
         {
             id: 3,
+            value: "Administrador",
             cargo: "Administrador(a)"
         }
     ]
@@ -53,18 +58,22 @@ const FormColaborator = (props) => {
     const tipoContrato = [
         {
             id: 0,
-            cargo: ""
+            value: "",
+            contrato: ""
         },
         {
             id: 1,
+            value: "Assinada",
             contrato: "Carteira assinada"
         },
         {
             id: 2,
-            contrato: "Autônomo (PJ)"
+            value: "Autônomo(PJ)",
+            contrato: "Autônomo(PJ)"
         },
         {
             id: 3,
+            value: "MEI",
             contrato: "MEI"
         }
     ]
@@ -73,11 +82,41 @@ const FormColaborator = (props) => {
         e.preventDefault()
     }
 
-    const telDigitado = newColaborator.tel
-    const formataTel = telDigitado.replace(/(\d{2})(\d{5})(\d{4})/g, '($1) $2-$3')
+    function formatCpf(value) {
+        const rawValue = value.replace(/\D/g, "").slice(0, 11)
+        
+        let formattedCpf = rawValue
 
-    const cpfDigitado = newColaborator.cpf
-    const formataCpf = cpfDigitado.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, "$1.$2.$3-$4")
+        if (rawValue.length > 9) {
+            formattedCpf = `${rawValue.slice(0, 3)}.${rawValue.slice(3, 6)}.${rawValue.slice(6, 9)}-${rawValue.slice(9)}`
+        }
+
+        setNewColaborator({ ...newColaborator, cpf: formattedCpf })
+    }
+
+    function formatRG(value) {
+        const rawValue = value.replace(/\D/g, "").slice(0, 10)
+        
+        let formattedRg = rawValue
+
+        if (rawValue.length > 8) {
+            formattedRg = `${rawValue.slice(0, 2)}.${rawValue.slice(2, 5)}.${rawValue.slice(5, 8)}-${rawValue.slice(8)}`
+        }
+
+        setNewColaborator({ ...newColaborator, rg: formattedRg })
+    }
+
+    function formatTel(value) {
+        const rawValue = value.replace(/\D/g, '').slice(0, 11)
+
+        let formattedPhone = rawValue
+
+        if (rawValue.length > 7) {
+            formattedPhone = `(${rawValue.slice(0, 2)}) ${rawValue.slice(2, 7)}-${rawValue.slice(7)}`
+        }
+
+        setNewColaborator({ ...newColaborator, tel: formattedPhone })
+    }
 
     return (
         <FormContent>
@@ -101,6 +140,7 @@ const FormColaborator = (props) => {
                     required
                     value={newColaborator.colaborator}
                     onChange={e => setNewColaborator({ ...newColaborator, colaborator: e.target.value })}
+                    maxLength={32}
                 />
             </DivInput>
             <DivInput>
@@ -110,10 +150,15 @@ const FormColaborator = (props) => {
                     largura={256}
                     required
                     onChange={e => selecionarCargo(e.target.value)}
+                    value={
+                        newColaborator.e_admin === 1 ? "Funcionário(a)" :
+                        newColaborator.e_admin === 2 ? "Coordenador(a)" :
+                        newColaborator.e_admin === 3 ? "Administrador(a)" : ""
+                    }
                 >
                     {
                         cargo.map(item => (
-                            <option key={item.id}>{item.cargo}</option>
+                            <option key={item.id} value={item.cargo}>{item.cargo}</option>
                         ))
                     }
                 </Select>
@@ -125,6 +170,11 @@ const FormColaborator = (props) => {
                     largura={220}
                     required
                     onChange={e => tipoContratacao(e.target.value)}
+                    value={
+                        newColaborator.tipo_contratacao === 1 ? "Carteira assinada" :
+                        newColaborator.tipo_contratacao === 2 ? "Autônomo(PJ)" :
+                        newColaborator.tipo_contratacao === 3 ? "MEI" : ""
+                    }
                 >
                     {tipoContrato.map(item => (
                         <option key={item.id} value={item.contrato}>{item.contrato}</option>
@@ -169,25 +219,25 @@ const FormColaborator = (props) => {
             <DivInput>
                 <Label textcolor={neutralColor}>CPF</Label>
                 <InputNumber 
-                    type="number"
+                    type="text"
                     placeholder="xxx.xxx.xxx-xx"
                     bordercolor={primaryColor} 
                     largura={220}
                     required
-                    value={formataCpf}
-                    onChange={e => setNewColaborator({ ...newColaborator, cpf: e.target.value })}
+                    value={newColaborator.cpf}
+                    onChange={e => formatCpf(e.target.value)}
                 />
             </DivInput>
             <DivInput>
                 <Label textcolor={neutralColor}>RG</Label>
                 <InputNumber 
-                    type="number"
+                    type="text"
                     placeholder="xx.xxx.xxx-xx"
                     bordercolor={primaryColor} 
                     largura={220}
                     required
                     value={newColaborator.rg}
-                    onChange={e => setNewColaborator({ ...newColaborator, rg: e.target.value })}
+                    onChange={e => formatRG(e.target.value)}
                 />
             </DivInput>
             <DivInput>
@@ -204,13 +254,13 @@ const FormColaborator = (props) => {
             <DivInput>
                 <Label textcolor={neutralColor}>Telefone</Label>
                 <InputNumber 
-                    type="number"
+                    type="text"
                     placeholder="(xx) xxxxx-xxxx"
                     bordercolor={primaryColor} 
                     largura={220}
                     required
-                    value={formataTel}
-                    onChange={e => setNewColaborator({ ...newColaborator, tel: e.target.value })}
+                    value={newColaborator.tel}
+                    onChange={e => formatTel(e.target.value)}
                 />
             </DivInput>
             <DivInput>

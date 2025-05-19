@@ -9,12 +9,10 @@ export const GroupInput = styled.div`
     gap: 1rem;
 `
 
-export const List = styled.span`
+export const List = styled.div`
     padding: 1rem;
     border-radius: 1rem;
-    overflow-y: auto;
-    height: 100%;
-    width: 100%;
+    overflow-y: hidden;
 
     &::-webkit-scrollbar {
         width: .25rem;

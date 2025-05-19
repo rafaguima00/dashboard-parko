@@ -1,9 +1,10 @@
-import { GraphicElement } from "../../style";
-import { Bar } from "react-chartjs-2";
-import { BarElement, CategoryScale, Chart as ChartJS, LinearScale, Tooltip } from "chart.js";
-import { data, options } from "./data";
+import { GraphicElement } from "../../style"
+import { Bar } from "react-chartjs-2"
+import { BarElement, CategoryScale, Chart as ChartJS, LinearScale, Tooltip } from "chart.js"
+import { data, options } from "./data"
+import ChartDataLabels from "chartjs-plugin-datalabels"
 
-ChartJS.register (Tooltip, CategoryScale, LinearScale, BarElement);
+ChartJS.register (Tooltip, CategoryScale, LinearScale, BarElement, ChartDataLabels)
 
 const GraphicClient = () => {
     return (
@@ -16,4 +17,4 @@ const GraphicClient = () => {
     )
 }
 
-export default GraphicClient;
+export default GraphicClient

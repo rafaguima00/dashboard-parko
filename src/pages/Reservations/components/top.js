@@ -1,9 +1,4 @@
-import {
-    TopItem,
-    InputGroup,
-    InputSearch,
-    Icon
-} from "../style"
+import { TopItem, InputGroup, InputSearch, Icon } from "../style"
 import { FiDownload, FiPlus } from "react-icons/fi"
 import Top from "../../../components/Top"
 

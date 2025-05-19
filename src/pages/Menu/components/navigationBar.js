@@ -119,7 +119,7 @@ const NavigationBar = (props) => {
                 <Profile>
                     <ImageProfile src={dataClient.image ? dataClient.image : avatar} />
                     <div>
-                        <UserName>{colaborator ? colaborator : "[user_name]"}</UserName>
+                        <UserName>{colaborator ? colaborator : ""}</UserName>
                         <Logout onClick={handleLogout}>Logout</Logout>
                     </div>
                 </Profile>

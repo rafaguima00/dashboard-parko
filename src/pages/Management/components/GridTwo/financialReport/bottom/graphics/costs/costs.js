@@ -1,9 +1,9 @@
-import { GraphicElement } from "../../style";
-import { Bar } from "react-chartjs-2";
-import { BarElement, CategoryScale, Chart as ChartJS, LinearScale, Tooltip } from "chart.js";
-import { data, options } from "./data";
+import { GraphicElement } from "../../style"
+import { Bar } from "react-chartjs-2"
+import { BarElement, CategoryScale, Chart as ChartJS, LinearScale, Tooltip } from "chart.js"
+import { data, options } from "./data"
 
-ChartJS.register (Tooltip, CategoryScale, LinearScale, BarElement);
+ChartJS.register (Tooltip, CategoryScale, LinearScale, BarElement)
 
 const GraphicCosts = () => {
     return (
@@ -16,4 +16,4 @@ const GraphicCosts = () => {
     )
 }
 
-export default GraphicCosts;
+export default GraphicCosts

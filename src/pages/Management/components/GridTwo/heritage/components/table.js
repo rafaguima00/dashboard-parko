@@ -9,6 +9,7 @@ import {
     Text
 } from "../style";
 import api from "../../../../../../services/api/server";
+import EmptyMessage from "../../../../../../components/EmptyMessage";
 
 const TableAccount = (props) => {
 
@@ -45,22 +46,26 @@ const TableAccount = (props) => {
                 <Text textcolor="#bababa">Ação</Text>
             </ListHeader>
             <ListBody>
-                {filtrarPatrimonio.map(item => (
-                    <ElementList key={item.id}>
-                        <Text textcolor="#7c7c7c">{item.code}</Text>
-                        <Text textcolor="#7c7c7c">{item.category}</Text>
-                        <Text textcolor="#7c7c7c">{item.quantity}</Text>
-                        <Text textcolor="#7c7c7c">{item.name}</Text>
-                        <GroupButton marginright={".5rem"} largura={"100%"} background="#fff">
-                            <button onClick={() => returnData({item})}>
-                                <FiEdit color={neutralColor} size={19}/>
-                            </button>
-                            <button onClick={() => handleDeleteItem(item.id)}>
-                                <AiOutlineDelete color={neutralColor} size={19}/>
-                            </button>
-                        </GroupButton> 
-                    </ElementList>
-                ))}
+                {
+                    filtrarPatrimonio.length > 0 ?
+                    filtrarPatrimonio.map(item => (
+                        <ElementList key={item.id}>
+                            <Text textcolor="#7c7c7c">{item.code}</Text>
+                            <Text textcolor="#7c7c7c">{item.category}</Text>
+                            <Text textcolor="#7c7c7c">{item.quantity}</Text>
+                            <Text textcolor="#7c7c7c">{item.name}</Text>
+                            <GroupButton marginright={".5rem"} largura={"100%"} background="#fff">
+                                <button onClick={() => returnData({item})}>
+                                    <FiEdit color={neutralColor} size={19}/>
+                                </button>
+                                <button onClick={() => handleDeleteItem(item.id)}>
+                                    <AiOutlineDelete color={neutralColor} size={19}/>
+                                </button>
+                            </GroupButton> 
+                        </ElementList>
+                    )) :
+                    <EmptyMessage>Sem registro de patrimônio</EmptyMessage>
+                }
             </ListBody>
         </List>
     )

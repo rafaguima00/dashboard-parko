@@ -74,26 +74,27 @@ const ListReserve = (props) => {
                 <Text>Cliente</Text>
                 <Text>Veículo</Text>
                 <Text>Placa</Text>
-                <Text>Entrada</Text>
+                <Text>Saída</Text>
                 <Text>Valor</Text>
                 <Text>Caixa</Text>
             </ListHeader>
             {
-                reservaFechada.length > 0 ? 
+                reservaFechada.length > 0 ?
                 reservaFechada.map((item) => (
                     <ListBody key={item.id}>
-                        <RenderItem 
+                        <RenderItem
                             valuesDebt={valuesDebt}
-                            item={item} 
+                            item={item}
                             clicked={clicked}
                             setClicked={setClicked}
                             firstWord={firstWord}
                             debtClient={debtClient}
                             handleOnClick={handleOnClick}
+                            verificarDividas={verificarDividas}
                         />
                     </ListBody>
                 )) :
-                <EmptyMessage>Nenhuma reserva fechada no momento</EmptyMessage> 
+                <EmptyMessage>Nenhuma reserva fechada hoje</EmptyMessage>
             }
         </List>
     )

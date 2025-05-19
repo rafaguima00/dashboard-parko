@@ -17,14 +17,15 @@ const GridTwo = (props) => {
     const { type_colaborator } = dataClient
 
     const titleSelected = () => {
-        if(selected === 0) {
-            return "Relatórios Financeiros"
-        } else if (selected === 1) {
-            return "Registros de Movimentações Financeiras"
-        } else if (selected === 2) {
-            return "Registro de Patrimônio"
-        } else {
-            return "Registro de Ocorrências"
+        switch(selected) {
+            case 0 :
+                return "Relatórios Financeiros"
+            case 1 :
+                return "Registros de Movimentações Financeiras"
+            case 2 :
+                return "Registro de Patrimônio"
+            default :
+                return "Registro de Ocorrências"
         }
     }
 

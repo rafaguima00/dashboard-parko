@@ -11,7 +11,7 @@ import ReadApi from "../../services/readData"
  
 const Settings = () => {
 
-    const { setDataClient, dataClient, park, colaborators } = useUser()
+    const { setDataClient, dataClient, park } = useUser()
     const { listColaborators, listReservations, loadData } = ReadApi()
 
     useEffect(() => {
@@ -20,11 +20,17 @@ const Settings = () => {
         if(token) {
             const decoded = jwtDecode(token)
             setDataClient(decoded.user)
-        }
+        } 
     }, [])
 
     useEffect(() => {
-        loadData(dataClient.id_establishment)
+        if(dataClient.id_establishment) {
+            loadData(dataClient.id_establishment)
+        }
+
+        if(dataClient.type_colaborator === "Funcionário(a)"){
+            throw new Error("Você não tem permissão para acessar esta funcionalidade")
+        }
     }, [dataClient])
     
     useEffect(() => {

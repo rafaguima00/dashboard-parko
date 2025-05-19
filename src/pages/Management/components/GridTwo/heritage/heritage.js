@@ -19,6 +19,11 @@ const Heritage = () => {
     const [text, setText] = useState("")
     const [loading, setLoading] = useState(false)
 
+    // Função para remover tudo que não for número
+    const unformatCurrency = (num) => {
+        return num.replace(/[^\d]/g, "").slice(0, 7)
+    }
+
     const readPatrimonio = async () => {
         await api.get("/heritage")
         .then(res => {
@@ -29,6 +34,11 @@ const Heritage = () => {
         })
     }
 
+    const formatDate = (date) => {
+        const [year, month, day] = date.split("-")
+        return `${day}/${month}/${year}`
+    }
+
     const createPatrimonio = async (e) => {
         e.preventDefault()
         setLoading(true)
@@ -37,10 +47,10 @@ const Heritage = () => {
             code: chosenItem.code, 
             name: chosenItem.name, 
             category: chosenItem.category, 
-            date_registry: chosenItem.date_registry, 
+            date_registry: formatDate(chosenItem.date_registry), 
             quantity: chosenItem.quantity, 
             unit_measurement: chosenItem.unit_measurement, 
-            value: chosenItem.value, 
+            value: unformatCurrency(chosenItem.value) / 100, 
             id_establishment: dataClient.id_establishment
         })
         .then(() => {

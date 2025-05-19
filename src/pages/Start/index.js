@@ -1,21 +1,17 @@
 import { useEffect, useState } from "react"
 import { useUser } from "../../context/globalContext"
-import { 
-    Container, 
-    Welcome, 
-    Grid
-} from "./style"
+import { Container, Welcome, Grid } from "./style"
 import ReservationStatus from "./components/reserveStatus"
 import InfoReserve from "./components/infoReservation"
 import { jwtDecode } from "jwt-decode"
 import ReadApi from "../../services/readData"
 import api from "../../services/api/server"
+import { unLoggedIn } from "../../mocks/errorPage"
 
 const Start = () => {
 
     const { setDataClient, dataClient, setReservations, park } = useUser()
     const { colaborator } = dataClient
-
     const { loadData, listColaborators, getPriceTable } = ReadApi()
 
     const [selected, setSelected] = useState(1)
@@ -47,28 +43,30 @@ const Start = () => {
 
     useEffect(() => {
         const token = localStorage.getItem("token")
-
+        
         if(token) {
             const decoded = jwtDecode(token)
-            setDataClient(decoded.user)
-        }
-    }, [])
-
-    useEffect(() => {
-        loadData(dataClient.id_establishment)
-    }, [dataClient])
-
-    useEffect(() => {
-        if(park) {
-            listColaborators(dataClient.id_establishment)
-            getPriceTable(dataClient.id_establishment)
-            listReservations()
-
-            const intervalo = setInterval(listReservations, 5000)
-
-            return () => clearInterval(intervalo)
+            const user = decoded.user
+            setDataClient(user)
+    
+            if (user?.id_establishment) {
+                listColaborators(user.id_establishment)
+                getPriceTable(user.id_establishment)
+                listReservations()
+    
+                const intervalo = setInterval(listReservations, 5000)
+                return () => clearInterval(intervalo)
+            }
+        } else {
+            throw new Error(unLoggedIn)
         }
     }, [park])
+
+    useEffect(() => {
+        if(dataClient.id_establishment) {
+            loadData(dataClient.id_establishment)
+        }
+    }, [dataClient])
 
     return (
         <Container>

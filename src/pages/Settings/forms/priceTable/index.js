@@ -76,71 +76,74 @@ const PriceTableForm = () => {
 
     const onSave = async (e) => {
         e.preventDefault()
+
         setLoading(true)
 
         if(!priceTable.id_estacionamento) {
 
             await api.post("/tabela_preco", { 
                 id_estacionamento: dataClient.id_establishment, 
-                tempo_tolerancia: formTable.tempo_tolerancia, 
+                tempo_tolerancia: value === "yes" ? formTable.tempo_tolerancia : 0, 
                 valor_hora: unformatCurrency(formTable.valor_hora)/100, 
-                valor_fracao_hora: formTable.valor_fracao_hora
+                valor_fracao_hora: unformatCurrency(formTable.valor_fracao_hora)/100
             })
             .then(() => {
                 alert("Valores salvos com sucesso.")
                 screenBack()
             })
             .catch(e => {
-                console.log(e)
+                alert(e)
             })
 
         } else {
 
-            await api.put(`/tabela_preco/${dataClient.id_establishment}`, formTable)
+            await api.put(`/tabela_preco/${dataClient.id_establishment}`, {
+                tempo_tolerancia: value === "yes" ? formTable.tempo_tolerancia : 0,
+                valor_hora: unformatCurrency(formTable.valor_hora)/100,
+                valor_fracao_hora: unformatCurrency(formTable.valor_fracao_hora)/100
+            })
             .then(() => {
                 alert("Informações atualizadas")
             })
             .catch(e => {
-                console.log(e)
+                alert(e)
             }) 
 
         }
+
+        const total = linhas.map(item => ({
+            id: item.id,
+            id_establishment: item.idEstacionamento,
+            primeira_hora: item.valueTime,
+            segunda_hora: item.valueTimeTwo,
+            value: unformatCurrency(item.valueNumber)/100
+        }))
         
         // Verificar se há linhas novas ainda não inseridas no banco de dados
         const filterLines = linhas.filter(item => item.id == null)
         if(filterLines.length > 0) {
-            await api.post("/tabela_fixa", {
-                id_establishment: filterLines.idEstacionamento,
-                primeira_hora: filterLines.valueTime, 
-                segunda_hora: filterLines.valueTimeTwo, 
-                value: filterLines.valueNumber
-            })
+            await api.post("/tabela_fixa", total)
             .then(() => {
-                console.log("criado")
+                alert("criado")
             })
             .catch(e => {
-                console.log(e)
+                alert(e)
             })
         }
 
         // Verificar linhas já existentes no banco de dados
         const itemExists = linhas.filter(item => item.id != null)
         if(itemExists.length > 0) {
-            await api.put(`/tabela_fixa/${dataClient.id_establishment}`, { 
-                primeira_hora: itemExists.valueTime, 
-                segunda_hora: itemExists.valueTimeTwo, 
-                value: itemExists.valueNumber
-            })
+            await api.put(`/tabela_fixa/${dataClient.id_establishment}`, total)
             .then(() => {
-                console.log("atualizado")
+                alert("atualizado")
             })
             .catch(e => {
-                console.log(e)
+                alert(e)
             })
         }
         
         setLoading(false)
-        return
     }
 
     // Função para formatar o valor com separadores de milhar
@@ -166,10 +169,18 @@ const PriceTableForm = () => {
         )))
     }
 
-    const handleValorHora = e => {
+    const handleValorHora = (e, variavel) => {
         const rawValue = e.target.value
+        let numericString = unformatCurrency(rawValue)
+
+        // Limitar a quantidade para no máximo 4 dígitos
+        if (numericString.length > 4) {
+            numericString = numericString.slice(0, 4)
+            return
+        }
+
         const numericValue = unformatCurrency(rawValue) / 100
-        setFormTable({ ...formTable, valor_hora: formatNumber(numericValue) })
+        setFormTable({ ...formTable, [variavel]: formatNumber(numericValue) })
     }
     
     // Função para formatar a entrada como hora (HH:MM)
@@ -260,8 +271,8 @@ const PriceTableForm = () => {
             id: priceTable.id,
             id_estacionamento: dataClient.id_establishment,
             tempo_tolerancia: priceTable.tempo_tolerancia,
-            valor_fracao_hora: priceTable.valor_fracao_hora,
-            valor_hora: priceTable.valor_hora,
+            valor_fracao_hora: formatNumber(priceTable.valor_fracao_hora),
+            valor_hora: formatNumber(priceTable.valor_hora),
         })
         getTabelaFixa(dataClient.id_establishment)
     }, [])
@@ -277,8 +288,6 @@ const PriceTableForm = () => {
             }));
             setLinhas(novasLinhas)
         }
-        console.log(tabelaFixa)
-        console.log(linhas)
     }, [tabelaFixa])
 
     useEffect(() => {
@@ -289,6 +298,10 @@ const PriceTableForm = () => {
         loadData(dataClient.id_establishment)
         listColaborators(dataClient.id_establishment)
         listReservations(dataClient.id_establishment)
+
+        if(dataClient.type_colaborator === "Funcionário(a)"){
+            throw new Error("Você não tem permissão para acessar esta funcionalidade")
+        }
     }, [dataClient, reservations])
 
     return (
@@ -369,7 +382,7 @@ const PriceTableForm = () => {
                                         type="text" 
                                         placeholder="R$ 0,00"
                                         value={formTable.valor_fracao_hora}
-                                        onChange={e => setFormTable({ ...formTable, valor_fracao_hora: e.target.value })}
+                                        onChange={e => handleValorHora(e, "valor_fracao_hora")}
                                     />
                                 </InputArea>
                             </Row>
@@ -381,7 +394,7 @@ const PriceTableForm = () => {
                                         type="text" 
                                         placeholder="R$ 0,00"
                                         value={formTable.valor_hora}
-                                        onChange={handleValorHora}
+                                        onChange={e => handleValorHora(e, "valor_hora")}
                                     />
                                 </InputArea>
                             </Row>

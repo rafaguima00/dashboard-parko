@@ -1,31 +1,31 @@
-import { theme } from "../../../../../../../../theme/theme";
+import { theme } from "../../../../../../../../theme/theme"
 
-const { greenColor, cancelColor } = theme;
+const { greenColor, cancelColor } = theme
 
-const entrada = [600, 700, 210, 332];
-const saida = [-400, -400, -110, -155];
+const entrada = [0, 0, 0, 0]
+const saida = [0, 0, 0, 0]
 
 export const data = {
-    labels: ["Setembro", "Outubro", "Novembro", "Dezembro"],
+    labels: ["Fevereiro", "Março", "Abril", "Maio"],
     datasets: [
-    {
-        label: "Entrada (R$)",
-        data: entrada,
-        backgroundColor: greenColor,
-        indexAxis: "x",
-        borderRadius: 360,
-        barPercentage: 0.5
-    },
-    {
-        label: "Saída (R$)",
-        data: saida,
-        backgroundColor: cancelColor,
-        indexAxis: "x",
-        borderRadius: 360,
-        barPercentage: 0.5
-    }
-  ],
-};
+        {
+            label: "Entrada (R$)",
+            data: entrada,
+            backgroundColor: greenColor,
+            indexAxis: "x",
+            borderRadius: 360,
+            barPercentage: 0.5
+        },
+        {
+            label: "Saída (R$)",
+            data: saida,
+            backgroundColor: cancelColor,
+            indexAxis: "x",
+            borderRadius: 360,
+            barPercentage: 0.5
+        }
+    ]
+}
 
 export const options = {
     scales: {
@@ -49,5 +49,5 @@ export const options = {
         }
     },
     responsive: true,
-    maintainAspectRatio: false,
-};
+    maintainAspectRatio: false
+}

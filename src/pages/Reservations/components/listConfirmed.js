@@ -9,17 +9,15 @@ import {
     ItemList
 } from "../style"
 import { formatCurrency } from "../../../services/formatCurrency"
-import ReadApi from "../../../services/readData"
 import EmptyMessage from "../../../components/EmptyMessage"
 import { theme } from "../../../theme/theme"
 
 const ListConfirmedReserve = (props) => {
 
     const { primaryColor } = theme
-    const { filterReserv, priceTable } = props
+    const { filterReserv, priceTable, listReservations } = props
 
-    const { setSelectedClient, dataClient, reservations } = useUser()
-    const { listReservations } = ReadApi()
+    const { setSelectedClient, dataClient } = useUser()
 
     const [clicked, setClicked] = useState(0)
 
@@ -36,7 +34,7 @@ const ListConfirmedReserve = (props) => {
         const totalHoras = ((new Date(diferenca).getUTCDate() - 1) * 24) + (new Date(diferenca).getUTCHours())
 
         if(diferenca <= 0) {
-            return formatCurrency(0, 'BRL')
+            return formatCurrency(item.value, 'BRL')
         }
         
         if(totalHoras >= 1) {
@@ -51,8 +49,10 @@ const ListConfirmedReserve = (props) => {
     }
 
     useEffect(() => {
-        listReservations(dataClient.id_establishment)
-    }, [])
+        if(dataClient.id_establishment) {
+            listReservations()
+        }
+    }, [dataClient])
 
     return (
         <List>

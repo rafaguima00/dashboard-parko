@@ -1,5 +1,5 @@
-import { Block, Span, Div, Month } from "../style";
-import { formatCurrency } from "../../../../../../../services/formatCurrency";
+import { Block, Span, Div, Month } from "../style"
+import { formatCurrency } from "../../../../../../../services/formatCurrency"
 
 const ReportClient = () => {
 
@@ -7,27 +7,27 @@ const ReportClient = () => {
         {
             id: 0,
             month: "January",
-            invoicing: 13000,
+            invoicing: 0
         },
         {
             id: 1,
             month: "Fevereiro",
-            invoicing: 16755,
+            invoicing: 0
         },
         {
             id: 2,
             month: "Março",
-            invoicing: 10000,
+            invoicing: 0
         },
         {
             id: 3,
             month: "Abril",
-            invoicing: 12500,
+            invoicing: 0
         },
         {
             id: 4,
             month: "Maio",
-            invoicing: 10575,
+            invoicing: 0
         }
     ]
 
@@ -42,30 +42,30 @@ const ReportClient = () => {
                     <p>Faturamento Mensal</p>
                     <hr/>
                     <span>
-                        <p>{`Média de ${formatCurrency(1500, 'BRL')} por dia no mês`}</p>
+                        {/* <p>{`Média de ${formatCurrency(0, 'BRL')} por dia no mês`}</p> */}
                     </span>
                 </Div>
                 <Div>
                     <p>Ocupação Mensal</p>
                     <hr/>
                     <span>
-                        <p>Média de 100 pessoas por dia no mês 50% da ocupação</p>
+                        {/* <p>Média de 100 pessoas por dia no mês 50% da ocupação</p> */}
                     </span>
                 </Div>
                 <Div>
                     <p>Mês historicamente de maior Faturamento</p>
                     <hr/>
                     <span>
-                        <Month>{formatItem}</Month>
-                        <p>{`Média de ${formatCurrency(1700, 'BRL')} por dia no mês`}</p>
+                        {/* <Month>{formatItem}</Month>
+                        <p>{`Média de ${formatCurrency(0, 'BRL')} por dia no mês`}</p> */}
                     </span>
                 </Div>
                 <Div>
                     <p>Mês historicamente de maior Ocupação</p>
                     <hr/>
                     <span>
-                        <Month>{formatItem}</Month>
-                        <p>Média de 100 pessoas por dia no mês 50% da ocupação</p>
+                        {/* <Month>{formatItem}</Month>
+                        <p>Média de 0 pessoas por dia no mês 0% da ocupação</p> */}
                     </span>
                 </Div>
             </Span>
@@ -73,4 +73,4 @@ const ReportClient = () => {
     )
 }
 
-export default ReportClient;
+export default ReportClient

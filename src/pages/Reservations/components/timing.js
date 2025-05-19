@@ -1,41 +1,46 @@
-import {
-    Timing,
-    View,
-    Name,
-    Clock
-} from "../style"
+import { Timing, View, Name, Clock } from "../style"
 import { theme } from "../../../theme/theme"
 import { useEffect, useState } from "react"
+import { useUser } from "../../../context/globalContext"
 
 const TimingReserve = (props) => {
 
     const [tempo, setTempo] = useState("00:00:00")
 
     const { primaryColor } = theme
-    const { colaborator, selectedClient } = props.state
+    const { selectedClient } = props.state
+    const { dataClient } = useUser()
 
     const converter = () => {
+
         if (!selectedClient) return
 
-        if(selectedClient?.status !== "Confirmado") {
+        if(selectedClient?.status !== "Confirmado" && selectedClient?.status !== "Recusado") {
             setTempo("00:00:00")
             return
         }
-        
+
         let dataReservaDoCliente = selectedClient?.data_entrada ?? ""
         let horaReservaDoCliente = selectedClient?.hora_entrada ?? ""
-        let converterData = new Date(dataReservaDoCliente+" "+horaReservaDoCliente).getTime()
+
+        let dataConvertida = formatarDataHoraParaDate(dataReservaDoCliente, horaReservaDoCliente)
+        if (!dataConvertida) return
+
+        let converterData = dataConvertida
         
-        // Verificar se as informações de data e hora estão presentes
+        // Verifica se as informações de data e hora estão presentes
         if (!dataReservaDoCliente || !horaReservaDoCliente) return
 
         const tempoAtual = new Date().getTime()
         const diferenca = tempoAtual - converterData
 
-        // Verificar se a diferença é válida
-        if (isNaN(diferenca) || diferenca < 0) return
+        // Verifica se a diferença é válida
+        if (isNaN(diferenca) || diferenca < 0) {
+            setTempo("00:00:00")
+            return
+        }
 
-        // Verificar se a data e hora da reserva é futura
+        // Verifica se a data e hora da reserva é futura
         if(converterData > tempoAtual) {
             setTempo("00:00:00")
             return
@@ -50,8 +55,27 @@ const TimingReserve = (props) => {
             (minutos < 10 ? "0"+minutos : minutos) + 
             ":" + 
             (segundos < 10 ? "0"+segundos : segundos)
-
+        
         setTempo(form)
+    }
+
+    function formatarDataHoraParaDate(dataStr, horaStr) {
+        if (!dataStr || !horaStr) return null
+    
+        // Detecta se o formato é dd/mm/yyyy
+        if (dataStr.includes('/')) {
+            const partes = dataStr.split('/')
+            if (partes.length !== 3) return null
+    
+            const [dia, mes, ano] = partes
+            dataStr = `${ano}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`
+        }
+    
+        // Monta string no formato ISO válido
+        const dataISO = `${dataStr} ${horaStr}:00`
+        const dataFinal = new Date(dataISO)
+    
+        return isNaN(dataFinal.getTime()) ? null : dataFinal
     }
 
     useEffect(() => {
@@ -73,7 +97,7 @@ const TimingReserve = (props) => {
             </Clock>
             <View>
                 <Name>Caixa responsável:</Name>
-                <Name>{colaborator ? colaborator : "[user_name]"}</Name>
+                <Name>{dataClient.colaborator ? dataClient.colaborator : ""}</Name>
             </View>
         </Timing>
     )

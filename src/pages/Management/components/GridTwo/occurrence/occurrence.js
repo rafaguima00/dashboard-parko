@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { Div } from "./style"
 import { theme } from "../../../../../theme/theme"
 import Register from "./components/register"
 import FormOcurrence from "./components/formOcurrence"
 import api from "../../../../../services/api/server"
+import { useUser } from "../../../../../context/globalContext"
 
 const Occurrence = (props) => {
 
-    const [formActive, setFormActive] = useState(0)
-    const [occurrenceItem, setOccurrenceItem] = useState({})
-
+    const { setFormActive, setOccurrenceItem } = useUser()
     const { primaryColor, neutralColor, cancelColor, greenColor } = theme
     const { occurrences, setOccurrences } = props.state
     const { dataClient } = props
@@ -27,20 +26,13 @@ const Occurrence = (props) => {
     const formOccurrence = (item) => {
         const { id_occurrence } = item
 
-        if(id_occurrence === 1) {
-            setFormActive(1)
-        } else if(id_occurrence === 2) {
-            setFormActive(2)
-        } else if(id_occurrence === 3) {
-            setFormActive(3)
+        if(id_occurrence) {
+            setFormActive(id_occurrence)
+            setOccurrenceItem(item)
         }
-        
-        setOccurrenceItem(item)
     }
 
     useEffect(() => { readOccurrences() }, [occurrences])
-
-    useEffect(() => console.log(occurrenceItem), [occurrenceItem])
 
     return (
         <Div>
@@ -51,8 +43,11 @@ const Occurrence = (props) => {
                 formOccurrence={formOccurrence}
             />
             <FormOcurrence 
-                colors={{ cancelColor, greenColor, primaryColor }} 
-                state={{ formActive, setFormActive, occurrenceItem, setOccurrenceItem }}
+                colors={{ 
+                    cancelColor, 
+                    greenColor, 
+                    primaryColor 
+                }} 
             />
         </Div>
     )

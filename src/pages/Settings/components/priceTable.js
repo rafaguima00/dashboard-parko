@@ -31,18 +31,12 @@ const PriceTable = () => {
     }, [priceTable])
 
     const tempoTolerancia = () => {
-        if(priceTable !== undefined) {
-            if(priceTable.tempo_tolerancia === null) {
-                return <strong>Não há tempo de tolerância</strong>
-            } else {
-                return <strong>Tempo de tolerância: {priceTable?.tempo_tolerancia ?? 0} minutos</strong>
-            }
+        if(priceTable?.tempo_tolerancia === null || priceTable?.tempo_tolerancia == 0) {
+            return <strong>Não há tempo de tolerância</strong>
         } else {
-            return ""
+            return <strong>Tempo de tolerância: {priceTable?.tempo_tolerancia ?? 0} minutos</strong>
         }
     }
-
-    const tempo = tempoTolerancia()
 
     const valorHora = (valueHour) => {
         return formatCurrency(valueHour, 'BRL')
@@ -57,7 +51,7 @@ const PriceTable = () => {
                 <Warning textcolor={neutralColor}>Valor da hora</Warning>
                 <Hour textcolor={primaryColor}>{valorHora(priceTable?.valor_hora ?? "")}</Hour>
                 <hr/>
-                <Warning textcolor={cancelColor}>{tempo}</Warning>
+                <Warning textcolor={cancelColor}>{tempoTolerancia()}</Warning>
             </Menu>
         </ContentInfo>
     )

@@ -1,3 +1,5 @@
+import { useUser } from "../../../../../../context/globalContext"
+import api from "../../../../../../services/api/server"
 import { 
     ContainerForm,
     Div,
@@ -6,30 +8,26 @@ import {
     LabelRadio,
     DataVehicle,
     TextArea
-} from "./styleForm";
-import { useState, useEffect } from "react";
+} from "./styleForm"
+import { useState, useEffect } from "react"
 
 const MissTicket = (props) => {
 
-    const [radioValue, setRadioValue] = useState("");
+    const [radioValue, setRadioValue] = useState("")
+    const { setOccurrenceItem, occurrenceItem } = useUser()
+    const { onBlur } = props
 
-    const { occurrenceItem, setOccurrenceItem } = props.state;
-
-    const handleOnChange = (e) => {
+    function handleOnChange(e) {
         if(radioValue === "no") {
             return setOccurrenceItem({ ...occurrenceItem, value: 0 })
         }
 
-        setOccurrenceItem({ ...occurrenceItem, value: e.target.value });
-    };
+        setOccurrenceItem({ ...occurrenceItem, value: e.target.value })
+    }
 
     useEffect(() => {
-        setOccurrenceItem({ ...occurrenceItem, value: 0 });
-    }, []);
-
-    useEffect(() => {
-        console.log(occurrenceItem);
-    }, [occurrenceItem]);
+        setOccurrenceItem({ ...occurrenceItem, value: 0 })
+    }, [])
 
     return (
         <>
@@ -65,6 +63,7 @@ const MissTicket = (props) => {
                             placeholder="0000" 
                             value={occurrenceItem.num_comanda}
                             onChange={e => setOccurrenceItem({ ...occurrenceItem, num_comanda: e.target.value })}
+                            onBlur={e => onBlur(e.target.value)}
                             required
                         />
                     </Div>
@@ -197,4 +196,4 @@ const MissTicket = (props) => {
     )
 }
 
-export default MissTicket;
+export default MissTicket

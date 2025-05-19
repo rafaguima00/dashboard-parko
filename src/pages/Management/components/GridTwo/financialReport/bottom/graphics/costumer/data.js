@@ -1,8 +1,8 @@
-import { theme } from "../../../../../../../../theme/theme";
+import { theme } from "../../../../../../../../theme/theme"
 
-const { primaryColor } = theme;
+const { primaryColor } = theme
 
-const total = [2, 3, 1, 1, 2, 3, 1, 1, 1]
+const total = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 export const data = {
     labels: [7, 8, 9, 10, 11, 12, 13, 14, 15],
@@ -15,8 +15,8 @@ export const data = {
         borderRadius: 360,
         barPercentage: 0.7
     }
-  ],
-};
+  ]
+}
 
 export const options = {
     plugins: {
@@ -24,7 +24,8 @@ export const options = {
             display: false
         },
         datalabels: {
-            display: false
+            display: true,
+            color: "#fff"
         }
     },
     scales: {
@@ -42,5 +43,5 @@ export const options = {
         }
     },
     responsive: true,
-    maintainAspectRatio: false,
-};
+    maintainAspectRatio: false
+}

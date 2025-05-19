@@ -12,10 +12,9 @@ import ReadApi from "../../services/readData"
 const Management = () => {
 
     const { neutralColor, primaryColor } = theme
-    const { setDataClient, dataClient, park } = useUser()
-    const { listColaborators, listReservations, loadData } = ReadApi()
+    const { setDataClient, dataClient, selected, setSelected } = useUser()
+    const { loadData } = ReadApi()
 
-    const [selected, setSelected] = useState(3)
     const [bqSelected, setBqSelected] = useState(0)
 
     useEffect(() => {

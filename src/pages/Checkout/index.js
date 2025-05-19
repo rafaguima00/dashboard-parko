@@ -9,23 +9,32 @@ import ListReserve from "./components/list"
 import { theme } from "../../theme/theme"
 import { Chart as ChartJS, ArcElement, BarElement, CategoryScale, LinearScale, Title } from "chart.js"
 import { Doughnut, Bar } from 'react-chartjs-2'
-import { data, options, plugins } from "./datasets/doughnut"
-import { dataBar, optionsBar } from "./datasets/bar"
+import DataSetDoughnut from "./datasets/doughnut"
+import DatasetBar from "./datasets/bar"
 import Modal from "../../components/Modal"
 import Contribution from "./form/contribution"
 import Retirada from "./form/retirada"
 import api from "../../services/api/server"
 import ReadApi from "../../services/readData"
-import { converter } from "../../services/converterData"
+import { jwtDecode } from "jwt-decode"
 
 ChartJS.register(ArcElement, BarElement, CategoryScale, LinearScale, Title)
 
 const Checkout = () => {
 
     const { primaryColor, neutralColor } = theme
-    const { reservations, dataClient, aportes, retiradas, park } = useUser()
+    const { 
+        reservations, 
+        dataClient, 
+        aportes, 
+        retiradas, 
+        park, 
+        setDataClient,
+        filtrarPorData, 
+        setFiltrarPorData,
+        reservaAppParko
+    } = useUser()
     const { readAportes, readRetiradas, listReservations, loadData } = ReadApi()
-    const { converterData } = converter()
 
     const [open, setOpen] = useState(false)
     const [openRetirada, setOpenRetirada] = useState(false)
@@ -42,25 +51,21 @@ const Checkout = () => {
     const [text, setText] = useState("")
     const [loading, setLoading] = useState(false)
     const [messageError, setMessageError] = useState("")
-    const [filtrarPorData, setFiltrarPorData] = useState({
-        resumo: converterData,
-        lista: converterData
-    })
 
-    const formatoPadrao = () => {
-        const formatar = filtrarPorData.lista.split("-")
-        return `${formatar[2]}/${formatar[1]}/${formatar[0]}`
-    }
 
     const reservaFechada = reservations.filter(
-        item => item.status === "Finalizado" &&
-        item.data_entrada === formatoPadrao()
+        item => item.status === "Finalizado" && 
+        item.data_saida === filtrarPorData.lista
     )
-
     const filterReserv = reservaFechada.filter(
         item => item.name.toLowerCase().includes(text.toLowerCase()) ||
-        item.license_plate.toLowerCase().includes(text.toLowerCase())
+        item.license_plate.toLowerCase().includes(text.toLowerCase()) || 
+        item.id == text
     )
+
+    const { dataBar, optionsBar } = DatasetBar()
+    const { data, options, plugins } = DataSetDoughnut()
+
 
     const calcularValorPorEstacionamento = (data, idEstacionamento) => {
 
@@ -85,6 +90,22 @@ const Checkout = () => {
         return { valoresTotal, valoresAporte, valoresRetiradas }
     }
 
+    const createdAt = (created_at) => {
+        const splitDate = created_at.split("T")
+
+        if(splitDate[0].includes("-")) {
+            const includes = splitDate[0].split("-")
+            return `${includes[2]}/${includes[1]}/${includes[0]}, ${splitDate[1]}`
+            
+        }
+
+        return null
+    }
+
+    const unformatCurrency = (num) => {
+        return num.replace(/[^\d]/g, "").slice(0, 6)
+    }
+
     const criarAporte = async (setOpen, e) => {
         e.preventDefault()
         setLoading(true)
@@ -92,8 +113,8 @@ const Checkout = () => {
         await api.post("/aportes", {
             id_establishment: dataClient.id_establishment,
             id_colaborator: dataClient.id,
-            created_at: novoAporte.created_at,
-            value: novoAporte.value,
+            created_at: createdAt(novoAporte.created_at),
+            value: unformatCurrency(novoAporte.value) / 100,
             description: novoAporte.description
         })
         .then(() => {
@@ -115,8 +136,8 @@ const Checkout = () => {
         await api.post("/retiradas", {
             id_establishment: dataClient.id_establishment,
             id_colaborator: dataClient.id,
-            created_at: novaRetirada.created_at,
-            value: novaRetirada.value,
+            created_at: createdAt(novaRetirada.created_at),
+            value: unformatCurrency(novaRetirada.value) / 100,
             description: novaRetirada.description
         })
         .then(() => {
@@ -130,6 +151,15 @@ const Checkout = () => {
             setLoading(false)
         })
     }
+
+    useEffect(() => {
+        const token = localStorage.getItem("token")
+
+        if(token) {
+            const decoded = jwtDecode(token)
+            setDataClient(decoded.user)
+        }
+    }, [])
 
     useEffect(() => {
         readRetiradas()
@@ -168,7 +198,8 @@ const Checkout = () => {
                 resumo={{
                     valoresTotal,
                     valoresAporte,
-                    valoresRetiradas
+                    valoresRetiradas,
+                    filtrarPorData
                 }}
             />
             <SecondHeader 
@@ -188,12 +219,15 @@ const Checkout = () => {
                         options={optionsBar}
                     />
                 </div>
+                
                 <div style={{ padding: 10 }}>
-                    <Doughnut
-                        data={data}
-                        options={options}
-                        plugins={plugins}
-                    />
+                    {reservaAppParko && 
+                        <Doughnut
+                            data={data}
+                            options={options}
+                            plugins={plugins}
+                        />
+                    }
                 </div>
             </Graphics>
 

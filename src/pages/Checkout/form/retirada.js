@@ -6,6 +6,25 @@ const Retirada = ({ primaryColor, neutralColor, state, messageError }) => {
     const { setNovaRetirada, novaRetirada } = state
     const { cancelColor } = theme
 
+    const formatNumber = (num) => {
+        if (!num) return ""
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(num)
+    }
+  
+    const unformatCurrency = (num) => {
+        return num.replace(/[^\d]/g, "").slice(0, 6)
+    }
+  
+    const handleChange = (e) => {
+        const rawValue = e.target.value
+        const numericValue = unformatCurrency(rawValue) / 100
+        
+        setNovaRetirada({ ...novaRetirada, value: formatNumber(numericValue) })
+    }
+
     return (
         <Form>
             <DivInput largura={"45%"}>
@@ -14,7 +33,7 @@ const Retirada = ({ primaryColor, neutralColor, state, messageError }) => {
                     type="text" 
                     bordercolor={primaryColor} 
                     value={novaRetirada.value}
-                    onChange={e => setNovaRetirada({ ...novaRetirada, value: e.target.value })}
+                    onChange={e => handleChange(e)}
                     required
                 />
                 <Label textcolor={cancelColor}>{messageError}</Label>

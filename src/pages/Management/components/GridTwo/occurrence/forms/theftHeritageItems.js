@@ -1,18 +1,12 @@
-import { 
-    ContainerForm,
-    Div,
-    Label,
-    InputText,
-    LabelRadio,
-    TextArea
-} from "./styleForm";
-import { useState } from "react";
+import { useUser } from "../../../../../../context/globalContext"
+import { ContainerForm, Div, Label, InputText, LabelRadio, TextArea } from "./styleForm"
+import { useState } from "react"
 
-const TheftHeritage = (props) => {
+const TheftHeritage = () => {
 
-    const [radioValue, setRadioValue] = useState("");
+    const [radioValue, setRadioValue] = useState("")
 
-    const { occurrenceItem, setOccurrenceItem } = props.state;
+    const { occurrenceItem, setOccurrenceItem } = useUser()
 
     return (
         <>
@@ -93,4 +87,4 @@ const TheftHeritage = (props) => {
     )
 }
 
-export default TheftHeritage;
+export default TheftHeritage

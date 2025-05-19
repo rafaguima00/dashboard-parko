@@ -3,18 +3,20 @@ import {
     ListBody,
     ElementList,
     ItemList,
-    State 
+    State, 
+    Line
 } from "../style"
 import api from "../../../services/api/server"
 import EmptyMessage from "../../../components/EmptyMessage"
 import { theme } from "../../../theme/theme"
 import { useNavigate } from "react-router-dom"
+import Modal from "../../../components/Modal"
 
 const ConfirmedReserve = (props) => {
 
     const { reservations, park, dataClient } = useUser()
-    const { primaryColor } = theme
-    const { setLoading } = props.states
+    const { primaryColor, neutralColor } = theme
+    const { setLoading, loading, setOpenRefuse, openRefuse } = props.states
     const { listReservations } = props
 
     const navigate = useNavigate()
@@ -61,7 +63,7 @@ const ConfirmedReserve = (props) => {
         }
     }
 
-    return (
+    return <>
         <ListBody>
         {
             reservations.filter(item => item.status === "Confirmado").length === 0 ?
@@ -77,7 +79,17 @@ const ConfirmedReserve = (props) => {
             ))
         }
         </ListBody>
-    )
+
+        {/* <Modal
+            isOpen={openRefuse}
+            setOpen={setOpenRefuse}
+            title={"Recusar reserva"}
+            funcao={e => refuseReserve(e, user)}
+            isLoading={loading}
+        >
+            <Line textcolor={neutralColor}>{`Deseja recusar a reserva de ${user.name}?`}</Line>
+        </Modal> */}
+    </>
 }
 
 export default ConfirmedReserve

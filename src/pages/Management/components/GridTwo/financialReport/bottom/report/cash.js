@@ -1,13 +1,13 @@
-import { Block, Table, Head, Th, Td } from "../style";
-import { cashFlow } from "../../../../../map/cashFlow";
-import { formatCurrency } from "../../../../../../../services/formatCurrency";
+import { Block, Table, Head, Th, Td } from "../style"
+import { cashFlow } from "../../../../../map/cashFlow"
+import { formatCurrency } from "../../../../../../../services/formatCurrency"
 
 const ReportCash = (props) => {
 
-    const { cancelColor, primaryColor } = props.colors;
+    const { cancelColor, primaryColor } = props.colors
 
     const flow = (entrance, exit) => {
-        return entrance - exit;
+        return formatCurrency(entrance - exit, 'BRL')
     }
 
     return (
@@ -27,7 +27,7 @@ const ReportCash = (props) => {
                             <Td textcolor="#7c7c7c">{item.month}</Td>
                             <Td textcolor={primaryColor}>{formatCurrency(item.entrance, 'BRL')}</Td>
                             <Td textcolor={cancelColor}>{formatCurrency(item.exit, 'BRL')}</Td>
-                            <Td textcolor="#7c7c7c">{formatCurrency(flow(item.entrance, item.exit), 'BRL')}</Td>
+                            <Td textcolor="#7c7c7c">{flow(item.entrance, item.exit)}</Td>
                         </tr>
                     ))}
                 </tbody>
@@ -36,4 +36,4 @@ const ReportCash = (props) => {
     )
 }
 
-export default ReportCash;
+export default ReportCash

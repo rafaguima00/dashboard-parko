@@ -1,33 +1,27 @@
-import { 
-    Div, 
-    Span, 
-    Icon,
-    Footer,
-    Button
-} from "../../../style";
-import { GoArrowSwitch } from "react-icons/go";
-import { FiDownload } from "react-icons/fi";
-import Cash from "./subComponents/cash";
-import Client from "./subComponents/client";
-import Costs from "./subComponents/costs";
-import General from "./subComponents/general";
-import HeritageAndStock from "./subComponents/heritageAndStock";
-import { theme } from "../../../../../theme/theme";
-import ReportCash from "./bottom/report/cash";
-import { useState } from "react";
-import GraphicFlow from "./bottom/graphics/cash/cash";
-import GraphicClient from "./bottom/graphics/costumer/client";
-import GraphicCosts from "./bottom/graphics/costs/costs";
-import ReportClient from "./bottom/report/client";
-import ReportCosts from "./bottom/report/costs";
+import { Div, Span, Icon, Footer, Button } from "../../../style"
+import { GoArrowSwitch } from "react-icons/go"
+import { FiDownload } from "react-icons/fi"
+import Cash from "./subComponents/cash"
+import Client from "./subComponents/client"
+import Costs from "./subComponents/costs"
+import General from "./subComponents/general"
+import HeritageAndStock from "./subComponents/heritageAndStock"
+import { theme } from "../../../../../theme/theme"
+import ReportCash from "./bottom/report/cash"
+import { useState } from "react"
+import GraphicFlow from "./bottom/graphics/cash/cash"
+import GraphicClient from "./bottom/graphics/costumer/client"
+import GraphicCosts from "./bottom/graphics/costs/costs"
+import ReportClient from "./bottom/report/client"
+import ReportCosts from "./bottom/report/costs"
 
 
 const FinancialReport = (props) => {
 
-    const { bqSelected } = props;
-    const { neutralColor, cancelColor, primaryColor } = theme;
+    const { bqSelected } = props
+    const { neutralColor, cancelColor, primaryColor } = theme
 
-    const [graphic, setGraphic] = useState(true);
+    const [graphic, setGraphic] = useState(true)
 
     return (
         <Span>
@@ -67,4 +61,4 @@ const FinancialReport = (props) => {
     )
 }
 
-export default FinancialReport;
+export default FinancialReport

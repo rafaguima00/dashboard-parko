@@ -57,24 +57,30 @@ const ReservationStatus = (props) => {
                     <Text>Placa</Text>
                     <TextState>Legenda</TextState>
                 </ListHeader>
+
                 {selected === 1 && 
                     <PendingReserve 
                         states={{ 
                             setOpen, 
                             open,
-                            setOpenRefuse,
-                            openRefuse,
                             setLoading
                         }} 
                         listReservations={listReservations}
                     />
                 }
+
                 {selected === 2 && 
                     <ConfirmedReserve 
-                        states={{ setLoading }} 
+                        states={{ 
+                            setLoading, 
+                            setOpenRefuse,
+                            openRefuse,
+                            loading 
+                        }} 
                         listReservations={listReservations}
                     />
                 }
+
                 {selected === 3 && <RefusedReserve listReservations={listReservations} />}
             </div>
         </ReserveStatus>

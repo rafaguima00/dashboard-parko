@@ -1,18 +1,11 @@
 import { Form, DivInput, Input, Label, Select } from "./style"
-import { theme } from "../../../theme/theme"
-import { formatCurrency } from "../../../services/formatCurrency"
+import { theme } from "../../../../theme/theme"
+import { formatCurrency } from "../../../../services/formatCurrency"
 
-const DebtPayment = (props) => {
+const ModalDividaCliente = (props) => {
 
     const { neutralColor, primaryColor } = theme
-    const {
-        selectedClient, 
-        debt,
-        valorInput,
-        setValorInput,
-        valorSelect,
-        setValorSelect
-    } = props
+    const { valorAPagar, setValorAPagar, valuesDebt, name } = props
 
     const formatNumber = (num) => {
         if (!num) return ""
@@ -29,7 +22,7 @@ const DebtPayment = (props) => {
     const handleChange = (rawValue) => {
         const numericValue = unformatCurrency(rawValue) / 100
         
-        setValorInput(formatNumber(numericValue))
+        setValorAPagar(formatNumber(numericValue))
     }
 
     return (
@@ -40,7 +33,7 @@ const DebtPayment = (props) => {
                     largura={"160px"} 
                     type="text" 
                     bordercolor={primaryColor} 
-                    value={selectedClient ?  selectedClient.name : ""}
+                    value={name}
                     disabled
                 />
             </DivInput>
@@ -50,7 +43,7 @@ const DebtPayment = (props) => {
                     largura={"240px"} 
                     type="text" 
                     bordercolor={primaryColor} 
-                    value={formatCurrency(debt ? debt : "", 'BRL')}
+                    value={formatCurrency(valuesDebt, 'BRL')}
                     disabled
 
                 />
@@ -58,9 +51,10 @@ const DebtPayment = (props) => {
             <DivInput>
                 <Label textcolor={neutralColor}>Forma de Pagamento</Label>
                 <Select 
-                    value={valorSelect}
+                    defaultValue="credit-card" 
                     largura="300px"
-                    onChange={e => setValorSelect(e.target.value)}
+                    // onChange={e => setValueSelectDebt(e.target.value)}
+                    // disabled={reservaParko === 1 ? true : false} 
                 >
                     <option value="credit-card">Maquineta (Crédito)</option>
                     <option value="debit-card">Maquineta (Débito)</option>
@@ -75,7 +69,7 @@ const DebtPayment = (props) => {
                     type="text" 
                     bordercolor={primaryColor} 
                     placeholder="R$ 0,00"
-                    value={valorInput ? valorInput : ""}
+                    value={valorAPagar}
                     onChange={e => handleChange(e.target.value)}
                 />
             </DivInput>
@@ -83,4 +77,4 @@ const DebtPayment = (props) => {
     )
 }
 
-export default DebtPayment
+export default ModalDividaCliente

@@ -1,14 +1,14 @@
-import { Bar } from "react-chartjs-2";
-import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Tooltip } from "chart.js";
-import { data, options } from "./data";
-import { GraphicElement } from "../../style";
+import { Bar } from "react-chartjs-2"
+import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Tooltip } from "chart.js"
+import { data, options } from "./data"
+import { GraphicElement } from "../../style"
 
-ChartJS.register(Legend, Tooltip, CategoryScale, LinearScale, BarElement);
+ChartJS.register(Legend, Tooltip, CategoryScale, LinearScale, BarElement)
 
 const GraphicFlow = () => {
     return (
         <GraphicElement largura={60}>
-            <Bar 
+            <Bar
                 data={data}
                 options={options}
             />
@@ -16,4 +16,4 @@ const GraphicFlow = () => {
     )
 }
 
-export default GraphicFlow;
+export default GraphicFlow

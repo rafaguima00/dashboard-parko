@@ -23,7 +23,10 @@ const FirstHeader = (props) => {
     function setData(e, value) {
         e.preventDefault()
 
-        setFiltrarPorData({ ...filtrarPorData, resumo: value })
+        const arrayFormatoPadrao = value.split("-")
+        const formatoPadrao = `${arrayFormatoPadrao[2]}/${arrayFormatoPadrao[1]}/${arrayFormatoPadrao[0]}`
+
+        setFiltrarPorData({ ...filtrarPorData, resumo: formatoPadrao })
         setAbrirModal(false)
     }
     

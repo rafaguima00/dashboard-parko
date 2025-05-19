@@ -1,10 +1,10 @@
-import { theme } from "../../../../../../../../theme/theme";
+import { theme } from "../../../../../../../../theme/theme"
 
-const { primaryColor } = theme;
+const { primaryColor } = theme
 
-const pagas = 3500;
-const pend = 3000;
-const totais = pagas + pend;
+const pagas = 0
+const pend = 0
+const totais = pagas + pend
 
 const total = [totais, pagas, pend]
 
@@ -20,7 +20,7 @@ export const data = {
         barPercentage: 0.5
     }
   ],
-};
+}
 
 export const options = {
     plugins: {
@@ -47,4 +47,4 @@ export const options = {
     },
     responsive: true,
     maintainAspectRatio: false,
-};
+}

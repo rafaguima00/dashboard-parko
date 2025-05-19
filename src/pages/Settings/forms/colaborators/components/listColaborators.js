@@ -5,7 +5,8 @@ import {
     InfoUser,
     Name,
     P,
-    GroupButton
+    GroupButton,
+    ColaboratorsList
 } from "../style"
 import GlobalButton from "../../../../../components/Button"
 import { useUser } from "../../../../../context/globalContext" 
@@ -28,7 +29,7 @@ const ListColaborators = (props) => {
 
     return (
         <ColaboratorsView background={"#8371AE"}>
-            <span>
+            <ColaboratorsList>
                 {colaborators.map(item => ( 
                     <Profile 
                         key={item.id} 
@@ -43,7 +44,7 @@ const ListColaborators = (props) => {
                         </InfoUser>
                     </Profile>
                 ))}
-            </span>
+            </ColaboratorsList>
             <GroupButton>
                 <GlobalButton 
                     background={primaryColor}

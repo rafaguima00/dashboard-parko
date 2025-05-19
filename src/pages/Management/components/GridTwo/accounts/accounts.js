@@ -22,46 +22,14 @@ const Accounts = () => {
     const [cost, setCost] = useState("")
     const [loading, setLoading] = useState(false)
 
-    const verifyCategory = async (acc) => {
-        const { category, value, desc_item, date_created } = acc
+    // Função para remover tudo que não for número
+    const unformatCurrency = (num) => {
+        return num.replace(/[^\d]/g, "")
+    }
 
-        if(category === "Aporte") {
-            await api.post("/aportes", {
-                id_establishment: dataClient.id_establishment,
-                id_colaborator: dataClient.id,
-                created_at: date_created,
-                value: value,
-                description: desc_item
-            })
-            .then(() => {
-                console.log("Aporte realizado")
-                setLoading(false)
-                setCount(false)
-            })
-            .catch(e => {
-                console.log("Erro ao realizar aporte")
-                setLoading(false)
-            })
-        }
-
-        if(category === "Retirada") {
-            await api.post("/retiradas", {
-                id_establishment: dataClient.id_establishment,
-                id_colaborator: dataClient.id,
-                created_at: date_created,
-                value: value,
-                description: desc_item
-            })
-            .then(() => {
-                console.log("Retirada realizada")
-                setLoading(false)
-                setCount(false)
-            })
-            .catch(e => {
-                console.log("Erro ao realizar retirada")
-                setLoading(false)
-            })
-        }
+    const formatDate = (date) => {
+        const [year, month, day] = date.split("-")
+        return `${day}/${month}/${year}`
     }
 
     const readAccounts = async () => {
@@ -81,18 +49,17 @@ const Accounts = () => {
         await api.post("/accounts", {
             category: chosenAcc.category, 
             desc_item: chosenAcc.desc_item, 
-            value: chosenAcc.value, 
-            date_created: chosenAcc.date_created, 
-            date_payment: chosenAcc.date_payment, 
+            value: unformatCurrency(chosenAcc.value) / 100, 
+            date_created: formatDate(chosenAcc.date_created), 
+            date_payment: formatDate(chosenAcc.date_payment), 
             status: radioValue, 
             cost: cost, 
-            id_establishment: dataClient.id_establishment
-        })
-        .then(() => {
-            verifyCategory(chosenAcc)
+            id_establishment: dataClient.id_establishment,
+            id_colaborator: dataClient.id
         })
         .then(() => {
             alert("Criado com sucesso")
+            readAccounts()
             setLoading(false)
             setCount(false)
         })
@@ -114,7 +81,11 @@ const Accounts = () => {
         item.date_created.includes(text)
     )
 
-    useEffect(() => { readAccounts() }, [accounts])
+    useEffect(() => { 
+        if(dataClient.id) {
+            readAccounts()
+        }
+    }, [dataClient])
 
     return (
         <Span>
@@ -126,6 +97,8 @@ const Accounts = () => {
                     setCount={setCount}
                     setText={setText}
                 />
+
+                {/* Lista de contas a pagar */}
                 <TableAccount 
                     neutralColor={neutralColor}
                     state={{ accounts }}

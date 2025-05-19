@@ -1,4 +1,7 @@
-import styled from "styled-components";
+import styled from "styled-components"
+import { theme } from "../../../../theme/theme"
+
+const { neutralColor } = theme
 
 export const ContentView = styled.div`
     display: flex;
@@ -21,6 +24,25 @@ export const ColaboratorsView = styled.div`
     align-items: center;
     justify-content: space-between;
 `
+
+export const ColaboratorsList = styled.div`
+    max-height: 78%;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+        width: .5rem;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: ${neutralColor};
+        border-radius: 3px;
+    }
+`
+
 export const P = styled.p`
     font-size: 14px;
 `

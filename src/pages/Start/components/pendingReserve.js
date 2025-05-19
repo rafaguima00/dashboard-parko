@@ -14,25 +14,13 @@ import { useState } from "react"
 
 const PendingReserve = (props) => {
 
-    const { reservations, park, dataClient } = useUser()
+    const { reservations } = useUser()
     const { primaryColor, neutralColor } = theme
-    const { setOpen, open, setOpenRefuse, openRefuse } = props.states
+    const { setOpen, open, setOpenRefuse } = props.states
     const { listReservations } = props
 
     const [user, setUser] = useState("")
     const [loading, setLoading] = useState(false)
-
-    const vagasOcupadas = async (id) => {
-        await api.put(`/vagas_ocupadas/${id}`, {
-            vagas_ocupadas: park.vagas_ocupadas + 1
-        })
-        .then(() => {
-            return "ok"
-        })
-        .catch(e => {
-            return e
-        })
-    }
 
     const getReservation = async (id) => {
         const findUser = reservations.find(item => item.id === id)
@@ -68,7 +56,6 @@ const PendingReserve = (props) => {
         })
         .then(() => {
             listReservations()
-            vagasOcupadas(dataClient.id_establishment)
             alert("Reserva confirmada com sucesso.")
         })
         .catch(e => {
@@ -82,7 +69,6 @@ const PendingReserve = (props) => {
     const showMessageRefuse = (e) => {
         e.preventDefault()
         setOpen(false)
-        setOpenRefuse(true)
     }
 
     const refuseReserve = async (e, user) => {
@@ -144,16 +130,6 @@ const PendingReserve = (props) => {
             isLoading={loading}
         >
             <Line textcolor={neutralColor}>{`Deseja confirmar a reserva de ${user.name}?`}</Line>
-        </Modal>
-
-        <Modal
-            isOpen={openRefuse}
-            setOpen={setOpenRefuse}
-            title={"Recusar reserva"}
-            funcao={e => refuseReserve(e, user)}
-            isLoading={loading}
-        >
-            <Line textcolor={neutralColor}>{`Deseja recusar a reserva de ${user.name}?`}</Line>
         </Modal>
     </>
 }

@@ -9,16 +9,16 @@ import ReadApi from "../../services/readData"
 
 const Ratings = () => {
 
-    const { ratings, setRatings, dataClient, setDataClient, park } = useUser()
-    const { loadData, listColaborators, listReservations } = ReadApi()
+    const { ratings, setRatings, dataClient, setDataClient } = useUser()
+    const { loadData } = ReadApi()
 
     const recuperarDados = async () => {
-        await api.get("/ratings")
+        await api.get(`/ratings/${dataClient.id_establishment}`)
         .then(res => {
             setRatings(res.data)
         })
         .catch(e => {
-            console.log(e.response.data.error.message)
+            setRatings(e.response.data.error.message)
         })
     }
 

@@ -1,7 +1,4 @@
-import {
-    ButtonGroup,
-    Line
-} from "../style"
+import { ButtonGroup, Line } from "../style"
 import GlobalButton from "../../../components/Button"
 import { theme } from "../../../theme/theme"
 import { useUser } from "../../../context/globalContext"
@@ -12,7 +9,7 @@ import api from "../../../services/api/server"
 const Buttons = ({ setOpen, setOpenRetirada }) => {
 
     const { cancelColor, primaryColor, neutralColor } = theme
-    const { dataClient, caixaAberto } = useUser()
+    const { dataClient, caixaAberto, valorDoCaixa, setCaixaAberto } = useUser()
     
     const [modal, setModal] = useState({
         open: false,
@@ -33,9 +30,10 @@ const Buttons = ({ setOpen, setOpenRetirada }) => {
 
         await api.put(`/abertura_caixa/${caixaAberto.id}`, { 
             aberto: 0,
-            value: caixaAberto.value
+            valor_fechamento: (caixaAberto?.valor_abertura ?? 0) + valorDoCaixa
         })
-        .then(() => {
+        .then(res => {
+            setCaixaAberto(res.data[0])
             alert("Caixa fechado")
         })
         .catch(e => {
@@ -83,4 +81,4 @@ const Buttons = ({ setOpen, setOpenRetirada }) => {
     
 }
 
-export default Buttons;
+export default Buttons

@@ -1,11 +1,11 @@
-import { Table, Head, Th, Td } from "../style";
-import { cashFlow } from "../../../../../map/cashFlow";
-import { formatCurrency } from "../../../../../../../services/formatCurrency";
+import { Table, Head, Th, Td } from "../style"
+import { cashFlow } from "../../../../../map/cashFlow"
+import { formatCurrency } from "../../../../../../../services/formatCurrency"
 
 const ReportCosts = () => {
 
-    let pend = "Pendente";
-    let variable = "Variavel";
+    let pend = "Pendente"
+    let variable = "Variavel"
 
     return (
         <div>
@@ -25,11 +25,11 @@ const ReportCosts = () => {
                 <tbody>
                     {cashFlow.map(item => (
                         <tr>
-                            <Td textcolor="#7c7c7c">Tel - Jan</Td>
-                            <Td textcolor="#7c7c7c">02/12/2023</Td>
-                            <Td textcolor="#7c7c7c">xx/xx/xxxx</Td>
-                            <Td textcolor="#7c7c7c">02/01/2024</Td>
-                            <Td textcolor="#7c7c7c">{formatCurrency((150), 'BRL')}</Td>
+                            <Td textcolor="#7c7c7c">Conta - Mês</Td>
+                            <Td textcolor="#7c7c7c">dd/mm/yyyy</Td>
+                            <Td textcolor="#7c7c7c">dd/mm/yyyy</Td>
+                            <Td textcolor="#7c7c7c">dd/mm/yyyy</Td>
+                            <Td textcolor="#7c7c7c">{formatCurrency((0), 'BRL')}</Td>
                             <Td textcolor="#7c7c7c">{formatCurrency((0), 'BRL')}</Td>
                             <Td textcolor="#7c7c7c">{pend.substring(0, 4)}</Td>
                             <Td textcolor="#7c7c7c">{variable.substring(0, 5)}</Td>
@@ -41,4 +41,4 @@ const ReportCosts = () => {
     )
 }
 
-export default ReportCosts;
+export default ReportCosts

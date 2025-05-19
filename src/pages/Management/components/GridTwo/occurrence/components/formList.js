@@ -1,35 +1,19 @@
-import phone from "../../../../../../assets/Phone.png";
-import ticket from "../../../../../../assets/Ticket.png";
-import wallet from "../../../../../../assets/Wallet.png";
-import { GoArrowRight } from "react-icons/go";
-import {
-    Section, 
-    FormButton, 
-    FormItem, 
-    TextItem,
-    DivImage,
-    Icon
-} from "../style";
+import phone from "../../../../../../assets/Phone.png"
+import ticket from "../../../../../../assets/Ticket.png"
+import wallet from "../../../../../../assets/Wallet.png"
+import { GoArrowRight } from "react-icons/go"
+import { Section,  FormButton,  FormItem,  TextItem, DivImage, Icon } from "../style"
+import { useUser } from "../../../../../../context/globalContext"
 
 const FormList = (props) => {
 
-    const { primaryColor } = props;
-    const { setFormActive, setOccurrenceItem } = props.state;
+    const { primaryColor } = props
+    const { setOccurrenceItem, setFormActive } = useUser()
 
-    const openFormTicket = () => {
-        setOccurrenceItem({});
-        setFormActive(1);
-    };
-
-    const openFormCliente = () => {
-        setOccurrenceItem({});
-        setFormActive(2);
-    };
-
-    const openFormPatrimonio = () => {
-        setOccurrenceItem({});
-        setFormActive(3);
-    };
+    const openForm = (num) => {
+        setOccurrenceItem({})
+        setFormActive(num)
+    }
 
     return (
         <Section>
@@ -40,7 +24,7 @@ const FormList = (props) => {
                     </DivImage>
                     <TextItem textcolor="#f4f4f4">Perda de Ticket</TextItem>
                 </FormItem>
-                <Icon onClick={openFormTicket}>
+                <Icon onClick={() => openForm(1)}>
                     <GoArrowRight size={22} color={primaryColor}/>
                 </Icon>
             </FormButton>
@@ -51,7 +35,7 @@ const FormList = (props) => {
                     </DivImage>
                     <TextItem textcolor="#f4f4f4">Furto de bens do cliente</TextItem>
                 </FormItem>
-                <Icon onClick={openFormCliente}>
+                <Icon onClick={() => openForm(2)}>
                     <GoArrowRight size={22} color={primaryColor}/>
                 </Icon>
             </FormButton>
@@ -62,7 +46,7 @@ const FormList = (props) => {
                     </DivImage>
                     <TextItem textcolor="#f4f4f4">Furto de itens do patrimônio</TextItem>
                 </FormItem>
-                <Icon onClick={openFormPatrimonio}>
+                <Icon onClick={() => openForm(3)}>
                     <GoArrowRight size={22} color={primaryColor}/>
                 </Icon>
             </FormButton>
@@ -70,4 +54,4 @@ const FormList = (props) => {
     )
 }
 
-export default FormList;
+export default FormList

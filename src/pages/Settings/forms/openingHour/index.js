@@ -172,7 +172,11 @@ const FormOpening = () => {
         loadData(dataClient.id_establishment)
         listColaborators(dataClient.id_establishment)
         listReservations(dataClient.id_establishment)
-    }, [])
+
+        if(dataClient.type_colaborator === "Funcionário(a)"){
+            throw new Error("Você não tem permissão para acessar esta funcionalidade")
+        }
+    }, [dataClient])
 
     return (
         <ContainerForm>

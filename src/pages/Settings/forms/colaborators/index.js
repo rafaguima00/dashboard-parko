@@ -38,7 +38,6 @@ const ColaboratorsForm = () => {
     const [loadingDel, setLoadingDel] = useState(false)
 
     const selecionarCargo = (value) => {
-
         if(value === "Funcionário(a)") {
             setNewColaborator({ ...newColaborator, e_admin: 1 })
         } else if (value === "Coordenador(a)") {
@@ -51,7 +50,7 @@ const ColaboratorsForm = () => {
     const tipoContratacao = (value) => {
         if(value === "Carteira assinada") {
             setNewColaborator({ ...newColaborator, tipo_contratacao: 1 })
-        } else if (value === "Autônomo (PJ)") {
+        } else if (value === "Autônomo(PJ)") {
             setNewColaborator({ ...newColaborator, tipo_contratacao: 2 })
         }else if (value === "MEI") {
             setNewColaborator({ ...newColaborator, tipo_contratacao: 3 })
@@ -66,10 +65,11 @@ const ColaboratorsForm = () => {
         await api.post("/colaborators", item)
         .then(() => {
             alert(`Colaborador ${item.colaborator} registrado`)
-            setLoadingAdd(false)
         })
         .catch(e => {
             alert(e.response.data.message)
+        })
+        .finally(() => {
             setLoadingAdd(false)
         })
     }
@@ -103,10 +103,11 @@ const ColaboratorsForm = () => {
             await api.put(`/colaborators/${selected}`, newColaborator)
             .then(() => {
                 alert("Usuário atualizado com sucesso.")
-                setLoading(false)
             })
             .catch(e => {
                 alert(e.response.data.message)
+            })
+            .finally(() => {
                 setLoading(false)
             })
         } else {
@@ -133,6 +134,10 @@ const ColaboratorsForm = () => {
         loadData(dataClient.id_establishment)
         listColaborators(dataClient.id_establishment)
         listReservations(dataClient.id_establishment)
+
+        if(dataClient.type_colaborator !== "Administrador(a)"){
+            throw new Error("Você não tem permissão para acessar esta funcionalidade")
+        }
     }, [dataClient])
 
     return (

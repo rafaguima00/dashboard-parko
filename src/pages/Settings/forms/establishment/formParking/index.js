@@ -63,15 +63,16 @@ const FormParking = (props) => {
         e.preventDefault()
         setLoading(true)
 
-        await api.patch(`/establishments/${dataClient.id_establishment}`, parkInfo)
+        await api.put(`/establishments/${dataClient.id_establishment}`, parkInfo)
         .then(() => {
             alert("As informações foram atualizadas com sucesso.")
         })
         .catch(e => {
             console.log(e)
         })
-
-        setLoading(false)
+        .finally(() => {
+            setLoading(false)
+        })
     }
 
     const atualizarCep = async ({ e }) => {
@@ -90,6 +91,66 @@ const FormParking = (props) => {
         .catch(e => {
             console.log(e)
         })
+    }
+
+    function formatTel(value) {
+        const rawValue = value.replace(/\D/g, '').slice(0, 11)
+
+        let formattedPhone = rawValue
+
+        if (rawValue.length > 7) {
+            formattedPhone = `(${rawValue.slice(0, 2)}) ${rawValue.slice(2, 7)}-${rawValue.slice(7)}`
+        }
+
+        setParkInfo({ ...parkInfo, contato: formattedPhone })
+    }
+
+    function formatCnpj(value) {
+        const rawValue = value.replace(/\D/g, '').slice(0, 14)
+
+        let formattedCnpj = rawValue
+
+        if (rawValue.length > 13) {
+            formattedCnpj = `${rawValue.slice(0, 2)}.${rawValue.slice(2, 5)}.${rawValue.slice(5, 8)}/${rawValue.slice(8, 12)}-${rawValue.slice(12, 14)}`
+        }
+
+        setParkInfo({ ...parkInfo, cnpj: formattedCnpj })
+    }
+
+    function formatCep(value) {
+        const rawValue = value.replace(/\D/g, '').slice(0, 14)
+
+        let formattedCep = rawValue
+
+        if(rawValue.length > 7) {
+            formattedCep = `${rawValue.slice(0, 5)}-${rawValue.slice(5, 8)}`
+        }
+
+        setParkInfo({ ...parkInfo, cep: formattedCep })
+    }
+
+    function formatInscricaoEstadual(value) {
+        const raw = value.replace(/\D/g, '').slice(0, 14)
+
+        let formatted = raw
+
+        if (raw.length > 9) {
+            formatted = `${raw.slice(0,3)}.${raw.slice(3,6)}.${raw.slice(6,9)}.${raw.slice(9,12)}`
+        }
+
+        setParkInfo({ ...parkInfo, inscricao_estadual: formatted })
+    }
+
+    function formatInscricaoMunicipal(value) {
+        const raw = value.replace(/\D/g, '').slice(0, 12)
+
+        let formatted = raw
+        
+        if (raw.length > 8) {
+            formatted = `${raw.slice(0,8)}-${raw.slice(8)}`
+        }
+
+        setParkInfo({ ...parkInfo, inscricao_municipal: formatted })
     }
 
     useEffect(() => {
@@ -147,7 +208,7 @@ const FormParking = (props) => {
                         largura={242}
                         required
                         value={parkInfo?.contato ?? ""}
-                        onChange={e => setParkInfo({ ...parkInfo, contato: e.target.value })}
+                        onChange={e => formatTel(e.target.value)}
                     />
                 </DivInput>
                 <DivInput>
@@ -159,7 +220,7 @@ const FormParking = (props) => {
                         largura={324}
                         required
                         value={parkInfo?.cnpj ?? ""}
-                        onChange={e => setParkInfo({ ...parkInfo, cnpj: e.target.value })}
+                        onChange={e => formatCnpj(e.target.value)}
                     />
                 </DivInput>
                 <DivInput>
@@ -171,7 +232,7 @@ const FormParking = (props) => {
                         largura={324}
                         required
                         value={parkInfo?.inscricao_estadual ?? ""}
-                        onChange={e => setParkInfo({ ...parkInfo, inscricao_estadual: e.target.value })}
+                        onChange={e => formatInscricaoEstadual(e.target.value)}
                     />
                 </DivInput>
                 <DivInput>
@@ -183,13 +244,13 @@ const FormParking = (props) => {
                         largura={324}
                         required
                         value={parkInfo?.inscricao_municipal ?? ""}
-                        onChange={e => setParkInfo({ ...parkInfo, inscricao_municipal: e.target.value })}
+                        onChange={e => formatInscricaoMunicipal(e.target.value)}
                     />
                 </DivInput>
                 <DivInput>
                     <Label textcolor={neutralColor}>E-mail</Label>
                     <Input 
-                        type="text"
+                        type="email"
                         placeholder="Seu e-mail"
                         bordercolor={primaryColor} 
                         largura={670}
@@ -219,7 +280,7 @@ const FormParking = (props) => {
                         largura={244}
                         required
                         value={parkInfo?.cep ?? ""}
-                        onChange={e => setParkInfo({ ...parkInfo, cep: e.target.value })}
+                        onChange={e => formatCep(e.target.value)}
                         onBlur={(e) => atualizarCep({ e })}
                     />
                 </DivInput>
