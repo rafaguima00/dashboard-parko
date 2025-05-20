@@ -6,19 +6,12 @@ import {
     DivButton,
     Select
 } from "../../style"
-import { 
-    FormContent,
-    DivImage, 
-    Image, 
-    Edit
-} from "../style"
+import { FormContent, DivImage, Image } from "../style"
 import avatar from "../../../../../assets/avatar.png"
-import { FaRegEdit } from "react-icons/fa"
 import GlobalButton from "../../../../../components/Button"
 import { useNavigate } from "react-router-dom"
 import { Bounce } from "react-activity"
 import "react-activity/dist/library.css"
-import { cpf } from "cpf-cnpj-validator"
 
 const FormColaborator = (props) => {
 

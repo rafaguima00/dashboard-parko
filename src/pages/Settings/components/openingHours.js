@@ -4,13 +4,17 @@ import {
     ButtonEdit,
     Menu,
     Warning,
-    Hour
+    Hour,
+    ElementLoading,
+    Loading
 } from "../style"
 import { theme } from "../../../theme/theme"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { useUser } from "../../../context/globalContext"
 import api from "../../../services/api/server"
+import { Spinner } from "react-activity"
+import "react-activity/dist/library.css"
 
 const OpeningHours = () => {
 
@@ -38,23 +42,42 @@ const OpeningHours = () => {
         })
     }
 
+    const MenuInfo = () => {
+        if(horaAbertura?.hora_abertura == null || horaFechamento?.hora_fechamento == null) {
+            return (
+                <>
+                    <ElementLoading>
+                        <Spinner size={16} speed={1} /> 
+                        <Loading>Carregando...</Loading>
+                    </ElementLoading>
+                </>
+            )
+        }
+
+        if(horaAbertura?.hora_abertura && horaFechamento?.hora_fechamento) {
+            return <>
+                <Menu>
+                    <Warning textcolor={neutralColor}>Em funcionamento de <strong>Segunda à Sábado</strong></Warning>
+                    <Hour textcolor={primaryColor}>
+                        {horaAbertura?.hora_abertura ?? "00:00"}h - {horaFechamento?.hora_fechamento ?? "00:00"}h
+                    </Hour>
+                    <hr/>
+                    <Warning textcolor={cancelColor}><strong>Não funcionamos nos feriados</strong></Warning>
+                </Menu>
+            </>
+        }
+    }
+
     useEffect(() => {
         recuperarDados()
-    }, [horaAbertura, horaFechamento])
+    }, [dataClient])
 
     return (
         <ContentInfo gridcolumn={"span 2"} gridrow={"span 1"}>
             <ButtonEdit onClick={routeScreen}>
                 <BiEdit size={22} color="#545454" />
             </ButtonEdit>
-            <Menu>
-                <Warning textcolor={neutralColor}>Em funcionamento de <strong>Segunda à Sábado</strong></Warning>
-                <Hour textcolor={primaryColor}>
-                    {horaAbertura?.hora_abertura ?? "00:00"}h - {horaFechamento?.hora_fechamento ?? "00:00"}h
-                </Hour>
-                <hr/>
-                <Warning textcolor={cancelColor}><strong>Não funcionamos nos feriados</strong></Warning>
-            </Menu>
+            <MenuInfo />
         </ContentInfo>
     )
 }

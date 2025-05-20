@@ -1,22 +1,18 @@
 import { useUser } from "../../../context/globalContext"
-import { 
-    ListBody,
-    ElementList,
-    ItemList,
-    State, 
-    Line
-} from "../style"
+import { ListBody, ElementList, ItemList, State, Line, ElementLoading, Loading } from "../style"
 import api from "../../../services/api/server"
 import EmptyMessage from "../../../components/EmptyMessage"
 import { theme } from "../../../theme/theme"
 import Modal from "../../../components/Modal"
 import { useState } from "react"
+import { Spinner } from "react-activity"
+import "react-activity/dist/library.css"
 
 const PendingReserve = (props) => {
 
     const { reservations } = useUser()
     const { primaryColor, neutralColor } = theme
-    const { setOpen, open, setOpenRefuse } = props.states
+    const { setOpen, open } = props.states
     const { listReservations } = props
 
     const [user, setUser] = useState("")
@@ -71,54 +67,38 @@ const PendingReserve = (props) => {
         setOpen(false)
     }
 
-    const refuseReserve = async (e, user) => {
-        const { 
-            id, 
-            data_entrada, 
-            hora_entrada,
-            value,
-            id_vehicle
-        } = user
+    const ReservasPendentes = () => {
+        if(reservations.filter(item => item.status === "Pendente").map(item => item.id) == null) {
+            return (
+                <>
+                    <ElementLoading>
+                        <Spinner size={16} speed={1} /> 
+                        <Loading>Carregando...</Loading>
+                    </ElementLoading>
+                </>
+            )
+        }
 
-        e.preventDefault()
-        setLoading(true)
-
-        await api.put(`reservations/${id}`, {
-            data_entrada: data_entrada,
-            hora_entrada: hora_entrada,
-            data_saida: "",
-            hora_saida: "",
-            value: value,
-            status: 3,
-            id_vehicle: id_vehicle
-        })
-        .then(() => {
-            listReservations()
-            alert("Reserva recusada.")
-        })
-        .catch(e => {
-            console.log("Erro ao recusar reserva", e)
-        })
-
-        setLoading(false)
-        setOpenRefuse(false)
+        if(reservations) {
+            return <>
+                {reservations.filter(item => item.status === "Pendente").length === 0 ? 
+                <EmptyMessage>Nenhuma reserva pendente neste estacionamento.</EmptyMessage> :
+                reservations.filter(item => item.status === "Pendente").map(item => (
+                    <ElementList key={item.id}>
+                        <input type="checkbox" checked={false} onClick={() => getReservation(item.id)} />
+                        <ItemList>{item.hora_entrada}</ItemList>
+                        <ItemList>{item.name_vehicle}</ItemList>
+                        <ItemList>{item.license_plate}</ItemList>
+                        <State cor={primaryColor}></State>
+                    </ElementList> 
+                ))}
+            </>
+        }
     }
 
     return <>
         <ListBody>
-        {
-            reservations.filter(item => item.status === "Pendente").length === 0 ? 
-            <EmptyMessage>Nenhuma reserva pendente neste estacionamento.</EmptyMessage> :
-            reservations.filter(item => item.status === "Pendente").map(item => (
-                <ElementList key={item.id}>
-                    <input type="checkbox" checked={false} onClick={() => getReservation(item.id)} />
-                    <ItemList>{item.hora_entrada}</ItemList>
-                    <ItemList>{item.name_vehicle}</ItemList>
-                    <ItemList>{item.license_plate}</ItemList>
-                    <State cor={primaryColor}></State>
-                </ElementList> 
-            ))
-        }
+        <ReservasPendentes />
         </ListBody>
         
         <Modal

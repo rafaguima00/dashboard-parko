@@ -1,18 +1,13 @@
 import { BiEdit } from "react-icons/bi"
-import { 
-    ContentInfo, 
-    ButtonEdit,
-    Menu,
-    Warning,
-    Hour
-} from "../style"
+import { ContentInfo, ButtonEdit, Menu, Warning, Hour, ElementLoading, Loading } from "../style"
 import { theme } from "../../../theme/theme"
 import { useNavigate } from "react-router-dom"
-import api from "../../../services/api/server"
 import { useEffect } from "react"
 import { useUser } from "../../../context/globalContext"
 import { formatCurrency } from "../../../services/formatCurrency"
 import ReadApi from "../../../services/readData"
+import { Spinner } from "react-activity"
+import "react-activity/dist/library.css"
 
 const PriceTable = () => {
     
@@ -28,17 +23,39 @@ const PriceTable = () => {
 
     useEffect(() => {
         getPriceTable(dataClient.id_establishment)
-    }, [priceTable])
+    }, [dataClient])
 
     const tempoTolerancia = () => {
-        if(priceTable?.tempo_tolerancia === null || priceTable?.tempo_tolerancia == 0) {
-            return <strong>Não há tempo de tolerância</strong>
-        } else {
-            return <strong>Tempo de tolerância: {priceTable?.tempo_tolerancia ?? 0} minutos</strong>
+        if(priceTable?.tempo_tolerancia == null) {
+            return (
+                <>
+                    <ElementLoading>
+                        <Spinner size={16} speed={1} /> 
+                        <Loading>Carregando...</Loading>
+                    </ElementLoading>
+                </>
+            )
         }
+
+        if(priceTable?.tempo_tolerancia === 0) {
+            return <strong>Não há tempo de tolerância</strong>
+        }
+            
+        return <strong>Tempo de tolerância: {priceTable?.tempo_tolerancia ?? 0} minutos</strong> 
     }
 
     const valorHora = (valueHour) => {
+        if(valueHour == null) {
+            return (
+                <>
+                    <ElementLoading>
+                        <Spinner size={16} speed={1} /> 
+                        <Loading>Carregando...</Loading>
+                    </ElementLoading>
+                </>
+            )
+        }
+
         return formatCurrency(valueHour, 'BRL')
     }
 

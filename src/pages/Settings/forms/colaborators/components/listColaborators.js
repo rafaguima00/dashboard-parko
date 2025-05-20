@@ -17,14 +17,30 @@ import "react-activity/dist/library.css"
 const ListColaborators = (props) => {
 
     const { primaryColor, neutralColor } = props.theme
-    const { selected, setSelected, newColaborator, setNewColaborator, loadingAdd, loadingDel } = props.state
-    const { handleCreateColaborator, deleteColaborator } = props
-
-    const { colaborators } = useUser()
+    const { selected, setSelected, setNewColaborator, loadingDel } = props.state
+    const { deleteColaborator } = props
+    const { colaborators, dataClient } = useUser()
 
     const handleClick = (item) => {
         setSelected(item.id)
         setNewColaborator(item)
+    }
+
+    function setNone() {
+        setSelected("none")
+        setNewColaborator({
+            colaborator: "",
+            cpf: "",
+            data_nasc: "",
+            e_admin: null,
+            email: "",
+            inicio_contrato: "",
+            password: "",
+            rg: "",
+            tel: "",
+            tipo_contratacao: null,
+            unidade: dataClient.id_establishment
+        })
     }
 
     return (
@@ -48,10 +64,10 @@ const ListColaborators = (props) => {
             <GroupButton>
                 <GlobalButton 
                     background={primaryColor}
-                    children={loadingAdd ? <Bounce color="#f4f4f4" /> : "Adicionar"}
+                    children={"Adicionar"}
                     altura={"2.6rem"}
                     bold={true}
-                    aoPressionar={e => handleCreateColaborator(e, newColaborator)}
+                    aoPressionar={setNone}
                 />
                 <GlobalButton 
                     background={"transparent"}

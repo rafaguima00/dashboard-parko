@@ -12,7 +12,7 @@ const Start = () => {
 
     const { setDataClient, dataClient, setReservations, park } = useUser()
     const { colaborator } = dataClient
-    const { loadData, listColaborators, getPriceTable } = ReadApi()
+    const { loadData } = ReadApi()
 
     const [selected, setSelected] = useState(1)
 
@@ -43,30 +43,30 @@ const Start = () => {
 
     useEffect(() => {
         const token = localStorage.getItem("token")
-        
+
         if(token) {
             const decoded = jwtDecode(token)
             const user = decoded.user
             setDataClient(user)
-    
-            if (user?.id_establishment) {
-                listColaborators(user.id_establishment)
-                getPriceTable(user.id_establishment)
-                listReservations()
-    
-                const intervalo = setInterval(listReservations, 5000)
-                return () => clearInterval(intervalo)
-            }
         } else {
             throw new Error(unLoggedIn)
         }
-    }, [park])
+    }, [])
 
     useEffect(() => {
-        if(dataClient.id_establishment) {
-            loadData(dataClient.id_establishment)
+        if(dataClient?.id_establishment) {
+            loadData(dataClient?.id_establishment)
         }
     }, [dataClient])
+
+    useEffect(() => {
+        if(park) {
+            listReservations()
+
+            const intervalo = setInterval(listReservations, 5000)
+            return () => clearInterval(intervalo)
+        }
+    }, [park])
 
     return (
         <Container>

@@ -3,6 +3,18 @@ import { theme } from "../../theme/theme"
 
 const { neutralColor } = theme
 
+export const ElementLoading = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+`
+
+export const Loading = styled.p`
+    font-size: 22px;
+`
+
 export const Container = styled.div`
     margin: 2rem 5.11rem 1.5rem 0;
     display: grid;
@@ -162,6 +174,7 @@ export const Profile = styled.div`
 export const EditProfile = styled.button`
     background: none;
     border: none;
+    z-index: 10;
 
     &:hover {
         cursor: pointer;

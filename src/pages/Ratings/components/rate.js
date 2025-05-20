@@ -33,7 +33,6 @@ const Rate = (props) => {
                     <Warning>Nenhuma avaliação disponível</Warning>
                 </Body>
             </section>
-
         )
     }
 

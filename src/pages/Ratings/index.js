@@ -29,16 +29,11 @@ const Ratings = () => {
             const decoded = jwtDecode(token)
             setDataClient(decoded.user)
         }
-
-        recuperarDados()
     }, [])
-
-    useEffect(() => { 
-        recuperarDados() 
-    }, [ratings])
 
     useEffect(() => {
         loadData(dataClient.id_establishment)
+        recuperarDados()
     }, [dataClient])
 
     return (

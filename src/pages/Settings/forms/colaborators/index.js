@@ -19,7 +19,7 @@ const ColaboratorsForm = () => {
     const location = useLocation()
     let selectedColaborator = location.state?.selectedColaborator
 
-    const [selected, setSelected] = useState(null)
+    const [selected, setSelected] = useState("none")
     const [newColaborator, setNewColaborator] = useState({
         colaborator: "",
         cpf: "",
@@ -34,7 +34,6 @@ const ColaboratorsForm = () => {
         unidade: dataClient.id_establishment
     })
     const [loading, setLoading] = useState(false)
-    const [loadingAdd, setLoadingAdd] = useState(false)
     const [loadingDel, setLoadingDel] = useState(false)
 
     const selecionarCargo = (value) => {
@@ -58,9 +57,8 @@ const ColaboratorsForm = () => {
     }
 
     //Adicionar colaborator (POST)
-    const handleCreateColaborator = async (e, item) => {
-        e.preventDefault()
-        setLoadingAdd(true)
+    const handleCreateColaborator = async (item) => {
+        setLoading(true)
 
         await api.post("/colaborators", item)
         .then(() => {
@@ -70,7 +68,8 @@ const ColaboratorsForm = () => {
             alert(e.response.data.message)
         })
         .finally(() => {
-            setLoadingAdd(false)
+            listColaborators(dataClient.id_establishment)
+            setLoading(false)
         })
     }
 
@@ -79,19 +78,37 @@ const ColaboratorsForm = () => {
         e.preventDefault()
         setLoadingDel(true)
 
-        if(!selected) {
+        if(selected === "none") {
             setLoadingDel(false)
             return alert("Selecione um usuário")
         }
 
         if(window.confirm("Tem certeza que deseja excluir esta conta?") === true) {
             await api.delete(`/colaborators/${id}`)
+            .then(() => {
+                alert("Conta deletada")
+                setNewColaborator({
+                    colaborator: "",
+                    cpf: "",
+                    data_nasc: "",
+                    e_admin: null,
+                    email: "",
+                    inicio_contrato: "",
+                    password: "",
+                    rg: "",
+                    tel: "",
+                    tipo_contratacao: null,
+                    unidade: dataClient.id_establishment
+                })
+            })
             .catch(e => {
                 alert(`Erro ao deletar conta ${e.response.data.message}`)
             })
+            .finally(() => {
+                listColaborators(dataClient.id_establishment)
+                setLoadingDel(false)
+            })
         }
-        
-        setLoadingDel(false)
     }
 
     //Atualizar colaborador (PUT)
@@ -99,7 +116,12 @@ const ColaboratorsForm = () => {
         e.preventDefault()
         setLoading(true)
 
-        if(selected) {
+        if(selected === "none") {
+            handleCreateColaborator(newColaborator)
+            return
+        }
+
+        if(selected !== "none") {
             await api.put(`/colaborators/${selected}`, newColaborator)
             .then(() => {
                 alert("Usuário atualizado com sucesso.")
@@ -108,11 +130,9 @@ const ColaboratorsForm = () => {
                 alert(e.response.data.message)
             })
             .finally(() => {
+                listColaborators(dataClient.id_establishment)
                 setLoading(false)
             })
-        } else {
-            alert("Selecione um usuário para atualizar informações")
-            setLoading(false)
         }
     }
 
@@ -151,10 +171,8 @@ const ColaboratorsForm = () => {
                         setSelected,
                         newColaborator,
                         setNewColaborator,
-                        loadingAdd,
                         loadingDel
                     }}
-                    handleCreateColaborator={handleCreateColaborator}
                     deleteColaborator={deleteColaborator}
                 />
                 <FormColaborator 

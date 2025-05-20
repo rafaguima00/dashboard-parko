@@ -7,12 +7,16 @@ import {
     InfoEstablishment,
     TextArea,
     P,
-    Name
+    Name,
+    ElementLoading,
+    Loading
 } from "../style"
 import camera from "../../../assets/camera.png"
 import { theme } from "../../../theme/theme"
 import { useNavigate } from "react-router-dom"
 import { useUser } from "../../../context/globalContext"
+import { Spinner } from "react-activity"
+import "react-activity/dist/library.css"
 
 const Establishment = () => {
 
@@ -22,23 +26,29 @@ const Establishment = () => {
 
     const navigate = useNavigate()
 
-    const coordenador = type_colaborator === "Coordenador(a)"
+    const noAdmin = type_colaborator !== "Administrador(a)"
 
     const routerScreen = () => {
-        if(coordenador) {
+        if(noAdmin) {
             alert("Você não tem permissão para editar as informações do estacionamento")
         } else {
             return navigate("/settings/establishment")
         }
     }
 
-    return (
-        <ContentInfo gridcolumn={1} gridrow={"span 3"}>
-            <ButtonEdit
-                onClick={routerScreen}
-            >
-                <BiEdit size={22} color="#545454" />
-            </ButtonEdit>
+    const Menu = () => {
+        if (park?.id == null) {
+            return (
+                <>
+                    <ElementLoading>
+                        <Spinner size={16} speed={1} /> 
+                        <Loading>Carregando...</Loading>
+                    </ElementLoading>
+                </>
+            )
+        }
+
+        return <>
             <MenuEstablishment>
                 <Image src={park?.image ?? camera} alt={park?.name ?? "..."}/>
                 <InfoEstablishment>
@@ -80,6 +90,17 @@ const Establishment = () => {
                     </TextArea>
                 </InfoEstablishment>
             </MenuEstablishment>
+        </>
+    }
+
+    return (
+        <ContentInfo gridcolumn={1} gridrow={"span 3"}>
+            <ButtonEdit
+                onClick={routerScreen}
+            >
+                <BiEdit size={22} color="#545454" />
+            </ButtonEdit>
+            <Menu />
         </ContentInfo>
     )
 }

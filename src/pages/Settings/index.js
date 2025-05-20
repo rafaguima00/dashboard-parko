@@ -12,7 +12,7 @@ import ReadApi from "../../services/readData"
 const Settings = () => {
 
     const { setDataClient, dataClient, park } = useUser()
-    const { listColaborators, listReservations, loadData } = ReadApi()
+    const { listColaborators, loadData } = ReadApi()
 
     useEffect(() => {
         const token = localStorage.getItem("token")
@@ -36,7 +36,6 @@ const Settings = () => {
     useEffect(() => {
         if(park) {
             listColaborators(dataClient.id_establishment)
-            listReservations(dataClient.id_establishment)
         }
     }, [park])
 

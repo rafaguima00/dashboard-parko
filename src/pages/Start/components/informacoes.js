@@ -2,17 +2,27 @@ import { Doughnut } from "react-chartjs-2"
 import AvaliacaoDoCliente from "../datasets/dgClientSatisfation"
 import { formatCurrency } from "../../../services/formatCurrency"
 import { FaRightLeft } from "react-icons/fa6"
-import { GroupInfo, TitleLine, Subtitle, Info, TextAligned } from "../style"
+import { 
+    GroupInfo, 
+    TitleLine, 
+    Subtitle, 
+    Info, 
+    TextAligned, 
+    Loading, 
+    ElementLoading 
+} from "../style"
 import { useUser } from "../../../context/globalContext"
 import VagasDisponiveisDataset from "../datasets/doughnut"
 import api from "../../../services/api/server"
 import { useEffect } from "react"
+import { Spinner } from "react-activity"
+import "react-activity/dist/library.css"
 
 const Informacoes = () => {
 
     const { park, dataClient, setRatings, ratings } = useUser()
     const { datachart, options } = VagasDisponiveisDataset({ park })
-    const { dadosCliente, opcoesCliente, avaliacaoTotal } = AvaliacaoDoCliente()
+    const { dadosCliente, opcoesCliente } = AvaliacaoDoCliente()
 
     const styleIcon = {
         position: "absolute",
@@ -22,8 +32,18 @@ const Informacoes = () => {
     }
     
     function quantidadeVagas() {
-        let vagas_disponiveis = (park?.numero_vagas ?? 0) - (park?.vagas_ocupadas ?? 0)
+        if (park?.numero_vagas == null || park?.vagas_ocupadas == null) {
+            return (
+                <>
+                    <ElementLoading>
+                        <Spinner size={16} speed={1} /> 
+                        <Loading>Carregando...</Loading>
+                    </ElementLoading>
+                </>
+            )
+        }
 
+        let vagas_disponiveis = (park?.numero_vagas ?? 0) - (park?.vagas_ocupadas ?? 0)
         return `${vagas_disponiveis}/${park?.numero_vagas ?? 0}`
     }
 
@@ -38,6 +58,17 @@ const Informacoes = () => {
     }
 
     function calcularPorcentagem() {
+        if(ratings == null) {
+            return (
+                <>
+                    <ElementLoading>
+                        <Spinner size={16} speed={1} /> 
+                        <Loading>Carregando...</Loading>
+                    </ElementLoading>
+                </>
+            )
+        }
+
         if(ratings.length > 0) {
             const total = ratings.length
             const positiva = ratings.filter(item => item.rate >= 4).length
@@ -86,10 +117,10 @@ const Informacoes = () => {
                 </TextAligned>
             </Info>
             <Info>
-                <span>
+                <div>
                     <TitleLine>{calcularPorcentagem()}</TitleLine>
                     <Subtitle>Satisfação do cliente</Subtitle>
-                </span>
+                </div>
                 <div style={{ width: 64, height: 64 }}>
                     <Doughnut
                         data={dadosCliente}

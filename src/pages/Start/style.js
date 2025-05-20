@@ -3,6 +3,18 @@ import { theme } from "../../theme/theme"
 
 const { neutralColor } = theme
 
+export const ElementLoading = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+`
+
+export const Loading = styled.p`
+    font-size: 22px;
+`
+
 export const Container = styled.div`
     margin-top: 2rem;
     margin-right: 3rem;

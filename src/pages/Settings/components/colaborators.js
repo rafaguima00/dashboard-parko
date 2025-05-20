@@ -32,16 +32,18 @@ const Colaborators = () => {
     const routeScreen = (item) => {
         if(coordenador || funcionario) {
             alert("Você não tem permissão para editar os dados dos colaboradores")
-        } else {
-            if(item) {
-                return navigate("/settings/colaborators", {
-                    state: {
-                        selectedColaborator: item,
-                    }
-                })
-            }
-            return navigate("/settings/colaborators")
+            return
+        } 
+
+        if(item) {
+            return navigate("/settings/colaborators", {
+                state: {
+                    selectedColaborator: item
+                }
+            })
         }
+        
+        return navigate("/settings/colaborators")
     }
 
     const navigateWithOutId = () => {
@@ -58,13 +60,16 @@ const Colaborators = () => {
                 {colaborators.map(item => ( 
                     <Profile key={item.id}>
                         <span>
-                            <ImageProfile src={item.image ? item.image : avatar} alt={item.colaborator ? item.colaborator : ""} />
+                            <ImageProfile src={item.image || avatar} alt={item.colaborator || ""} />
                             <InfoUser textcolor={neutralColor}>
-                                <Name>{item.colaborator ? item.colaborator : ""}</Name>
-                                <P>{item.type_colaborator ? item.type_colaborator : ""}</P>
+                                <Name>{item.colaborator || ""}</Name>
+                                <P>{item.type_colaborator || ""}</P>
                             </InfoUser>
                         </span>
-                        <EditProfile onClick={() => routeScreen(item)}>
+                        <EditProfile onClick={() => {
+                            console.log("clicou")
+                            routeScreen(item)
+                        }}>
                             <BiEdit size={22} color={neutralColor} />
                         </EditProfile>
                     </Profile>
