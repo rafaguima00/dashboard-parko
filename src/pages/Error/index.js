@@ -1,11 +1,9 @@
 import { Container, Login, Text } from "./style"
 import { unknownError } from "../../mocks/errorPage"
-import { useRouteError } from "react-router-dom"
 import { theme } from "../../theme/theme"
 
-const ErrorPage = () => {
+const ErrorPage = ({ errorMsg }) => {
 
-    const errorMessage = useRouteError()
     const token = localStorage.getItem("token")
 
     const { primaryColor } = theme
@@ -17,7 +15,7 @@ const ErrorPage = () => {
 
     return (
         <Container>
-            <Text>{errorMessage || unknownError}</Text>
+            <Text>{errorMsg || unknownError}</Text>
             {!token && 
                 <Login
                     btcolor={primaryColor}

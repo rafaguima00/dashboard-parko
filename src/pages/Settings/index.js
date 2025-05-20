@@ -4,15 +4,20 @@ import Colaborators from "./components/colaborators"
 import PriceTable from "./components/priceTable"
 import OpeningHours from "./components/openingHours"
 import Top from "../../components/Top"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { jwtDecode } from "jwt-decode"
 import { useUser } from "../../context/globalContext"
 import ReadApi from "../../services/readData"
+import ErrorPage from "../Error"
+import { unLoggedIn } from "../../mocks/errorPage"
  
 const Settings = () => {
 
     const { setDataClient, dataClient, park } = useUser()
     const { listColaborators, loadData } = ReadApi()
+
+    const [unauthorized, setUnauthorized] = useState(false)
+    const [errorMsg, setErrorMsg] = useState("")
 
     useEffect(() => {
         const token = localStorage.getItem("token")
@@ -20,7 +25,10 @@ const Settings = () => {
         if(token) {
             const decoded = jwtDecode(token)
             setDataClient(decoded.user)
-        } 
+        } else {
+            setUnauthorized(true)
+            setErrorMsg(unLoggedIn)
+        }
     }, [])
 
     useEffect(() => {
@@ -29,7 +37,8 @@ const Settings = () => {
         }
 
         if(dataClient.type_colaborator === "Funcionário(a)"){
-            throw new Error("Você não tem permissão para acessar esta funcionalidade")
+            setUnauthorized(true)
+            setErrorMsg("Você não tem permissão para acessar esta funcionalidade")
         }
     }, [dataClient])
     
@@ -38,6 +47,10 @@ const Settings = () => {
             listColaborators(dataClient.id_establishment)
         }
     }, [park])
+
+    if(unauthorized) {
+        return <ErrorPage errorMsg={errorMsg} />
+    }
 
     return (
         <Container>

@@ -17,6 +17,8 @@ import Retirada from "./form/retirada"
 import api from "../../services/api/server"
 import ReadApi from "../../services/readData"
 import { jwtDecode } from "jwt-decode"
+import ErrorPage from "../Error"
+import { unLoggedIn } from "../../mocks/errorPage"
 
 ChartJS.register(ArcElement, BarElement, CategoryScale, LinearScale, Title)
 
@@ -36,6 +38,7 @@ const Checkout = () => {
     } = useUser()
     const { readAportes, readRetiradas, listReservations, loadData } = ReadApi()
 
+    const [unauthorized, setUnauthorized] = useState(false)
     const [open, setOpen] = useState(false)
     const [openRetirada, setOpenRetirada] = useState(false)
     const [novoAporte, setNovoAporte] = useState({
@@ -158,16 +161,15 @@ const Checkout = () => {
         if(token) {
             const decoded = jwtDecode(token)
             setDataClient(decoded.user)
+        } else {
+            setUnauthorized(true)
         }
     }, [])
 
     useEffect(() => {
+        loadData(dataClient.id_establishment)
         readRetiradas()
         readAportes()
-    }, [aportes, retiradas])
-
-    useEffect(() => {
-        loadData(dataClient.id_establishment)
     }, [dataClient])
 
     useEffect(() => {
@@ -185,6 +187,10 @@ const Checkout = () => {
         valoresAporte,
         valoresRetiradas
     } = calcularValorPorEstacionamento(reservations, dataClient.id_establishment)
+
+    if(unauthorized) {
+        return <ErrorPage errorMsg={unLoggedIn} />
+    }
 
     return (
         <Container>

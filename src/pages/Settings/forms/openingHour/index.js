@@ -9,11 +9,15 @@ import BottomButton from "./components/BottomButton"
 import api from "../../../../services/api/server"
 import { jwtDecode } from "jwt-decode"
 import ReadApi from "../../../../services/readData"
+import { unLoggedIn } from "../../../../mocks/errorPage"
+import ErrorPage from "../../../Error"
 
 const FormOpening = () => {
 
     const date = new Date().toLocaleDateString()
 
+    const [unauthorized, setUnauthorized] = useState(false)
+    const [errorMsg, setErrorMsg] = useState("")
     const [dados, setDados] = useState([])
     const [loading, setLoading] = useState(false)
 
@@ -138,7 +142,7 @@ const FormOpening = () => {
             "hora_fechamento": item.close
         }))
 
-        if(dados == []) {
+        if(dados.length === 0) {
             await api.post("/hora_funcionamento", dados)
             .then(() => {
                 alert("Dados enviados com sucesso.")
@@ -165,6 +169,9 @@ const FormOpening = () => {
         if(token) {
             const decoded = jwtDecode(token)
             setDataClient(decoded.user)
+        } else {
+            setUnauthorized(true)
+            setErrorMsg(unLoggedIn)
         }
     }, [])
 
@@ -174,9 +181,14 @@ const FormOpening = () => {
         listReservations(dataClient.id_establishment)
 
         if(dataClient.type_colaborator === "Funcionário(a)"){
-            throw new Error("Você não tem permissão para acessar esta funcionalidade")
+            setUnauthorized(true)
+            setErrorMsg("Você não tem permissão para acessar esta funcionalidade")
         }
     }, [dataClient])
+
+    if(unauthorized) {
+        return <ErrorPage errorMsg={errorMsg} />
+    }
 
     return (
         <ContainerForm>

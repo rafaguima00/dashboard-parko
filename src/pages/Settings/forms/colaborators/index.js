@@ -10,6 +10,8 @@ import ListColaborators from "./components/listColaborators"
 import api from "../../../../services/api/server"
 import { jwtDecode } from "jwt-decode"
 import ReadApi from "../../../../services/readData"
+import { unLoggedIn } from "../../../../mocks/errorPage"
+import ErrorPage from "../../../Error"
 
 const ColaboratorsForm = () => {
 
@@ -19,6 +21,8 @@ const ColaboratorsForm = () => {
     const location = useLocation()
     let selectedColaborator = location.state?.selectedColaborator
 
+    const [unauthorized, setUnauthorized] = useState(false)
+    const [errorMsg, setErrorMsg] = useState("")
     const [selected, setSelected] = useState("none")
     const [newColaborator, setNewColaborator] = useState({
         colaborator: "",
@@ -142,6 +146,10 @@ const ColaboratorsForm = () => {
         if(token) {
             const decoded = jwtDecode(token)
             setDataClient(decoded.user)
+        } else {
+            setUnauthorized(true)
+            setErrorMsg(unLoggedIn)
+            return
         }
 
         if(selectedColaborator) {
@@ -156,9 +164,14 @@ const ColaboratorsForm = () => {
         listReservations(dataClient.id_establishment)
 
         if(dataClient.type_colaborator !== "Administrador(a)"){
-            throw new Error("Você não tem permissão para acessar esta funcionalidade")
+            setUnauthorized(true)
+            setErrorMsg("Você não tem permissão para acessar esta funcionalidade")
         }
     }, [dataClient])
+
+    if(unauthorized) {
+        return <ErrorPage errorMsg={errorMsg} />
+    }
 
     return (
         <ContainerForm>

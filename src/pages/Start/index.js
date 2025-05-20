@@ -6,6 +6,7 @@ import InfoReserve from "./components/infoReservation"
 import { jwtDecode } from "jwt-decode"
 import ReadApi from "../../services/readData"
 import api from "../../services/api/server"
+import ErrorPage from "../Error"
 import { unLoggedIn } from "../../mocks/errorPage"
 
 const Start = () => {
@@ -15,6 +16,7 @@ const Start = () => {
     const { loadData } = ReadApi()
 
     const [selected, setSelected] = useState(1)
+    const [unauthorized, setUnauthorized] = useState(false)
 
     const btReservations = [
         {
@@ -49,7 +51,7 @@ const Start = () => {
             const user = decoded.user
             setDataClient(user)
         } else {
-            throw new Error(unLoggedIn)
+            setUnauthorized(true)
         }
     }, [])
 
@@ -67,6 +69,10 @@ const Start = () => {
             return () => clearInterval(intervalo)
         }
     }, [park])
+
+    if(unauthorized) {
+        return <ErrorPage errorMsg={unLoggedIn} />
+    }
 
     return (
         <Container>

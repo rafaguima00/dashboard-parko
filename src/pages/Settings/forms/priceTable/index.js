@@ -27,6 +27,8 @@ import { jwtDecode } from "jwt-decode"
 import ReadApi from "../../../../services/readData"
 import { Bounce } from "react-activity"
 import "react-activity/dist/library.css"
+import { unLoggedIn } from "../../../../mocks/errorPage"
+import ErrorPage from "../../../Error"
 
 const PriceTableForm = () => {
 
@@ -52,6 +54,8 @@ const PriceTableForm = () => {
         return navigate("/settings")
     }
 
+    const [unauthorized, setUnauthorized] = useState(false)
+    const [errorMsg, setErrorMsg] = useState("")
     const [value, setValue] = useState("yes")
     const [typeCharge, setTypeCharge] = useState("tabela-fixa")
     const [loading, setLoading] = useState(false)
@@ -265,6 +269,10 @@ const PriceTableForm = () => {
         if(token) {
             const decoded = jwtDecode(token)
             setDataClient(decoded.user)
+        } else {
+            setErrorMsg(unLoggedIn)
+            setUnauthorized(true)
+            return
         }
 
         setFormTable({
@@ -285,7 +293,7 @@ const PriceTableForm = () => {
                 valueNumber: formatNumber(item.value),
                 valueTime: item.primeira_hora,
                 valueTimeTwo: item.segunda_hora,
-            }));
+            }))
             setLinhas(novasLinhas)
         }
     }, [tabelaFixa])
@@ -300,9 +308,14 @@ const PriceTableForm = () => {
         listReservations(dataClient.id_establishment)
 
         if(dataClient.type_colaborator === "Funcionário(a)"){
-            throw new Error("Você não tem permissão para acessar esta funcionalidade")
+            setErrorMsg("Você não tem permissão para acessar esta funcionalidade")
+            setUnauthorized(true)
         }
     }, [dataClient, reservations])
+
+    if(unauthorized) {
+        return <ErrorPage errorMsg={errorMsg} />
+    }
 
     return (
         <ContainerForm>

@@ -14,6 +14,8 @@ import { Bounce } from "react-activity"
 import "react-activity/dist/library.css"
 import Top from "../../components/Top"
 import { formatCurrency } from "../../services/formatCurrency"
+import ErrorPage from "../Error"
+import { unLoggedIn } from "../../mocks/errorPage"
 
 const Reservations = () => {
 
@@ -26,6 +28,7 @@ const Reservations = () => {
     const [linhas, setLinhas] = useState([{ valorPgto: "", valueSelect: "credit-card" }])
     const [dateTime, setDateTime] = useState("")
     const [trocoCliente, setTrocoCliente] = useState(0)
+    const [unauthorized, setUnauthorized] = useState(false)
 
     const { 
         setDataClient,
@@ -319,6 +322,9 @@ const Reservations = () => {
                 const intervalo = setInterval(listReservations, 5000)
                 return () => clearInterval(intervalo)
             }
+        } else {
+            setUnauthorized(true)
+            return
         }
         
         if(reservaAberta) {
@@ -337,6 +343,10 @@ const Reservations = () => {
         listDividas()
         getDebtById()
     }, [selectedClient])
+
+    if(unauthorized) {
+        return <ErrorPage errorMsg={unLoggedIn} />
+    }
 
     return (
         <Container>

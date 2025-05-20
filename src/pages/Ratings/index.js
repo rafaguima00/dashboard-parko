@@ -2,12 +2,16 @@ import { Container } from "./style"
 import Rate from "./components/rate"
 import Top from "../../components/Top"
 import api from "../../services/api/server"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useUser } from "../../context/globalContext"
 import { jwtDecode } from "jwt-decode"
 import ReadApi from "../../services/readData"
+import ErrorPage from "../Error"
+import { unLoggedIn } from "../../mocks/errorPage"
 
 const Ratings = () => {
+
+    const [unauthorized, setUnauthorized] = useState(false)
 
     const { ratings, setRatings, dataClient, setDataClient } = useUser()
     const { loadData } = ReadApi()
@@ -28,6 +32,8 @@ const Ratings = () => {
         if(token) {
             const decoded = jwtDecode(token)
             setDataClient(decoded.user)
+        } else {
+            setUnauthorized(true)
         }
     }, [])
 
@@ -35,6 +41,10 @@ const Ratings = () => {
         loadData(dataClient.id_establishment)
         recuperarDados()
     }, [dataClient])
+
+    if(unauthorized) {
+        return <ErrorPage errorMsg={unLoggedIn} />
+    }
 
     return (
         <Container>
