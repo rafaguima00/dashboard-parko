@@ -4,7 +4,6 @@ import { useUser } from "../context/globalContext"
 const ReadApi = () => {
 
     const { 
-        setReservations,
         setPark,
         setColaborators,
         setAportes,
@@ -13,16 +12,6 @@ const ReadApi = () => {
         setDebts,
         setTabelaFixa
     } = useUser()
-
-    const listReservations = async (id) => {
-        await api.get(`/reservations/parking/${id}`)
-        .then(res => {
-            setReservations(res.data)
-        })
-        .catch(e => {
-            console.log(e)
-        })
-    }
 
     const loadData = async (id) => {
         await api.get(`/establishments/${id}`)
@@ -65,7 +54,6 @@ const ReadApi = () => {
     }
 
     const getPriceTable = async (id) => {
-
         await api.get(`/tabela_preco/${id}`)
         .then(res => {
             setPriceTable(res.data[0])
@@ -98,7 +86,6 @@ const ReadApi = () => {
     }
     
     return { 
-        listReservations, 
         loadData, 
         listColaborators, 
         readAportes, 

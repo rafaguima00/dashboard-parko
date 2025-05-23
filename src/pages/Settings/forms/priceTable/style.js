@@ -3,6 +3,18 @@ import { theme } from "../../../../theme/theme"
 
 const { neutralColor, primaryColor } = theme
 
+export const ElementLoading = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+`
+
+export const Loading = styled.p`
+    font-size: 22px;
+`
+
 export const Form = styled.form`
     width: auto;
     height: 502px;
