@@ -2,7 +2,7 @@ import { Timing, View, Name, Clock } from "../style"
 import { theme } from "../../../theme/theme"
 import { useEffect, useState } from "react"
 import { useUser } from "../../../context/globalContext"
-import calculateTimingReservation from "../utils/calculateTimingReservation"
+import calculateTimingReservation from "../utils/useTimeReservation"
 
 const TimingReserve = () => {
 

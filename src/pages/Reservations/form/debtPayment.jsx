@@ -13,14 +13,6 @@ const DebtPayment = (props) => {
         valorSelect,
         setValorSelect
     } = props
-
-    const formatNumber = (num) => {
-        if (!num) return ""
-        return new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL'
-        }).format(num)
-    }
   
     const unformatCurrency = (num) => {
         return num.replace(/[^\d]/g, "").slice(0, 6)
@@ -29,7 +21,7 @@ const DebtPayment = (props) => {
     const handleChange = (rawValue) => {
         const numericValue = unformatCurrency(rawValue) / 100
         
-        setValorInput(formatNumber(numericValue))
+        setValorInput(formatCurrency(numericValue, 'BRL'))
     }
 
     return (
@@ -62,8 +54,8 @@ const DebtPayment = (props) => {
                     largura="300px"
                     onChange={e => setValorSelect(e.target.value)}
                 >
-                    <option value="credit-card">Maquineta (Crédito)</option>
-                    <option value="debit-card">Maquineta (Débito)</option>
+                    <option value="credit_card">Maquineta (Crédito)</option>
+                    <option value="debit_card">Maquineta (Débito)</option>
                     <option value="money">Dinheiro</option>
                     <option value="pix">Pix</option>
                 </Select>

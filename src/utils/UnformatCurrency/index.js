@@ -1,3 +1,3 @@
 export const unformatCurrency = (num) => {
-    return num.replace(/[^\d]/g, "")
+    return num?.replace(/[^\d]/g, "")
 }

@@ -18,7 +18,7 @@ import { useState } from "react"
 
 const ReservationStatus = (props) => {
 
-    const { listReservations, btReservations, selected, setSelected } = props
+    const { btReservations, selected, setSelected } = props
     const { primaryColor } = theme
 
     const [open, setOpen] = useState(false)
@@ -78,8 +78,7 @@ const ReservationStatus = (props) => {
                             setOpen, 
                             open,
                             setLoading
-                        }} 
-                        listReservations={listReservations}
+                        }}
                     />
                 }
 
@@ -90,12 +89,11 @@ const ReservationStatus = (props) => {
                             setOpenRefuse,
                             openRefuse,
                             loading 
-                        }} 
-                        listReservations={listReservations}
+                        }}
                     />
                 }
 
-                {selected === 3 && <RefusedReserve listReservations={listReservations} />}
+                {selected === 3 && <RefusedReserve />}
             </div>
         </ReserveStatus>
         <LoadingScreen isOpen={loading} />

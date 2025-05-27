@@ -3,14 +3,17 @@ import { useUser } from "../../../context/globalContext"
 import { List, ListHeader, Text, ListBody, ElementList, ItemList } from "../style"
 import EmptyMessage from "../../../components/EmptyMessage"
 import { theme } from "../../../theme/theme"
-import { mapDateTime } from "../utils/mapDateTime"
-import { mapValue } from "../utils/mapValue"
+import { mapDateTime } from "../../../utils/MapDateTime"
+import { calculateReservationValue } from "../../../utils/CalculateReservationValue"
+import useReservation from "../../../hooks/useReservation"
+import { formatCurrency } from "../../../utils/FormatCurrency"
 
 const ListConfirmedReserve = (props) => {
 
     const { primaryColor } = theme
-    const { filterReserv, priceTable, listReservations } = props
-    const { setSelectedClient, dataClient } = useUser()
+    const { filterReserv } = props
+    const { setSelectedClient, dataClient, priceTable } = useUser()
+    const { fetchReservations } = useReservation()
 
     const [clicked, setClicked] = useState(0)
 
@@ -19,11 +22,17 @@ const ListConfirmedReserve = (props) => {
         setSelectedClient(item)
     }
 
+    const mapValue = (item) => {
+        const { valorDaReservaAtual } = calculateReservationValue(item, priceTable)
+
+        return formatCurrency(valorDaReservaAtual, 'BRL')
+    }
+
     useEffect(() => {
         if(dataClient.id_establishment) {
-            listReservations()
+            fetchReservations()
 
-            const intervalo = setInterval(listReservations, 3000)
+            const intervalo = setInterval(fetchReservations, 3000)
             return () => clearInterval(intervalo)
         }
     }, [dataClient])
@@ -52,7 +61,7 @@ const ListConfirmedReserve = (props) => {
                             <ItemList>{item.name_vehicle}</ItemList>
                             <ItemList>{item.license_plate}</ItemList>
                             <ItemList>{mapDateTime(item)}</ItemList>
-                            <ItemList>{mapValue(item, priceTable)}</ItemList>
+                            <ItemList>{mapValue(item)}</ItemList>
                         </ElementList>
                     </ListBody>
                 )) :

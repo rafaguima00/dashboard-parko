@@ -5,15 +5,16 @@ import ReservationStatus from "./components/reserveStatus"
 import InfoReserve from "./components/infoReservation"
 import { jwtDecode } from "jwt-decode"
 import ReadApi from "../../services/readData"
-import api from "../../services/api/server"
 import ErrorPage from "../Error"
 import { unLoggedIn } from "../../mocks/errorPage"
+import useReservation from "../../hooks/useReservation"
 
 const Start = () => {
 
-    const { setDataClient, dataClient, setReservations, park } = useUser()
+    const { setDataClient, dataClient, park } = useUser()
     const { colaborator } = dataClient
     const { loadData } = ReadApi()
+    const { fetchReservations } = useReservation()
 
     const [selected, setSelected] = useState(1)
     const [unauthorized, setUnauthorized] = useState(false)
@@ -32,16 +33,6 @@ const Start = () => {
             name: "Recusadas"
         }
     ]
-
-    async function listReservations() {
-        await api.get(`/reservations/parking/${dataClient.id_establishment}`)
-        .then(res => {
-            setReservations(res.data)
-        })
-        .catch(e => {
-            console.log(e)
-        })
-    }
 
     useEffect(() => {
         const token = localStorage.getItem("token")
@@ -63,9 +54,9 @@ const Start = () => {
 
     useEffect(() => {
         if(park) {
-            listReservations()
+            fetchReservations()
 
-            const intervalo = setInterval(listReservations, 5000)
+            const intervalo = setInterval(fetchReservations, 5000)
             return () => clearInterval(intervalo)
         }
     }, [park])
@@ -80,8 +71,7 @@ const Start = () => {
                 Bem-vindo, <strong>{colaborator}</strong>
             </Welcome>
             <Grid>
-                <ReservationStatus 
-                    listReservations={listReservations}
+                <ReservationStatus
                     btReservations={btReservations}
                     selected={selected}
                     setSelected={setSelected}

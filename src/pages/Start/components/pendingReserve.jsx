@@ -7,13 +7,14 @@ import Modal from "../../../components/Modal"
 import { useState } from "react"
 import { Spinner } from "react-activity"
 import "react-activity/dist/library.css"
+import useReservation from "../../../hooks/useReservation"
 
 const PendingReserve = (props) => {
 
     const { reservations } = useUser()
     const { primaryColor, neutralColor } = theme
     const { setOpen, open } = props.states
-    const { listReservations } = props
+    const { editReservation } = useReservation()
 
     const [user, setUser] = useState("")
     const [loading, setLoading] = useState(false)
@@ -28,43 +29,28 @@ const PendingReserve = (props) => {
     }
 
     const confirmarReserva = async (e, user) => {
-        const { 
-            id, 
-            data_entrada, 
-            hora_entrada,
-            data_saida,
-            hora_saida,
-            value,
-            id_vehicle
-        } = user
+        const { id, data_entrada, hora_entrada, data_saida, hora_saida, value, id_vehicle } = user
 
         e.preventDefault()
         setLoading(true)
 
-        await api.put(`reservations/${id}`, {
-            data_entrada: data_entrada,
-            hora_entrada: hora_entrada,
-            data_saida: data_saida,
-            hora_saida: hora_saida,
-            value: value,
-            status: 2,
-            id_vehicle: id_vehicle
-        })
-        .then(() => {
-            listReservations()
+        try {
+            await editReservation(id, {
+                data_entrada: data_entrada,
+                hora_entrada: hora_entrada,
+                data_saida: data_saida,
+                hora_saida: hora_saida,
+                value: value,
+                status: 2,
+                id_vehicle: id_vehicle
+            })
             alert("Reserva confirmada com sucesso.")
-        })
-        .catch(e => {
-            alert("Erro ao confirmar reserva", e)
-        })
-
-        setLoading(false)
-        setOpen(false)
-    }
-
-    const showMessageRefuse = (e) => {
-        e.preventDefault()
-        setOpen(false)
+        } catch (error) {
+            alert("Erro ao confirmar reserva", error)
+        } finally {
+            setLoading(false)
+            setOpen(false)
+        }
     }
 
     const ReservasPendentes = () => {
@@ -106,7 +92,6 @@ const PendingReserve = (props) => {
             setOpen={setOpen}
             title={"Confirmar reserva"}
             funcao={e => confirmarReserva(e, user)}
-            aoCancelar={showMessageRefuse}
             isLoading={loading}
         >
             <Line textcolor={neutralColor}>{`Deseja confirmar a reserva de ${user.name}?`}</Line>

@@ -9,6 +9,7 @@ import Modal from "../../../components/Modal"
 import NewReservation from "../form/newReservation"
 import api from "../../../services/api/server"
 import Informacoes from "./informacoes"
+import useReservation from "../../../hooks/useReservation"
 
 ChartJS.register(ArcElement, Title)
 
@@ -18,6 +19,7 @@ const InfoReserve = () => {
     const { primaryColor, cancelColor, neutralColor } = theme
     const { valorDoCaixa } = useUser()
     const navigate = useNavigate()
+    const { addReservation } = useReservation()
 
     const [open, setOpen] = useState(false)
     const [data, setData] = useState({})
@@ -109,30 +111,27 @@ const InfoReserve = () => {
 
     // 3- Feito isso, cadastrar a reserva no banco de dados
     const createReservation = async (idVehicle, idUser) => {
-
-        await api.post("/reservations", {
-            data_entrada: data.data_entrada,
-            hora_entrada: data.hora_entrada,
-            data_saida: "", 
-            hora_saida: "",
-            value: priceTable?.valor_hora, 
-            id_costumer: idUser,
-            id_vehicle: idVehicle.id, 
-            id_establishment: dataClient.id_establishment,
-            parko_app: 0,
-            status_reservation: 1
-        })
-        .then(res => {
-            setCarregando(false)
+        try {
+            await addReservation({
+                data_entrada: data.data_entrada,
+                hora_entrada: data.hora_entrada,
+                data_saida: "", 
+                hora_saida: "",
+                value: priceTable?.valor_hora, 
+                id_costumer: idUser,
+                id_vehicle: idVehicle.id, 
+                id_establishment: dataClient.id_establishment,
+                parko_app: 0,
+                status_reservation: 1
+            })
             setOpen(false)
             alert("Reserva realizada com sucesso")
-            setReservations([ ...reservations, res.data ])
             setData({})
-        })
-        .catch(e => {
-            console.log(e)
+        } catch (error) {
+            throw error
+        } finally {
             setCarregando(false)
-        })
+        }
     }
 
     const verificarSeEstaAberto = async () => {

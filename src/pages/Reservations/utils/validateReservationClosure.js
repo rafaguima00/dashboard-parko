@@ -1,9 +1,6 @@
-export const validateReservationClosure = ({
-    selectedClient,
-    paymentLines,
-    valorTotal,
-    unformatCurrency,
-}) => {
+import { unformatCurrency } from "../../../utils/UnformatCurrency"
+
+export const validateReservationClosure = ({ selectedClient, paymentLines, valorTotal }) => {
     if (selectedClient?.status === "Recusado") {
         return { 
             valid: false, 

@@ -14,11 +14,15 @@ import DatasetBar from "./datasets/bar"
 import Modal from "../../components/Modal"
 import Contribution from "./form/contribution"
 import Retirada from "./form/retirada"
-import api from "../../services/api/server"
 import ReadApi from "../../services/readData"
 import { jwtDecode } from "jwt-decode"
 import ErrorPage from "../Error"
 import { unLoggedIn } from "../../mocks/errorPage"
+import useAportes from "../../hooks/useAportes"
+import { unformatCurrency } from "../../utils/UnformatCurrency"
+import useRetiradas from "../../hooks/useRetiradas"
+import { createdAt } from "../../utils/ConverterDataParaFormatoPadrao"
+import useReservation from "../../hooks/useReservation"
 
 ChartJS.register(ArcElement, BarElement, CategoryScale, LinearScale, Title)
 
@@ -26,13 +30,16 @@ const Checkout = () => {
 
     const { primaryColor, neutralColor } = theme
     const { 
-        reservations, setReservations,
+        reservations,
         dataClient, setDataClient,
         aportes,  retiradas, 
         park, reservaAppParko,
         filtrarPorData, setFiltrarPorData,
     } = useUser()
-    const { readAportes, readRetiradas, loadData } = ReadApi()
+    const { fetchAportes, addAportes } = useAportes()
+    const { fetchRetiradas, addRetiradas } = useRetiradas()
+    const { fetchReservations } = useReservation()
+    const { loadData } = ReadApi()
 
     const [unauthorized, setUnauthorized] = useState(false)
     const [open, setOpen] = useState(false)
@@ -50,7 +57,6 @@ const Checkout = () => {
     const [text, setText] = useState("")
     const [loading, setLoading] = useState(false)
     const [messageError, setMessageError] = useState("")
-
 
     const reservaFechada = reservations.filter(
         item => item.status === "Finalizado" && 
@@ -89,76 +95,48 @@ const Checkout = () => {
         return { valoresTotal, valoresAporte, valoresRetiradas }
     }
 
-    const createdAt = (created_at) => {
-        const splitDate = created_at.split("T")
-
-        if(splitDate[0].includes("-")) {
-            const includes = splitDate[0].split("-")
-            return `${includes[2]}/${includes[1]}/${includes[0]}, ${splitDate[1]}`
-            
-        }
-
-        return null
-    }
-
-    const unformatCurrency = (num) => {
-        return num.replace(/[^\d]/g, "").slice(0, 6)
-    }
-
     const criarAporte = async (setOpen, e) => {
         e.preventDefault()
         setLoading(true)
-
-        await api.post("/aportes", {
-            id_establishment: dataClient.id_establishment,
-            id_colaborator: dataClient.id,
-            created_at: createdAt(novoAporte.created_at),
-            value: unformatCurrency(novoAporte.value) / 100,
-            description: novoAporte.description
-        })
-        .then(() => {
+        
+        try {
+            await addAportes({
+                id_establishment: dataClient.id_establishment,
+                id_colaborator: dataClient.id,
+                created_at: createdAt(novoAporte.created_at),
+                value: unformatCurrency(novoAporte.value) / 100,
+                description: novoAporte.description
+            })
             alert("Aporte realizado com sucesso")
             setOpen(false)
-            setLoading(false)
             setNovoAporte({})
-        })
-        .catch(e => {
-            setMessageError(e.response.data.message)
+        } catch (error) {
+            setMessageError(error)
+        } finally {
             setLoading(false)
-        })
+        }
     }
 
     const criarRetirada = async (setOpenRetirada, e) => {
         e.preventDefault()
         setLoading(true)
-
-        await api.post("/retiradas", {
-            id_establishment: dataClient.id_establishment,
-            id_colaborator: dataClient.id,
-            created_at: createdAt(novaRetirada.created_at),
-            value: unformatCurrency(novaRetirada.value) / 100,
-            description: novaRetirada.description
-        })
-        .then(() => {
+        
+        try {
+            await addRetiradas({
+                id_establishment: dataClient.id_establishment,
+                id_colaborator: dataClient.id,
+                created_at: createdAt(novaRetirada.created_at),
+                value: unformatCurrency(novaRetirada.value) / 100,
+                description: novaRetirada.description
+            })
             alert("Retirada realizada com sucesso")
             setOpenRetirada(false)
-            setLoading(false)
             setNovaRetirada({})
-        })
-        .catch(e => {
-            setMessageError(e.response.data.message)
+        } catch (error) {
+            setMessageError(error)
+        } finally {
             setLoading(false)
-        })
-    }
-
-    const listReservations = async () => {
-        await api.get(`/reservations/parking/${dataClient.id_establishment}`)
-        .then(res => {
-            setReservations(res.data)
-        })
-        .catch(e => {
-            setReservations(e)
-        })
+        }
     }
 
     useEffect(() => {
@@ -174,13 +152,13 @@ const Checkout = () => {
 
     useEffect(() => {
         loadData(dataClient.id_establishment)
-        readRetiradas()
-        readAportes()
+        fetchRetiradas()
+        fetchAportes()
     }, [dataClient])
 
     useEffect(() => {
         if(park) {
-            listReservations()
+            fetchReservations()
         }
     }, [park])
 
@@ -222,7 +200,7 @@ const Checkout = () => {
                     setFiltrarPorData
                 }} 
             />
-            <ListReserve reservaFechada={filterReserv} listReservations={listReservations} />
+            <ListReserve reservaFechada={filterReserv} />
             <Buttons setOpen={setOpen} setOpenRetirada={setOpenRetirada}/>
             <Graphics background={primaryColor}>
                 <div style={{ padding: 10 }}>

@@ -4,27 +4,16 @@ import api from "../../../services/api/server"
 import EmptyMessage from "../../../components/EmptyMessage"
 import { theme } from "../../../theme/theme"
 import { useNavigate } from "react-router-dom"
+import useReservation from "../../../hooks/useReservation"
 
 const ConfirmedReserve = (props) => {
 
-    const { reservations, park, dataClient } = useUser()
+    const { reservations } = useUser()
     const { primaryColor } = theme
     const { setLoading } = props.states
-    const { listReservations } = props
+    const { fetchReservations } = useReservation()
 
     const navigate = useNavigate()
-
-    const vagasOcupadas = async (id) => {
-        await api.put(`/vagas_ocupadas/${id}`, {
-            vagas_ocupadas: park.vagas_ocupadas - 1
-        })
-        .then(() => {
-            console.log("ok")
-        })
-        .catch(e => {
-            console.log(e)
-        })
-    }
 
     const handleUpdate = async (id) => {
         const findUser = reservations.find(item => item.id === id)
@@ -43,8 +32,7 @@ const ConfirmedReserve = (props) => {
             })
             .then(() => {
                 setLoading(false)
-                vagasOcupadas(dataClient.id_establishment)
-                listReservations()
+                fetchReservations()
             })
             .then(() => {
                 return navigate("/checkout")

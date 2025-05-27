@@ -30,7 +30,7 @@ const FormOpening = () => {
         checked 
     } = useParking()
     const { dataClient, setDataClient } = useUser()
-    const { listColaborators, listReservations, loadData } = ReadApi()
+    const { listColaborators, loadData } = ReadApi()
 
     const { 
         cancelColor, 
@@ -178,7 +178,6 @@ const FormOpening = () => {
     useEffect(() => {
         loadData(dataClient.id_establishment)
         listColaborators(dataClient.id_establishment)
-        listReservations(dataClient.id_establishment)
 
         if(dataClient.type_colaborator === "Funcionário(a)"){
             setUnauthorized(true)

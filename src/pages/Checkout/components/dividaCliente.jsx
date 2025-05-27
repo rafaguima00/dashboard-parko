@@ -6,6 +6,7 @@ import ModalDividaCliente from "./modalDividaCliente"
 import api from "../../../services/api/server"
 import ReadApi from "../../../services/readData"
 import { useUser } from "../../../context/globalContext"
+import useReservation from "../../../hooks/useReservation"
 
 const DividaCliente = (props) => {
 
@@ -16,11 +17,13 @@ const DividaCliente = (props) => {
         setClicked,
         verificarDividas
     } = props
-    const { listDividas, listReservations } = ReadApi()
-    const { dataClient, debts, reservations } = useUser()
+    const { listDividas } = ReadApi()
+    const { debts, reservations } = useUser()
+    const { fetchReservations } = useReservation()
 
     const [isOpen, setIsOpen] = useState(false)
     const [valorAPagar, setValorAPagar] = useState("")
+    const [valorSelect, setValorSelect] = useState("")
     const [isLoading, setIsLoading] = useState(false)
 
     function unformatCurrency(num) {
@@ -38,7 +41,7 @@ const DividaCliente = (props) => {
         await api.put(`/debts/${item.id_costumer}`, { 
             value: unformatCurrency(valorAPagar) / 100, 
             id_establishment: item.id_establishment,
-            payment_method: "" // Pendente
+            payment_method: valorSelect
         })
         .then(() => {
             alert("Pagamento de dívida registrado com sucesso!")
@@ -49,7 +52,7 @@ const DividaCliente = (props) => {
         })
         .finally(() => {
             listDividas()
-            listReservations(dataClient.id_establishment)
+            fetchReservations()
             setIsLoading(false)
         })
     }
@@ -57,6 +60,10 @@ const DividaCliente = (props) => {
     useEffect(() => {
         verificarDividas()
     }, [debts, reservations])
+
+    useEffect(() => {
+        console.log(item)
+    }, [item])
 
     return <>
         {debtClient === false ? 
@@ -97,7 +104,9 @@ const DividaCliente = (props) => {
             <ModalDividaCliente 
                 setValorAPagar={setValorAPagar}
                 valorAPagar={valorAPagar}
+                setValorSelect={setValorSelect}
                 valuesDebt={valuesDebt}
+                reservaParko={item.parko_app}
                 name={item.name}
             />
         </Modal>

@@ -6,7 +6,6 @@ const ReadApi = () => {
     const { 
         setPark,
         setColaborators,
-        setAportes,
         setRetiradas,
         setPriceTable,
         setDebts,
@@ -27,16 +26,6 @@ const ReadApi = () => {
         await api.get(`/colaborators/${id}`)
         .then(res => {
             setColaborators(res.data)
-        })
-        .catch(e => {
-            console.log(e)
-        })
-    }
-
-    const readAportes = async () => {
-        await api.get("/aportes")
-        .then(res => {
-            setAportes(res.data)
         })
         .catch(e => {
             console.log(e)
@@ -88,7 +77,6 @@ const ReadApi = () => {
     return { 
         loadData, 
         listColaborators, 
-        readAportes, 
         readRetiradas,
         getPriceTable,
         listDividas,

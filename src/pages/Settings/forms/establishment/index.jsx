@@ -13,7 +13,7 @@ const FormEstablishment = () => {
 
     const { neutralColor, primaryColor, cancelColor, greenColor } = theme
     const { setDataClient, dataClient } = useUser()
-    const { listColaborators, listReservations, loadData } = ReadApi()
+    const { listColaborators, loadData } = ReadApi()
 
     const [unauthorized, setUnauthorized] = useState(false)
     const [errorMsg, setErrorMsg] = useState("")
@@ -33,7 +33,6 @@ const FormEstablishment = () => {
     useEffect(() => {
         loadData(dataClient.id_establishment)
         listColaborators(dataClient.id_establishment)
-        listReservations(dataClient.id_establishment)
 
         if(dataClient.type_colaborator !== "Administrador(a)"){
             setUnauthorized(true)

@@ -1,55 +1,90 @@
 import api from "../services/api/server"
 import { formatCurrency } from "../utils/FormatCurrency"
-import { unformatCurrency } from "../utils/UnformatCurrency"
-import { validateReservationClosure } from "../pages/Reservations/utils/validateReservationClosure"
 import { valueToPay, statusPayment } from "../pages/Reservations/utils/paymentUtils"
 import { checkClientDebts } from "../pages/Reservations/utils/checkClientDebts"
-import { calculateReservationValue } from "../pages/Reservations/utils/calculateReservationValue"
+import { calculateReservationValue } from "../utils/CalculateReservationValue"
 import { useUser } from "../context/globalContext"
+import ReadApi from "../services/readData"
+import { listReservations, updateReservation } from "../services/crud/reservationsService"
+import { createReservation } from "../services/crud/reservationsService"
+import { validateReservationClosure } from "../pages/Reservations/utils/validateReservationClosure"
+import { unformatCurrency } from "../utils/UnformatCurrency"
+import { useState } from "react"
 
-const useReservation = ({ 
-    paymentLines, 
-    setLoading, 
-    setError, 
-    setMessageError,
-    listDividas
-}) => {
-    const { 
-        setReservations, 
-        selectedClient, 
-        priceTable, 
-        debts, 
-        dataClient, 
-        valorAPagar, 
+const useReservation = () => {
+
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(false)
+    const [messageError, setMessageError] = useState("")
+
+    const { listDividas } = ReadApi()
+    const {
+        setReservations,
+        selectedClient,
+        priceTable,
+        debts,
+        dataClient,
+        valorAPagar,
         valueSelectDebt
     } = useUser()
 
-    const listReservations = async () => {
-        await api.get(`/reservations/parking/${dataClient.id_establishment}`)
-        .then(res => {
-            setReservations(res.data)
-        })
-        .catch(e => {
-            setReservations(e)
-        })
-    }
+    // Informações da reserva selecionada
+    const getGridItems = () => ([
+        { id: 1, title: "Número reserva", info: selectedClient?.id },
+        { id: 2, title: "Placa", info: selectedClient?.license_plate },
+        { id: 3, title: "Cliente", info: selectedClient?.name },
+        { id: 4, title: "Entrada", info: selectedClient?.hora_entrada },
+        { id: 5, title: "Veículo", info: selectedClient?.name_vehicle },
+        { id: 6, title: "Saída", info: selectedClient?.hora_saida }
+    ])
 
-    const valorTotal = () => {
-        const { diferenca, valorDaReservaAtual } = calculateReservationValue(selectedClient, priceTable)
-        const { hasDebt, valuesDebt } = checkClientDebts(selectedClient, debts)
-        const { value } = selectedClient || {}
-
-        if(diferenca < 0 && value) return formatCurrency(value, 'BRL')
-
-        if(selectedClient) {
-            if(hasDebt) {
-                return formatCurrency(valorDaReservaAtual + (valuesDebt ?? 0), 'BRL')
-            }
-            return formatCurrency(valorDaReservaAtual, 'BRL')
+    // Carregar todas as reservas
+    const fetchReservations = async () => {
+        try {
+            const data = await listReservations(dataClient?.id_establishment)
+            setReservations(data)
+        } catch (error) {
+            setReservations(error)
         }
     }
 
-    const registrarPagamento = async (idReservation, trocoCliente) => {
+    // Criar uma nova reserva
+    const addReservation = async (reservation) => {
+        try {
+            const data = await createReservation(reservation)
+            fetchReservations()
+            return data
+        } catch (error) {
+            throw error
+        }
+    }
+
+    // Atualizar uma reserva (status, horário de entrada, horário de saída, valor a ser pago...)
+    const editReservation = async (id, reservation) => {
+        try {
+            const data = await updateReservation(id, reservation)    
+            fetchReservations()
+            return data        
+        } catch (error) {
+            throw error
+        }
+    }
+
+    // Calcular valor total da reserva selecionada
+    const valorTotal = () => {
+        const { diferenca, valorDaReservaAtual } = calculateReservationValue(selectedClient, priceTable)
+        const { hasDebt, valuesDebt } = checkClientDebts(selectedClient, debts)
+        const valorAPagarPelaDivida = (hasDebt ? (valuesDebt ?? 0) : 0)
+
+        if (diferenca < 0) return formatCurrency(valorDaReservaAtual, 'BRL')
+
+        if (selectedClient) {
+            return formatCurrency(valorDaReservaAtual + valorAPagarPelaDivida, 'BRL')
+        }
+    }
+
+    // Salvar pagamento no banco de dados (execução após o fecharReserva())
+    const registrarPagamento = async (idReservation, trocoCliente, paymentLines) => {
         const { id_costumer, id_vehicle, id_establishment } = selectedClient
         const { hasDebt, valuesDebt } = checkClientDebts(selectedClient, debts)
 
@@ -87,7 +122,7 @@ const useReservation = ({
             })
     }
 
-    const fecharReserva = async (id, e, paymentLines, valorTotal, trocoCliente) => {
+    const reservationClosure = async (e, id, paymentLines, trocoCliente) => {
         e.preventDefault()
         setLoading(true)
 
@@ -100,8 +135,7 @@ const useReservation = ({
         const { valid, message } = validateReservationClosure({
             selectedClient: clienteAtualizado, 
             paymentLines, 
-            valorTotal, 
-            unformatCurrency
+            valorTotal
         })
 
         if (!valid) {
@@ -114,7 +148,7 @@ const useReservation = ({
         const filtrarDivida = paymentLines.filter(item => item.valueSelect === "debit")
         const { id_costumer, name, data_entrada, hora_entrada, data_saida, hora_saida, id_vehicle, id_establishment } = selectedClient
 
-        if(filtrarDivida.length > 0) {
+        if (filtrarDivida.length > 0) {
             const calcularDivida = filtrarDivida
                 .map(item => unformatCurrency(item.valorPgto)/100)
                 .reduce((prev, current) => prev + current, 0)
@@ -126,21 +160,22 @@ const useReservation = ({
             }).catch(e => alert(`erro ao registrar dívida: ${e}`))
         }
 
-        if(window.confirm(`Deseja concluir a reserva de ${name}?`)) {
-            await api.put(`/reservations/${id}`, { 
-                data_entrada,
-                hora_entrada,
-                data_saida,
-                hora_saida,
-                value: unformatCurrency(valorTotal())/100,
-                status: 4,
-                id_vehicle,
-                id_establishment
-            }).then(() => {
-                registrarPagamento(id, trocoCliente)
-            }).catch(e => {
-                alert("Erro ao concluir reserva", e)
-            })
+        if (window.confirm(`Deseja concluir a reserva de ${name}?`)) {
+            try {
+                await editReservation(id, {
+                    data_entrada,
+                    hora_entrada,
+                    data_saida,
+                    hora_saida,
+                    value: unformatCurrency(valorTotal())/100,
+                    status: 4,
+                    id_vehicle,
+                    id_establishment
+                })
+                await registrarPagamento(id, trocoCliente, paymentLines)
+            } catch (error) {
+                alert("Erro ao concluir reserva", error)
+            }
         }
 
         setError(false)
@@ -148,7 +183,18 @@ const useReservation = ({
         setLoading(false)
     }
 
-    return { valorTotal, fecharReserva, listReservations }
+    return {
+        error, 
+        loading,
+        messageError,
+        addReservation, 
+        editReservation,
+        reservationClosure,
+        fetchReservations, 
+        getGridItems, 
+        registrarPagamento,
+        valorTotal
+    }
 }
 
 export default useReservation

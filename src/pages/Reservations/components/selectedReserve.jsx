@@ -7,10 +7,8 @@ const SelectedReserve = (props) => {
     const { 
         valuesDebt, hasDebt,
         error, messageError,
-        total, valorDaReservaAtual,
         dateTime, setDateTime,
-        setTrocoCliente, trocoCliente,
-        listReservations, diferenca
+        setTrocoCliente, trocoCliente
     } = props.reservationData
     const { paymentLines, setPaymentLines } = props.paymentData
 
@@ -21,8 +19,7 @@ const SelectedReserve = (props) => {
                 <FirstColumn 
                     states={{
                         dateTime,
-                        setDateTime,
-                        listReservations
+                        setDateTime
                     }}
                 />
 
@@ -33,9 +30,6 @@ const SelectedReserve = (props) => {
                         error,
                         messageError,
                         valuesDebt,
-                        total,
-                        valorDaReservaAtual,
-                        diferenca,
                         setPaymentLines,
                         paymentLines,
                         setTrocoCliente,

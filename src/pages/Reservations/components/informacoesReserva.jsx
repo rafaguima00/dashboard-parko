@@ -1,8 +1,10 @@
-import ArrayInfo from "../utils/arrayInformacoes"
+import useReservation from "../../../hooks/useReservation"
 import { GridItems, InfoReservation } from "../style"
 
 const InformacoesReserva = () => {
-    const { gridItems } = ArrayInfo()
+
+    const { getGridItems } = useReservation()
+    const gridItems = getGridItems()
 
     return <>
         <GridItems>

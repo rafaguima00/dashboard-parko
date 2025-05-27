@@ -39,7 +39,6 @@ const PriceTableForm = () => {
     const { primaryColor, cancelColor, greenColor } = theme
     const { 
         listColaborators, 
-        listReservations, 
         loadData, 
         getPriceTable,
         getTabelaFixa
@@ -324,7 +323,6 @@ const PriceTableForm = () => {
     useEffect(() => {
         loadData(dataClient.id_establishment)
         listColaborators(dataClient.id_establishment)
-        listReservations(dataClient.id_establishment)
         getPriceTable(dataClient.id_establishment)
         getTabelaFixa(dataClient.id_establishment)
 

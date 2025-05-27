@@ -1,5 +1,4 @@
 import {
-    FormContent,
     TextField,
     Label,
     Input,
@@ -11,7 +10,6 @@ import {
     AreaForm
 } from "../style"
 import { useState } from "react"
-import { useUser } from "../../../context/globalContext"
 import { useNavigate } from "react-router-dom"
 import { theme } from "../../../theme/theme"
 import api from "../../../services/api/server"
@@ -23,8 +21,11 @@ const ContentForm = () => {
     const [error, setError] = useState(false)
     const [messageError, setMessageError] = useState("")
     const [title, setTitle] = useState("Login")
+    const [data, setData] = useState({
+        email: "",
+        password: ""
+    })
 
-    const { setDataClient, dataClient } = useUser()
     const { primaryColor } = theme
 
     const navigate = useNavigate()
@@ -32,17 +33,11 @@ const ContentForm = () => {
     const handleLogin = async (e) => {
         e.preventDefault()
 
-        if(dataClient.email === "" || dataClient.password === "") {
-            setError(true)
-            setMessageError("Preencha o campo vazio")
-            return
-        }
-
         setTitle(<Dots color={"#f4f4f4"} />)
 
         await api.post("/login", {
-            email: dataClient.email,
-            password: dataClient.password
+            email: data.email,
+            password: data.password
         })
         .then(response => {    
             localStorage.setItem("token", JSON.stringify(response.data))
@@ -54,7 +49,7 @@ const ContentForm = () => {
         .catch(e => {
             setTitle("Login")
             setError(true)
-            setMessageError(e)
+            setMessageError(e.response.data.message)
         })
     }
 
@@ -72,7 +67,7 @@ const ContentForm = () => {
                         type="email"
                         placeholder="Digite seu e-mail"
                         required
-                        onChange={e => setDataClient({ ...dataClient, email: e.target.value })}
+                        onChange={e => setData({ ...data, email: e.target.value })}
                     />
                 </TextField>
                 <TextField>
@@ -81,7 +76,7 @@ const ContentForm = () => {
                         type="password"
                         placeholder="Digite sua senha"
                         required
-                        onChange={e => setDataClient({ ...dataClient, password: e.target.value })}
+                        onChange={e => setData({ ...data, password: e.target.value })}
                     />
                 </TextField>
             </div>

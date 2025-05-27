@@ -9,12 +9,14 @@ import EmptyMessage from "../../../components/EmptyMessage"
 import ReadApi from "../../../services/readData"
 import { useEffect, useState } from "react"
 import RenderItem from "./renderItem"
+import useReservation from "../../../hooks/useReservation"
 
 const ListReserve = (props) => {
 
-    const { reservaFechada, listReservations } = props
+    const { reservaFechada } = props
     const { dataClient, reservations, debts } = useUser()
     const { listDividas } = ReadApi()
+    const { fetchReservations } = useReservation()
 
     const firstWord = dataClient?.colaborator ?? ""
 
@@ -56,7 +58,7 @@ const ListReserve = (props) => {
     }
 
     useEffect(() => {
-        listReservations(dataClient.id_establishment)
+        fetchReservations()
     }, [reservaFechada, reservations])
 
     useEffect(() => {

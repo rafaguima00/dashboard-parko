@@ -43,7 +43,8 @@ export const router = createBrowserRouter([
             { path: "/settings/funcionamento", element: <FormOpening />, errorElement: <ErrorPage /> },
             { path: "/settings/colaborators", element: <ColaboratorsForm />, errorElement: <ErrorPage /> },
             { path: "/settings/table", element: <PriceTableForm />, errorElement: <ErrorPage /> },
-            { path: "/rating", element: <Ratings />, errorElement: <ErrorPage />  }
+            { path: "/rating", element: <Ratings />, errorElement: <ErrorPage />  },
+            { path: "*", element: <ErrorPage /> }
         ]
     }
 ])

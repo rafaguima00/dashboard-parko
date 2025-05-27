@@ -1,6 +1,7 @@
 import { ElementList, ItemList } from "../style"
 import { formatCurrency } from "../../../utils/FormatCurrency"
 import DividaCliente from "./dividaCliente"
+import { mapDateTime } from "../../../utils/MapDateTime"
 
 const RenderItem = (props) => {
     const { 
@@ -13,10 +14,6 @@ const RenderItem = (props) => {
         valuesDebt,
         verificarDividas
     } = props
-
-    const mapDateTime = (item) => {
-        return `${item.data_saida}, ${item.hora_saida}`
-    }
 
     return <>
         {clicked === item.id ? 

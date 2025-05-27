@@ -14,7 +14,6 @@ const SummaryContent = (props) => {
         setCaixaAberto, 
         setResumoVendas, 
         resumoVendas, 
-        valorDoCaixa, 
         setValorDoCaixa
     } = useUser()
     const { email, colaborator } = dataClient

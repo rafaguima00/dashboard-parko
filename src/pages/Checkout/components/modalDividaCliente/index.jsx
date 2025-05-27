@@ -5,7 +5,7 @@ import { formatCurrency } from "../../../../utils/FormatCurrency"
 const ModalDividaCliente = (props) => {
 
     const { neutralColor, primaryColor } = theme
-    const { valorAPagar, setValorAPagar, valuesDebt, name } = props
+    const { valorAPagar, setValorAPagar, valuesDebt, name, setValorSelect, reservaParko } = props
 
     const formatNumber = (num) => {
         if (!num) return ""
@@ -51,13 +51,13 @@ const ModalDividaCliente = (props) => {
             <DivInput>
                 <Label textcolor={neutralColor}>Forma de Pagamento</Label>
                 <Select 
-                    defaultValue="credit-card" 
+                    defaultValue="credit_card" 
                     largura="300px"
-                    // onChange={e => setValueSelectDebt(e.target.value)}
-                    // disabled={reservaParko === 1 ? true : false} 
+                    onChange={e => setValorSelect(e.target.value)}
+                    disabled={reservaParko === 1 ? true : false} 
                 >
-                    <option value="credit-card">Maquineta (Crédito)</option>
-                    <option value="debit-card">Maquineta (Débito)</option>
+                    <option value="credit_card">Maquineta (Crédito)</option>
+                    <option value="debit_card">Maquineta (Débito)</option>
                     <option value="money">Dinheiro</option>
                     <option value="pix">Pix</option>
                 </Select>

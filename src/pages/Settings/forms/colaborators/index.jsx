@@ -16,7 +16,7 @@ import ErrorPage from "../../../Error"
 const ColaboratorsForm = () => {
 
     const { dataClient, setDataClient } = useUser()
-    const { listColaborators, listReservations, loadData } = ReadApi()
+    const { listColaborators, loadData } = ReadApi()
 
     const location = useLocation()
     let selectedColaborator = location.state?.selectedColaborator
@@ -161,7 +161,6 @@ const ColaboratorsForm = () => {
     useEffect(() => {
         loadData(dataClient.id_establishment)
         listColaborators(dataClient.id_establishment)
-        listReservations(dataClient.id_establishment)
 
         if(dataClient.type_colaborator !== "Administrador(a)"){
             setUnauthorized(true)
