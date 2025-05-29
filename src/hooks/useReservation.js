@@ -25,6 +25,7 @@ const useReservation = () => {
         debts,
         dataClient,
         valorAPagar,
+        setValorAPagar,
         valueSelectDebt
     } = useUser()
 
@@ -73,33 +74,40 @@ const useReservation = () => {
     // Calcular valor total da reserva selecionada
     const valorTotal = () => {
         const { diferenca, valorDaReservaAtual } = calculateReservationValue(selectedClient, priceTable)
-        const { hasDebt, valuesDebt } = checkClientDebts(selectedClient, debts)
-        const valorAPagarPelaDivida = (hasDebt ? (valuesDebt ?? 0) : 0)
+        const { hasDebt } = checkClientDebts(selectedClient, debts)
+        const valorAPagarPelaDivida = hasDebt && valorAPagar
 
         if (diferenca < 0) return formatCurrency(valorDaReservaAtual, 'BRL')
 
         if (selectedClient) {
-            return formatCurrency(valorDaReservaAtual + valorAPagarPelaDivida, 'BRL')
+            return valorDaReservaAtual + valorAPagarPelaDivida
         }
     }
 
     // Salvar pagamento no banco de dados (execução após o fecharReserva())
     const registrarPagamento = async (idReservation, trocoCliente, paymentLines) => {
         const { id_costumer, id_vehicle, id_establishment } = selectedClient
-        const { hasDebt, valuesDebt } = checkClientDebts(selectedClient, debts)
+        const { hasDebt } = checkClientDebts(selectedClient, debts)
 
-        if (hasDebt && valuesDebt === valorAPagar) {
+        if (hasDebt) {
             await api.put(`/debts/${id_costumer}`, {
                 value: valorAPagar,
                 id_establishment: id_establishment,
                 payment_method: valueSelectDebt
-            }).then(() => {
-                listReservations()
-                listDividas()
-                alert("Reserva concluída com sucesso!")
-            }).catch(e => {
-                alert("Erro ao quitar dívida")
             })
+            .then(() => {
+                setValorAPagar("")
+                alert("Pagamento de dívida registrado")
+            })
+            .catch(() => {
+                alert("Erro ao quitar dívida")
+                return
+            })
+            .finally(() => {
+                listDividas()
+                fetchReservations()
+            })
+
             return
         }
 
@@ -117,7 +125,8 @@ const useReservation = () => {
             .then(() => {
                 listReservations()
                 alert("Reserva concluída com sucesso!")
-            }).catch(e => {
+            })
+            .catch(e => {
                 alert("Erro ao salvar pagamento", e)
             })
     }
@@ -132,21 +141,28 @@ const useReservation = () => {
             hora_saida: selectedClient.hora_saida || ""
         }
 
-        const { valid, message } = validateReservationClosure({
-            selectedClient: clienteAtualizado, 
-            paymentLines, 
-            valorTotal
-        })
+        if (selectedClient.parko_app === 0) {
+            const { valid, message } = validateReservationClosure({
+                selectedClient: clienteAtualizado, 
+                paymentLines, 
+                valorTotal
+            })
 
-        if (!valid) {
-            setError(true)
-            setMessageError(message)
-            setLoading(false)
-            return
+            if (!valid) {
+                setError(true)
+                setMessageError(message)
+                setLoading(false)
+                return
+            }
         }
 
         const filtrarDivida = paymentLines.filter(item => item.valueSelect === "debit")
-        const { id_costumer, name, data_entrada, hora_entrada, data_saida, hora_saida, id_vehicle, id_establishment } = selectedClient
+        const { 
+            id_costumer, name, 
+            data_entrada, hora_entrada, 
+            data_saida, hora_saida, 
+            id_vehicle, id_establishment 
+        } = selectedClient
 
         if (filtrarDivida.length > 0) {
             const calcularDivida = filtrarDivida
@@ -167,7 +183,7 @@ const useReservation = () => {
                     hora_entrada,
                     data_saida,
                     hora_saida,
-                    value: unformatCurrency(valorTotal())/100,
+                    value: valorTotal(),
                     status: 4,
                     id_vehicle,
                     id_establishment

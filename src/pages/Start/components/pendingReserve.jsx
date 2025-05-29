@@ -54,7 +54,7 @@ const PendingReserve = (props) => {
     }
 
     const ReservasPendentes = () => {
-        if(reservations.filter(item => item.status === "Pendente").map(item => item.id) == null) {
+        if (reservations?.filter(item => item.status === "Pendente").map(item => item.id) == null) {
             return (
                 <>
                     <ElementLoading>
@@ -65,7 +65,7 @@ const PendingReserve = (props) => {
             )
         }
 
-        if(reservations) {
+        if (reservations) {
             return <>
                 {reservations.filter(item => item.status === "Pendente").length === 0 ? 
                 <EmptyMessage>Nenhuma reserva pendente neste estacionamento.</EmptyMessage> :

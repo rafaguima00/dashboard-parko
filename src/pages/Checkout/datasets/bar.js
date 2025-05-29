@@ -85,11 +85,16 @@ const DatasetBar = () => {
   const optionsBar = {
     indexAxis: 'y',
     scales: {
-      // x: { 
-      //   ticks: { 
-      //     mirror: true 
-      //   } 
-      // }
+      x: {
+        grid: {
+          display: false
+        }
+      },
+      y: {
+        grid: {
+          display: false
+        }
+      }
     },
     plugins: {
       title: {

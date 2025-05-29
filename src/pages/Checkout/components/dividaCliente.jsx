@@ -7,6 +7,7 @@ import api from "../../../services/api/server"
 import ReadApi from "../../../services/readData"
 import { useUser } from "../../../context/globalContext"
 import useReservation from "../../../hooks/useReservation"
+import { RiCloseLine } from "react-icons/ri"
 
 const DividaCliente = (props) => {
 
@@ -77,7 +78,9 @@ const DividaCliente = (props) => {
                     <p>Créditos do Cliente:</p>
                     <p>{formatCurrency(item.value, 'BRL')}</p>
                 </DivDebt>
-                <Back onClick={() => setClicked(null)}>x</Back>
+                <Back onClick={() => setClicked(null)}>
+                    <RiCloseLine size={22} />
+                </Back>
             </CreditClient> :
             <DebtClient>
                 <NameClient>{item.name}</NameClient>
@@ -90,7 +93,9 @@ const DividaCliente = (props) => {
                     <p>{formatCurrency(valuesDebt, 'BRL')}</p>
                 </DivDebt>
                 <Receive onClick={abrirModal}>Receber Dívida</Receive>
-                <Back onClick={() => setClicked(null)}>x</Back>
+                <Back onClick={() => setClicked(null)}>
+                    <RiCloseLine size={22} />
+                </Back>
             </DebtClient> 
         }
         <Modal

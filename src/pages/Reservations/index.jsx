@@ -93,7 +93,7 @@ const Reservations = () => {
             <TopTwo>
                 <Top children="Reserva Selecionada" font={19} />
             </TopTwo>
-            <SelectedReserve 
+            <SelectedReserve
                 reservationData={{
                     valuesDebt, hasDebt,
                     error, messageError,

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useUser } from "../../../context/globalContext"
 import { useNavigate } from "react-router-dom"
-import { InfoReservation, GroupButton, Line } from "../style"
+import { InfoReservation, GroupButton, Line, ElementLoading } from "../style"
 import GlobalButton from "../../../components/Button"
 import { theme } from "../../../theme/theme"
 import { Chart as ChartJS, ArcElement, Title } from "chart.js"
@@ -10,6 +10,7 @@ import NewReservation from "../form/newReservation"
 import api from "../../../services/api/server"
 import Informacoes from "./informacoes"
 import useReservation from "../../../hooks/useReservation"
+import { FaPlus } from "react-icons/fa6"
 
 ChartJS.register(ArcElement, Title)
 
@@ -29,8 +30,7 @@ const InfoReserve = () => {
     const [modalFecharCx, setModalFecharCx] = useState(false)
 
     const { 
-        dataClient, 
-        reservations, setReservations, 
+        dataClient, reservations, 
         priceTable, setPriceTable,
         setCaixaAberto, caixaAberto
     } = useUser()
@@ -164,13 +164,13 @@ const InfoReserve = () => {
             id_colaborator: dataClient.id
         })
         .then(() => {
+            verificarSeEstaAberto()
             alert("Caixa aberto")
             return navigate("/checkout")
         })
         .catch(e => {
             alert("Erro ao abrir caixa")
             setModalAbrirCx(false)
-            console.log(e)
         })
 
         setLoading(false)
@@ -190,7 +190,7 @@ const InfoReserve = () => {
 
         await api.put(`/abertura_caixa/${caixaAberto.id}`, { 
             aberto: 0,
-            valor_fechamento: (caixaAberto?.valor_abertura ?? 0) + valorDoCaixa
+            valor_fechamento: valorDoCaixa
         })
         .then(res => {
             setCaixaAberto(res.data[0])
@@ -203,6 +203,17 @@ const InfoReserve = () => {
         })
 
         setLoading(false)
+    }
+
+    const tituloNovaReserva = () => {
+        return (
+            <>
+                <ElementLoading gap={4}>
+                    <FaPlus size={14} />
+                    <p>Nova Reserva</p>
+                </ElementLoading>
+            </>
+        )
     }
 
     useEffect(() => {
@@ -219,7 +230,7 @@ const InfoReserve = () => {
             <GroupButton>
                 <GlobalButton
                     background={primaryColor}
-                    children="+ Nova Reserva"
+                    children={tituloNovaReserva()}
                     altura={heightButton}
                     aoPressionar={() => setOpen(true)}
                 />

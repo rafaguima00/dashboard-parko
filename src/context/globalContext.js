@@ -42,6 +42,7 @@ export const InfoProvider = ({ children }) => {
     const [valorAPagar, setValorAPagar] = useState("")
     const [valueSelectDebt, setValueSelectDebt] = useState("")
     const [valorDoCaixa, setValorDoCaixa] = useState(0)
+    const [dividasEmDinheiro, setDividasEmDinheiro] = useState([])
 
     const value = {
         filtrarPorData, setFiltrarPorData,
@@ -70,6 +71,7 @@ export const InfoProvider = ({ children }) => {
         valorAPagar, setValorAPagar, // Valor a pagar pelas dívidas
         valueSelectDebt, setValueSelectDebt, // Forma de pagamento das dívidas
         valorDoCaixa, setValorDoCaixa, // Valor da abertura/fechamento do caixa ao vivo
+        dividasEmDinheiro, setDividasEmDinheiro // Dívidas em dinheiro em espécie
     }
 
     return (

@@ -54,12 +54,12 @@ const SecondColumn = (props) => {
         return prev + current + (valorAPagar ? valorAPagar : 0)
     })
 
-    const optionMoney = paymentLines.some(item => item.valueSelect === "money") 
+    const optionMoney = paymentLines.filter(item => item.valueSelect === "money") 
 
     const alterarLinhas = () => {
 
-        if((optionMoney || valueSelectDebt === "money") && (somarValores > unformatCurrency(total)/100)) {
-            return setTrocoCliente(somarValores - (unformatCurrency(total)/100))
+        if((optionMoney.length > 0 || valueSelectDebt === "money") && (somarValores > total)) {
+            return setTrocoCliente(somarValores - total)
         }
 
         return setTrocoCliente(0)
@@ -124,10 +124,7 @@ const SecondColumn = (props) => {
                     <DivPayment>
                         <RenderItem states={{ paymentLines, setPaymentLines, somarValores, setTrocoCliente, optionMoney }} />
                     </DivPayment>
-                    <Add 
-                        onClick={addLine} 
-                        disabled={selectedClient.parko_app === 1 ? true : false}
-                    >
+                    <Add onClick={addLine}>
                         <FiPlus size={".8em"} />
                     </Add>
                 </Payment>

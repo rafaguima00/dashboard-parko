@@ -3,7 +3,7 @@ import { Summary, Header, Pg, InfoCheckout, Info } from "../style"
 import avatar from "../../../assets/avatar.png"
 import { theme } from "../../../theme/theme"
 import { formatCurrency } from "../../../utils/FormatCurrency"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import api from "../../../services/api/server"
 
 const SummaryContent = (props) => {
@@ -14,13 +14,13 @@ const SummaryContent = (props) => {
         setCaixaAberto, 
         setResumoVendas, 
         resumoVendas, 
-        setValorDoCaixa
+        setValorDoCaixa,
+        dividasEmDinheiro,
+        setDividasEmDinheiro
     } = useUser()
     const { email, colaborator } = dataClient
     const { valoresAporte,  valoresRetiradas, filtrarPorData } = props.resumo
     const { cancelColor, neutralColor, primaryColor } = theme
-
-    const [dividasEmDinheiro, setDividasEmDinheiro] = useState([])
 
     const unformatCurrency = (num) => {
         return num.replace(/[^\d]/g, "")
@@ -120,13 +120,13 @@ const SummaryContent = (props) => {
 
         const total = ganhos - valoresRetiradas
 
-        if(caixaAberto?.aberto === 1) {
-            setValorDoCaixa(total)
+        if (caixaAberto?.aberto === 1) {
+            setValorDoCaixa((caixaAberto?.valor_abertura ?? 0) + total)
         }
     }
 
     useEffect(() => {
-        if(dataClient.id_establishment && resumoVendas) {
+        if (dataClient.id_establishment && resumoVendas) {
             verificarCaixa()
             resumoDeVendas()
             verificarDividas()
@@ -134,7 +134,7 @@ const SummaryContent = (props) => {
     }, [dataClient.id_establishment])
 
     useEffect(() => {
-        if(dividasEmDinheiro && dividasEmDinheiro.length > 0) {
+        if (dividasEmDinheiro && dividasEmDinheiro.length > 0) {
             organizarDividas()
         }
     }, [dividasEmDinheiro])
@@ -146,7 +146,7 @@ const SummaryContent = (props) => {
     }, [resumoVendas, dividasEmDinheiro, valoresAporte, valoresRetiradas])
 
     useEffect(() => {
-        if(filtrarPorData.resumo) {
+        if (filtrarPorData.resumo) {
             buscarCaixa()
         }
     }, [filtrarPorData.resumo])

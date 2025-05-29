@@ -9,18 +9,7 @@ export const validateDebt = (e, valorInput, valorSelect, valuesDebt) => {
 
         return {
             valorInput: formatCurrency(valuesDebt, 'BRL'),
-            valorAPagar: valuesDebt,
-            valueSelectDebt: valorSelect,
-            open: false
-        }
-    }
-
-    if (unformatCurrency(valorInput)/100 < valuesDebt) {
-        alert("Preencha o valor completo da dívida")
-        
-        return {
-            valorInput: formatCurrency(valuesDebt, 'BRL'),
-            valorAPagar: valuesDebt,
+            valorAPagar: unformatCurrency(valuesDebt)/100,
             valueSelectDebt: valorSelect,
             open: false
         }
@@ -28,7 +17,7 @@ export const validateDebt = (e, valorInput, valorSelect, valuesDebt) => {
 
     return {
         valorInput: formatCurrency(valorInput, 'BRL'),
-        valorAPagar: formatCurrency(valorInput, 'BRL'),
+        valorAPagar: unformatCurrency(valorInput)/100,
         valueSelectDebt: valorSelect,
         open: false
     }

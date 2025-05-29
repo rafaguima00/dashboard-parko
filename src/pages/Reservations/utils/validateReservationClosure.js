@@ -30,7 +30,7 @@ export const validateReservationClosure = ({ selectedClient, paymentLines, valor
         }
     }
 
-    const unformatTotal = unformatCurrency(valorTotal())/100
+    const unformatTotal = valorTotal()
     const somarValores = valores.reduce((prev, current) => prev + current, 0)
 
     if (somarValores < unformatTotal) {

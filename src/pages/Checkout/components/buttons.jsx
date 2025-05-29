@@ -28,9 +28,9 @@ const Buttons = ({ setOpen, setOpenRetirada }) => {
             return
         }
 
-        await api.put(`/abertura_caixa/${caixaAberto.id}`, { 
+        await api.put(`/abertura_caixa/${caixaAberto?.id}`, { 
             aberto: 0,
-            valor_fechamento: (caixaAberto?.valor_abertura ?? 0) + valorDoCaixa
+            valor_fechamento: valorDoCaixa
         })
         .then(res => {
             setCaixaAberto(res.data[0])

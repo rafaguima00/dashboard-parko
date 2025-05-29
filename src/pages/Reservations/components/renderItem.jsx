@@ -5,15 +5,26 @@ import { unformatCurrency } from "../../../utils/UnformatCurrency"
 import useReservation from "../../../hooks/useReservation"
 import { useEffect } from "react"
 import usePayment from "../../../hooks/usePayment"
+import { checkClientDebts } from "../utils/checkClientDebts"
 
 const RenderItem = (props) => {
 
     const { paymentLines, setPaymentLines, somarValores, setTrocoCliente, optionMoney } = props.states
-
-    const { selectedClient, valueSelectDebt, resumoVendas } = useUser()
+    const { selectedClient, valueSelectDebt, resumoVendas, valorAPagar, debts } = useUser()
+    const { hasDebt } = checkClientDebts(selectedClient, debts)
     const { valorTotal } = useReservation()
     const { fetchPayments } = usePayment()
     const total = valorTotal()
+
+    const pesquisarPagamento = () => {
+        const findPgto = resumoVendas.find(item => item.id_reservation === selectedClient?.id)
+
+        return findPgto
+    }
+
+    const pagamento = pesquisarPagamento()
+
+    const valorAPagarPelaDivida = hasDebt && valorAPagar
 
     const handleSelectChange = (e, index) => {
         const value = e.target.value
@@ -26,7 +37,7 @@ const RenderItem = (props) => {
     const handleChange = (e, index) => {
         const rawValue = e.target.value
 
-        if(rawValue === "") return  
+        if (rawValue === "") return  
 
         const formatValue = rawValue?.replace(/\D/g, '').slice(0, 6)
         const numericValue = unformatCurrency(formatValue) / 100
@@ -39,8 +50,8 @@ const RenderItem = (props) => {
     const troco = (index) => {
         const { valorPgto, valueSelect } = paymentLines[index]
 
-        if ((somarValores > unformatCurrency(total)/100) && (optionMoney.length > 0 || valueSelectDebt === "money")) {
-            setTrocoCliente(somarValores - (unformatCurrency(total)/100))
+        if ((somarValores > total) && (optionMoney.length > 0 || valueSelectDebt === "money")) {
+            setTrocoCliente(somarValores - total)
         }
 
         if (valueSelect !== "money" || valorPgto < 0) {
@@ -49,14 +60,6 @@ const RenderItem = (props) => {
             ))
         }
     }
-
-    const pesquisarPagamento = () => {
-        const findPgto = resumoVendas.find(item => item.id_reservation === selectedClient?.id)
-
-        return findPgto
-    }
-
-    const pagamento = pesquisarPagamento()
 
     useEffect(() => {
         fetchPayments()
@@ -69,8 +72,11 @@ const RenderItem = (props) => {
     return paymentLines.map((linha, index) => (
         <ArrayElement key={index}>
             <Select
-                value={selectedClient?.parko_app === 1 && index === 0 ? pagamento.payment_method : linha.valueSelect}
-                disabled={selectedClient?.parko_app === 1 && index === 0 ? true : false}
+                value={
+                    selectedClient?.parko_app === 1 && index === 0 ? 
+                    pagamento.payment_method : 
+                    linha.valueSelect
+                }
                 onChange={e => handleSelectChange(e, index)}
             >
                 <option value="credit_card">Maquineta (Crédito)</option>
@@ -82,10 +88,13 @@ const RenderItem = (props) => {
             <Price
                 type="text"
                 placeholder="Valor (R$)"
-                value={selectedClient?.parko_app === 1 && index === 0 ? formatCurrency(pagamento.value, 'BRL') : linha.valorPgto}
+                value={
+                    selectedClient?.parko_app === 1 && index === 0 ? 
+                    formatCurrency(pagamento.value + valorAPagarPelaDivida, 'BRL') : 
+                    linha.valorPgto
+                }
                 onChange={e => handleChange(e, index)}
                 onBlur={() => troco(index)}
-                disabled={selectedClient?.parko_app === 1 && index === 0 ? true : false}
             />
         </ArrayElement>
     ))
