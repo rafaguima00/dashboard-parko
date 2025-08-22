@@ -17,6 +17,7 @@ import { unLoggedIn } from "../../mocks/errorPage"
 import { checkClientDebts } from "./utils/checkClientDebts"
 import { filterByText, filterOpenReservations } from "./utils/filterReservation"
 import useReservation from "../../hooks/useReservation"
+import { useLocation } from "react-router-dom"
 
 const Reservations = () => {
 
@@ -30,12 +31,13 @@ const Reservations = () => {
     const { 
         setDataClient, dataClient, 
         selectedClient, setSelectedClient, 
-        reservations,
-        debts
+        reservations, debts
     } = useUser()
     const { hasDebt, valuesDebt } = checkClientDebts(selectedClient, debts)
-    const { loadData, listDividas, getPriceTable } = ReadApi()
+    const { loadData, listDividas, getPriceTable, getTabelaFixa } = ReadApi()
     const { error, loading, messageError, fetchReservations, reservationClosure } = useReservation()
+    const location = useLocation()
+    const reservationComplete = location.state?.reservationId
 
     const reservaAberta = filterOpenReservations(reservations)
     const filterReserv = filterByText(reservaAberta, text)
@@ -52,26 +54,32 @@ const Reservations = () => {
         const decoded = jwtDecode(token)
         setDataClient(decoded.user)
 
-        if(decoded.user.id_establishment) {
+        if (decoded.user.id_establishment) {
             fetchReservations(decoded.user.id_establishment)
-
             const intervalo = setInterval(() => {
                 fetchReservations(decoded.user.id_establishment)
             }, 3000)
-
             return () => clearInterval(intervalo)
         }
-
-        if(reservaAberta) {
-            const indexOf = filterReserv.values().next().value
-            setSelectedClient(indexOf)
-        }
     }, [])
+
+    useEffect(() => {
+        if (reservations.length > 0) {
+            const abertas = filterOpenReservations(reservations)
+            const filtradas = filterByText(abertas, text)
+
+            if (!selectedClient) {
+                const primeiro = filtradas.values().next().value
+                setSelectedClient(reservationComplete || primeiro)
+            }
+        }
+    }, [reservations, text, reservationComplete])
     
     useEffect(() => {
-        if(dataClient.id_establishment) {
+        if (dataClient.id_establishment) {
             loadData(dataClient.id_establishment)
             getPriceTable(dataClient.id_establishment)
+            getTabelaFixa(dataClient.id_establishment)
         }
     }, [dataClient])
 
@@ -79,7 +87,7 @@ const Reservations = () => {
         listDividas()
     }, [selectedClient])
 
-    if(unauthorized) {
+    if (unauthorized) {
         return <ErrorPage errorMsg={unLoggedIn} />
     }
 
@@ -87,7 +95,10 @@ const Reservations = () => {
         <Container>
             <TopContent states={{ text, setText }} />
             <ItemReservation>
-                <ListConfirmedReserve filterReserv={filterReserv} />
+                <ListConfirmedReserve 
+                    filterReserv={filterReserv} 
+                    reservationComplete={reservationComplete}
+                />
                 <TimingReserve />
             </ItemReservation>
             <TopTwo>

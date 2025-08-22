@@ -19,6 +19,8 @@ import RenderItem from "../components/renderItem"
 import { validateDebt } from "../utils/validateDebt"
 import LineDebt from "./lineDebt"
 import { FiPlus } from "react-icons/fi"
+import { calculateReservationValue } from "../../../utils/CalculateReservationValue"
+import RadioArea from "./radioArea"
 
 const SecondColumn = (props) => {
 
@@ -38,17 +40,20 @@ const SecondColumn = (props) => {
         valorAPagar, 
         setValorAPagar, 
         valueSelectDebt, 
-        setValueSelectDebt 
+        setValueSelectDebt,
+        priceTable, tabelaFixa,
+        changeNeeded, setChangeNeeded
     } = useUser()
     const { valorTotal } = useReservation()
     const total = valorTotal()
+    const { valorDaReservaAtual } = calculateReservationValue(selectedClient, priceTable, tabelaFixa, selectedClient.type_of_charge)
 
     const [openDebt, setOpenDebt] = useState(false)
     const [valorInput, setValorInput] = useState("")
     const [valorSelect, setValorSelect] = useState("credit_card")
 
     const valores = paymentLines.map(item => {
-        return unformatCurrency(item.valorPgto)/100
+        return unformatCurrency(item.valorPgto) / 100
     })
     const somarValores = valores.reduce((prev, current) => {
         return prev + current + (valorAPagar ? valorAPagar : 0)
@@ -58,7 +63,7 @@ const SecondColumn = (props) => {
 
     const alterarLinhas = () => {
 
-        if((optionMoney.length > 0 || valueSelectDebt === "money") && (somarValores > total)) {
+        if ((optionMoney.length > 0 || valueSelectDebt === "money") && (somarValores > total)) {
             return setTrocoCliente(somarValores - total)
         }
 
@@ -80,7 +85,7 @@ const SecondColumn = (props) => {
     }
 
     useEffect(() => {
-        if(trocoCliente < 0) {
+        if (trocoCliente < 0) {
             setTrocoCliente(0)
         }
     }, [trocoCliente])
@@ -109,7 +114,7 @@ const SecondColumn = (props) => {
                 <Receive>
                     <ValueReservation 
                         titulo="Valor a receber" 
-                        variavel={selectedClient?.value} 
+                        variavel={valorDaReservaAtual} 
                     />
 
                     {hasDebt &&
@@ -134,6 +139,13 @@ const SecondColumn = (props) => {
                     </DivError>
                 }
             </div>
+            {optionMoney.length > 0 && 
+                <RadioArea 
+                    children="O cliente vai precisar de troco?" 
+                    changeNeeded={changeNeeded}
+                    setChangeNeeded={setChangeNeeded}
+                />
+            }
 
             {/* 3° linha: Valor da reserva + valor da dívida */}
             {total && <ValueReservation titulo="Valor total" variavel={total} />}

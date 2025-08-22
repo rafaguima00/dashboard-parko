@@ -26,7 +26,9 @@ const useReservation = () => {
         dataClient,
         valorAPagar,
         setValorAPagar,
-        valueSelectDebt
+        valueSelectDebt,
+        tabelaFixa,
+        changeNeeded
     } = useUser()
 
     // Informações da reserva selecionada
@@ -43,9 +45,15 @@ const useReservation = () => {
     const fetchReservations = async () => {
         try {
             const data = await listReservations(dataClient?.id_establishment)
-            setReservations(data)
+
+            setReservations(prev => {
+                if (JSON.stringify(prev) !== JSON.stringify(data)) {
+                    return data
+                }
+                return prev
+            })
         } catch (error) {
-            setReservations(error)
+            console.error(error)
         }
     }
 
@@ -73,11 +81,14 @@ const useReservation = () => {
 
     // Calcular valor total da reserva selecionada
     const valorTotal = () => {
-        const { diferenca, valorDaReservaAtual } = calculateReservationValue(selectedClient, priceTable)
+        const { 
+            diferenca, 
+            valorDaReservaAtual 
+        } = calculateReservationValue(selectedClient, priceTable, tabelaFixa, selectedClient.type_of_charge)
         const { hasDebt } = checkClientDebts(selectedClient, debts)
         const valorAPagarPelaDivida = hasDebt && valorAPagar
 
-        if (diferenca < 0) return formatCurrency(valorDaReservaAtual, 'BRL')
+        if (selectedClient && diferenca < 0) return formatCurrency(valorDaReservaAtual, 'BRL')
 
         if (selectedClient) {
             return valorDaReservaAtual + valorAPagarPelaDivida

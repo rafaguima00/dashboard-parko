@@ -3,7 +3,7 @@ const calculateTimingReservation = (selectedClient, setTempo) => {
 
         if (!selectedClient) return
 
-        if(selectedClient?.status !== "Confirmado" && selectedClient?.status !== "Recusado") {
+        if (selectedClient?.status !== "Confirmado" && selectedClient?.status !== "Recusado") {
             setTempo("00:00:00")
             return
         }
@@ -29,7 +29,7 @@ const calculateTimingReservation = (selectedClient, setTempo) => {
         }
 
         // Verifica se a data e hora da reserva é futura
-        if(converterData > tempoAtual) {
+        if (converterData > tempoAtual) {
             setTempo("00:00:00")
             return
         }

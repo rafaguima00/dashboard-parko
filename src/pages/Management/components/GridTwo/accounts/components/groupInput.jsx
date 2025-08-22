@@ -16,7 +16,7 @@ const InputGroup = (props) => {
 
     return (
         <GroupInput>
-            <Button 
+            {/* <Button 
                 background={"#f4f4f4"} 
                 paddingright={".5rem"} 
                 paddingleft={".5rem"}
@@ -24,7 +24,7 @@ const InputGroup = (props) => {
                 onClick={() => setFilterDate(true)}
             >
                 <GoCalendar size={19} color={neutralColor}/>
-            </Button>
+            </Button> */}
             <Button 
                 background={"#f4f4f4"} 
                 paddingright={".5rem"} 

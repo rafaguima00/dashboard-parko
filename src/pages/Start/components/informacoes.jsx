@@ -58,7 +58,7 @@ const Informacoes = () => {
     }
 
     function calcularPorcentagem() {
-        if(ratings == null) {
+        if (ratings == null) {
             return (
                 <>
                     <ElementLoading>
@@ -69,7 +69,7 @@ const Informacoes = () => {
             )
         }
 
-        if(ratings.length > 0) {
+        if (ratings.length > 0) {
             const total = ratings.length
             const positiva = ratings.filter(item => item.rate >= 4).length
             const ratePercent = (positiva * 100) / total
@@ -81,10 +81,16 @@ const Informacoes = () => {
     }
 
     useEffect(() => {
-        if(dataClient.id_establishment) {
+        if (dataClient.id_establishment) {
             avaliacoes()
         }
     }, [dataClient.id_establishment])
+
+    useEffect(() => {
+        if (ratings) {
+            console.log(ratings)
+        }
+    }, [ratings])
 
     return <>
         <GroupInfo>

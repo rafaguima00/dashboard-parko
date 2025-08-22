@@ -62,21 +62,17 @@ const DividaCliente = (props) => {
         verificarDividas()
     }, [debts, reservations])
 
-    useEffect(() => {
-        console.log(item)
-    }, [item])
-
     return <>
         {debtClient === false ? 
             <CreditClient>
                 <NameClient>{item.name}</NameClient>
                 <DivDebt>
                     <p>Créditos da Reserva:</p>
-                    <p>{formatCurrency(item.value, 'BRL')}</p>
+                    <p>{formatCurrency(0, 'BRL')}</p>
                 </DivDebt>
                 <DivDebt>
                     <p>Créditos do Cliente:</p>
-                    <p>{formatCurrency(item.value, 'BRL')}</p>
+                    <p>{formatCurrency(0, 'BRL')}</p>
                 </DivDebt>
                 <Back onClick={() => setClicked(null)}>
                     <RiCloseLine size={22} />

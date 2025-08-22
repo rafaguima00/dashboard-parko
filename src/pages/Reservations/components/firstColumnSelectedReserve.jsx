@@ -15,7 +15,7 @@ const FirstColumn = (props) => {
     const [formData, setFormData] = useState({})
 
     const { dateTime, setDateTime } = props.states
-    const { selectedClient, setSelectedClient, priceTable } = useUser()
+    const { selectedClient, setSelectedClient, priceTable, tabelaFixa } = useUser()
     const { editReservation } = useReservation()
 
     function formatarDataHoraParaDate(data_entrada) {
@@ -56,7 +56,7 @@ const FirstColumn = (props) => {
 
     const handleUpdate = async (id, updatedClient) => {
         
-        const { valorDaReservaAtual } = calculateReservationValue(updatedClient, priceTable)
+        const { valorDaReservaAtual } = calculateReservationValue(updatedClient, priceTable, tabelaFixa, selectedClient.type_of_charge)
 
         try {
             await editReservation(id, {

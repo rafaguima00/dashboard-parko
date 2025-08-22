@@ -41,10 +41,10 @@ const SummaryContent = (props) => {
             const response = await api.get(`/abertura_caixa/parking/${dataClient.id_establishment}`)
             const caixas = response.data
 
-            const dataFechamento = caixas.find(item => item.data_fechamento === filtrarPorData.resumo)
+            const dataFechamento = caixas.find(item => item.data_fechamento === filtrarPorData)
 
             if (!dataFechamento || !dataFechamento.data_fechamento) {
-                const dataAbertura = caixas.find(item => item.data_abertura === filtrarPorData.resumo)
+                const dataAbertura = caixas.find(item => item.data_abertura === filtrarPorData)
                 setCaixaAberto(dataAbertura || null)
             } else {
                 setCaixaAberto(dataFechamento)
@@ -66,7 +66,7 @@ const SummaryContent = (props) => {
     }
 
     function mapVendas(payment_method) {
-        const filtrarData = resumoVendas.filter(item => item.data === filtrarPorData.resumo)
+        const filtrarData = resumoVendas.filter(item => item.data === filtrarPorData)
         const formaDePagamento = filtrarData.filter(item => item.payment_method === payment_method)
 
         if (payment_method === "total") {
@@ -100,7 +100,7 @@ const SummaryContent = (props) => {
         const filterDebts = dividasEmDinheiro?.filter(
             item => item.status === "Pago" && 
             item.payment_method === "money" && 
-            item.date_updated?.split(",")[0] === filtrarPorData.resumo
+            item.date_updated?.split(",")[0] === filtrarPorData
         )
 
         const plusValues = filterDebts
@@ -146,10 +146,10 @@ const SummaryContent = (props) => {
     }, [resumoVendas, dividasEmDinheiro, valoresAporte, valoresRetiradas])
 
     useEffect(() => {
-        if (filtrarPorData.resumo) {
+        if (filtrarPorData) {
             buscarCaixa()
         }
-    }, [filtrarPorData.resumo])
+    }, [filtrarPorData])
 
     return (
         <Summary>
@@ -160,11 +160,11 @@ const SummaryContent = (props) => {
                     <Pg><strong>E-mail: </strong>{email}</Pg>
                     <Pg>
                         <strong>Abertura do caixa: </strong>
-                        {`${caixaAberto?.data_abertura ?? ""}, ${caixaAberto?.hora_abertura ?? ""}`}
+                        {caixaAberto?.data_abertura && `${caixaAberto?.data_abertura ?? ""}, ${caixaAberto?.hora_abertura ?? ""}`}
                     </Pg>
                     <Pg>
                         <strong>Fechamento do caixa: </strong>
-                        {`${caixaAberto?.data_fechamento ?? ""}, ${caixaAberto?.hora_fechamento ?? ""}`}
+                        {caixaAberto?.data_fechamento && `${caixaAberto?.data_fechamento ?? ""}, ${caixaAberto?.hora_fechamento ?? ""}`}
                     </Pg>
                     <Pg><strong>Valor da abertura (dinheiro): </strong>{formatCurrency(caixaAberto?.valor_abertura ?? 0, 'BRL')}</Pg>
                     <Pg>

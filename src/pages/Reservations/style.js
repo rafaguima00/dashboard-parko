@@ -401,3 +401,37 @@ export const ArrayElement = styled.div`
     align-items: center;
     gap: 1rem;
 `
+
+export const RadioAreaStyle = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+`
+
+export const RadioText = styled.p`
+    color: ${neutralColor};
+`
+
+export const InputArea = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .7rem;
+
+    div {
+        display: flex;
+        flex-direction: row;
+        gap: .4rem;
+    }
+`
+
+export const Label = styled.label`
+    color: ${props => props.textcolor ? props.textcolor : neutralColor};
+    font-weight: ${props => props.bold ? "700" : "400"};
+    font-size: ${props => props.font ? props.font : 16}px;
+`
+
+export const Radio = styled.input`
+    accent-color: #7d7d7d;
+`

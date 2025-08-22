@@ -30,12 +30,12 @@ const Colaborators = () => {
     const navigate = useNavigate()
 
     const routeScreen = (item) => {
-        if(coordenador || funcionario) {
+        if (coordenador || funcionario) {
             alert("Você não tem permissão para editar os dados dos colaboradores")
             return
         } 
 
-        if(item) {
+        if (item) {
             return navigate("/settings/colaborators", {
                 state: {
                     selectedColaborator: item
@@ -47,7 +47,7 @@ const Colaborators = () => {
     }
 
     const navigateWithOutId = () => {
-        if(coordenador || funcionario) {
+        if (coordenador || funcionario) {
             alert("Você não tem permissão para editar os dados dos colaboradores")
         } else {
             return navigate("/settings/colaborators")

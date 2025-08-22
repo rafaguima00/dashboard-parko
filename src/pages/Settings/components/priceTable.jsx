@@ -2,18 +2,21 @@ import { BiEdit } from "react-icons/bi"
 import { ContentInfo, ButtonEdit, Menu, Warning, Hour, ElementLoading, Loading } from "../style"
 import { theme } from "../../../theme/theme"
 import { useNavigate } from "react-router-dom"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useUser } from "../../../context/globalContext"
 import { formatCurrency } from "../../../utils/FormatCurrency"
 import ReadApi from "../../../services/readData"
 import { Spinner } from "react-activity"
 import "react-activity/dist/library.css"
+import api from "../../../services/api/server"
 
 const PriceTable = () => {
     
+    const [typeCharge, setTypeCharge] = useState("")
+
     const { neutralColor, primaryColor, cancelColor } = theme
-    const { dataClient, priceTable } = useUser()
-    const { getPriceTable } = ReadApi()
+    const { dataClient, priceTable, tabelaFixa } = useUser()
+    const { getPriceTable, getTabelaFixa } = ReadApi()
     
     const navigate = useNavigate()
 
@@ -23,10 +26,17 @@ const PriceTable = () => {
 
     useEffect(() => {
         getPriceTable(dataClient.id_establishment)
+        getTabelaFixa(dataClient.id_establishment)
     }, [dataClient])
 
+    useEffect(() => {
+        if (priceTable && tabelaFixa) {
+            getTypeOfCharge()
+        }
+    }, [priceTable, tabelaFixa])
+
     const tempoTolerancia = () => {
-        if(priceTable?.tempo_tolerancia == null) {
+        if (priceTable?.tempo_tolerancia == null) {
             return (
                 <>
                     <ElementLoading>
@@ -37,15 +47,24 @@ const PriceTable = () => {
             )
         }
 
-        if(priceTable?.tempo_tolerancia === 0) {
+        if (priceTable?.tempo_tolerancia === 0) {
             return <strong>Não há tempo de tolerância</strong>
         }
             
         return <strong>Tempo de tolerância: {priceTable?.tempo_tolerancia ?? 0} minutos</strong> 
     }
 
-    const valorHora = (valueHour) => {
-        if(valueHour == null) {
+    const getTypeOfCharge = async () => {
+        try {
+            const response = await api.get(`/establishments/${dataClient.id_establishment}`)
+            setTypeCharge(response.data[0].type_of_charge)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const valorHora = () => {
+        if (priceTable?.valor_hora == null || tabelaFixa == null) {
             return (
                 <>
                     <ElementLoading>
@@ -56,7 +75,13 @@ const PriceTable = () => {
             )
         }
 
-        return formatCurrency(valueHour, 'BRL')
+        if (typeCharge === "hora_fracao") {
+            return formatCurrency(priceTable?.valor_hora, 'BRL')
+        }
+
+        if (typeCharge === "tabela_fixa") {
+            return formatCurrency(tabelaFixa[0].value, 'BRL')
+        }
     }
 
     return (
@@ -66,7 +91,7 @@ const PriceTable = () => {
             </ButtonEdit>
             <Menu>
                 <Warning textcolor={neutralColor}>Valor da hora</Warning>
-                <Hour textcolor={primaryColor}>{valorHora(priceTable?.valor_hora ?? "")}</Hour>
+                <Hour textcolor={primaryColor}>{valorHora()}</Hour>
                 <hr/>
                 <Warning textcolor={cancelColor}>{tempoTolerancia()}</Warning>
             </Menu>

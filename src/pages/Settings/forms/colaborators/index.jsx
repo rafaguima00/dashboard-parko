@@ -41,7 +41,7 @@ const ColaboratorsForm = () => {
     const [loadingDel, setLoadingDel] = useState(false)
 
     const selecionarCargo = (value) => {
-        if(value === "Funcionário(a)") {
+        if (value === "Funcionário(a)") {
             setNewColaborator({ ...newColaborator, e_admin: 1 })
         } else if (value === "Coordenador(a)") {
             setNewColaborator({ ...newColaborator, e_admin: 2 })
@@ -51,11 +51,11 @@ const ColaboratorsForm = () => {
     }
 
     const tipoContratacao = (value) => {
-        if(value === "Carteira assinada") {
+        if (value === "Carteira assinada") {
             setNewColaborator({ ...newColaborator, tipo_contratacao: 1 })
         } else if (value === "Autônomo(PJ)") {
             setNewColaborator({ ...newColaborator, tipo_contratacao: 2 })
-        }else if (value === "MEI") {
+        } else if (value === "MEI") {
             setNewColaborator({ ...newColaborator, tipo_contratacao: 3 })
         }
     }
@@ -82,12 +82,12 @@ const ColaboratorsForm = () => {
         e.preventDefault()
         setLoadingDel(true)
 
-        if(selected === "none") {
+        if (selected === "none") {
             setLoadingDel(false)
             return alert("Selecione um usuário")
         }
 
-        if(window.confirm("Tem certeza que deseja excluir esta conta?") === true) {
+        if (window.confirm("Tem certeza que deseja excluir esta conta?") === true) {
             await api.delete(`/colaborators/${id}`)
             .then(() => {
                 alert("Conta deletada")
@@ -112,6 +112,8 @@ const ColaboratorsForm = () => {
                 listColaborators(dataClient.id_establishment)
                 setLoadingDel(false)
             })
+        } else {
+            setLoadingDel(false)
         }
     }
 
@@ -120,12 +122,12 @@ const ColaboratorsForm = () => {
         e.preventDefault()
         setLoading(true)
 
-        if(selected === "none") {
+        if (selected === "none") {
             handleCreateColaborator(newColaborator)
             return
         }
 
-        if(selected !== "none") {
+        if (selected !== "none") {
             await api.put(`/colaborators/${selected}`, newColaborator)
             .then(() => {
                 alert("Usuário atualizado com sucesso.")
@@ -143,7 +145,7 @@ const ColaboratorsForm = () => {
     useEffect(() => {
         const token = localStorage.getItem("token")
 
-        if(token) {
+        if (token) {
             const decoded = jwtDecode(token)
             setDataClient(decoded.user)
         } else {
@@ -152,7 +154,7 @@ const ColaboratorsForm = () => {
             return
         }
 
-        if(selectedColaborator) {
+        if (selectedColaborator) {
             setSelected(selectedColaborator.id)
             setNewColaborator(selectedColaborator)
         }
@@ -162,7 +164,7 @@ const ColaboratorsForm = () => {
         loadData(dataClient.id_establishment)
         listColaborators(dataClient.id_establishment)
 
-        if(dataClient.type_colaborator !== "Administrador(a)"){
+        if (dataClient.type_colaborator !== "Administrador(a)"){
             setUnauthorized(true)
             setErrorMsg("Você não tem permissão para acessar esta funcionalidade")
         }

@@ -40,16 +40,19 @@ const ContentForm = () => {
             password: data.password
         })
         .then(response => {    
+            console.log(response.data)
             localStorage.setItem("token", JSON.stringify(response.data))
         })
         .then(() => {
-            setTitle("Login")
             return navigate("/start")
         })
         .catch(e => {
-            setTitle("Login")
+            console.log(e)
             setError(true)
             setMessageError(e.response.data.message)
+        })
+        .finally(() => {
+            setTitle("Login")
         })
     }
 

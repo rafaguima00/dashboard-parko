@@ -110,7 +110,7 @@ const Menu = () => {
     }, [dataClient.id])
 
     useEffect(() => {
-        if(requests.length >= 1) {
+        if (requests.length >= 1) {
             setTime(1500)
             setShowNotification(true)
         } else {

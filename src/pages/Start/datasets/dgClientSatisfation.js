@@ -4,10 +4,10 @@ import { useUser } from "../../../context/globalContext"
 
 const AvaliacaoDoCliente = () => {
     const { primaryColor, cancelColor } = theme
-    const { ratings } = useUser()
+    const { ratings = [] } = useUser()
 
     const avaliacaoTotal = useMemo(() => {
-        const totais = ratings?.reduce(
+        const totais = (Array.isArray(ratings) ? ratings : []).reduce(
             (acc, item) => {
                 if (item.rate <= 2) acc.bad += 1
                 else if (item.rate === 3) acc.mid += 1

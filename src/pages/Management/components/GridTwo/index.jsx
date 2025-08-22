@@ -17,7 +17,7 @@ const GridTwo = (props) => {
     const { type_colaborator } = dataClient
 
     const titleSelected = () => {
-        switch(selected) {
+        switch (selected) {
             case 0 :
                 return "Relatórios Financeiros"
             case 1 :

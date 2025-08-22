@@ -1,45 +1,24 @@
 import { useUser } from "../../../context/globalContext"
 import { ListBody, ElementList, ItemList, State } from "../style"
-import api from "../../../services/api/server"
 import EmptyMessage from "../../../components/EmptyMessage"
 import { theme } from "../../../theme/theme"
 import { useNavigate } from "react-router-dom"
-import useReservation from "../../../hooks/useReservation"
 
 const ConfirmedReserve = (props) => {
 
     const { reservations } = useUser()
     const { primaryColor } = theme
-    const { setLoading } = props.states
-    const { fetchReservations } = useReservation()
 
     const navigate = useNavigate()
 
     const handleUpdate = async (id) => {
         const findUser = reservations.find(item => item.id === id)
 
-        if(window.confirm(`Deseja concluir a reserva de ${findUser.name}?`) === true) {
-            setLoading(true)
-
-            await api.put(`reservations/${id}`, {
-                data_entrada: findUser.data_entrada,
-                hora_entrada: findUser.hora_entrada,
-                data_saida: findUser.data_saida,
-                hora_saida: findUser.hora_saida,
-                value: findUser.value,
-                status: 4,
-                id_vehicle: findUser.id_vehicle
-            })
-            .then(() => {
-                setLoading(false)
-                fetchReservations()
-            })
-            .then(() => {
-                return navigate("/checkout")
-            })
-            .catch(e => {
-                setLoading(false)
-                console.log(e)
+        if (window.confirm(`Deseja concluir a reserva de ${findUser.name}?`) === true) {
+            return navigate("/reservations", {
+                state: {
+                    reservationId: findUser
+                }
             })
         }
     }

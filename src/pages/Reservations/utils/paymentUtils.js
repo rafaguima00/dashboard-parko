@@ -5,6 +5,7 @@ export const valueToPay = (valueSelect, valorPgto, trocoCliente) => {
         const valorFinal = (unformatCurrency(valorPgto) / 100) - trocoCliente
         return valorFinal.toFixed(2)
     }
+    
     const valorFinal = unformatCurrency(valorPgto) / 100
     return valorFinal.toFixed(2)
 }

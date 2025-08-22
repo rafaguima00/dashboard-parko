@@ -11,25 +11,32 @@ import { formatCurrency } from "../../../utils/FormatCurrency"
 const ListConfirmedReserve = (props) => {
 
     const { primaryColor } = theme
-    const { filterReserv } = props
-    const { setSelectedClient, dataClient, priceTable } = useUser()
+    const { filterReserv, reservationComplete } = props
+    const { setSelectedClient, dataClient, priceTable, tabelaFixa } = useUser()
     const { fetchReservations } = useReservation()
 
     const [clicked, setClicked] = useState(0)
 
-    const handleOnClick = ({ index, item }) => {
-        setClicked(index)
+    const handleOnClick = ({ item }) => {
+        setClicked(item.id)
         setSelectedClient(item)
     }
 
     const mapValue = (item) => {
-        const { valorDaReservaAtual } = calculateReservationValue(item, priceTable)
+        const { valorDaReservaAtual } = calculateReservationValue(item, priceTable, tabelaFixa, item.type_of_charge)
 
         return formatCurrency(valorDaReservaAtual, 'BRL')
     }
 
     useEffect(() => {
-        if(dataClient.id_establishment) {
+        if (reservationComplete) {
+            setClicked(reservationComplete.id)
+            setSelectedClient(reservationComplete)
+        }
+    }, [])
+
+    useEffect(() => {
+        if (dataClient.id_establishment) {
             fetchReservations()
 
             const intervalo = setInterval(fetchReservations, 3000)
@@ -52,8 +59,8 @@ const ListConfirmedReserve = (props) => {
                 filterReserv.map((item, index) => (
                     <ListBody key={item.id}>
                         <ElementList
-                            backgroundcolor={clicked === index ? primaryColor : "#f4f4f4"}
-                            textcolor={clicked === index ? "#fff" : "#7c7c7c"}
+                            backgroundcolor={clicked === item.id ? primaryColor : "#f4f4f4"}
+                            textcolor={clicked === item.id ? "#fff" : "#7c7c7c"}
                             onClick={() => handleOnClick({ index, item })}
                         >
                             <ItemList>{item.id}</ItemList>

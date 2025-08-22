@@ -45,7 +45,7 @@ const ListReserve = (props) => {
             const encontrarValores = filterDebts.map(item => item.value)
 
             // Se possuir mais de uma dívida, fazer a soma dos valores e retornar o total
-            if(encontrarValores.length >= 1) {
+            if (encontrarValores.length >= 1) {
                 setDebtClient(true)
                 const somarValores = encontrarValores.reduce((acc, current) => {
                     return acc + current
@@ -96,7 +96,7 @@ const ListReserve = (props) => {
                         />
                     </ListBody>
                 )) :
-                <EmptyMessage>Nenhuma reserva fechada hoje</EmptyMessage>
+                <EmptyMessage>Nenhuma reserva fechada nesta data</EmptyMessage>
             }
         </List>
     )

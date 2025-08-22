@@ -20,7 +20,6 @@ const SecondHeader = (props) => {
     const { 
         text, 
         setText,
-        filtrarPorData,
         setFiltrarPorData
     } = props.states
 
@@ -33,7 +32,7 @@ const SecondHeader = (props) => {
         const arrayFormatoPadrao = value.split("-")
         const formatoPadrao = `${arrayFormatoPadrao[2]}/${arrayFormatoPadrao[1]}/${arrayFormatoPadrao[0]}`
 
-        setFiltrarPorData({ ...filtrarPorData, lista: formatoPadrao })
+        setFiltrarPorData(formatoPadrao)
         setAbrirModal(false)
     }
 

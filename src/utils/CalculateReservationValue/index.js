@@ -13,9 +13,44 @@ export const normalizeDate = (dateStr) => {
     return dateStr
 }
 
-export const calculateReservationValue = (item, priceTable) => {
-
+const verifyTypeOfCharge = (item, priceTable, tabelaFixa, totalHoras, diferenca, charge) => {
     const clienteParko = item?.parko_app === 1
+    
+    if (charge === "tabela_fixa") {
+        const maxEnd = tabelaFixa.reduce((max, item) => {
+            const [endH, endM] = item.segunda_hora.split(":").map(Number)
+            const endMs = endH * 60 * 60 * 1000 + endM * 60 * 1000
+            return Math.max(max, endMs)
+        }, 0)
+
+        
+        if (diferenca >= maxEnd) {
+            return (priceTable?.valor_hora ?? 0) * totalHoras + (totalHoras === 1 ? 0 : (diferenca % 3600000 === 0 ? 0 : priceTable?.valor_fracao_hora)) 
+        }
+
+        const valorFinal = tabelaFixa.find(item => {
+            const [startH, startM] = item.primeira_hora.split(":").map(Number)
+            const [endH, endM] = item.segunda_hora.split(":").map(Number)
+
+            const startMs = startH * 60 * 60 * 1000 + startM * 60 * 1000
+            const endMs = endH * 60 * 60 * 1000 + endM * 60 * 1000
+
+
+            return diferenca >= startMs && diferenca < endMs
+        })
+        
+        return valorFinal?.value
+    }
+
+    if (charge === "hora_fracao") {
+        return totalHoras >= 1 && !clienteParko && diferenca >= 0
+        ? (item?.value ?? 0) * totalHoras + (totalHoras === 1 ? 0 : (diferenca % 3600000 === 0 ? 0 : priceTable?.valor_fracao_hora))
+        : item?.value ?? 0
+    }
+}
+
+export const calculateReservationValue = (item, priceTable, tabelaFixa, charge) => {
+
     const dataSaidaDoCliente = item?.data_saida ?? ""
     const horaSaidaDoCliente = item?.hora_saida ?? ""
     const dataHoraDeSaidaExistente = dataSaidaDoCliente !== "" && horaSaidaDoCliente !== ""
@@ -33,11 +68,9 @@ export const calculateReservationValue = (item, priceTable) => {
         ? converterDataDeSaida - converterDataDeEntrada
         : tempoAtual - converterDataDeEntrada
 
-    const totalHoras = ((new Date(diferenca).getUTCDate() - 1) * 24) + new Date(diferenca).getUTCHours()
+    const totalHoras = ((new Date(diferenca).getUTCDate() - 1) * 24) + new Date(diferenca).getUTCHours() + 1
 
-    const valorDaReservaAtual = totalHoras >= 1 && !clienteParko && diferenca >= 0
-        ? ((priceTable?.valor_fracao_hora ?? 0) * totalHoras) + (priceTable?.valor_hora ?? 0)
-        : item?.value ?? 0
+    const valorDaReservaAtual = verifyTypeOfCharge(item, priceTable, tabelaFixa, totalHoras, diferenca, charge)
 
     return { totalHoras, valorDaReservaAtual, diferenca }
 }

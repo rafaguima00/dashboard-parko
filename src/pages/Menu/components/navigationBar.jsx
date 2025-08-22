@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useUser } from "../../../context/globalContext"
 import {
     SideBar,
@@ -10,9 +10,7 @@ import {
     ImageProfile,
     UserName,
     Logout,
-    Bottom,
-    Name,
-    Select
+    Bottom
 } from "../style"
 import avatar from "../../../assets/avatar.png"
 import logo from "../../../assets/logo-parko.png"
@@ -78,8 +76,13 @@ const NavigationBar = (props) => {
     ]
 
     const handleSelectItem = (id) => {
+        localStorage.setItem("item", id)
         setLinkSelected(id)
     }
+
+    useEffect(() => {
+        setLinkSelected(Number(localStorage.getItem("item")))
+    }, [])
 
     return (
         <SideBar background={primaryColor}>

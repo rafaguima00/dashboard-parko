@@ -13,10 +13,7 @@ export const InfoProvider = ({ children }) => {
         return `${day<10 ? "0"+day : day}/${month<10 ? "0"+month : month}/${year}`
     }
 
-    const [filtrarPorData, setFiltrarPorData] = useState({
-        resumo: formatoPadrao(), // Resumo de vendas (caixa)
-        lista: formatoPadrao() // Lista de reservas (caixa)
-    })
+    const [filtrarPorData, setFiltrarPorData] = useState(formatoPadrao())
     const [dataClient, setDataClient] = useState({}) 
     const [park, setPark] = useState({}) 
     const [colaborators, setColaborators] = useState([]) 
@@ -43,6 +40,7 @@ export const InfoProvider = ({ children }) => {
     const [valueSelectDebt, setValueSelectDebt] = useState("")
     const [valorDoCaixa, setValorDoCaixa] = useState(0)
     const [dividasEmDinheiro, setDividasEmDinheiro] = useState([])
+    const [changeNeeded, setChangeNeeded] = useState("yes")
 
     const value = {
         filtrarPorData, setFiltrarPorData,
@@ -71,7 +69,8 @@ export const InfoProvider = ({ children }) => {
         valorAPagar, setValorAPagar, // Valor a pagar pelas dívidas
         valueSelectDebt, setValueSelectDebt, // Forma de pagamento das dívidas
         valorDoCaixa, setValorDoCaixa, // Valor da abertura/fechamento do caixa ao vivo
-        dividasEmDinheiro, setDividasEmDinheiro // Dívidas em dinheiro em espécie
+        dividasEmDinheiro, setDividasEmDinheiro, // Dívidas em dinheiro em espécie
+        changeNeeded, setChangeNeeded // Estado que retorna se o troco do cliente será pago na hora ou se vai ficar devendo
     }
 
     return (

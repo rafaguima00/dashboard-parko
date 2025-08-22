@@ -28,49 +28,76 @@ const InfoReserve = () => {
     const [modalAbrirCx, setModalAbrirCx] = useState(false)
     const [loading, setLoading] = useState(false)
     const [modalFecharCx, setModalFecharCx] = useState(false)
+    const [valueReservation, setValueReservation] = useState(0)
 
     const { 
         dataClient, reservations, 
         priceTable, setPriceTable,
-        setCaixaAberto, caixaAberto
+        setCaixaAberto, caixaAberto,
+        setTabelaFixa, tabelaFixa,
+        park
     } = useUser()
 
     const getPriceTable = async () => {
         await api.get(`/tabela_preco/${dataClient.id_establishment}`)
+            .then(res => {
+                setPriceTable(res.data[0])
+            }) 
+            .catch(e => {
+                console.log(e)
+            })
+    }
+
+    const getTabelaFixa = async () => {
+        await api.get(`/tabela_fixa/${dataClient.id_establishment}`)
         .then(res => {
-            setPriceTable(res.data[0])
-        }) 
+            setTabelaFixa(res.data)
+        })
         .catch(e => {
             console.log(e)
         })
     }
 
-    // Ao clicar em 'Nova reserva' cadastrar o cliente e retornar o id
-    const verifyUsers = async () => {
+    // Verificar se já existe cadastro do usuário
+    const verificarUsuario = async () => {
+        setCarregando(true)
+
         await api.get("/users")
-        .then(res => {
-            createVehicle(res.data[res.data.length - 1].id)
-        })
-        .catch(e => {
-            console.log(e)
-        })
+            .then(res => {
+                const verify = res.data.filter(item => item.name.toLowerCase() === data.name_user.toLowerCase() && item.tel === data.tel)
+
+                if (verify.length > 0) {
+                    verificarVeiculo(verify[0].id)
+                } else {
+                    createUser()
+                }
+            })
+            .catch(e => {
+                console.log(e)
+                setCarregando(false)
+            })
     }
 
-    // Depois de criar o cliente cadastrar o veículo e retornar o id
-    const verifyVehicles = async (idUser) => {
+    // Verificar se placa do veículo já existe no banco
+    const verificarVeiculo = async (idUser) => {
         await api.get("/vehicles")
-        .then(res => {
-            createReservation(res.data[res.data.length - 1], idUser)
-        })
-        .catch(e => {
-            console.log(e)
-        })
+            .then(res => {
+                const verify = res.data.filter(item => item.license_plate === data.license_plate)
+                
+                if (verify.length > 0) {
+                    createReservation(verify[0].id, idUser)
+                } else {
+                    createVehicle(idUser)
+                }
+            })
+            .catch(e => {
+                console.log(e)
+                setCarregando(false)
+            })
     }
 
     // 1- Pegar as informações do usuário e criar no banco de dados
-    const createUser = async (e) => {
-        e.preventDefault()
-
+    const createUser = async () => {
         setCarregando(true)
 
         await api.post("/users", { 
@@ -82,13 +109,13 @@ const InfoReserve = () => {
             data_nasc: "",
             password: ""
         })
-        .then(() => {
-            verifyUsers()
-        })
-        .catch(e => {
-            console.log(e)
-            setCarregando(false)
-        })
+            .then(res => {
+                verificarVeiculo(res.data.id)
+            })
+            .catch(e => {
+                console.log(e)
+                setCarregando(false)
+            })
     }
 
     // 2- Pegar as informações do veículo e criar no banco de dados
@@ -100,13 +127,13 @@ const InfoReserve = () => {
             color: data.color,
             license_plate: data.license_plate
         })
-        .then(() => {
-            verifyVehicles(idUser)
-        })
-        .catch(e => {
-            console.log(e)
-            setCarregando(false)
-        })
+            .then(res => {
+                createReservation(res.data.id, idUser)
+            })
+            .catch(e => {
+                console.log(e)
+                setCarregando(false)
+            })
     }
 
     // 3- Feito isso, cadastrar a reserva no banco de dados
@@ -117,12 +144,12 @@ const InfoReserve = () => {
                 hora_entrada: data.hora_entrada,
                 data_saida: "", 
                 hora_saida: "",
-                value: priceTable?.valor_hora, 
+                value: valueReservation, 
                 id_costumer: idUser,
-                id_vehicle: idVehicle.id, 
+                id_vehicle: idVehicle, 
                 id_establishment: dataClient.id_establishment,
                 parko_app: 0,
-                status_reservation: 1
+                status_reservation: 2
             })
             setOpen(false)
             alert("Reserva realizada com sucesso")
@@ -131,20 +158,35 @@ const InfoReserve = () => {
             throw error
         } finally {
             setCarregando(false)
+            setValueReservation(0)
+        }
+    }
+
+    // Calcular valor da reserva
+    const calcularValorDaReserva = (e) => {
+        e.preventDefault()
+        setCarregando(true)
+        
+        if (park.type_of_charge === "hora_fracao") {
+            setValueReservation(priceTable?.valor_hora)
+        }
+
+        if (park.type_of_charge === "tabela_fixa") {
+            setValueReservation(tabelaFixa[0]?.value)
         }
     }
 
     const verificarSeEstaAberto = async () => {
         await api.get(`/abertura_caixa/parking/${dataClient.id_establishment}`)
-        .then(res => {
-            if (res.data && res.data.length > 0) {
-                setCaixaAberto(res.data[res.data.length - 1])
-                return
-            }
-        })
-        .catch(e => {
-            console.log(e)
-        })
+            .then(res => {
+                if (res.data && res.data.length > 0) {
+                    setCaixaAberto(res.data[res.data.length - 1])
+                    return
+                }
+            })
+            .catch(e => {
+                console.log(e)
+            })
     }
 
     const abrirCaixa = async (e) => {
@@ -152,7 +194,7 @@ const InfoReserve = () => {
 
         setLoading(true)
 
-        if(caixaAberto?.aberto === 1) {
+        if (caixaAberto?.aberto === 1) {
             alert("O caixa já está aberto")
             setModalAbrirCx(false)
             setLoading(false)
@@ -163,15 +205,15 @@ const InfoReserve = () => {
             id_establishment: dataClient.id_establishment,
             id_colaborator: dataClient.id
         })
-        .then(() => {
-            verificarSeEstaAberto()
-            alert("Caixa aberto")
-            return navigate("/checkout")
-        })
-        .catch(e => {
-            alert("Erro ao abrir caixa")
-            setModalAbrirCx(false)
-        })
+            .then(() => {
+                verificarSeEstaAberto()
+                alert("Caixa aberto")
+                return navigate("/checkout")
+            })
+            .catch(e => {
+                alert("Erro ao abrir caixa")
+                setModalAbrirCx(false)
+            })
 
         setLoading(false)
     }
@@ -181,7 +223,7 @@ const InfoReserve = () => {
 
         setLoading(true)
 
-        if(caixaAberto?.aberto === 0) {
+        if (caixaAberto?.aberto === 0) {
             alert("O caixa já está fechado")
             setModalFecharCx(false)
             setLoading(false)
@@ -192,15 +234,15 @@ const InfoReserve = () => {
             aberto: 0,
             valor_fechamento: valorDoCaixa
         })
-        .then(res => {
-            setCaixaAberto(res.data[0])
-            alert("Caixa fechado")
-            setModalFecharCx(false)
-        })
-        .catch(() => {
-            alert("Erro ao fechar caixa")
-            setModalFecharCx(false)
-        })
+            .then(res => {
+                setCaixaAberto(res.data[0])
+                alert("Caixa fechado")
+                setModalFecharCx(false)
+            })
+            .catch(() => {
+                alert("Erro ao fechar caixa")
+                setModalFecharCx(false)
+            })
 
         setLoading(false)
     }
@@ -220,8 +262,15 @@ const InfoReserve = () => {
         if (dataClient.id_establishment) {
             verificarSeEstaAberto()
             getPriceTable()
+            getTabelaFixa()
         }
     }, [dataClient.id_establishment])
+
+    useEffect(() => {
+        if (valueReservation > 0) {
+            verificarUsuario()
+        }
+    }, [valueReservation])
     
     return (
         <InfoReservation>
@@ -253,7 +302,7 @@ const InfoReserve = () => {
                 setOpen={setOpen} 
                 title={"Nova Reserva"}
                 maxWidth={"52rem"}
-                funcao={createUser}
+                funcao={calcularValorDaReserva}
                 isLoading={carregando}
             >
                 <NewReservation 

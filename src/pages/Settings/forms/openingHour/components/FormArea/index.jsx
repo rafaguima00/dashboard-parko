@@ -19,7 +19,7 @@ import { useState } from "react"
 
 const FormArea = (props) => {
 
-    const { neutralColor, primaryColor, setChecked, table, date, dados } = props
+    const { neutralColor, primaryColor, setTable, table, date } = props
 
     const [linha, setLinha] = useState(1)
 
@@ -56,20 +56,45 @@ const FormArea = (props) => {
                             <WeekDay textcolor={neutralColor}>
                                 {item.week}
                             </WeekDay>
-                            <Checkbox type="checkbox" checked={item.checked} onChange={() => setChecked(!item.checked)} />
+                            <Checkbox
+                                type="checkbox"
+                                checked={item.closed}
+                                onChange={(e) => {
+                                    const novoValor = e.target.checked
+                                    setTable(prev =>
+                                        prev.map(d =>
+                                            d.id === item.id ? { ...d, closed: novoValor } : d
+                                        )
+                                    )
+                                }}
+                            />
+
                             <Time 
                                 type="time" 
                                 bordercolor={primaryColor} 
                                 value={item.open} 
-                                disabled={item.checked === true ? true : false} 
-                                onChange={e => item.onChangeOpen(e)}
+                                disabled={item.closed}
+                                onChange={e =>
+                                    setTable(prev =>
+                                        prev.map(d =>
+                                            d.id === item.id ? { ...d, open: e.target.value } : d
+                                        )
+                                    )
+                                }
                             />
+
                             <Time 
                                 type="time" 
                                 bordercolor={primaryColor} 
                                 value={item.close} 
-                                disabled={item.checked === true ? true : false} 
-                                onChange={e => item.onChangeClose(e)}
+                                disabled={item.closed}
+                                onChange={e =>
+                                    setTable(prev =>
+                                        prev.map(d =>
+                                            d.id === item.id ? { ...d, close: e.target.value } : d
+                                        )
+                                    )
+                                }
                             />
                         </PriceTableOf>
                     ))}

@@ -148,6 +148,7 @@ export const RowTable = styled.div`
     align-items: center;
     justify-content: space-between;
     gap: .8rem;
+    position: relative;
 `
 
 export const Square = styled.input`
@@ -191,4 +192,13 @@ export const ColumnTable = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
+`
+
+export const ButtonDelete = styled.button`
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    border: none;
+    background: #f4f4f4;
+    cursor: pointer;
 `

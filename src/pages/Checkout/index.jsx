@@ -60,7 +60,7 @@ const Checkout = () => {
 
     const reservaFechada = reservations.filter(
         item => item.status === "Finalizado" && 
-        item.data_saida === filtrarPorData.lista
+        item.data_saida === filtrarPorData
     )
     const filterReserv = reservaFechada.filter(
         item => item.name.toLowerCase().includes(text.toLowerCase()) ||
@@ -76,7 +76,7 @@ const Checkout = () => {
 
         const filtrarItem = (array) => array.filter(
             item => item.id_establishment === idEstacionamento &&
-            item.created_at.slice(0, 10) === filtrarPorData.resumo
+            item.created_at.slice(0, 10) === filtrarPorData
         )
 
         const calcularSoma = (array) => array.map(item => item.value)
@@ -142,7 +142,7 @@ const Checkout = () => {
     useEffect(() => {
         const token = localStorage.getItem("token")
 
-        if(token) {
+        if (token) {
             const decoded = jwtDecode(token)
             setDataClient(decoded.user)
         } else {
@@ -157,7 +157,7 @@ const Checkout = () => {
     }, [dataClient])
 
     useEffect(() => {
-        if(park) {
+        if (park) {
             fetchReservations()
         }
     }, [park])
@@ -172,7 +172,7 @@ const Checkout = () => {
         valoresRetiradas
     } = calcularValorPorEstacionamento(reservations, dataClient.id_establishment)
 
-    if(unauthorized) {
+    if (unauthorized) {
         return <ErrorPage errorMsg={unLoggedIn} />
     }
 
@@ -180,8 +180,7 @@ const Checkout = () => {
         <Container>
             <FirstHeader
                 states={{
-                    setFiltrarPorData,
-                    filtrarPorData
+                    setFiltrarPorData
                 }}
             />
             <SummaryContent 
@@ -196,7 +195,6 @@ const Checkout = () => {
                 states={{ 
                     text, 
                     setText,
-                    filtrarPorData,
                     setFiltrarPorData
                 }} 
             />

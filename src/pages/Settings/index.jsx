@@ -22,7 +22,7 @@ const Settings = () => {
     useEffect(() => {
         const token = localStorage.getItem("token")
 
-        if(token) {
+        if (token) {
             const decoded = jwtDecode(token)
             setDataClient(decoded.user)
         } else {
@@ -32,18 +32,18 @@ const Settings = () => {
     }, [])
 
     useEffect(() => {
-        if(dataClient.id_establishment) {
+        if (dataClient.id_establishment) {
             loadData(dataClient.id_establishment)
         }
 
-        if(dataClient.type_colaborator === "Funcionário(a)"){
+        if (dataClient.type_colaborator === "Funcionário(a)"){
             setUnauthorized(true)
             setErrorMsg("Você não tem permissão para acessar esta funcionalidade")
         }
     }, [dataClient])
     
     useEffect(() => {
-        if(park) {
+        if (park) {
             listColaborators(dataClient.id_establishment)
         }
     }, [park])

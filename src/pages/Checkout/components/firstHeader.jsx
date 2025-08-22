@@ -14,7 +14,7 @@ import { theme } from "../../../theme/theme"
 
 const FirstHeader = (props) => {
 
-    const { setFiltrarPorData, filtrarPorData } = props.states
+    const { setFiltrarPorData } = props.states
     const { neutralColor, primaryColor } = theme
 
     const [abrirModal, setAbrirModal] = useState(false)
@@ -26,7 +26,7 @@ const FirstHeader = (props) => {
         const arrayFormatoPadrao = value.split("-")
         const formatoPadrao = `${arrayFormatoPadrao[2]}/${arrayFormatoPadrao[1]}/${arrayFormatoPadrao[0]}`
 
-        setFiltrarPorData({ ...filtrarPorData, resumo: formatoPadrao })
+        setFiltrarPorData(formatoPadrao)
         setAbrirModal(false)
     }
     
