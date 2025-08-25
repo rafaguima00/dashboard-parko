@@ -1,8 +1,8 @@
 export const buttons = [
-    {
-        id: 0,
-        name: "Relatórios Financeiros"
-    },
+    // {
+    //     id: 0,
+    //     name: "Relatórios Financeiros"
+    // },
     {
         id: 1,
         name: "Registros de Movimentações Financeiras"

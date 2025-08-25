@@ -13,8 +13,23 @@ export const normalizeDate = (dateStr) => {
     return dateStr
 }
 
+const toNumber = (x) => {
+    if (x == null) return 0
+    if (typeof x === "number") return x
+    if (typeof x === "string") {
+        // lida com "1.234,56" e "5,00"
+        const cleaned = x.replace(/\./g, "").replace(",", ".")
+        const n = Number(cleaned)
+        return Number.isFinite(n) ? n : 0
+    }
+    return Number(x) || 0
+}
+
 const verifyTypeOfCharge = (item, priceTable, tabelaFixa, totalHoras, diferenca, charge) => {
     const clienteParko = item?.parko_app === 1
+    const valorHora = toNumber(priceTable?.valor_hora)
+    const valorFracao = toNumber(priceTable?.valor_fracao_hora)
+    const temFracao = diferenca % 3600000 !== 0
     
     if (charge === "tabela_fixa") {
         const maxEnd = tabelaFixa.reduce((max, item) => {
@@ -43,9 +58,11 @@ const verifyTypeOfCharge = (item, priceTable, tabelaFixa, totalHoras, diferenca,
     }
 
     if (charge === "hora_fracao") {
-        return totalHoras >= 1 && !clienteParko && diferenca >= 0
-        ? (item?.value ?? 0) * totalHoras + (totalHoras === 1 ? 0 : (diferenca % 3600000 === 0 ? 0 : priceTable?.valor_fracao_hora))
-        : item?.value ?? 0
+        if (totalHoras >= 1 && !clienteParko && diferenca >= 0) {
+            return (valorHora * totalHoras) + (totalHoras === 1 ? 0 : (temFracao ? valorFracao : 0))
+        }
+        // < 1h: cobre a 1ª hora (ajuste se sua regra for diferente)
+        return valorHora
     }
 }
 
@@ -68,7 +85,7 @@ export const calculateReservationValue = (item, priceTable, tabelaFixa, charge) 
         ? converterDataDeSaida - converterDataDeEntrada
         : tempoAtual - converterDataDeEntrada
 
-    const totalHoras = ((new Date(diferenca).getUTCDate() - 1) * 24) + new Date(diferenca).getUTCHours() + 1
+    const totalHoras = Math.floor(diferenca / (1000 * 60 * 60))
 
     const valorDaReservaAtual = verifyTypeOfCharge(item, priceTable, tabelaFixa, totalHoras, diferenca, charge)
 

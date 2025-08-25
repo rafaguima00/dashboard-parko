@@ -21,7 +21,7 @@ const Buttons = ({ setOpen, setOpenRetirada }) => {
 
         setModal({ ...modal, loading: true })
 
-        if(caixaAberto?.aberto === 0) {
+        if (caixaAberto?.aberto === 0) {
             alert("O caixa já está fechado")
             setModal({ ...modal, loading: false })
             setModal({ ...modal, open: false })

@@ -183,7 +183,8 @@ const useReservation = () => {
             await api.post(`/debts`, {
                 value: calcularDivida,
                 id_costumer: id_costumer,
-                id_establishment: dataClient.id_establishment
+                id_establishment: dataClient.id_establishment,
+                id_reservation: selectedClient.id
             }).catch(e => alert(`erro ao registrar dívida: ${e}`))
         }
 

@@ -23,7 +23,7 @@ const Management = () => {
     useEffect(() => {
         const token = localStorage.getItem("token")
 
-        if(token) {
+        if (token) {
             const decoded = jwtDecode(token)
             setDataClient(decoded.user)
         } else {
@@ -35,7 +35,7 @@ const Management = () => {
         loadData(dataClient.id_establishment)
     }, [dataClient])
 
-    if(unauthorized) {
+    if (unauthorized) {
         return <ErrorPage errorMsg={unLoggedIn} />
     }
 

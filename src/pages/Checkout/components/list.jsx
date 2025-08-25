@@ -23,6 +23,7 @@ const ListReserve = (props) => {
     const [clicked, setClicked] = useState(0)
     const [debtClient, setDebtClient] = useState()
     const [valuesDebt, setValuesDebt] = useState(0)
+    const [dividasDaReserva, setDividasDaReserva] = useState(0)
 
     // Selecionar cada reserva
     const handleOnClick = (item) => {
@@ -40,6 +41,13 @@ const ListReserve = (props) => {
             item.status === "Pendente"
         )
         
+        const dividas = filterDebts.find(item => item.id_reservation === clicked)
+        if (Boolean(dividas) === true) {
+            setDividasDaReserva(dividas.value)
+        } else {
+            setDividasDaReserva(0)
+        }
+
         // Caso tenha dívida, a função vai retornar o valor da dívida
         if (filterDebts) {
             const encontrarValores = filterDebts.map(item => item.value)
@@ -93,6 +101,7 @@ const ListReserve = (props) => {
                             debtClient={debtClient}
                             handleOnClick={handleOnClick}
                             verificarDividas={verificarDividas}
+                            dividasDaReserva={dividasDaReserva}
                         />
                     </ListBody>
                 )) :

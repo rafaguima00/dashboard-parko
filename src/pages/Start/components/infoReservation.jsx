@@ -230,7 +230,7 @@ const InfoReserve = () => {
             return
         }
 
-        await api.put(`/abertura_caixa/${caixaAberto.id}`, { 
+        await api.put(`/abertura_caixa/${caixaAberto?.id}`, { 
             aberto: 0,
             valor_fechamento: valorDoCaixa
         })

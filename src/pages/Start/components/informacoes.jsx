@@ -86,12 +86,6 @@ const Informacoes = () => {
         }
     }, [dataClient.id_establishment])
 
-    useEffect(() => {
-        if (ratings) {
-            console.log(ratings)
-        }
-    }, [ratings])
-
     return <>
         <GroupInfo>
             <Info>

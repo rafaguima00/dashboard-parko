@@ -12,7 +12,7 @@ const ListConfirmedReserve = (props) => {
 
     const { primaryColor } = theme
     const { filterReserv, reservationComplete } = props
-    const { setSelectedClient, dataClient, priceTable, tabelaFixa } = useUser()
+    const { setSelectedClient, dataClient, priceTable, tabelaFixa, selectedClient } = useUser()
     const { fetchReservations } = useReservation()
 
     const [clicked, setClicked] = useState(0)

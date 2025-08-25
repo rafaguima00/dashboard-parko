@@ -12,7 +12,8 @@ const RenderItem = (props) => {
         debtClient,
         handleOnClick,
         valuesDebt,
-        verificarDividas
+        verificarDividas,
+        dividasDaReserva
     } = props
 
     return <>
@@ -24,6 +25,7 @@ const RenderItem = (props) => {
                 setClicked={setClicked}
                 clicked={clicked}
                 verificarDividas={verificarDividas}
+                dividasDaReserva={dividasDaReserva}
             /> :
             <ElementList 
                 backgroundcolor={"#f4f4f4"}

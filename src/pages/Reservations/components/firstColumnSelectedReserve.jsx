@@ -68,6 +68,7 @@ const FirstColumn = (props) => {
                 status: status,
                 id_vehicle: updatedClient?.id_vehicle
             })
+
             alert("Reserva atualizada com sucesso.")
             setDateTime("")
             setOpenEdit(false)

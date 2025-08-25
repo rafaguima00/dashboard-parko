@@ -16,7 +16,8 @@ const DividaCliente = (props) => {
         item, 
         valuesDebt,
         setClicked,
-        verificarDividas
+        verificarDividas,
+        dividasDaReserva
     } = props
     const { listDividas } = ReadApi()
     const { debts, reservations } = useUser()
@@ -82,7 +83,7 @@ const DividaCliente = (props) => {
                 <NameClient>{item.name}</NameClient>
                 <DivDebt>
                     <p>Dívidas da Reserva:</p>
-                    <p>{formatCurrency(valuesDebt, 'BRL')}</p>
+                    <p>{formatCurrency(dividasDaReserva, 'BRL')}</p>
                 </DivDebt>
                 <DivDebt>
                     <p>Dívidas do Cliente:</p>
