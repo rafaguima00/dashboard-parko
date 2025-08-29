@@ -8,6 +8,7 @@ import Modal from "../../../../../components/Modal"
 import NewHeritage from "./form/new"
 import EditHeritage from "./form/edit"
 import api from "../../../../../services/api/server"
+import * as XLSX from "xlsx"
 
 const Heritage = () => {
     const { patrimonio, setPatrimonio, dataClient } = useUser()
@@ -86,7 +87,20 @@ const Heritage = () => {
         item.name.toLowerCase().includes(text.toLowerCase())
     )
 
-    useEffect(() => { readPatrimonio() }, [patrimonio])
+    const exportData = () => {
+        const wb = XLSX.utils.book_new()
+        const ws = XLSX.utils.json_to_sheet(filtrarPatrimonio)
+
+        XLSX.utils.book_append_sheet(wb, ws, "Registro de patrimônio")
+
+        XLSX.writeFile(wb, `Registros de patrimônio ${dataClient.establishment} ${new Date().toLocaleDateString("pt-br")}.xlsx`)
+    }
+
+    useEffect(() => { 
+        if (dataClient.id) {
+            readPatrimonio() 
+        }
+    }, [dataClient])
 
     return (
         <Span>
@@ -96,6 +110,7 @@ const Heritage = () => {
                     neutralColor={neutralColor} 
                     primaryColor={primaryColor} 
                     state={{ text, setText, setNewItem }}
+                    exportData={exportData}
                 />
                 
                 {/* lista de itens do patrimônio */}

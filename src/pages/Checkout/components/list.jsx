@@ -10,6 +10,7 @@ import ReadApi from "../../../services/readData"
 import { useEffect, useState } from "react"
 import RenderItem from "./renderItem"
 import useReservation from "../../../hooks/useReservation"
+import api from "../../../services/api/server"
 
 const ListReserve = (props) => {
 
@@ -55,9 +56,10 @@ const ListReserve = (props) => {
             // Se possuir mais de uma dívida, fazer a soma dos valores e retornar o total
             if (encontrarValores.length >= 1) {
                 setDebtClient(true)
-                const somarValores = encontrarValores.reduce((acc, current) => {
-                    return acc + current
-                })
+                const somarValores = encontrarValores
+                    .reduce((acc, current) => {
+                        return acc + current
+                    })
                 setValuesDebt(somarValores)
             } else {
                 setDebtClient(false)

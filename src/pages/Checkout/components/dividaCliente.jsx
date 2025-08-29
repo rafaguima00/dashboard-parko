@@ -69,11 +69,11 @@ const DividaCliente = (props) => {
                 <NameClient>{item.name}</NameClient>
                 <DivDebt>
                     <p>Créditos da Reserva:</p>
-                    <p>{formatCurrency(0, 'BRL')}</p>
+                    <p>{formatCurrency(item.creditos_da_reserva, 'BRL')}</p>
                 </DivDebt>
                 <DivDebt>
                     <p>Créditos do Cliente:</p>
-                    <p>{formatCurrency(0, 'BRL')}</p>
+                    <p>{formatCurrency(item.creditos_do_cliente, 'BRL')}</p>
                 </DivDebt>
                 <Back onClick={() => setClicked(null)}>
                     <RiCloseLine size={22} />

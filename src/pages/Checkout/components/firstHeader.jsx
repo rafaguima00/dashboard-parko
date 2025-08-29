@@ -15,6 +15,7 @@ import { theme } from "../../../theme/theme"
 const FirstHeader = (props) => {
 
     const { setFiltrarPorData } = props.states
+    const { handleDownload } = props
     const { neutralColor, primaryColor } = theme
 
     const [abrirModal, setAbrirModal] = useState(false)
@@ -29,14 +30,20 @@ const FirstHeader = (props) => {
         setFiltrarPorData(formatoPadrao)
         setAbrirModal(false)
     }
-    
+
     return <>
         <Title>
             <Top children="Caixa Aberto" font={19} />
             <IconGroup>
-                <Icon><BsPrinter size={14} color="#545454"/></Icon>
-                <Icon><BsDownload size={14} color="#545454"/></Icon>
-                <Icon onClick={() => setAbrirModal(true)}><BsCalendar4 size={14} color="#545454"/></Icon>
+                <Icon>
+                    <BsPrinter size={14} color="#545454"/>
+                </Icon>
+                <Icon onClick={handleDownload}>
+                    <BsDownload size={14} color="#545454"/>
+                </Icon>
+                <Icon onClick={() => setAbrirModal(true)}>
+                    <BsCalendar4 size={14} color="#545454"/>
+                </Icon>
             </IconGroup>
         </Title>
 

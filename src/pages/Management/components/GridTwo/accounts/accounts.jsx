@@ -8,6 +8,7 @@ import { useUser } from "../../../../../context/globalContext"
 import FilterDate from "./form/filterDate"
 import NovaConta from "./form/novaConta"
 import api from "../../../../../services/api/server"
+import * as XLSX from "xlsx"
 
 const Accounts = () => {
 
@@ -34,12 +35,12 @@ const Accounts = () => {
 
     const readAccounts = async () => {
         await api.get("/accounts")
-        .then(res => {
-            setAccounts(res.data)
-        })
-        .catch(e => {
-            console.log(e)
-        })
+            .then(res => {
+                setAccounts(res.data)
+            })
+            .catch(e => {
+                console.log(e)
+            })
     }
 
     const createAccounts = async (e) => {
@@ -57,16 +58,16 @@ const Accounts = () => {
             id_establishment: dataClient.id_establishment,
             id_colaborator: dataClient.id
         })
-        .then(() => {
-            alert("Criado com sucesso")
-            readAccounts()
-            setLoading(false)
-            setCount(false)
-        })
-        .catch(e => {
-            setLoading(false)
-            console.log(e)
-        })
+            .then(() => {
+                alert("Criado com sucesso")
+                readAccounts()
+                setLoading(false)
+                setCount(false)
+            })
+            .catch(e => {
+                setLoading(false)
+                console.log(e)
+            })
     }
 
     const filtrarData = async (e) => {
@@ -81,8 +82,17 @@ const Accounts = () => {
         item.date_created.includes(text)
     )
 
+    const exportData = () => {
+        const wb = XLSX.utils.book_new()
+        const ws = XLSX.utils.json_to_sheet(filterAccounts)
+
+        XLSX.utils.book_append_sheet(wb, ws, `Movimentações financeiras`)
+
+        XLSX.writeFile(wb, `Movimentações financeiras ${dataClient.establishment} ${new Date().toLocaleDateString("pt-br")}.xlsx`)
+    }
+
     useEffect(() => { 
-        if(dataClient.id) {
+        if (dataClient.id) {
             readAccounts()
         }
     }, [dataClient])
@@ -96,6 +106,7 @@ const Accounts = () => {
                     setFilterDate={setFilterDate} 
                     setCount={setCount}
                     setText={setText}
+                    exportData={exportData}
                 />
 
                 {/* Lista de contas a pagar */}

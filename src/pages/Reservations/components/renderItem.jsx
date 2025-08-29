@@ -74,7 +74,7 @@ const RenderItem = (props) => {
             <Select
                 value={
                     selectedClient?.parko_app === 1 && index === 0 ? 
-                    pagamento.payment_method : 
+                    pagamento?.payment_method : 
                     linha.valueSelect
                 }
                 onChange={e => handleSelectChange(e, index)}

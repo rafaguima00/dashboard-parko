@@ -129,7 +129,10 @@ const useReservation = () => {
             value: valueToPay(item.valueSelect, item.valorPgto, trocoCliente),
             payment_method: item.valueSelect,
             id_reservation: idReservation,
-            status: statusPayment(item.valueSelect)
+            status: statusPayment(item.valueSelect),
+            value_paid: (unformatCurrency(item.valorPgto) / 100),
+            change_to_pay: trocoCliente,
+            change_paid: changeNeeded === "no" ? 1 : 0
         }))
 
         await api.post("/payment-on-db", dadosPagamento)

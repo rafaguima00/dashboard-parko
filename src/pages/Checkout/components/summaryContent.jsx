@@ -20,6 +20,7 @@ const SummaryContent = (props) => {
     } = useUser()
     const { email, colaborator } = dataClient
     const { valoresAporte,  valoresRetiradas, filtrarPorData } = props.resumo
+    const { organizarDividas, mapVendas } = props
     const { cancelColor, neutralColor, primaryColor } = theme
 
     const unformatCurrency = (num) => {
@@ -65,27 +66,6 @@ const SummaryContent = (props) => {
         })
     }
 
-    function mapVendas(payment_method) {
-        const filtrarData = resumoVendas.filter(item => item.data === filtrarPorData)
-        const formaDePagamento = filtrarData.filter(item => item.payment_method === payment_method)
-
-        if (payment_method === "total") {
-            const totalVendas = filtrarData.map(item => item.value)
-                .reduce((prev, current) => prev + current, 0)
-
-            return formatCurrency(totalVendas, 'BRL')
-        }
-
-        if (formaDePagamento.length > 0) {
-            const somarVendas = formaDePagamento.map(item => item.value)
-                .reduce((prev, current) => prev + current, 0)
-                
-            return formatCurrency(somarVendas, 'BRL')
-        }
-
-        return formatCurrency(0, 'BRL')
-    }
-
     async function verificarDividas() {
         await api.get(`/debts/${dataClient.id_establishment}`)
         .then(res => {
@@ -94,22 +74,6 @@ const SummaryContent = (props) => {
         .catch(e => {
             setDividasEmDinheiro(e)
         })
-    }
-
-    function organizarDividas() {
-        const filterDebts = dividasEmDinheiro?.filter(
-            item => item.status === "Pago" && 
-            item.payment_method === "money" && 
-            item.date_updated?.split(",")[0] === filtrarPorData
-        )
-
-        const plusValues = filterDebts
-            .map(item => item.value)
-            .reduce((prev, current) => {
-                return prev + current
-            }, 0)
-
-        return plusValues ? formatCurrency(plusValues, 'BRL') : formatCurrency(0, 'BRL')
     }
 
     function calcularValorDoCaixa() {
@@ -154,7 +118,7 @@ const SummaryContent = (props) => {
     return (
         <Summary>
             <Header>
-                <img src={dataClient.image ? dataClient.image : avatar} alt="Avatar" />
+                <img src={dataClient.image || avatar} alt={`Foto de perfil ${dataClient.colaborator}`} />
                 <div>
                     <Pg><strong>Responsável: </strong>{colaborator}</Pg>
                     <Pg><strong>E-mail: </strong>{email}</Pg>

@@ -23,6 +23,9 @@ import { unformatCurrency } from "../../utils/UnformatCurrency"
 import useRetiradas from "../../hooks/useRetiradas"
 import { createdAt } from "../../utils/ConverterDataParaFormatoPadrao"
 import useReservation from "../../hooks/useReservation"
+import { formatCurrency } from "../../utils/FormatCurrency"
+import api from "../../services/api/server"
+import * as XLSX from "xlsx"
 
 ChartJS.register(ArcElement, BarElement, CategoryScale, LinearScale, Title)
 
@@ -30,11 +33,12 @@ const Checkout = () => {
 
     const { primaryColor, neutralColor } = theme
     const { 
-        reservations,
+        reservations, caixaAberto,
         dataClient, setDataClient,
         aportes,  retiradas, 
         park, reservaAppParko,
         filtrarPorData, setFiltrarPorData,
+        resumoVendas, dividasEmDinheiro
     } = useUser()
     const { fetchAportes, addAportes } = useAportes()
     const { fetchRetiradas, addRetiradas } = useRetiradas()
@@ -57,20 +61,55 @@ const Checkout = () => {
     const [text, setText] = useState("")
     const [loading, setLoading] = useState(false)
     const [messageError, setMessageError] = useState("")
+    const [reservaFechada, setReservaFechada] = useState([])
 
-    const reservaFechada = reservations.filter(
-        item => item.status === "Finalizado" && 
-        item.data_saida === filtrarPorData
-    )
-    const filterReserv = reservaFechada.filter(
-        item => item.name.toLowerCase().includes(text.toLowerCase()) ||
-        item.license_plate.toLowerCase().includes(text.toLowerCase()) || 
-        item.id == text
-    )
+    const closedReservations = async () => {
+        try {
+            const reservasFechadas = reservations.filter(
+                item =>
+                    item.status === "Finalizado" &&
+                    item.data_saida === filtrarPorData
+            )
+
+            const filterReserv = reservasFechadas.filter(
+                item =>
+                    item.name.toLowerCase().includes(text.toLowerCase()) ||
+                    item.license_plate.toLowerCase().includes(text.toLowerCase()) ||
+                    item.id == text
+            )
+
+            const response = await api.get(`/payment/${dataClient.id_establishment}`)
+            const payments = response.data
+
+            const reservasComPagamentos = filterReserv.map(item => {
+                const pagamentosReserva = payments.filter(
+                    p => p.id_customer === item.id_costumer &&
+                    p.payment_method === "money" &&
+                    p.change_paid === 0
+                )
+                const changeToPay = pagamentosReserva.map(p => p.change_to_pay)
+                const somarValores = changeToPay.reduce((prev, current) => (
+                    prev + current
+                ), 0)
+                const procurarCreditosDaReserva = pagamentosReserva.find(pgto => pgto.id_reservation === item.id)
+
+                return {
+                    ...item,
+                    pagamentos: pagamentosReserva,
+                    creditos_do_cliente: somarValores,
+                    creditos_da_reserva: procurarCreditosDaReserva?.change_to_pay ?? 0
+                }
+            })
+
+            return reservasComPagamentos
+        } catch (error) {
+            console.log("Erro ao carregar créditos do cliente", error)
+            return []
+        }
+    }
 
     const { dataBar, optionsBar } = DatasetBar()
     const { data, options, plugins } = DataSetDoughnut()
-
 
     const calcularValorPorEstacionamento = (data, idEstacionamento) => {
 
@@ -80,9 +119,9 @@ const Checkout = () => {
         )
 
         const calcularSoma = (array) => array.map(item => item.value)
-        .reduce((prev, current) => {
-            return prev + current
-        }, 0) 
+            .reduce((prev, current) => {
+                return prev + current
+            }, 0) 
 
         const valoresTotal = calcularSoma(data)
 
@@ -139,6 +178,112 @@ const Checkout = () => {
         }
     }
 
+    function mapVendas(payment_method) {
+        const filtrarData = resumoVendas.filter(item => item.data === filtrarPorData)
+        const formaDePagamento = filtrarData.filter(item => item.payment_method === payment_method)
+
+        if (payment_method === "total") {
+            const totalVendas = filtrarData
+                .map(item => item.value)
+                .reduce((prev, current) => prev + current, 0)
+
+            return formatCurrency(totalVendas, 'BRL')
+        }
+
+        if (formaDePagamento.length > 0) {
+            const somarVendas = formaDePagamento
+                .map(item => item.value)
+                .reduce((prev, current) => prev + current, 0)
+                
+            return formatCurrency(somarVendas, 'BRL')
+        }
+
+        return formatCurrency(0, 'BRL')
+    }
+    
+    function organizarDividas() {
+        const filterDebts = dividasEmDinheiro?.filter(
+            item => item.status === "Pago" && 
+            item.payment_method === "money" && 
+            item.date_updated?.split(",")[0] === filtrarPorData
+        )
+
+        const plusValues = filterDebts
+            .map(item => item.value)
+            .reduce((prev, current) => {
+                return prev + current
+            }, 0)
+
+        return plusValues ? formatCurrency(plusValues, 'BRL') : formatCurrency(0, 'BRL')
+    }
+
+    function handleDownload(e) {
+        e.preventDefault()
+
+        const dados = {
+            responsavel: dataClient.colaborator,
+            email: dataClient.email,
+            abertura: caixaAberto?.data_abertura && `${caixaAberto?.data_abertura ?? ""}, ${caixaAberto?.hora_abertura ?? ""}`,
+            fechamento: caixaAberto?.data_fechamento && `${caixaAberto?.data_fechamento ?? ""}, ${caixaAberto?.hora_fechamento ?? ""}`,
+            valor_da_abertura: formatCurrency(caixaAberto?.valor_abertura ?? 0, 'BRL'),
+            valor_do_fechamento: formatCurrency(caixaAberto?.valor_fechamento ?? 0, 'BRL')
+        }
+
+        const caixa = {
+            valor_da_abertura: formatCurrency(caixaAberto?.valor_abertura ?? 0, 'BRL'),
+            vendas_em_dinheiro: mapVendas("money"),
+            recebimento_de_dividas_em_dinheiro: organizarDividas(),
+            aportes: formatCurrency(valoresAporte, "BRL"),
+            retiradas: formatCurrency(valoresRetiradas, "BRL"),
+            valor_do_fechamento: formatCurrency(caixaAberto?.valor_fechamento ?? 0, 'BRL')
+        }
+
+        const resumoDeVendas = {
+            dinheiro: mapVendas("money"),
+            pix: mapVendas("pix"),
+            debito: mapVendas("debit_card"),
+            credito: mapVendas("credit_card"),
+            a_pagar: mapVendas("debit"),
+            total: mapVendas("total")
+        }
+
+        const wb = XLSX.utils.book_new()
+
+        const createSheet = (data, text) => {
+            const ws = XLSX.utils.json_to_sheet([data])
+            XLSX.utils.book_append_sheet(wb, ws, text)
+        }
+
+        createSheet(dados, "Dados")
+        createSheet(caixa, "Fechamento do caixa")
+        createSheet(resumoDeVendas, "Resumo de vendas")
+
+        XLSX.writeFile(wb, `Resumo de vendas ${dataClient.establishment} ${caixaAberto?.data_abertura}.xlsx`)
+    }
+
+    async function handleDownloadReservation() {
+        const response = await api.get(`/payment/${dataClient.id_establishment}`)
+        const payments = response.data
+
+        const pagamentoPorReserva = reservaFechada.map(item => {
+            return payments.filter(p => p.id_reservation === item.id)
+        })
+
+        const wb = XLSX.utils.book_new()
+
+        const wsReservas = XLSX.utils.json_to_sheet(reservaFechada)
+        XLSX.utils.book_append_sheet(wb, wsReservas, "Reservas")
+
+        const pagamentos = pagamentoPorReserva.flat()
+        const wsPagamentos = XLSX.utils.json_to_sheet(pagamentos)
+        XLSX.utils.book_append_sheet(wb, wsPagamentos, "Pagamentos")
+
+        XLSX.writeFile(
+            wb,
+            `Reservas e Pagamentos ${dataClient.establishment}, ${reservaFechada[0].data_saida}.xlsx`
+        )
+    }
+
     useEffect(() => {
         const token = localStorage.getItem("token")
 
@@ -164,7 +309,14 @@ const Checkout = () => {
 
     useEffect(() => {
         calcularValorPorEstacionamento(reservations, dataClient.id_establishment)
-    }, [reservations])
+
+        const fetchData = async () => {
+            const data = await closedReservations()
+            setReservaFechada(data)
+        }
+
+        fetchData()
+    }, [reservations, filtrarPorData, text])
 
     const { 
         valoresTotal,
@@ -182,6 +334,7 @@ const Checkout = () => {
                 states={{
                     setFiltrarPorData
                 }}
+                handleDownload={handleDownload}
             />
             <SummaryContent 
                 resumo={{
@@ -190,6 +343,8 @@ const Checkout = () => {
                     valoresRetiradas,
                     filtrarPorData
                 }}
+                organizarDividas={organizarDividas}
+                mapVendas={mapVendas}
             />
             <SecondHeader 
                 states={{ 
@@ -197,8 +352,9 @@ const Checkout = () => {
                     setText,
                     setFiltrarPorData
                 }} 
+                handleDownloadReservation={handleDownloadReservation}
             />
-            <ListReserve reservaFechada={filterReserv} />
+            <ListReserve reservaFechada={reservaFechada} />
             <Buttons setOpen={setOpen} setOpenRetirada={setOpenRetirada}/>
             <Graphics background={primaryColor}>
                 <div style={{ padding: 10 }}>

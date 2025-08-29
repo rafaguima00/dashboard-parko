@@ -43,7 +43,7 @@ export const InfoProvider = ({ children }) => {
     const [changeNeeded, setChangeNeeded] = useState("yes")
 
     const value = {
-        filtrarPorData, setFiltrarPorData,
+        filtrarPorData, setFiltrarPorData, // Filtrar dados na página de reservas fechadas
         dataClient, setDataClient, // Dados do colaborador logado no site
         selectedClient, setSelectedClient, // Informações do cliente selecionado (reservas abertas)
         park, setPark, // Dados do estabelecimento em que o colaborador trabalha

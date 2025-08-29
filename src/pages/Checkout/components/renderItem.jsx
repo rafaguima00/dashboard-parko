@@ -36,7 +36,7 @@ const RenderItem = (props) => {
                 <ItemList>{item.name}</ItemList>
                 <ItemList>{item.name_vehicle}</ItemList>
                 <ItemList>{item.license_plate}</ItemList>
-                <ItemList>{mapDateTime(item)}</ItemList>
+                <ItemList>{mapDateTime(item.data_saida, item.hora_saida)}</ItemList>
                 <ItemList>{formatCurrency(item.value, 'BRL')}</ItemList>
                 <ItemList>{firstWord.split(" ")[0]}</ItemList>
             </ElementList>

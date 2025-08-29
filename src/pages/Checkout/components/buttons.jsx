@@ -32,16 +32,16 @@ const Buttons = ({ setOpen, setOpenRetirada }) => {
             aberto: 0,
             valor_fechamento: valorDoCaixa
         })
-        .then(res => {
-            setCaixaAberto(res.data[0])
-            alert("Caixa fechado")
-        })
-        .catch(e => {
-            alert("Erro ao fechar caixa")
-        })
+            .then(res => {
+                setCaixaAberto(res.data[0])
+                alert("Caixa fechado")
+            })
+            .catch(e => {
+                alert("Erro ao fechar caixa")
+                console.log(e)
+            })
 
-        setModal({ ...modal, loading: false })
-        setModal({ ...modal, open: false })
+        setModal({ open: false, loading: false })
     }
 
     return <>

@@ -67,7 +67,7 @@ const ListConfirmedReserve = (props) => {
                             <ItemList>{item.name}</ItemList>
                             <ItemList>{item.name_vehicle}</ItemList>
                             <ItemList>{item.license_plate}</ItemList>
-                            <ItemList>{mapDateTime(item)}</ItemList>
+                            <ItemList>{mapDateTime(item.data_entrada, item.hora_entrada)}</ItemList>
                             <ItemList>{mapValue(item)}</ItemList>
                         </ElementList>
                     </ListBody>

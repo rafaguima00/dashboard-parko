@@ -30,7 +30,11 @@ const verifyTypeOfCharge = (item, priceTable, tabelaFixa, totalHoras, diferenca,
     const valorHora = toNumber(priceTable?.valor_hora)
     const valorFracao = toNumber(priceTable?.valor_fracao_hora)
     const temFracao = diferenca % 3600000 !== 0
-    
+
+    if (clienteParko) {
+        return item?.value ?? 0
+    }
+
     if (charge === "tabela_fixa") {
         const maxEnd = tabelaFixa.reduce((max, item) => {
             const [endH, endM] = item.segunda_hora.split(":").map(Number)
@@ -58,10 +62,10 @@ const verifyTypeOfCharge = (item, priceTable, tabelaFixa, totalHoras, diferenca,
     }
 
     if (charge === "hora_fracao") {
-        if (totalHoras >= 1 && !clienteParko && diferenca >= 0) {
+        if (totalHoras >= 1 && diferenca >= 0) {
             return (valorHora * totalHoras) + (totalHoras === 1 ? 0 : (temFracao ? valorFracao : 0))
         }
-        // < 1h: cobre a 1ª hora (ajuste se sua regra for diferente)
+
         return valorHora
     }
 }

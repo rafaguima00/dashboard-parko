@@ -1,12 +1,12 @@
-import { SlPrinter } from "react-icons/sl";
-import { HiOutlinePlus } from "react-icons/hi";
-import { Button } from "../../../../style";
-import { GroupInput, InputSearch } from "../style";
+import { SlPrinter } from "react-icons/sl"
+import { HiOutlinePlus } from "react-icons/hi"
+import { Button } from "../../../../style"
+import { GroupInput, InputSearch } from "../style"
 
 const InputGroup = (props) => {
 
-    const { neutralColor, primaryColor } = props;
-    const { text, setText, setNewItem } = props.state;
+    const { neutralColor, primaryColor, exportData } = props
+    const { text, setText, setNewItem } = props.state
 
     return (
         <GroupInput>
@@ -15,6 +15,7 @@ const InputGroup = (props) => {
                 paddingright={".5rem"} 
                 paddingleft={".5rem"}
                 borderradius={".5rem"}
+                onClick={exportData}
             >
                 <SlPrinter size={19} color={neutralColor}/>
             </Button>
@@ -40,4 +41,4 @@ const InputGroup = (props) => {
     )
 }
 
-export default InputGroup;
+export default InputGroup

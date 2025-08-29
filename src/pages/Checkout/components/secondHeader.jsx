@@ -22,6 +22,7 @@ const SecondHeader = (props) => {
         setText,
         setFiltrarPorData
     } = props.states
+    const { handleDownloadReservation } = props
 
     const [abrirModal, setAbrirModal] = useState(false)
     const [dataSelecionada, setDataSelecionada] = useState("")
@@ -47,9 +48,15 @@ const SecondHeader = (props) => {
                     value={text}
                     onChange={e => setText(e.target.value)}
                 />
-                <Icon><BiEdit size={17} color="#545454" /></Icon>
-                <Icon onClick={() => setAbrirModal(true)}><BsCalendar4 size={14} color="#545454" /></Icon>
-                <Icon><BsDownload size={14} color="#545454" /></Icon>
+                <Icon>
+                    <BiEdit size={17} color="#545454" />
+                </Icon>
+                <Icon onClick={() => setAbrirModal(true)}>
+                    <BsCalendar4 size={14} color="#545454" />
+                </Icon>
+                <Icon onClick={handleDownloadReservation}>
+                    <BsDownload size={14} color="#545454" />
+                </Icon>
             </IconGroup>
         </SecondTitle>
 
