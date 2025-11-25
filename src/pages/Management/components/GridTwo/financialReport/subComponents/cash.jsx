@@ -1,12 +1,12 @@
-import Top from "../../../../../../components/Top";
-import { Table, Icon, Body } from "../style";
-import { FiEye } from "react-icons/fi";
-import { TbDownload } from "react-icons/tb";
-import { cash } from "../../../../map/tableCash";
+import Top from "../../../../../../components/Top"
+import { Table, Icon, Body } from "../style"
+import { FiEye } from "react-icons/fi"
+import { TbDownload } from "react-icons/tb"
+import { cash } from "../../../../map/tableCash"
 
 const Cash = (props) => {
 
-    const { neutralColor } = props;
+    const { neutralColor, setTabelaDeFaturamento } = props
 
     return (
         <>
@@ -32,7 +32,7 @@ const Cash = (props) => {
                                             <TbDownload color={neutralColor} size={19}/>
                                         </Icon>
                                     }
-                                    <Icon onClick={() => {/* it's working */}}>
+                                    <Icon onClick={() => setTabelaDeFaturamento(item.code)}>
                                         <FiEye color={neutralColor} size={19}/>
                                     </Icon>
                                 </td>
@@ -45,4 +45,4 @@ const Cash = (props) => {
     )
 }
 
-export default Cash;
+export default Cash

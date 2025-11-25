@@ -7,26 +7,42 @@ import Costs from "./subComponents/costs"
 import General from "./subComponents/general"
 import HeritageAndStock from "./subComponents/heritageAndStock"
 import { theme } from "../../../../../theme/theme"
-import ReportCash from "./bottom/report/cash"
-import { useState } from "react"
+import ReportCash from "./bottom/report/Cash/cash"
+import { useEffect, useState } from "react"
 import GraphicFlow from "./bottom/graphics/cash/cash"
 import GraphicClient from "./bottom/graphics/costumer/client"
 import GraphicCosts from "./bottom/graphics/costs/costs"
 import ReportClient from "./bottom/report/client"
 import ReportCosts from "./bottom/report/costs"
-
+import { useFluxoDeCaixa } from "../../../../../hooks/useFluxoDeCaixa"
+import { useUser } from "../../../../../context/globalContext"
 
 const FinancialReport = (props) => {
 
+    const { dataClient } = useUser()
     const { bqSelected } = props
-    const { neutralColor, cancelColor, primaryColor } = theme
+    const { neutralColor } = theme
+
+    const {
+        totalFinal,
+        despesasPorMes,
+        aportes,
+        retiradas,
+        recebimentos,
+        reload
+    } = useFluxoDeCaixa(dataClient.id_establishment)
 
     const [graphic, setGraphic] = useState(true)
+    const [tabelaDeFaturamento, setTabelaDeFaturamento] = useState("fluxo_de_caixa")
+
+    useEffect(() => {
+        reload()
+    }, [])
 
     return (
         <Span>
             <Div height={50}>
-                {bqSelected === 0 && <Cash neutralColor={neutralColor}/>}
+                {bqSelected === 0 && <Cash neutralColor={neutralColor} setTabelaDeFaturamento={setTabelaDeFaturamento} />}
                 {bqSelected === 1 && <Client neutralColor={neutralColor}/>}
                 {bqSelected === 2 && <Costs neutralColor={neutralColor}/>}
                 {bqSelected === 3 && <HeritageAndStock neutralColor={neutralColor}/>}
@@ -45,7 +61,16 @@ const FinancialReport = (props) => {
                             {bqSelected === 2 && <GraphicCosts/>}
                         </> : 
                         <>
-                            {bqSelected === 0 && <ReportCash colors={{ primaryColor, cancelColor }}/>}
+                            {bqSelected === 0 && 
+                                <ReportCash 
+                                    tabelaDeFaturamento={tabelaDeFaturamento} 
+                                    totalFinal={totalFinal} 
+                                    despesasPorMes={despesasPorMes}
+                                    aportes={aportes}
+                                    retiradas={retiradas}
+                                    recebimentos={recebimentos}
+                                />
+                            }
                             {bqSelected === 1 && <ReportClient/>}
                             {bqSelected === 2 && <ReportCosts/>}
                         </>

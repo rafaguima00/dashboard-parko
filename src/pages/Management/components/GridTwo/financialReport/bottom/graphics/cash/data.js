@@ -6,7 +6,7 @@ const entrada = [0, 0, 0, 0]
 const saida = [0, 0, 0, 0]
 
 export const data = {
-    labels: ["Fevereiro", "Março", "Abril", "Maio"],
+    labels: ["Agosto", "Setembro", "Outubro", "Novembro"],
     datasets: [
         {
             label: "Entrada (R$)",
