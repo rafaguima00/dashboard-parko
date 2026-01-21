@@ -12,6 +12,11 @@ const Login = () => {
 
     const navigate = useNavigate()
 
+    // Ao criar banco de dados, tabela e dados fictícios localmente entrar com os seguintes e-mail e senha:
+
+    // E-mail de teste: usertest@email.com
+    // Senha de teste: tester1234
+
     useEffect(() => {
         if (token) {
             return navigate("/start")
