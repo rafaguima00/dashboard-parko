@@ -55,7 +55,6 @@ const Recebimentos = (props) => {
             totais[mesExtenso] += Number(item.value)
         })
 
-        // Converter objeto -> array [{ mes, total }]
         const total = Object.entries(totais).map(([mes, total]) => ({
             mes,
             total

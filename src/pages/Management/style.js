@@ -104,16 +104,26 @@ export const Div = styled.div`
 export const BlockQuote = styled.button`
     display: block;
     background: none;
-    border: none;
     font-size: 16px;
     font-weight: ${props => props.bold};
     color: ${props => props.textcolor};
     border: 2px solid transparent;
     border-bottom-color: ${props => props.borderbottom};
-    padding: 0 2rem;
+    padding: .8rem 2rem;
+    width: 60%;
+    text-align: start;
 
     &:hover {
         cursor: pointer;
+    }
+
+    &:first-child {
+        padding-top: 0;
+    }
+
+    &:last-child {
+        border: none;
+        padding-bottom: 0;
     }
 `
 
@@ -144,4 +154,39 @@ export const Footer = styled.footer`
     height: 92%;
     color: #c7c7c7;
     font-size: 15px;
+`
+
+export const DivInput = styled.div`
+    position: absolute;
+    right: 5.11rem;
+    top: 3rem;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+`
+
+export const Label = styled.label`
+    color: ${props => props.textcolor};
+    font-size: 14px;
+`
+
+export const Input = styled.input`
+    padding: .4rem .5rem;
+    background: none;
+    border: 1px solid ${props => props.bordercolor};
+    border-radius: .5rem;
+    width: ${props => props.largura};
+    height: 2.5rem;
+
+    &::placeholder {
+        color: #7d7d7d;
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &:disabled {
+        background-color: #c4c4c4;
+    }
 `

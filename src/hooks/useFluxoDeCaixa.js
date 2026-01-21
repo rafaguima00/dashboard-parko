@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import api from "../services/api/server"
 
-export const useFluxoDeCaixa = (id_establishment) => {
+export const useFluxoDeCaixa = (id_establishment, diferencaDeMesesParaHoje) => {
     const [recebimentos, setRecebimentos] = useState([])
     const [aportes, setAportes] = useState([])
     const [retiradas, setRetiradas] = useState([])
@@ -16,26 +16,20 @@ export const useFluxoDeCaixa = (id_establishment) => {
         "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
     ]
 
-    // -----------------------------
-    // GERA LISTA DOS ÚLTIMOS 5 MESES
-    // -----------------------------
     const gerarListaUltimos5Meses = () => {
         const hoje = new Date()
         const meses = []
 
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < (diferencaDeMesesParaHoje ? diferencaDeMesesParaHoje + 1 : 5); i++) {
             const data = new Date(hoje.getFullYear(), hoje.getMonth() - i, 1)
             meses.push(`${nomesMeses[data.getMonth()]}/${data.getFullYear()}`)
         }
         return meses
     }
 
-    // -----------------------------
-    // FILTRA DATA POR ÚLTIMOS 5 MESES
-    // -----------------------------
     const filtrarPorUltimos5Meses = (rawDate) => {
         const hoje = new Date()
-        const dataCorte = new Date(hoje.getFullYear(), hoje.getMonth() - 4, 1)
+        const dataCorte = new Date(hoje.getFullYear(), hoje.getMonth() - (diferencaDeMesesParaHoje ? diferencaDeMesesParaHoje - 1 : 4), 1)
 
         const dataStr = rawDate.split(",")[0].trim()
         const [dia, mes, ano] = dataStr.split("/").map(Number)
@@ -44,9 +38,6 @@ export const useFluxoDeCaixa = (id_establishment) => {
         return dataItem >= dataCorte
     }
 
-    // -----------------------------
-    // SOMA VALORES POR MÊS
-    // -----------------------------
     const somarPorMes = (dados, campoData, campoValor) => {
         const meses = gerarListaUltimos5Meses()
         const totais = {}
@@ -69,9 +60,6 @@ export const useFluxoDeCaixa = (id_establishment) => {
         }))
     }
 
-    // -----------------------------
-    // RECEBIMENTOS (payments)
-    // -----------------------------
     const loadRecebimentos = async () => {
         const response = await api.get(`/payment/${id_establishment}`)
 
@@ -82,9 +70,6 @@ export const useFluxoDeCaixa = (id_establishment) => {
         return somarPorMes(filtrados, "data", "value")
     }
 
-    // -----------------------------
-    // APORTES (accounts, somente category="Aporte")
-    // -----------------------------
     const loadAportes = async () => {
         const response = await api.get("/accounts")
 
@@ -109,9 +94,6 @@ export const useFluxoDeCaixa = (id_establishment) => {
         return somarPorMes(filtrados, "date_created", "value")
     }
 
-    // -----------------------------
-    // NOVO — DESPESAS (accounts exceto Aporte)
-    // -----------------------------
     const loadDespesas = async () => {
         const response = await api.get("/accounts")
 
@@ -124,9 +106,6 @@ export const useFluxoDeCaixa = (id_establishment) => {
         return somarPorMes(filtrados, "date_created", "value")
     }
 
-    // -----------------------------
-    // SOMA RECEBIMENTOS + APORTES
-    // -----------------------------
     const somarRecebimentosEAportes = (rec, apo) => {
         return rec.map((r, i) => ({
             mes: r.mes,
@@ -134,9 +113,6 @@ export const useFluxoDeCaixa = (id_establishment) => {
         }))
     }
 
-    // -----------------------------
-    // NOVO — SALDO FINAL = (recebimentos + aportes) - despesas
-    // -----------------------------
     const calcularSaldoFinal = (recebMaisAportes, despesas) => {
         return recebMaisAportes.map((item, i) => ({
             mes: item.mes,
@@ -144,9 +120,6 @@ export const useFluxoDeCaixa = (id_establishment) => {
         }))
     }
 
-    // -----------------------------
-    // EFETUA TODAS AS BUSCAS
-    // -----------------------------
     const loadFluxo = async () => {
         try {
             setLoading(true)
@@ -179,8 +152,8 @@ export const useFluxoDeCaixa = (id_establishment) => {
     }
 
     useEffect(() => {
-        if (id_establishment) loadFluxo()
-    }, [id_establishment])
+        if (id_establishment || diferencaDeMesesParaHoje) loadFluxo()
+    }, [id_establishment, diferencaDeMesesParaHoje])
 
     return {
         recebimentos,

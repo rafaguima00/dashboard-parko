@@ -47,6 +47,7 @@ const GridOne = (props) => {
                                         key={item.id}
                                         onClick={() => setBqSelected(item.id)}
                                         style={type_colaborator === "Funcionário(a)" ? { display: "none" } : {}}
+                                        borderbottom={"#858585"}
                                     >
                                         <p>{item.name}</p>
                                     </BlockQuote>

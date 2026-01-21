@@ -13,7 +13,7 @@ const Login = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if(token) {
+        if (token) {
             return navigate("/start")
         }
     }, [navigate, token])

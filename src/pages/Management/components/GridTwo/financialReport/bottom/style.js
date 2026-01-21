@@ -1,15 +1,21 @@
 import styled from "styled-components";
 
-export const Table = styled.table`
-    width: ${props => props.largura || "37rem"};
+export const Table = styled.div`
+    width: 100%;
     border-collapse: collapse;
+    overflow-y: scroll;
+    max-height: 15rem;
+    padding: 0 1rem;
 
     tr {
         height: 2.7rem;
+        gap: 20rem
     }
 `
 
 export const Head = styled.thead`
+    width: ${props => props.largura ? props.largura : `auto`};
+
     th {
         color: ${props => props.textcolor};
     }
@@ -20,13 +26,27 @@ export const Th = styled.th`
     color: #bababa;
     font-weight: 400;
     border-bottom: 1px solid #eaeaea;
-    padding: 0 .5rem;
+    padding: 0 1.5rem;
 `
 
 export const Td = styled.td`
     color: ${props => props.textcolor};
     text-align: center;
     border-bottom: 1px solid #eaeaea;
+`
+
+export const ItemTable = styled.td`
+    color: #7c7c7c;
+    text-align: center;
+    border-bottom: 1px solid #eaeaea;
+    padding: 8px 16px;
+`
+
+export const AllTable = styled.div`
+    overflow-y: scroll;
+    max-height: 15rem;
+    width: 100%;
+    font-size: 13px;
 `
 
 export const Block = styled.div`

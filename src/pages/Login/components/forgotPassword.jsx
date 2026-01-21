@@ -37,16 +37,16 @@ const ForgotPassword = () => {
         await api.post("/verify-email", {
             email: dataClient.email
         })
-        .then(() => {
-            setTitle("Avançar")
-            setDataClient({ ...dataClient, email: "" })
-            return navigate("/send-link")
-        })
-        .catch(e => {
-            setTitle("Avançar")
-            setError(true)
-            setMessageError(e.response.data.message)
-        })
+            .then(() => {
+                setTitle("Avançar")
+                setDataClient({ ...dataClient, email: "" })
+                return navigate("/send-link")
+            })
+            .catch(e => {
+                setTitle("Avançar")
+                setError(true)
+                setMessageError(e.response.data.message)
+            })
     }
 
     const goBack = e => {

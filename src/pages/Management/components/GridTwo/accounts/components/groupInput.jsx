@@ -2,6 +2,7 @@ import { SlPrinter } from "react-icons/sl"
 import { HiOutlinePlus } from "react-icons/hi"
 import { Button } from "../../../../style"
 import { GroupInput, InputSearch } from "../style"
+import { GoCalendar } from "react-icons/go"
 
 const InputGroup = (props) => {
 
@@ -10,12 +11,13 @@ const InputGroup = (props) => {
         primaryColor, 
         setCount, 
         setText,
-        exportData
+        exportData,
+        setFilterDate
     } = props
 
     return (
         <GroupInput>
-            {/* <Button 
+            <Button 
                 background={"#f4f4f4"} 
                 paddingright={".5rem"} 
                 paddingleft={".5rem"}
@@ -23,7 +25,7 @@ const InputGroup = (props) => {
                 onClick={() => setFilterDate(true)}
             >
                 <GoCalendar size={19} color={neutralColor}/>
-            </Button> */}
+            </Button>
             <Button 
                 background={"#f4f4f4"} 
                 paddingright={".5rem"} 

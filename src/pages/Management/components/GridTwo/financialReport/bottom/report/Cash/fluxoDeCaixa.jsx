@@ -11,7 +11,14 @@ const FluxoDeCaixa = (props) => {
 
     const { dataClient } = useUser()
     const { primaryColor, cancelColor } = theme
-    const { result, totalFinal, despesasPorMes } = props
+    const { 
+        result,
+        totalFinal, 
+        despesasPorMes, 
+        dataDeInicio,
+        dataDeTermino,
+        resultado
+    } = props
 
     const relatorioMensal = (month, total) => {
         const mapArr = total.filter(item => item.mes.split("/")[0] === month)

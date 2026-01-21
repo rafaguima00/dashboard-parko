@@ -1,12 +1,12 @@
-import Top from "../../../../../../components/Top";
-import { costs } from "../../../../map/tableCosts";
-import { Table, Icon, Body } from "../style";
-import { FiEye } from "react-icons/fi";
-import { TbDownload } from "react-icons/tb";
+import Top from "../../../../../../components/Top"
+import { costs } from "../../../../map/tableCosts"
+import { Table, Icon, Body } from "../style"
+import { FiEye } from "react-icons/fi"
+import { TbDownload } from "react-icons/tb"
 
 const Costs = (props) => {
 
-    const { neutralColor } = props;
+    const { neutralColor, setTabelaDeContas } = props
 
     return (
         <>
@@ -32,7 +32,7 @@ const Costs = (props) => {
                                             <TbDownload color={neutralColor} size={19}/>
                                         </Icon>
                                     }
-                                    <Icon onClick={() => {/* it's working */}}>
+                                    <Icon onClick={() => setTabelaDeContas(item.code)}>
                                         <FiEye color={neutralColor} size={19}/>
                                     </Icon>
                                 </td>
@@ -45,4 +45,4 @@ const Costs = (props) => {
     )
 }
 
-export default Costs;
+export default Costs

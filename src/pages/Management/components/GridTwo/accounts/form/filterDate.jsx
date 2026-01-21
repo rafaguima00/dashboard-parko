@@ -3,6 +3,7 @@ import { DivInput, Form, Input, Label } from "./style"
 const FilterDate = (props) => {
 
     const { primaryColor, neutralColor } = props.colors
+    const { setDataTermino, setDataInicio, dataTermino, dataInicio } = props
 
     return (
         <Form>
@@ -11,6 +12,8 @@ const FilterDate = (props) => {
                 <Input 
                     type="date"
                     bordercolor={primaryColor}
+                    onChange={e => setDataInicio(e.target.value)}
+                    value={dataInicio}
                 />
             </DivInput>
             <DivInput>
@@ -18,6 +21,8 @@ const FilterDate = (props) => {
                 <Input 
                     type="date"
                     bordercolor={primaryColor}
+                    onChange={e => setDataTermino(e.target.value)}
+                    value={dataTermino}
                 />
             </DivInput>
         </Form>

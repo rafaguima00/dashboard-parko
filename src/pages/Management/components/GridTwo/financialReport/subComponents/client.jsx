@@ -1,12 +1,12 @@
-import Top from "../../../../../../components/Top";
-import { client } from "../../../../map/tableClients";
-import { Table, Icon, Body } from "../style";
-import { FiEye } from "react-icons/fi";
-import { TbDownload } from "react-icons/tb";
+import Top from "../../../../../../components/Top"
+import { client } from "../../../../map/tableClients"
+import { Table, Icon, Body } from "../style"
+import { FiEye } from "react-icons/fi"
+import { TbDownload } from "react-icons/tb"
 
 const Client = (props) => {
 
-    const { neutralColor } = props;
+    const { neutralColor, setTabelaDeClientes } = props
 
     return (
         <>
@@ -32,7 +32,7 @@ const Client = (props) => {
                                             <TbDownload color={neutralColor} size={19}/>
                                         </Icon>
                                     }
-                                    <Icon onClick={() => {/* it's working */}}>
+                                    <Icon onClick={() => setTabelaDeClientes(item.code)}>
                                         <FiEye color={neutralColor} size={19}/>
                                     </Icon>
                                 </td>
@@ -45,4 +45,4 @@ const Client = (props) => {
     )
 }
 
-export default Client;
+export default Client

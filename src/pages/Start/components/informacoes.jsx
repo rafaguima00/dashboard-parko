@@ -17,12 +17,16 @@ import api from "../../../services/api/server"
 import { useEffect } from "react"
 import { Spinner } from "react-activity"
 import "react-activity/dist/library.css"
+import useReservation from "../../../hooks/useReservation"
+import usePayment from "../../../hooks/usePayment"
 
 const Informacoes = () => {
 
-    const { park, dataClient, setRatings, ratings } = useUser()
+    const { park, dataClient, setRatings, ratings, reservations, resumoVendas } = useUser()
     const { datachart, options } = VagasDisponiveisDataset({ park })
     const { dadosCliente, opcoesCliente } = AvaliacaoDoCliente()
+    const { fetchReservations } = useReservation()
+    const { fetchPayments } = usePayment()
 
     const styleIcon = {
         position: "absolute",
@@ -31,6 +35,15 @@ const Informacoes = () => {
         margin: 10
     }
     
+    const dataDeHoje = new Date().getDate()
+    const mesAtual = new Date().getMonth() + 1
+    
+    const formatarDia = dataDeHoje < 10 ? "0" + dataDeHoje : dataDeHoje
+    const formatarMes = mesAtual < 10 ? "0" + mesAtual : mesAtual
+    const anoAtual = new Date().getFullYear()
+    
+    const dataCompleta = `${formatarDia}/${formatarMes}/${anoAtual}`
+
     function quantidadeVagas() {
         if (park?.numero_vagas == null || park?.vagas_ocupadas == null) {
             return (
@@ -80,9 +93,27 @@ const Informacoes = () => {
         return `Sem avaliações`
     }
 
+    const numeroDePessoasNoDia = () => {
+        const reservasHoje = reservations.filter(item => item.data_entrada === dataCompleta)
+
+        return reservasHoje.length
+    }
+
+    const faturamentoDiario = () => {
+        const vendasHoje = resumoVendas.filter(item => item.data === dataCompleta)
+        const mapValue = vendasHoje.map(item => item.value)
+        const somarValores = mapValue.reduce((prev, current) => {
+            return prev + current
+        }, 0)
+
+        return formatCurrency(somarValores, 'BRL')
+    }
+
     useEffect(() => {
         if (dataClient.id_establishment) {
             avaliacoes()
+            fetchReservations()
+            fetchPayments()
         }
     }, [dataClient.id_establishment])
 
@@ -105,14 +136,14 @@ const Informacoes = () => {
             <Info>
                 <FaRightLeft color="#545454" size={16} title="Arrow" style={styleIcon} />
                 <TextAligned>
-                    <TitleLine>{formatCurrency(0, 'BRL')}</TitleLine>
+                    <TitleLine>{faturamentoDiario()}</TitleLine>
                     <Subtitle>Faturamento diário</Subtitle>
                 </TextAligned>
             </Info>
             <Info>
                 <FaRightLeft color="#545454" size={16} title="Arrow" style={styleIcon} />
                 <TextAligned>
-                    <TitleLine>0</TitleLine>
+                    <TitleLine>{numeroDePessoasNoDia()}</TitleLine>
                     <Subtitle>Número de pessoas no dia</Subtitle>
                 </TextAligned>
             </Info>

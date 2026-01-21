@@ -24,14 +24,14 @@ const DatasetBar = () => {
   }, [])
 
   useEffect(() => {
-    if(resumoVendas.length > 0) {
+    if (resumoVendas.length > 0) {
       carregarVendas()
     }
-  }, [resumoVendas, filtrarPorData.resumo])
+  }, [resumoVendas, filtrarPorData])
 
   function carregarVendas() {
       const filtrarDataDePgto = resumoVendas
-        .filter(item => item.data === filtrarPorData.resumo)
+        .filter(item => item.data === filtrarPorData)
 
       const totais = {
         "credit_card": 0,

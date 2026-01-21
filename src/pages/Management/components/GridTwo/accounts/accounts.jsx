@@ -16,6 +16,8 @@ const Accounts = () => {
     const { neutralColor, primaryColor } = theme
 
     const [filterDate, setFilterDate] = useState(false)
+    const [dataInicio, setDataInicio] = useState("")
+    const [dataTermino, setDataTermino] = useState("")
     const [count, setCount] = useState(false)
     const [text, setText] = useState("")
     const [chosenAcc, setChosenAcc] = useState({})
@@ -72,7 +74,8 @@ const Accounts = () => {
 
     const filtrarData = async (e) => {
         e.preventDefault()
-        setLoading(true)
+        
+        setFilterDate(false)
     }
 
     const filtrar = accounts.filter(item => item.id_establishment === dataClient.id_establishment)
@@ -81,6 +84,28 @@ const Accounts = () => {
         item.desc_item.toLowerCase().includes(text.toLowerCase()) || 
         item.date_created.includes(text)
     )
+
+    const parseDateBR = (dateBR) => {
+        const [day, month, year] = dateBR.split("/")
+        return new Date(year, month - 1, day)
+    }
+
+    const parseDateISO = (dateISO) => {
+        if (!dateISO) return null
+        const [year, month, day] = dateISO.split("-")
+        return new Date(year, month - 1, day)
+    }
+
+    const inicio = parseDateISO(dataInicio)
+    const fim = parseDateISO(dataTermino)
+
+    const filterAccountsByDate = filterAccounts.filter(item => {
+        if (!inicio && !fim) return true
+
+        const dataItem = parseDateBR(item.date_created)
+
+        return dataItem >= inicio && dataItem <= fim
+    })
 
     const exportData = () => {
         const wb = XLSX.utils.book_new()
@@ -113,7 +138,7 @@ const Accounts = () => {
                 <TableAccount 
                     neutralColor={neutralColor}
                     state={{ accounts }}
-                    filterAccounts={filterAccounts}
+                    filterAccounts={filterAccountsByDate}
                 />
                 <Modal
                     isOpen={filterDate}
@@ -123,7 +148,13 @@ const Accounts = () => {
                     funcao={filtrarData}
                     isLoading={loading}
                 >
-                    <FilterDate colors={{ primaryColor, neutralColor }} />
+                    <FilterDate 
+                        colors={{ primaryColor, neutralColor }} 
+                        setDataInicio={setDataInicio}
+                        setDataTermino={setDataTermino}
+                        dataInicio={dataInicio}
+                        dataTermino={dataTermino}
+                    />
                 </Modal>
                 <Modal
                     isOpen={count}

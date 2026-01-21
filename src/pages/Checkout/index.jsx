@@ -38,7 +38,8 @@ const Checkout = () => {
         aportes,  retiradas, 
         park, reservaAppParko,
         filtrarPorData, setFiltrarPorData,
-        resumoVendas, dividasEmDinheiro
+        resumoVendas, dividasEmDinheiro,
+        setCaixaAberto
     } = useUser()
     const { fetchAportes, addAportes } = useAportes()
     const { fetchRetiradas, addRetiradas } = useRetiradas()
@@ -178,6 +179,19 @@ const Checkout = () => {
         }
     }
 
+    const verificarSeEstaAberto = async () => {
+        await api.get(`/abertura_caixa/parking/${dataClient.id_establishment}`)
+            .then(res => {
+                if (res.data && res.data.length > 0) {
+                    setCaixaAberto(res.data[res.data.length - 1])
+                    return
+                }
+            })
+            .catch(e => {
+                console.log(e)
+            })
+    }
+
     function mapVendas(payment_method) {
         const filtrarData = resumoVendas.filter(item => item.data === filtrarPorData)
         const formaDePagamento = filtrarData.filter(item => item.payment_method === payment_method)
@@ -299,6 +313,7 @@ const Checkout = () => {
         loadData(dataClient.id_establishment)
         fetchRetiradas()
         fetchAportes()
+        verificarSeEstaAberto()
     }, [dataClient])
 
     useEffect(() => {
