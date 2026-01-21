@@ -54,7 +54,7 @@ npm start
 
 Crie um arquivo `.env` na raiz do projeto e adicione:
 
-REACT_APP_STATUS_APP=production
+REACT_APP_STATUS_APP=test
 
 Essa variável é utilizada para controlar o ambiente da aplicação (ex: produção ou desenvolvimento).
 
