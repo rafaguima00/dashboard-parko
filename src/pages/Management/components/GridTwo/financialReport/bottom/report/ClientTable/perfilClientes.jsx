@@ -15,7 +15,7 @@ const PerfilClientes = () => {
         const mapValue = clienteParko.map(item => item.value)
         const somarValores = mapValue.reduce((prev, current) => {
             return prev + current
-        })
+        }, 0)
         
         return formatCurrency(somarValores, 'BRL')
     }
@@ -26,6 +26,7 @@ const PerfilClientes = () => {
         // Conta quantas vezes cada id_costumer aparece
         const contador = clienteParko.reduce((acc, item) => {
             acc[item.id_costumer] = (acc[item.id_costumer] || 0) + 1
+
             return acc
         }, {})
 

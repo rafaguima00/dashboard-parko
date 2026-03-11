@@ -68,7 +68,6 @@ const GraficoSegregacaoCustos = (props) => {
                     return acc
                 }, {})
 
-                console.log(groupedAccounts)
                 setCostType(groupedAccounts)
             }
 
@@ -108,7 +107,6 @@ const GraficoSegregacaoCustos = (props) => {
                     return acc
                 }, {})
                 
-                console.log(groupedAccounts)
                 setCostType(groupedAccounts)
             }
 

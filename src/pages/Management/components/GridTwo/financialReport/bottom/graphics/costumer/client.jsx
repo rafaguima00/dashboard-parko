@@ -1,19 +1,34 @@
 import { GraphicElement } from "../../style"
-import { Bar } from "react-chartjs-2"
-import { BarElement, CategoryScale, Chart as ChartJS, LinearScale, Tooltip } from "chart.js"
-import { data, options } from "./data"
+import {
+    Chart as ChartJS,
+    ArcElement,
+    Tooltip,
+    Legend,
+    Title
+} from "chart.js"
+import { Doughnut } from "react-chartjs-2"
+import DoughnutChart from "./data"
 import ChartDataLabels from "chartjs-plugin-datalabels"
 
-ChartJS.register (Tooltip, CategoryScale, LinearScale, BarElement, ChartDataLabels)
+ChartJS.register(ArcElement, ChartDataLabels, Tooltip, Legend, Title)
 
-const GraphicClient = () => {
+const GraphicClient = (props) => {
+
+    const { tabelaDeClientes, dataDeInicio, dataDeTermino } = props
+
+    const { data, options } = DoughnutChart({ dataDeInicio, dataDeTermino })
+
     return (
-        <GraphicElement largura={60}>
-            <Bar 
-                data={data}
-                options={options}
-            />
-        </GraphicElement>
+        <>
+            {tabelaDeClientes === "perfil_dos_clientes" && 
+                <GraphicElement largura={60}>
+                    <Doughnut 
+                        data={data} 
+                        options={options} 
+                    />
+                </GraphicElement>
+            }
+        </>
     )
 }
 

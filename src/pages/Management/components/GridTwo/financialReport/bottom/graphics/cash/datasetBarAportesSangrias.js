@@ -40,7 +40,7 @@ const DataAportesSangrias = (props) => {
                     const data = item.created_at.split(", ")[0]
                     const [dia, mes, ano] = data.split('/')
 
-                    return mes === converterMes && ano === year
+                    return mes === converterMes && ano === year.toString()
                 })
                 const valoresAportes = mapAportes?.map(item => item.value)
                 const somarValores = valoresAportes?.reduce((prev, curr) => {

@@ -155,7 +155,13 @@ const FinancialReport = (props) => {
                                     dataDeTermino={dataDeTermino}
                                 />
                             }
-                            {bqSelected === 1 && <GraphicClient />}
+                            {bqSelected === 1 && 
+                                <GraphicClient 
+                                    tabelaDeClientes={tabelaDeClientes}
+                                    dataDeInicio={dataDeInicio}
+                                    dataDeTermino={dataDeTermino}
+                                />
+                            }
                             {bqSelected === 2 && 
                                 <GraphicCosts 
                                     tabelaDeContas={tabelaDeContas}

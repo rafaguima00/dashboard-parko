@@ -6,15 +6,14 @@ import {
     Chart as ChartJS, 
     Legend, 
     LinearScale, 
+    Title,
     Tooltip 
 } from "chart.js"
 import GraphicCostsData from "./data"
 import GraficoSegregacaoCustos from "./segregacaoPie"
-import { Spinner } from "react-activity"
-import "react-activity/dist/library.css"
-import { ElementLoading, Loading } from "../../../../../../style"
+import CostCategoryChart from "./costCategoryChart"
 
-ChartJS.register (Legend, Tooltip, CategoryScale, LinearScale, BarElement)
+ChartJS.register (Legend, Title, Tooltip, CategoryScale, LinearScale, BarElement)
 
 const GraphicCosts = (props) => {
 
@@ -22,17 +21,7 @@ const GraphicCosts = (props) => {
 
     const { data, options } = GraphicCostsData()
     const { dataCosts, optionsCosts } = GraficoSegregacaoCustos({ dataDeInicio, dataDeTermino })
-
-    const custos = () => {
-        return (
-            <>
-                <ElementLoading>
-                    <Spinner size={16} speed={1} /> 
-                    <Loading>Carregando...</Loading>
-                </ElementLoading>
-            </>
-        )
-    }
+    const { dataCostCategory, optionsCostCategory } = CostCategoryChart({ dataDeInicio, dataDeTermino })
 
     return <>
         {tabelaDeContas === "geral_de_contas" &&
@@ -53,8 +42,11 @@ const GraphicCosts = (props) => {
         }
 
         {tabelaDeContas === "custos_por_categoria" &&
-            <GraphicElement largura={40}>
-                {custos()}
+            <GraphicElement largura={80}>
+                <Bar 
+                    data={dataCostCategory}
+                    options={optionsCostCategory}
+                />
             </GraphicElement>
         }
     </>

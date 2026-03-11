@@ -33,10 +33,11 @@ const DataSetDoughnut = () => {
 
     setReservaAppParko(mapReservations.filter(item => item === 1).length)
     setReservaNaoParko(mapReservations.filter(item => item === 0).length)
-  }, [reservations])
+  }, [reservations, filtrarPorData])
 
   const appPercent = useMemo(() => {
     const total = reservaAppParko + reservaNaoParko
+    
     return total > 0 ? Number(((reservaAppParko * 100) / total).toFixed(2)) : total.toFixed(2)
   }, [reservaAppParko, reservaNaoParko])
 

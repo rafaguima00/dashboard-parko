@@ -7,6 +7,7 @@ export const Container = styled.div`
     margin: 4rem 5.11rem 4rem 0;
     display: grid;
     grid-template-rows: 5% auto 16% 5%;
+    grid-template-columns: 390px auto;
     gap: 1rem;
 `
 
