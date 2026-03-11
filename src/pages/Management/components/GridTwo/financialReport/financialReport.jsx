@@ -52,8 +52,12 @@ const FinancialReport = (props) => {
     const [tabelaDeContas, setTabelaDeContas] = useState("geral_de_contas")
 
     const loadAccounts = async () => {
-        const response = await api.get(`/accounts`)
-        setAccounts(response.data)
+        try {
+            const response = await api.get(`/accounts`)
+            setAccounts(response.data)
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     const parseDateBR = (dateString) => {
@@ -144,9 +148,21 @@ const FinancialReport = (props) => {
 
                     {graphic ? 
                         <> 
-                            {bqSelected === 0 && <GraphicFlow />}
+                            {bqSelected === 0 && 
+                                <GraphicFlow 
+                                    tabelaDeFaturamento={tabelaDeFaturamento} 
+                                    dataDeInicio={dataDeInicio}
+                                    dataDeTermino={dataDeTermino}
+                                />
+                            }
                             {bqSelected === 1 && <GraphicClient />}
-                            {bqSelected === 2 && <GraphicCosts />}
+                            {bqSelected === 2 && 
+                                <GraphicCosts 
+                                    tabelaDeContas={tabelaDeContas}
+                                    dataDeInicio={dataDeInicio}
+                                    dataDeTermino={dataDeTermino}
+                                />
+                            }
                         </> : 
                         <>
                             {bqSelected === 0 && 

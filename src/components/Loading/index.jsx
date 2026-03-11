@@ -7,7 +7,7 @@ const LoadingScreen = ({ isOpen }) => {
 
     const { primaryColor } = theme
 
-    if(isOpen === true) {
+    if (isOpen) {
         return (
             <Background>
                 <Spinner color={primaryColor} size={32}/>

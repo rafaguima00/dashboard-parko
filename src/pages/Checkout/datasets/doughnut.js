@@ -11,11 +11,13 @@ const DataSetDoughnut = () => {
     reservaNaoParko, 
     setReservaNaoParko, 
     reservaAppParko, 
-    setReservaAppParko
+    setReservaAppParko,
+    filtrarPorData
   } = useUser()
 
   useEffect(() => {
     if (!dataClient?.id_establishment) return
+    
     api.get(`/reservations/parking/${dataClient.id_establishment}`)
       .then(res => setReservations(res.data))
       .catch(e => console.log(e))
@@ -24,14 +26,18 @@ const DataSetDoughnut = () => {
   useEffect(() => {
     if (!Array.isArray(reservations)) return
 
-    const mapReservations = reservations.map(item => Number(item.parko_app))
+    const filterReservations = reservations.filter(
+      item => item.data_saida === filtrarPorData
+    )
+    const mapReservations = filterReservations.map(item => Number(item.parko_app))
+
     setReservaAppParko(mapReservations.filter(item => item === 1).length)
     setReservaNaoParko(mapReservations.filter(item => item === 0).length)
   }, [reservations])
 
   const appPercent = useMemo(() => {
     const total = reservaAppParko + reservaNaoParko
-    return total > 0 ? Number(((reservaAppParko * 100) / total).toFixed(2)) : "0"
+    return total > 0 ? Number(((reservaAppParko * 100) / total).toFixed(2)) : total.toFixed(2)
   }, [reservaAppParko, reservaNaoParko])
 
   const data = useMemo(() => ({
@@ -63,7 +69,7 @@ const DataSetDoughnut = () => {
         ctx.fillStyle = "#fff"
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
-        ctx.fillText(`${appPercent !== null ? `${appPercent}%` : 'Carregando...'}`, centerX, centerY)
+        ctx.fillText(`${appPercent ? `${appPercent}%` : 'Carregando...'}`, centerX, centerY)
       }
     }
   ], [appPercent])

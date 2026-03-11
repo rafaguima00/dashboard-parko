@@ -3,19 +3,15 @@ import { useEffect, useState } from "react"
 import { converter } from "../../../utils/ConverterData"
 import { useUser } from "../../../context/globalContext"
 import FormEditInput from "../components/formEditInput"
+import LoadingScreen from "../../../components/Loading"
 
 const EditModal = (props) => {
 
-    const { setStatus, status, dateTime, setDateTime, formData, setFormData } = props.states
+    const [loading, setLoading] = useState(true)
+
+    const { setStatus, status, dateTime, setDateTime, formState, dispatch } = props.states
     const { selectedClient } = useUser()
-    const { 
-        color, 
-        data_saida, 
-        hora_saida, id, 
-        license_plate, 
-        name, name_vehicle, 
-        parko_app, tel 
-    } = selectedClient || {}
+    const { data_saida, hora_saida, id, parko_app } = selectedClient || {}
 
     const reservaNaoParko = parko_app === 0
     const statusReserva = {
@@ -63,6 +59,32 @@ const EditModal = (props) => {
         setStatus(statusMap[selectedClient.status] || 0)
     }
 
+    function carregarInformacoes() {
+        if (selectedClient?.data_entrada.includes('/')) {
+            let dataStr
+
+            const partes = selectedClient?.data_entrada.split('/')
+            if (partes.length !== 3) return null
+    
+            const [dia, mes, ano] = partes
+            dataStr = `${ano}-${mes}-${dia}`
+
+            dispatch({ type: "change", field: "name", value: selectedClient.name })
+            dispatch({ type: "change", field: "tel", value: selectedClient.tel })
+            dispatch({ type: "change", field: "name_vehicle", value: selectedClient.name_vehicle })
+            dispatch({ type: "change", field: "color", value: selectedClient.color })
+            dispatch({ type: "change", field: "license_plate", value: selectedClient.license_plate })
+            dispatch({ type: "change", field: "data_entrada", value: dataStr })
+            dispatch({ type: "change", field: "hora_entrada", value: selectedClient.hora_entrada })
+        }
+
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        carregarInformacoes()
+    }, [])
+
     useEffect(() => {
         if (selectedClient) {
             atualizarStatus()
@@ -73,28 +95,62 @@ const EditModal = (props) => {
         verificarAtividade()
     }, [status])
 
-    return (
+    return <>
+        {loading && <LoadingScreen />}
         <Form>
             <FormEditInput label={"N°"} type="text" value={id} disabled />
-            <FormEditInput label={"Nome do Cliente"} type="text" largura={"360px"} value={name} disabled={disabledData} />
-            <FormEditInput label={"Contato"} type="text" largura={"219px"} value={tel} disabled={disabledData} />
-            <FormEditInput label={"Modelo"} type="text" largura={"245px"} value={name_vehicle} disabled={disabledData} />
-            <FormEditInput label={"Cor"} type="text" largura={"245px"} value={color} disabled={disabledData} />
-            <FormEditInput label={"Placa"} type="text" largura={"245px"} value={license_plate} disabled={disabledData} />
+            <FormEditInput 
+                label={"Nome do Cliente"} 
+                type="text" 
+                largura={"360px"} 
+                value={formState.name} 
+                onChange={e => dispatch({ type: "change", field: "name", value: e.target.value })}
+                disabled={disabledData} 
+            />
+            <FormEditInput 
+                label={"Contato"} 
+                type="text" 
+                largura={"219px"} 
+                value={formState.tel} 
+                onChange={e => dispatch({ type: "change", field: "tel", value: e.target.value })}
+                disabled={disabledData} 
+            />
+            <FormEditInput 
+                label={"Modelo"} 
+                type="text" 
+                largura={"245px"} 
+                value={formState.name_vehicle} 
+                onChange={e => dispatch({ type: "change", field: "name_vehicle", value: e.target.value })}
+                disabled={disabledData} 
+            />
+            <FormEditInput 
+                label={"Cor"} 
+                type="text" 
+                largura={"245px"} 
+                value={formState.color} 
+                onChange={e => dispatch({ type: "change", field: "color", value: e.target.value })}
+                disabled={disabledData} 
+            />
+            <FormEditInput 
+                label={"Placa"} 
+                type="text" 
+                largura={"245px"} 
+                value={formState.license_plate} 
+                onChange={e => dispatch({ type: "change", field: "license_plate", value: e.target.value })}
+                disabled={disabledData} 
+            />
             <FormEditInput 
                 label={"Data de Entrada"} 
                 type="date" 
                 largura={"245px"} 
-                value={formData.data_entrada} 
-                onChange={e => setFormData({ ...formData, data_entrada: e.target.value })}
+                value={formState.data_entrada} 
                 disabled={disabled} 
             />
             <FormEditInput 
                 label={"Hora de Entrada"} 
                 type="time" 
                 largura={"245px"} 
-                value={formData.hora_entrada} 
-                onChange={e => setFormData({ ...formData, hora_entrada: e.target.value })}
+                value={formState.hora_entrada} 
                 disabled={disabled} 
             />
             <FormEditInput 
@@ -107,7 +163,7 @@ const EditModal = (props) => {
                 disabled={disabledData}
             />
         </Form>
-    )
+    </>
 }
 
 export default EditModal

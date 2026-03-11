@@ -8,6 +8,19 @@ export const Container = styled.div`
     gap: 1rem;
 `
 
+export const ElementLoading = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: ${props => props.gap ? props.gap : 10}px;
+`
+
+export const Loading = styled.p`
+    font-size: 22px;
+    color: #0c3b28;
+`
+
 export const Financial = styled.div`
     padding: 1rem;
     border-radius: 1rem;

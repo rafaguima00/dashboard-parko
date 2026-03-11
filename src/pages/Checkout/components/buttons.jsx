@@ -1,20 +1,23 @@
-import { ButtonGroup, Line } from "../style"
+import { ButtonGroup } from "../style"
 import GlobalButton from "../../../components/Button"
 import { theme } from "../../../theme/theme"
 import { useUser } from "../../../context/globalContext"
 import Modal from "../../../components/Modal"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import api from "../../../services/api/server"
+import StartEndTill from "./startEndTill"
+import { unformatCurrency } from "../../../utils/UnformatCurrency"
 
 const Buttons = ({ setOpen, setOpenRetirada }) => {
 
-    const { cancelColor, primaryColor, neutralColor } = theme
+    const { cancelColor, primaryColor } = theme
     const { dataClient, caixaAberto, valorDoCaixa, setCaixaAberto } = useUser()
     
     const [modal, setModal] = useState({
         open: false,
         loading: false
     })
+    const [valorEmEspecie, setValorEmEspecie] = useState("")
 
     async function fecharCaixa(e) {
         e.preventDefault()
@@ -30,7 +33,7 @@ const Buttons = ({ setOpen, setOpenRetirada }) => {
 
         await api.put(`/abertura_caixa/${caixaAberto?.id}`, { 
             aberto: 0,
-            valor_fechamento: valorDoCaixa
+            valor_fechamento: unformatCurrency(valorEmEspecie) / 100 || valorDoCaixa
         })
             .then(res => {
                 setCaixaAberto(res.data[0])
@@ -43,6 +46,12 @@ const Buttons = ({ setOpen, setOpenRetirada }) => {
 
         setModal({ open: false, loading: false })
     }
+
+    useEffect(() => {
+        if (modal.open === false) {
+            setValorEmEspecie("")
+        }
+    }, [modal])
 
     return <>
             <ButtonGroup>
@@ -75,7 +84,12 @@ const Buttons = ({ setOpen, setOpenRetirada }) => {
                 title="Fechar Caixa"
                 funcao={fecharCaixa}
             >
-                <Line textcolor={neutralColor}>Deseja fechar caixa agora?</Line>
+                <StartEndTill 
+                    children={"Deseja fechar caixa agora?"}
+                    label={"Insira o valor em espécie do caixa"}
+                    value={valorEmEspecie}
+                    setValue={setValorEmEspecie}
+                />
             </Modal>
         </>
     

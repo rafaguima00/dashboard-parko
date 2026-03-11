@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useReducer, useState } from "react"
 import InformacoesReserva from "./informacoesReserva"
 import { Edit } from "../style"
 import Modal from "../../../components/Modal"
@@ -6,13 +6,16 @@ import EditModal from "../form/edit"
 import { useUser } from "../../../context/globalContext"
 import useReservation from "../../../hooks/useReservation"
 import { calculateReservationValue } from "../../../utils/CalculateReservationValue"
+import { formReducer } from "../form/formState/reducer"
+import { initialState } from "../form/initialState"
 
 const FirstColumn = (props) => {
 
     const [openEdit, setOpenEdit] = useState(false)
     const [loading, setLoading] = useState(false)
     const [status, setStatus] = useState(0)
-    const [formData, setFormData] = useState({})
+
+    const [formState, dispatch] = useReducer(formReducer, initialState)
 
     const { dateTime, setDateTime } = props.states
     const { selectedClient, setSelectedClient, priceTable, tabelaFixa } = useUser()
@@ -31,7 +34,8 @@ const FirstColumn = (props) => {
             const [dia, mes, ano] = partes
             dataStr = `${ano}-${mes}-${dia}`
 
-            setFormData({ hora_entrada: selectedClient?.hora_entrada, data_entrada: dataStr })
+            dispatch({ type: "change", field: "hora_entrada", value: selectedClient?.hora_entrada })
+            dispatch({ type: "change", field: "data_entrada", data_entrada: dataStr })
         }
     }
 
@@ -43,8 +47,8 @@ const FirstColumn = (props) => {
 
         const updatedClient = {
             ...selectedClient,
-            data_entrada: formData.data_entrada,
-            hora_entrada: formData.hora_entrada,
+            data_entrada: formState.data_entrada,
+            hora_entrada: formState.hora_entrada,
             data_saida: converter[0],
             hora_saida: converter[1],
             status: status
@@ -102,9 +106,9 @@ const FirstColumn = (props) => {
             >
                 <EditModal 
                     states={{ 
-                        setStatus, status,
-                        dateTime, setDateTime,
-                        formData, setFormData
+                        status, dateTime, 
+                        setDateTime, formState, 
+                        dispatch, setStatus
                     }} 
                 />
             </Modal>

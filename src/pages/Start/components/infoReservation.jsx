@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useReducer } from "react"
 import { useUser } from "../../../context/globalContext"
 import { useNavigate } from "react-router-dom"
-import { InfoReservation, GroupButton, Line, ElementLoading } from "../style"
+import { InfoReservation, GroupButton, ElementLoading } from "../style"
 import GlobalButton from "../../../components/Button"
 import { theme } from "../../../theme/theme"
 import { Chart as ChartJS, ArcElement, Title } from "chart.js"
@@ -11,24 +11,30 @@ import api from "../../../services/api/server"
 import Informacoes from "./informacoes"
 import useReservation from "../../../hooks/useReservation"
 import { FaPlus } from "react-icons/fa6"
+import { formReducer } from "../form/formState/reducer"
+import { initialState } from "../form/initialState"
+import StartEndTill from "./startEndTill"
+import { unformatCurrency } from "../../../utils/UnformatCurrency"
 
 ChartJS.register(ArcElement, Title)
 
 const InfoReserve = () => {
 
     const heightButton = "2.4rem"
-    const { primaryColor, cancelColor, neutralColor } = theme
+    const { primaryColor, cancelColor } = theme
     const { valorDoCaixa } = useUser()
     const navigate = useNavigate()
     const { addReservation } = useReservation()
 
     const [open, setOpen] = useState(false)
-    const [data, setData] = useState({})
     const [carregando, setCarregando] = useState(false)
     const [modalAbrirCx, setModalAbrirCx] = useState(false)
     const [loading, setLoading] = useState(false)
     const [modalFecharCx, setModalFecharCx] = useState(false)
     const [valueReservation, setValueReservation] = useState(0)
+    const [valorEmEspecie, setValorEmEspecie] = useState("")
+
+    const [formState, dispatch] = useReducer(formReducer, initialState)
 
     const { 
         dataClient, reservations, 
@@ -64,7 +70,7 @@ const InfoReserve = () => {
 
         await api.get("/users")
             .then(res => {
-                const verify = res.data.filter(item => item.name.toLowerCase() === data.name_user.toLowerCase() && item.tel === data.tel)
+                const verify = res.data.filter(item => item.name.toLowerCase() === formState.name.toLowerCase() && item.tel === formState.cel)
 
                 if (verify.length > 0) {
                     verificarVeiculo(verify[0].id)
@@ -82,7 +88,7 @@ const InfoReserve = () => {
     const verificarVeiculo = async (idUser) => {
         await api.get("/vehicles")
             .then(res => {
-                const verify = res.data.filter(item => item.license_plate === data.license_plate)
+                const verify = res.data.filter(item => item.license_plate === formState.license_plate)
                 
                 if (verify.length > 0) {
                     createReservation(verify[0].id, idUser)
@@ -101,8 +107,8 @@ const InfoReserve = () => {
         setCarregando(true)
 
         await api.post("/users", { 
-            tel: data.tel,
-            name_user: data.name_user, 
+            tel: formState.cel,
+            name_user: formState.name, 
             email: "", 
             cpf: "", 
             rg: "", 
@@ -123,9 +129,9 @@ const InfoReserve = () => {
 
         await api.post("/vehicles", {
             id_costumer: idUser, 
-            name_vehicle: data.name_vehicle, 
-            color: data.color,
-            license_plate: data.license_plate
+            name_vehicle: formState.name_vehicle, 
+            color: formState.color,
+            license_plate: formState.license_plate
         })
             .then(res => {
                 createReservation(res.data.id, idUser)
@@ -140,8 +146,8 @@ const InfoReserve = () => {
     const createReservation = async (idVehicle, idUser) => {
         try {
             await addReservation({
-                data_entrada: data.data_entrada,
-                hora_entrada: data.hora_entrada,
+                data_entrada: formState.data_entrada,
+                hora_entrada: formState.hora_entrada,
                 data_saida: "", 
                 hora_saida: "",
                 value: valueReservation, 
@@ -153,7 +159,7 @@ const InfoReserve = () => {
             })
             setOpen(false)
             alert("Reserva realizada com sucesso")
-            setData({})
+            dispatch({ type: "clear" })
         } catch (error) {
             throw error
         } finally {
@@ -165,6 +171,7 @@ const InfoReserve = () => {
     // Calcular valor da reserva
     const calcularValorDaReserva = (e) => {
         e.preventDefault()
+
         setCarregando(true)
         
         if (park.type_of_charge === "hora_fracao") {
@@ -203,7 +210,8 @@ const InfoReserve = () => {
 
         await api.post("/abertura_caixa", { 
             id_establishment: dataClient.id_establishment,
-            id_colaborator: dataClient.id
+            id_colaborator: dataClient.id,
+            valor_abertura: unformatCurrency(valorEmEspecie) / 100
         })
             .then(() => {
                 verificarSeEstaAberto()
@@ -232,15 +240,16 @@ const InfoReserve = () => {
 
         await api.put(`/abertura_caixa/${caixaAberto?.id}`, { 
             aberto: 0,
-            valor_fechamento: valorDoCaixa
+            valor_fechamento: unformatCurrency(valorEmEspecie) / 100 || valorDoCaixa
         })
             .then(res => {
                 setCaixaAberto(res.data[0])
                 alert("Caixa fechado")
-                setModalFecharCx(false)
             })
             .catch(() => {
                 alert("Erro ao fechar caixa")
+            })
+            .finally(() => {
                 setModalFecharCx(false)
             })
 
@@ -271,6 +280,12 @@ const InfoReserve = () => {
             verificarUsuario()
         }
     }, [valueReservation])
+
+    useEffect(() => {
+        if (modalAbrirCx === false || modalFecharCx === false) {
+            setValorEmEspecie("")
+        }
+    }, [modalAbrirCx, modalFecharCx])
     
     return (
         <InfoReservation>
@@ -307,9 +322,9 @@ const InfoReserve = () => {
             >
                 <NewReservation 
                     state={{
-                        data, 
-                        setData,
-                        reservations
+                        formState,
+                        reservations,
+                        dispatch
                     }}
                 />
             </Modal>
@@ -322,7 +337,12 @@ const InfoReserve = () => {
                 funcao={abrirCaixa}
                 isLoading={loading}
             >
-                <Line textcolor={neutralColor}>Deseja abrir caixa agora?</Line>
+                <StartEndTill 
+                    value={valorEmEspecie} 
+                    setValue={setValorEmEspecie} 
+                    children={"Deseja abrir caixa agora?"}
+                    label={"Insira o valor em espécie do caixa"}
+                />
             </Modal>
 
             <Modal
@@ -333,7 +353,12 @@ const InfoReserve = () => {
                 funcao={fecharCaixa}
                 isLoading={loading}
             >
-                <Line textcolor={neutralColor}>Deseja fechar caixa agora?</Line>
+                <StartEndTill 
+                    value={valorEmEspecie} 
+                    setValue={setValorEmEspecie} 
+                    children={"Deseja fechar caixa agora?"}
+                    label={"Insira o valor em espécie do caixa"}
+                />
             </Modal>
         </InfoReservation>
     )

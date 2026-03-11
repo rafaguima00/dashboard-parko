@@ -93,10 +93,12 @@ const Informacoes = () => {
         return `Sem avaliações`
     }
 
-    const numeroDePessoasNoDia = () => {
-        const reservasHoje = reservations.filter(item => item.data_entrada === dataCompleta)
+    const numeroDeClientesNoMes = () => {
+        const clientesNoMes = reservations.filter(
+            item => item.data_entrada.split("/")[1] === formatarMes
+        )
 
-        return reservasHoje.length
+        return clientesNoMes.length
     }
 
     const faturamentoDiario = () => {
@@ -143,8 +145,8 @@ const Informacoes = () => {
             <Info>
                 <FaRightLeft color="#545454" size={16} title="Arrow" style={styleIcon} />
                 <TextAligned>
-                    <TitleLine>{numeroDePessoasNoDia()}</TitleLine>
-                    <Subtitle>Número de pessoas no dia</Subtitle>
+                    <TitleLine>{numeroDeClientesNoMes()}</TitleLine>
+                    <Subtitle>Número de clientes no mês</Subtitle>
                 </TextAligned>
             </Info>
             <Info>

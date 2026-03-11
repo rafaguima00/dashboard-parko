@@ -97,10 +97,6 @@ const ReportCash = (props) => {
     }, [dataDeInicio, dataDeTermino])
 
     useEffect(() => {
-        console.log(resultado)
-    }, [resultado])
-
-    useEffect(() => {
         dateToday()
     }, [])
 

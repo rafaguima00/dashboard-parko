@@ -7,11 +7,6 @@ const GraphicCostsData = () => {
         
     const { primaryColor } = theme
 
-    const pagas = 18
-    const pend = 8
-    const totais = pagas + pend
-
-    const total = [totais, pagas, pend]
     const { accounts, setAccounts, dataClient } = useUser()
 
     const [totalContas, setTotalContas] = useState([])

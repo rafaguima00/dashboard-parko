@@ -5,7 +5,7 @@ import { converter } from "../../../utils/ConverterData"
 const NewReservation = (props) => {
 
     const { neutralColor, primaryColor } = theme
-    const { data, setData, reservations } = props.state
+    const { formState, reservations, dispatch } = props.state
     const { converterData } = converter()
 
     function formatTel(value) {
@@ -17,7 +17,7 @@ const NewReservation = (props) => {
             formattedPhone = `(${rawValue.slice(0, 2)}) ${rawValue.slice(2, 7)}-${rawValue.slice(7)}`
         }
 
-        setData({ ...data, tel: formattedPhone })
+        dispatch({ type: "change", field: "cel", value: formattedPhone })
     }
 
     function formatPlaca(value) {
@@ -29,7 +29,7 @@ const NewReservation = (props) => {
             formattedPlate = `${rawValue.slice(0, 3)}-${rawValue.slice(3)}`;
         }
 
-        setData({ ...data, license_plate: formattedPlate })
+        dispatch({ type: "change", field: "license_plate", value: formattedPlate })
     }
 
     return (
@@ -50,8 +50,8 @@ const NewReservation = (props) => {
                     bordercolor={primaryColor} 
                     largura={360}
                     placeholder="Nome Completo"
-                    value={data.name_user}
-                    onChange={e => setData({ ...data, name_user: e.target.value })}
+                    value={formState.name}
+                    onChange={e => dispatch({ type: "change", field: "name", value: e.target.value })}
                     required
                 />
             </DivInput>
@@ -62,7 +62,7 @@ const NewReservation = (props) => {
                     bordercolor={primaryColor} 
                     placeholder="(xx) xxxxx-xxxx"
                     largura={219}
-                    value={data.tel}
+                    value={formState.cel}
                     onChange={e => formatTel(e.target.value)}
                     required
                 />
@@ -74,8 +74,8 @@ const NewReservation = (props) => {
                     bordercolor={primaryColor} 
                     placeholder="Modelo do Veículo"
                     largura={245}
-                    value={data.name_vehicle}
-                    onChange={e => setData({ ...data, name_vehicle: e.target.value })}
+                    value={formState.name_vehicle}
+                    onChange={e => dispatch({ type: "change", field: "name_vehicle", value: e.target.value })}
                     required
                 />
             </DivInput>
@@ -86,8 +86,8 @@ const NewReservation = (props) => {
                     bordercolor={primaryColor} 
                     placeholder="Cor do Veículo"
                     largura={245}
-                    value={data.color}
-                    onChange={e => setData({ ...data, color: e.target.value })}
+                    value={formState.color}
+                    onChange={e => dispatch({ type: "change", field: "color", value: e.target.value })}
                     required
                 />
             </DivInput>
@@ -98,7 +98,7 @@ const NewReservation = (props) => {
                     bordercolor={primaryColor} 
                     placeholder="Placa do Veículo"
                     largura={245}
-                    value={data.license_plate}
+                    value={formState.license_plate}
                     onChange={e => formatPlaca(e.target.value)}
                     required
                 />
@@ -109,7 +109,7 @@ const NewReservation = (props) => {
                     type="date"
                     bordercolor={primaryColor} 
                     largura={245}
-                    onChange={e => setData({ ...data, data_entrada: e.target.value })}
+                    onChange={e => dispatch({ type: "change", field: "data_entrada", value: e.target.value })}
                     min={converterData}
                     required
                 />
@@ -120,7 +120,7 @@ const NewReservation = (props) => {
                     type="time"
                     bordercolor={primaryColor}
                     largura={245}
-                    onChange={e => setData({ ...data, hora_entrada: e.target.value })}
+                    onChange={e => dispatch({ type: "change", field: "hora_entrada", value: e.target.value })}
                     required
                 />
             </DivInput>

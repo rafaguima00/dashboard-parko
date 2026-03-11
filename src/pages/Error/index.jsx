@@ -10,6 +10,7 @@ const ErrorPage = ({ errorMsg }) => {
 
     function navigateToLogin(e) {
         e.preventDefault()
+        
         window.location.href = "/"
     }
 
