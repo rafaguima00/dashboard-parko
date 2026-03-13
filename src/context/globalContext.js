@@ -15,6 +15,7 @@ export const InfoProvider = ({ children }) => {
 
     const [filtrarPorData, setFiltrarPorData] = useState(formatoPadrao())
     const [dataClient, setDataClient] = useState({}) 
+    const [unauthorized, setUnauthorized] = useState(false)
     const [park, setPark] = useState({}) 
     const [colaborators, setColaborators] = useState([]) 
     const [reservations, setReservations] = useState([]) 
@@ -70,7 +71,8 @@ export const InfoProvider = ({ children }) => {
         valueSelectDebt, setValueSelectDebt, // Forma de pagamento das dívidas
         valorDoCaixa, setValorDoCaixa, // Valor da abertura/fechamento do caixa ao vivo
         dividasEmDinheiro, setDividasEmDinheiro, // Dívidas em dinheiro em espécie
-        changeNeeded, setChangeNeeded // Estado que retorna se o troco do cliente será pago na hora ou se vai ficar devendo
+        changeNeeded, setChangeNeeded, // Estado que retorna se o troco do cliente será pago na hora ou se vai ficar devendo
+        unauthorized, setUnauthorized // Estado da autenticação
     }
 
     return (

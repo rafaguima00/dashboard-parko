@@ -6,6 +6,7 @@ const Confirmation = (props) => {
 
     const { otp, setOtp } = props
     const { neutralColor } = theme
+
     const containerStyle = { 
         display: 'flex', 
         flexDirection: 'row', 
@@ -13,6 +14,7 @@ const Confirmation = (props) => {
         justifyContent: 'space-between',
         marginTop: '1rem'
     }
+    
     const inputStyle = { width: '80px', height: '80px' }
 
     return (

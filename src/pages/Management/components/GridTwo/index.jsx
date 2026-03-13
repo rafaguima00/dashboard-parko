@@ -10,11 +10,12 @@ import { useEffect, useState } from "react"
 
 const GridTwo = (props) => {
 
-    const { selected, bqSelected } = props.states
+    const { bqSelected } = props
     const { 
         dataClient, 
         occurrences, 
-        setOccurrences 
+        setOccurrences,
+        selected
     } = useUser()
     const { type_colaborator } = dataClient
     const { primaryColor } = theme

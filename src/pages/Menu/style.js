@@ -57,7 +57,7 @@ export const SideBar = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    background-color: ${props => props.background};
+    background-color: ${primaryColor};
     height: 100vh;
     width: 90%;
 `

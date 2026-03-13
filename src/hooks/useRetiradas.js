@@ -8,6 +8,7 @@ const useRetiradas = () => {
     const fetchRetiradas = async () => {
         try {
             const data = await readRetiradas()
+
             setRetiradas(data)
         } catch (error) {
             setRetiradas(`Erro ao buscar retiradas ${error}`)
@@ -17,10 +18,11 @@ const useRetiradas = () => {
     const addRetiradas = async (retirada) => {
         try {
             const data = await createRetiradas(retirada)
+
             fetchRetiradas()
             return data
         } catch (error) {
-            throw error
+            setRetiradas(`Erro ao criar retirada ${error}`)
         }
     }
 

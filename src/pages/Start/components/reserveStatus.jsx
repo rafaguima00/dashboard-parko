@@ -15,16 +15,17 @@ import Top from "../../../components/Top"
 import { theme } from "../../../theme/theme"
 import LoadingScreen from "../../../components/Loading"
 import { useState } from "react"
+import { btReservations } from "../../../mocks/typeReservations"
 
-const ReservationStatus = (props) => {
+const ReservationStatus = () => {
 
-    const { btReservations, selected, setSelected } = props
     const { primaryColor } = theme
 
     const [open, setOpen] = useState(false)
     const [openRefuse, setOpenRefuse] = useState(false)
     const [loading, setLoading] = useState(false)
     const [color, setColor] = useState("#c4c4c4")
+    const [selected, setSelected] = useState(1)
 
     function mouseEnter() {
         setColor("red")

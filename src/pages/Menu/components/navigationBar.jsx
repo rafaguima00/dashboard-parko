@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom"
-import { useEffect, useState } from "react"
+import { Link, useLocation } from "react-router-dom"
 import { useUser } from "../../../context/globalContext"
 import {
     SideBar,
@@ -14,78 +13,26 @@ import {
 } from "../style"
 import avatar from "../../../assets/avatar.png"
 import logo from "../../../assets/logo-parko.png"
-import { AiOutlineHome } from "react-icons/ai"
-import { LiaCarSideSolid } from "react-icons/lia"
-import { CgNotes } from "react-icons/cg"
-import { RiMoneyDollarCircleLine, RiSettings5Line } from "react-icons/ri"
-import { FiStar } from "react-icons/fi"
 import { theme } from "../../../theme/theme"
+import useAuth from "../../../hooks/useAuth"
+import { links } from "../../../mocks/links"
 
 const NavigationBar = (props) => {
 
     const { dataClient } = useUser()
+
+    const { removeToken } = useAuth()
+
+    const location = useLocation()
+    
+    const currentPath = location.pathname
+
     const { colaborator, type_colaborator } = dataClient
-    const { primaryColor, neutralColor } = theme
-    const { styles, textSelected, handleLogout } = props
-
-    const [linkSeletected, setLinkSelected] = useState(1)
-
-    const links = [
-        {
-            id: 1,
-            path: "/start",
-            title: "Home",
-            text: "Início",
-            icon: AiOutlineHome
-        },
-        {
-            id: 2,
-            path: "/reservations",
-            title: "Reservations",
-            text: "Reservas",
-            icon: LiaCarSideSolid
-        },
-        {
-            id: 3,
-            path: "/checkout",
-            title: "Checkout",
-            text: "Caixa",
-            icon: CgNotes
-        },
-        {
-            id: 4,
-            path: "/management",
-            title: "Management",
-            text: "Gestão",
-            icon: RiMoneyDollarCircleLine
-        },
-        {
-            id: 5,
-            path: "/settings",
-            title: "Settings",
-            text: "Configurações",
-            icon: RiSettings5Line
-        },
-        {
-            id: 6,
-            path: "/rating",
-            title: "Rating",
-            text: "Avaliações",
-            icon: FiStar
-        }
-    ]
-
-    const handleSelectItem = (id) => {
-        localStorage.setItem("item", id)
-        setLinkSelected(id)
-    }
-
-    useEffect(() => {
-        setLinkSelected(Number(localStorage.getItem("item")))
-    }, [])
+    const { neutralColor } = theme
+    const { styles, textSelected } = props
 
     return (
-        <SideBar background={primaryColor}>
+        <SideBar>
             <Image src={logo} />
             <NavBar>
                 {links.map(item => (
@@ -95,35 +42,26 @@ const NavigationBar = (props) => {
                         style={
                             item.id === 5 && type_colaborator === "Funcionário(a)" ?
                             { display: "none" } :
-                            linkSeletected === item.id ? styles[1] : styles[0]
+                            currentPath.includes(item.path) ? styles[1] : styles[0]
                         }
-                        onClick={() => handleSelectItem(item.id)}
-                        
                     >
                         <item.icon
-                            color={linkSeletected === item.id ? neutralColor : "#fff"}
+                            color={currentPath.includes(item.path) ? neutralColor : "#fff"}
                             size={18}
                             title={item.title}
                         />
-                        <Path style={linkSeletected === item.id ? textSelected : {}}>
+                        <Path style={currentPath.includes(item.path) ? textSelected : {}}>
                             {item.text}
                         </Path>
                     </Link>
                 ))}
             </NavBar>
             <Bottom>
-                {/* <span>
-                    <Name>Estacionamento</Name>
-                    <Select>
-                        <option background={primaryColor}>Bela Park</option>
-                        <option background={primaryColor}>Estacionamento x</option>
-                    </Select>
-                </span> */}
                 <Profile>
                     <ImageProfile src={dataClient.image ? dataClient.image : avatar} />
                     <div>
-                        <UserName>{colaborator ? colaborator : ""}</UserName>
-                        <Logout onClick={handleLogout}>Logout</Logout>
+                        <UserName>{colaborator || ""}</UserName>
+                        <Logout onClick={removeToken}>Logout</Logout>
                     </div>
                 </Profile>
             </Bottom>

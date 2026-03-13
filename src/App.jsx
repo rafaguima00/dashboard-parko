@@ -4,6 +4,7 @@ import { InfoProvider } from "./context/globalContext"
 import { ParkProvider } from "./context/parkingContext"
 
 const App = () => {
+
   return (
     <InfoProvider>
       <ParkProvider>

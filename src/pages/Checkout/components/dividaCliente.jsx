@@ -4,7 +4,6 @@ import { formatCurrency } from "../../../utils/FormatCurrency"
 import { Back, CreditClient, DebtClient, DivDebt, NameClient, Receive } from "../style"
 import ModalDividaCliente from "./modalDividaCliente"
 import api from "../../../services/api/server"
-import ReadApi from "../../../services/readData"
 import { useUser } from "../../../context/globalContext"
 import useReservation from "../../../hooks/useReservation"
 import { RiCloseLine } from "react-icons/ri"
@@ -19,9 +18,8 @@ const DividaCliente = (props) => {
         verificarDividas,
         dividasDaReserva
     } = props
-    const { listDividas } = ReadApi()
     const { debts, reservations } = useUser()
-    const { fetchReservations } = useReservation()
+    const { fetchReservations, fetchDebts } = useReservation()
 
     const [isOpen, setIsOpen] = useState(false)
     const [valorAPagar, setValorAPagar] = useState("")
@@ -53,7 +51,7 @@ const DividaCliente = (props) => {
             alert(e)
         })
         .finally(() => {
-            listDividas()
+            fetchDebts(item.id_costumer)
             fetchReservations()
             setIsLoading(false)
         })

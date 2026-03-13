@@ -1,20 +1,16 @@
 import Top from "../../../../components/Top"
-import {
-    Financial,
-    Button,
-    BlockQuote,
-    Section
-} from "../../style"
+import { Financial, Button, BlockQuote, Section } from "../../style"
 import { useUser } from "../../../../context/globalContext"
+import { theme } from "../../../../theme/theme"
 
 const GridOne = (props) => {
 
-    const { buttons, blockquote, colors, states } = props
-    const { neutralColor, primaryColor } = colors
-    const { selected, setSelected, bqSelected, setBqSelected } = states
+    const { dataClient, selected, setSelected } = useUser()
 
-    const { dataClient } = useUser()
     const { type_colaborator } = dataClient
+    const { neutralColor, primaryColor } = theme
+    const { buttons, blockquote, states } = props
+    const { bqSelected, setBqSelected } = states
 
     return (
         <>

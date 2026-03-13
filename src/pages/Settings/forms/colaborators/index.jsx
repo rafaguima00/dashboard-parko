@@ -9,14 +9,16 @@ import FormColaborator from "./components/form"
 import ListColaborators from "./components/listColaborators"
 import api from "../../../../services/api/server"
 import { jwtDecode } from "jwt-decode"
-import ReadApi from "../../../../services/readData"
 import { unLoggedIn } from "../../../../mocks/errorPage"
 import ErrorPage from "../../../Error"
+import usePark from "../../../../hooks/usePark"
+import useColaborators from "../../../../hooks/useColaborators"
 
 const ColaboratorsForm = () => {
 
     const { dataClient, setDataClient } = useUser()
-    const { listColaborators, loadData } = ReadApi()
+    const { fetchColaborators } = useColaborators()
+    const { fetchPark } = usePark()
 
     const location = useLocation()
     let selectedColaborator = location.state?.selectedColaborator
@@ -72,7 +74,7 @@ const ColaboratorsForm = () => {
             alert(e.response.data.message)
         })
         .finally(() => {
-            listColaborators(dataClient.id_establishment)
+            fetchColaborators()
             setLoading(false)
         })
     }
@@ -109,7 +111,7 @@ const ColaboratorsForm = () => {
                 alert(`Erro ao deletar conta ${e.response.data.message}`)
             })
             .finally(() => {
-                listColaborators(dataClient.id_establishment)
+                fetchColaborators()
                 setLoadingDel(false)
             })
         } else {
@@ -136,7 +138,7 @@ const ColaboratorsForm = () => {
                 alert(e.response.data.message)
             })
             .finally(() => {
-                listColaborators(dataClient.id_establishment)
+                fetchColaborators()
                 setLoading(false)
             })
         }
@@ -161,10 +163,10 @@ const ColaboratorsForm = () => {
     }, [])
 
     useEffect(() => {
-        loadData(dataClient.id_establishment)
-        listColaborators(dataClient.id_establishment)
+        fetchPark()
+        fetchColaborators()
 
-        if (dataClient.type_colaborator !== "Administrador(a)"){
+        if (dataClient.type_colaborator !== "Administrador(a)") {
             setUnauthorized(true)
             setErrorMsg("Você não tem permissão para acessar esta funcionalidade")
         }

@@ -1,38 +1,24 @@
 import { Container } from "./style"
-import { theme } from "../../theme/theme"
 import { useEffect, useState } from "react"
 import { buttons } from "./map/buttons"
 import { blockquote } from "./map/blockquote"
 import GridOne from "./components/GridOne"
 import GridTwo from "./components/GridTwo"
-import { jwtDecode } from "jwt-decode"
 import { useUser } from "../../context/globalContext"
-import ReadApi from "../../services/readData"
 import ErrorPage from "../Error"
 import { unLoggedIn } from "../../mocks/errorPage"
+import usePark from "../../hooks/usePark"
 
 const Management = () => {
 
-    const { neutralColor, primaryColor } = theme
-    const { setDataClient, dataClient, selected, setSelected } = useUser()
-    const { loadData } = ReadApi()
+    const { unauthorized, dataClient } = useUser()
+    
+    const { fetchPark } = usePark()
 
     const [bqSelected, setBqSelected] = useState(0)
-    const [unauthorized, setUnauthorized] = useState(false)
 
     useEffect(() => {
-        const token = localStorage.getItem("token")
-
-        if (token) {
-            const decoded = jwtDecode(token)
-            setDataClient(decoded.user)
-        } else {
-            setUnauthorized(true)
-        }
-    }, [])
-
-    useEffect(() => {
-        loadData(dataClient.id_establishment)
+        if (dataClient.id_establishment) fetchPark()
     }, [dataClient])
 
     if (unauthorized) {
@@ -44,10 +30,9 @@ const Management = () => {
             <GridOne 
                 buttons={buttons}
                 blockquote={blockquote}
-                colors={{ neutralColor, primaryColor }}
-                states={{ selected, setSelected, bqSelected, setBqSelected }}
+                states={{ bqSelected, setBqSelected }}
             />
-            <GridTwo states={{ selected, bqSelected }}/>
+            <GridTwo bqSelected={bqSelected} />
         </Container>
     )
 }

@@ -21,20 +21,19 @@ import LineDebt from "./lineDebt"
 import { FiPlus } from "react-icons/fi"
 import { calculateReservationValue } from "../../../utils/CalculateReservationValue"
 import RadioArea from "./radioArea"
+import { checkClientDebts } from "../utils/checkClientDebts"
 
 const SecondColumn = (props) => {
 
     const {
-        hasDebt,
-        error,
-        messageError,
-        valuesDebt,
         setPaymentLines,
         paymentLines,
         setTrocoCliente,
         trocoCliente
     } = props.states
+
     const { cancelColor } = theme
+
     const { 
         selectedClient, 
         valorAPagar, 
@@ -42,11 +41,17 @@ const SecondColumn = (props) => {
         valueSelectDebt, 
         setValueSelectDebt,
         priceTable, tabelaFixa,
-        changeNeeded, setChangeNeeded
+        changeNeeded, setChangeNeeded,
+        debts
     } = useUser()
-    const { valorTotal } = useReservation()
+
+    const { error, messageError, valorTotal } = useReservation()
+
     const total = valorTotal()
+
     const { valorDaReservaAtual } = calculateReservationValue(selectedClient, priceTable, tabelaFixa, selectedClient.type_of_charge)
+    
+    const { hasDebt, valuesDebt } = checkClientDebts(selectedClient, debts)
 
     const [openDebt, setOpenDebt] = useState(false)
     const [valorInput, setValorInput] = useState("")
@@ -55,6 +60,7 @@ const SecondColumn = (props) => {
     const valores = paymentLines.map(item => {
         return unformatCurrency(item.valorPgto) / 100
     })
+
     const somarValores = valores.reduce((prev, current) => {
         return prev + current + (valorAPagar ? valorAPagar : 0)
     })
@@ -67,7 +73,7 @@ const SecondColumn = (props) => {
             return setTrocoCliente(somarValores - total)
         }
 
-        return setTrocoCliente(0)
+        setTrocoCliente(0)
     }
 
     const addLine = e => {
@@ -133,7 +139,7 @@ const SecondColumn = (props) => {
                         <FiPlus size={".8em"} />
                     </Add>
                 </Payment>
-                {error === true && 
+                {error && 
                     <DivError>
                         <MessageError>{messageError}</MessageError>
                     </DivError>

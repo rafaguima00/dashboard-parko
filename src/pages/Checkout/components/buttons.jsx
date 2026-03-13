@@ -7,27 +7,53 @@ import { useEffect, useState } from "react"
 import api from "../../../services/api/server"
 import StartEndTill from "./startEndTill"
 import { unformatCurrency } from "../../../utils/UnformatCurrency"
+import Contribution from "../form/contribution"
+import Retirada from "../form/retirada"
+import { createdAt } from "../../../utils/ConverterDataParaFormatoPadrao"
+import useAportes from "../../../hooks/useAportes"
+import useRetiradas from "../../../hooks/useRetiradas"
 
-const Buttons = ({ setOpen, setOpenRetirada }) => {
+const Buttons = () => {
 
     const { cancelColor, primaryColor } = theme
+
     const { dataClient, caixaAberto, valorDoCaixa, setCaixaAberto } = useUser()
-    
-    const [modal, setModal] = useState({
+    const { addAportes } = useAportes()
+    const { addRetiradas } = useRetiradas()
+
+    const [modalAporte, setModalAporte] = useState(false)
+    const [modalRetirada, setModalRetirada] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [messageError, setMessageError] = useState("")
+
+    const [novoAporte, setNovoAporte] = useState({
+        created_at: "",
+        value: "",
+        description: ""
+    })
+
+    const [novaRetirada, setNovaRetirada] = useState({
+        created_at: "",
+        value: "",
+        description: ""
+    })
+
+    const [modalFecharCaixa, setModalFecharCaixa] = useState({
         open: false,
         loading: false
     })
+
     const [valorEmEspecie, setValorEmEspecie] = useState("")
 
     async function fecharCaixa(e) {
         e.preventDefault()
 
-        setModal({ ...modal, loading: true })
+        setModalFecharCaixa({ ...modalFecharCaixa, loading: true })
 
         if (caixaAberto?.aberto === 0) {
             alert("O caixa já está fechado")
-            setModal({ ...modal, loading: false })
-            setModal({ ...modal, open: false })
+            setModalFecharCaixa({ ...modalFecharCaixa, loading: false })
+            setModalFecharCaixa({ ...modalFecharCaixa, open: false })
             return
         }
 
@@ -44,14 +70,60 @@ const Buttons = ({ setOpen, setOpenRetirada }) => {
                 console.log(e)
             })
 
-        setModal({ open: false, loading: false })
+        setModalFecharCaixa({ open: false, loading: false })
+    }
+
+    const criarAporte = async (e, setOpen) => {
+        e.preventDefault()
+        setLoading(true)
+        
+        try {
+            await addAportes({
+                id_establishment: dataClient.id_establishment,
+                id_colaborator: dataClient.id,
+                created_at: createdAt(novoAporte.created_at),
+                value: unformatCurrency(novoAporte.value) / 100,
+                description: novoAporte.description
+            })
+
+            alert("Concluído")
+            setOpen(false)
+            setNovoAporte({})
+        } catch (error) {
+            setMessageError(error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const criarRetirada = async (e, setOpen) => {
+        e.preventDefault()
+        setLoading(true)
+        
+        try {
+            await addRetiradas({
+                id_establishment: dataClient.id_establishment,
+                id_colaborator: dataClient.id,
+                created_at: createdAt(novaRetirada.created_at),
+                value: unformatCurrency(novaRetirada.value) / 100,
+                description: novaRetirada.description
+            })
+
+            alert("Concluído")
+            setOpen(false)
+            setNovaRetirada({})
+        } catch (error) {
+            setMessageError(error)
+        } finally {
+            setLoading(false)
+        }
     }
 
     useEffect(() => {
-        if (modal.open === false) {
+        if (modalFecharCaixa.open === false) {
             setValorEmEspecie("")
         }
-    }, [modal])
+    }, [modalFecharCaixa])
 
     return <>
             <ButtonGroup>
@@ -59,28 +131,28 @@ const Buttons = ({ setOpen, setOpenRetirada }) => {
                     children="Fechar Caixa"
                     background={cancelColor}
                     largura={"7rem"}
-                    aoPressionar={() => setModal({ ...modal, open: true })}
+                    aoPressionar={() => setModalFecharCaixa({ ...modalFecharCaixa, open: true })}
                 />
                 <GlobalButton 
                     children="Aporte"
                     background={primaryColor}
                     largura={"7rem"}
-                    aoPressionar={() => setOpen(true)}
+                    aoPressionar={() => setModalAporte(true)}
                     disabled={dataClient.type_colaborator === "Funcionário(a)" ? true : false}
                 />
                 <GlobalButton 
                     children="Retirada"
                     background={primaryColor}
                     largura={"7rem"}
-                    aoPressionar={() => setOpenRetirada(true)}
+                    aoPressionar={() => setModalRetirada(true)}
                     disabled={dataClient.type_colaborator === "Funcionário(a)" ? true : false}
                 />
             </ButtonGroup>
 
             <Modal
-                isOpen={modal.open}
-                setOpen={() => setModal({ ...modal, open: !modal.open })}
-                isLoading={modal.loading}
+                isOpen={modalFecharCaixa.open}
+                setOpen={() => setModalFecharCaixa({ ...modalFecharCaixa, open: !modalFecharCaixa.open })}
+                isLoading={modalFecharCaixa.loading}
                 title="Fechar Caixa"
                 funcao={fecharCaixa}
             >
@@ -89,6 +161,34 @@ const Buttons = ({ setOpen, setOpenRetirada }) => {
                     label={"Insira o valor em espécie do caixa"}
                     value={valorEmEspecie}
                     setValue={setValorEmEspecie}
+                />
+            </Modal>
+
+            <Modal
+                isOpen={modalAporte}
+                setOpen={setModalAporte}
+                title={"Aporte de Dinheiro"}
+                maxWidth={"30rem"}
+                funcao={e => criarAporte(e, setModalAporte)}
+                isLoading={loading}
+            >
+                <Contribution 
+                    state={{ setNovoAporte, novoAporte }}
+                    messageError={messageError}
+                />
+            </Modal>
+
+            <Modal
+                isOpen={modalRetirada}
+                setOpen={setModalRetirada}
+                title={"Retirada de Dinheiro"}
+                maxWidth={"30rem"}
+                funcao={e => criarRetirada(e, setModalRetirada)}
+                isLoading={loading}
+            >
+                <Retirada 
+                    state={{ setNovaRetirada, novaRetirada }}
+                    messageError={messageError}
                 />
             </Modal>
         </>

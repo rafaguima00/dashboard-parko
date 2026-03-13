@@ -39,21 +39,20 @@ const ContentForm = () => {
             email: data.email,
             password: data.password
         })
-        .then(response => {    
-            console.log(response.data)
-            localStorage.setItem("token", JSON.stringify(response.data))
-        })
-        .then(() => {
-            return navigate("/start")
-        })
-        .catch(e => {
-            console.log(e)
-            setError(true)
-            setMessageError(e.response.data.message)
-        })
-        .finally(() => {
-            setTitle("Login")
-        })
+            .then(response => {    
+                localStorage.setItem("token", JSON.stringify(response.data))
+            })
+            .then(() => {
+                return navigate("/start")
+            })
+            .catch(e => {
+                console.log(e)
+                setError(true)
+                setMessageError(e.response.data.message)
+            })
+            .finally(() => {
+                setTitle("Login")
+            })
     }
 
     const createPassword = e => {

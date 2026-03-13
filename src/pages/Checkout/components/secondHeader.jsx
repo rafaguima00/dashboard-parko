@@ -13,16 +13,16 @@ import { theme } from "../../../theme/theme"
 import Top from "../../../components/Top"
 import { useState } from "react"
 import Modal from "../../../components/Modal"
+import { useUser } from "../../../context/globalContext"
+import { handleDownloadReservation } from "../utils/downloadSheet"
 
 const SecondHeader = (props) => {
 
     const { primaryColor, neutralColor } = theme
-    const { 
-        text, 
-        setText,
-        setFiltrarPorData
-    } = props.states
-    const { handleDownloadReservation } = props
+    const { text, setText } = props.states
+    const { valoresAporte, valoresRetirada } = props.resumo
+
+    const { caixaAberto, dataClient, setFiltrarPorData } = useUser()
 
     const [abrirModal, setAbrirModal] = useState(false)
     const [dataSelecionada, setDataSelecionada] = useState("")
@@ -54,7 +54,11 @@ const SecondHeader = (props) => {
                 <Icon onClick={() => setAbrirModal(true)}>
                     <BsCalendar4 size={14} color="#545454" />
                 </Icon>
-                <Icon onClick={handleDownloadReservation}>
+                <Icon 
+                    onClick={e => {
+                        handleDownloadReservation(e, dataClient, caixaAberto, valoresAporte, valoresRetirada)
+                    }}
+                >
                     <BsDownload size={14} color="#545454" />
                 </Icon>
             </IconGroup>

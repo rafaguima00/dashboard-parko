@@ -8,6 +8,7 @@ import { useEffect } from "react"
 const Login = () => {
 
     const { primaryColor } = theme
+    
     const token = localStorage.getItem("token")
 
     const navigate = useNavigate()

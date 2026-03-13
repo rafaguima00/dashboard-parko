@@ -6,18 +6,16 @@ import {
     ListBody
 } from "../style"
 import EmptyMessage from "../../../components/EmptyMessage"
-import ReadApi from "../../../services/readData"
 import { useEffect, useState } from "react"
 import RenderItem from "./renderItem"
 import useReservation from "../../../hooks/useReservation"
-import api from "../../../services/api/server"
 
 const ListReserve = (props) => {
 
     const { reservaFechada } = props
+    
     const { dataClient, reservations, debts } = useUser()
-    const { listDividas } = ReadApi()
-    const { fetchReservations } = useReservation()
+    const { fetchDebts, fetchReservations } = useReservation()
 
     const firstWord = dataClient?.colaborator ?? ""
 
@@ -28,8 +26,8 @@ const ListReserve = (props) => {
 
     // Selecionar cada reserva
     const handleOnClick = (item) => {
-        const { id } = item
-        setClicked(id)
+        setClicked(item.id)
+        fetchDebts(item.id_costumer)
     }
 
     // Assim que clicar em um item a função vai retornar a reserva selecionada
@@ -75,10 +73,6 @@ const ListReserve = (props) => {
         verificarDividas()
     }, [clicked])
 
-    useEffect(() => {
-        listDividas()
-    }, [])
-
     return (
         <List>
             <ListHeader>
@@ -91,8 +85,8 @@ const ListReserve = (props) => {
                 <Text>Caixa</Text>
             </ListHeader>
             {
-                reservaFechada.length > 0 ?
-                reservaFechada.map((item) => (
+                reservaFechada?.length > 0 ?
+                reservaFechada?.map((item) => (
                     <ListBody key={item.id}>
                         <RenderItem
                             valuesDebt={valuesDebt}

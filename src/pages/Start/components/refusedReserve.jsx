@@ -29,7 +29,8 @@ const RefusedReserve = () => {
     }
 
     async function updateStatusReservation(reserv) {
-        const { id, data_entrada, hora_entrada, data_saida, hora_saida, value, id_vehicle } = reserv
+        const { id, data_entrada, hora_entrada, data_saida, hora_saida, value, id_vehicle, id_establishment } = reserv
+     
 
         await api.put(`/reservations/${id}`, { 
             data_entrada: data_entrada, 
@@ -38,7 +39,8 @@ const RefusedReserve = () => {
             hora_saida: hora_saida, 
             value: value, 
             status: 4, 
-            id_vehicle: id_vehicle 
+            id_vehicle: id_vehicle,
+            id_establishment: id_establishment
         })
         .then(() => {
             setOtp("")

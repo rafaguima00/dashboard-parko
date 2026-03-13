@@ -5,7 +5,6 @@ import { useUser } from "../../../../context/globalContext"
 import { useEffect, useState } from "react"
 import api from "../../../../services/api/server"
 import { jwtDecode } from "jwt-decode"
-import ReadApi from "../../../../services/readData"
 import "react-activity/dist/library.css"
 import { unLoggedIn } from "../../../../mocks/errorPage"
 import ErrorPage from "../../../Error"
@@ -14,15 +13,13 @@ import TabelaFixa from "./components/tabelaFixa"
 import FracaoHora from "./components/horaFracao"
 import RadioArea from "./components/radioArea"
 import TempoTolerancia from "./components/tempoTolerancia"
+import usePark from "../../../../hooks/usePark"
+import useColaborators from "../../../../hooks/useColaborators"
+import usePriceTable from "../../../../hooks/usePriceTable"
+import useTabelaFixa from "../../../../hooks/useTabelaFixa"
 
 const PriceTableForm = () => {
 
-    const { 
-        listColaborators, 
-        loadData, 
-        getPriceTable,
-        getTabelaFixa
-    } = ReadApi()
     const { 
         dataClient, 
         priceTable, 
@@ -30,6 +27,10 @@ const PriceTableForm = () => {
         reservations,
         tabelaFixa
     } = useUser()
+    const { fetchPark } = usePark()
+    const { fetchColaborators } = useColaborators()
+    const { fetchTabelaFixa } = useTabelaFixa()
+    const { fetchPriceTable } = usePriceTable()
 
     const [unauthorized, setUnauthorized] = useState(false)
     const [errorMsg, setErrorMsg] = useState("")
@@ -111,12 +112,12 @@ const PriceTableForm = () => {
     }, [priceTable])
 
     useEffect(() => {
-        loadData(dataClient.id_establishment)
-        listColaborators(dataClient.id_establishment)
-        getPriceTable(dataClient.id_establishment)
-        getTabelaFixa(dataClient.id_establishment)
+        fetchPark()
+        fetchColaborators()
+        fetchTabelaFixa()
+        fetchPriceTable()
 
-        if (dataClient.type_colaborator === "Funcionário(a)"){
+        if (dataClient.type_colaborator === "Funcionário(a)") {
             setErrorMsg("Você não tem permissão para acessar esta funcionalidade")
             setUnauthorized(true)
         }

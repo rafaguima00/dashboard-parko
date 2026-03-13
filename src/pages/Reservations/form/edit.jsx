@@ -7,8 +7,6 @@ import LoadingScreen from "../../../components/Loading"
 
 const EditModal = (props) => {
 
-    const [loading, setLoading] = useState(true)
-
     const { setStatus, status, dateTime, setDateTime, formState, dispatch } = props.states
     const { selectedClient } = useUser()
     const { data_saida, hora_saida, id, parko_app } = selectedClient || {}
@@ -25,6 +23,7 @@ const EditModal = (props) => {
 
     const [disabled, setDisabled] = useState(false)
     const [disabledData, setDisabledData] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     const verificarAtividade = () => {
         //data e hora de entrada editável

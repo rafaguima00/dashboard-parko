@@ -5,6 +5,7 @@ import { theme } from "../../../theme/theme"
 import { formatCurrency } from "../../../utils/FormatCurrency"
 import { useEffect } from "react"
 import api from "../../../services/api/server"
+import { mapVendas, organizarDividas } from "../utils/downloadSheet"
 
 const SummaryContent = (props) => {
 
@@ -16,11 +17,11 @@ const SummaryContent = (props) => {
         resumoVendas, 
         setValorDoCaixa,
         dividasEmDinheiro,
-        setDividasEmDinheiro
+        setDividasEmDinheiro,
+        filtrarPorData
     } = useUser()
     const { email, colaborator } = dataClient
-    const { valoresAporte,  valoresRetiradas, filtrarPorData } = props.resumo
-    const { organizarDividas, mapVendas } = props
+    const { valoresAporte,  valoresRetiradas } = props.resumo
     const { cancelColor, neutralColor, primaryColor } = theme
 
     const unformatCurrency = (num) => {
@@ -78,8 +79,8 @@ const SummaryContent = (props) => {
 
     function calcularValorDoCaixa() {
 
-        const vendasEmDinheiro = unformatCurrency(mapVendas("money")) / 100
-        const pagamentoDeDividas = unformatCurrency(organizarDividas()) / 100
+        const vendasEmDinheiro = unformatCurrency(mapVendas("money", resumoVendas, filtrarPorData)) / 100
+        const pagamentoDeDividas = unformatCurrency(organizarDividas(dividasEmDinheiro, filtrarPorData)) / 100
         const ganhos = vendasEmDinheiro + pagamentoDeDividas + valoresAporte
 
         const total = ganhos - valoresRetiradas
@@ -99,7 +100,7 @@ const SummaryContent = (props) => {
 
     useEffect(() => {
         if (dividasEmDinheiro && dividasEmDinheiro.length > 0) {
-            organizarDividas()
+            organizarDividas(dividasEmDinheiro, filtrarPorData)
         }
     }, [dividasEmDinheiro])
 
@@ -143,11 +144,11 @@ const SummaryContent = (props) => {
                 </Info>
                 <Info pricetxtcolor={primaryColor} textcolor={neutralColor}>
                     <p>Vendas em dinheiro</p>
-                    <p>{mapVendas("money")}</p>
+                    <p>{mapVendas("money", resumoVendas, filtrarPorData)}</p>
                 </Info>
                 <Info pricetxtcolor={primaryColor} textcolor={neutralColor}>
                     <p>Recebimento de dívidas (dinheiro)</p>
-                    <p>{organizarDividas()}</p>
+                    <p>{organizarDividas(dividasEmDinheiro, filtrarPorData)}</p>
                 </Info>
                 <Info pricetxtcolor={primaryColor} textcolor={neutralColor}> 
                     <p>Aportes</p>
@@ -166,27 +167,27 @@ const SummaryContent = (props) => {
                 <h3>Resumo de vendas</h3>
                 <Info pricetxtcolor={neutralColor} textcolor={neutralColor}>
                     <p>Dinheiro</p>
-                    <p>{mapVendas("money")}</p>
+                    <p>{mapVendas("money", resumoVendas, filtrarPorData)}</p>
                 </Info>
                 <Info pricetxtcolor={neutralColor} textcolor={neutralColor}>
                     <p>Pix</p>
-                    <p>{mapVendas("pix")}</p>
+                    <p>{mapVendas("pix", resumoVendas, filtrarPorData)}</p>
                 </Info>
                 <Info pricetxtcolor={neutralColor} textcolor={neutralColor}>
                     <p>Débito</p>
-                    <p>{mapVendas("debit_card")}</p>
+                    <p>{mapVendas("debit_card", resumoVendas, filtrarPorData)}</p>
                 </Info>
                 <Info pricetxtcolor={neutralColor} textcolor={neutralColor}>
                     <p>Crédito</p>
-                    <p>{mapVendas("credit_card")}</p>
+                    <p>{mapVendas("credit_card", resumoVendas, filtrarPorData)}</p>
                 </Info>
                 <Info pricetxtcolor={neutralColor} textcolor={neutralColor}>
                     <p>A pagar</p>
-                    <p>{mapVendas("debit")}</p>
+                    <p>{mapVendas("debit", resumoVendas, filtrarPorData)}</p>
                 </Info>
                 <Info pricetxtcolor={neutralColor} textcolor="#000">
                     <p>Total</p>
-                    <p>{mapVendas("total")}</p>
+                    <p>{mapVendas("total", resumoVendas, filtrarPorData)}</p>
                 </Info>
             </InfoCheckout>
         </Summary>

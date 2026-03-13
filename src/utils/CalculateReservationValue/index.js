@@ -17,7 +17,6 @@ const toNumber = (x) => {
     if (x == null) return 0
     if (typeof x === "number") return x
     if (typeof x === "string") {
-        // lida com "1.234,56" e "5,00"
         const cleaned = x.replace(/\./g, "").replace(",", ".")
         const n = Number(cleaned)
         return Number.isFinite(n) ? n : 0

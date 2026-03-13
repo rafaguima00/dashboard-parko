@@ -1,10 +1,10 @@
 import { theme } from "../../../theme/theme"
 import { Form, DivInput, Input, Label } from "./style"
 
-const Retirada = ({ primaryColor, neutralColor, state, messageError }) => {
+const Retirada = ({ state, messageError }) => {
 
     const { setNovaRetirada, novaRetirada } = state
-    const { cancelColor } = theme
+    const { cancelColor, primaryColor, neutralColor } = theme
 
     const formatNumber = (num) => {
         if (!num) return ""

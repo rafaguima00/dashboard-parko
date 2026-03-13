@@ -1,16 +1,16 @@
 import TopForm from "../../components/topForm"
 import { ContainerForm } from "../style"
 import { useEffect, useState } from "react"
-import { useParking } from "../../../../context/parkingContext"
 import { useUser } from "../../../../context/globalContext"
 import { theme } from "../../../../theme/theme"
 import FormArea from "./components/FormArea"
 import BottomButton from "./components/BottomButton"
 import api from "../../../../services/api/server"
 import { jwtDecode } from "jwt-decode"
-import ReadApi from "../../../../services/readData"
 import { unLoggedIn } from "../../../../mocks/errorPage"
 import ErrorPage from "../../../Error"
+import usePark from "../../../../hooks/usePark"
+import useColaborators from "../../../../hooks/useColaborators"
 
 const FormOpening = () => {
 
@@ -25,7 +25,8 @@ const FormOpening = () => {
     const [table, setTable] = useState([])
 
     const { dataClient, setDataClient } = useUser()
-    const { listColaborators, loadData } = ReadApi()
+    const { fetchPark } = usePark()
+    const { fetchColaborators } = useColaborators()
 
     const { 
         cancelColor, 
@@ -109,21 +110,8 @@ const FormOpening = () => {
     }
 
     useEffect(() => {
-        const token = localStorage.getItem("token")
-
-        if (token) {
-            const decoded = jwtDecode(token)
-            setDataClient(decoded.user)
-            recuperarDados(decoded.user.id_establishment)
-        } else {
-            setUnauthorized(true)
-            setErrorMsg(unLoggedIn)
-        }
-    }, [])
-
-    useEffect(() => {
-        loadData(dataClient.id_establishment)
-        listColaborators(dataClient.id_establishment)
+        fetchPark()
+        fetchColaborators()
 
         if (dataClient.type_colaborator === "Funcionário(a)") {
             setUnauthorized(true)

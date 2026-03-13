@@ -12,21 +12,24 @@ import {
 import camera from "../../../assets/camera.png"
 import { FaStar } from "react-icons/fa6"
 import { theme } from "../../../theme/theme"
+import { useUser } from "../../../context/globalContext"
 
-const Rate = (props) => {
+const Rate = () => {
 
     const { neutralColor, primaryColor } = theme
-    const { ratings, dataClient } = props
+    const { ratings, dataClient } = useUser()
 
     const renderItems = () => {
-        const findRate = ratings.filter(item => item.id_establishment === dataClient.id_establishment)
+        const findRate = ratings.filter(
+            item => item.id_establishment === dataClient.id_establishment
+        )
 
-        return { findRate }
+        return findRate
     }
 
-    const { findRate } = renderItems()
+    const findRate = renderItems()
 
-    if(findRate.length === 0) {
+    if (findRate.length === 0) {
         return (
             <section>
                 <Body>
@@ -36,7 +39,7 @@ const Rate = (props) => {
         )
     }
 
-    if(findRate) {
+    if (findRate) {
         return (
             <section>
                 {findRate.map((item) => (

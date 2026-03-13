@@ -1,10 +1,10 @@
 import { Form, DivInput, Input, Label, InputNumber } from "./style"
 import { theme } from "../../../theme/theme"
 
-const Contribution = ({ primaryColor, neutralColor, state, messageError }) => {
+const Contribution = ({ state, messageError }) => {
 
     const { novoAporte, setNovoAporte } = state
-    const { cancelColor } = theme
+    const { cancelColor, neutralColor, primaryColor } = theme
 
     const formatNumber = (num) => {
         if (!num) return ""

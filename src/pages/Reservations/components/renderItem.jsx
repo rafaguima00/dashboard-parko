@@ -90,7 +90,7 @@ const RenderItem = (props) => {
                 placeholder="Valor (R$)"
                 value={
                     selectedClient?.parko_app === 1 && index === 0 ? 
-                    formatCurrency(pagamento.value + valorAPagarPelaDivida, 'BRL') : 
+                    formatCurrency(pagamento?.value + valorAPagarPelaDivida, 'BRL') : 
                     linha.valorPgto
                 }
                 onChange={e => handleChange(e, index)}

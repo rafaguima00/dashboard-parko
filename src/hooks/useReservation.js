@@ -4,12 +4,13 @@ import { valueToPay, statusPayment } from "../pages/Reservations/utils/paymentUt
 import { checkClientDebts } from "../pages/Reservations/utils/checkClientDebts"
 import { calculateReservationValue } from "../utils/CalculateReservationValue"
 import { useUser } from "../context/globalContext"
-import ReadApi from "../services/readData"
 import { listReservations, updateReservation } from "../services/crud/reservationsService"
 import { createReservation } from "../services/crud/reservationsService"
 import { validateReservationClosure } from "../pages/Reservations/utils/validateReservationClosure"
 import { unformatCurrency } from "../utils/UnformatCurrency"
 import { useState } from "react"
+import { readRequestEndReservation } from "../services/crud/requestEndReservation"
+import { readDividas } from "../services/crud/debts"
 
 const useReservation = () => {
 
@@ -17,7 +18,6 @@ const useReservation = () => {
     const [error, setError] = useState(false)
     const [messageError, setMessageError] = useState("")
 
-    const { listDividas } = ReadApi()
     const {
         setReservations,
         selectedClient,
@@ -28,7 +28,9 @@ const useReservation = () => {
         setValorAPagar,
         valueSelectDebt,
         tabelaFixa,
-        changeNeeded
+        changeNeeded,
+        setRequests,
+        setDebts
     } = useUser()
 
     // Informações da reserva selecionada
@@ -40,6 +42,12 @@ const useReservation = () => {
         { id: 5, title: "Veículo", info: selectedClient?.name_vehicle },
         { id: 6, title: "Saída", info: selectedClient?.hora_saida }
     ])
+
+    const fetchDebts = async (id) => {
+        const data = await readDividas(id)
+
+        setDebts(data)
+    }
 
     // Carregar todas as reservas
     const fetchReservations = async () => {
@@ -69,13 +77,18 @@ const useReservation = () => {
     }
 
     // Atualizar uma reserva (status, horário de entrada, horário de saída, valor a ser pago...)
-    const editReservation = async (id, reservation) => {
+    const editReservation = async (id, reservation, handle = () => {}) => {
         try {
-            const data = await updateReservation(id, reservation)    
+            const data = await updateReservation(id, reservation)
+
             fetchReservations()
-            return data        
+
+            handle()
+            console.log(handle)
+
+            return data
         } catch (error) {
-            throw error
+            return error
         }
     }
 
@@ -115,7 +128,7 @@ const useReservation = () => {
                 return
             })
             .finally(() => {
-                listDividas()
+                fetchDebts(id_costumer)
                 fetchReservations()
             })
 
@@ -214,6 +227,12 @@ const useReservation = () => {
         setLoading(false)
     }
 
+    const verifyRequestEndReservation = async () => {
+        const data = await readRequestEndReservation(dataClient.id_establishment)
+        
+        setRequests(data)
+    }
+
     return {
         error, 
         loading,
@@ -221,10 +240,12 @@ const useReservation = () => {
         addReservation, 
         editReservation,
         reservationClosure,
+        fetchDebts,
         fetchReservations, 
         getGridItems, 
         registrarPagamento,
-        valorTotal
+        valorTotal,
+        verifyRequestEndReservation
     }
 }
 

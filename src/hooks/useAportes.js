@@ -3,11 +3,12 @@ import { createAportes, readAportes } from "../services/crud/aportesService"
 
 const useAportes = () => {
 
-    const { setAportes } = useUser()
+    const { dataClient, setAportes } = useUser()
 
     const fetchAportes = async () => {
         try {
-            const data = await readAportes()
+            const data = await readAportes(dataClient.id_establishment)
+
             setAportes(data)
         } catch (error) {
             setAportes(`Erro ao buscar aportes ${error}`)
@@ -17,11 +18,12 @@ const useAportes = () => {
     const addAportes = async (aporte) => {
         try {
             const data = await createAportes(aporte)
+
             await fetchAportes()
+
             return data
         } catch (error) {
             setAportes(`Erro ao criar aporte ${error}`)
-            throw error
         }
     }
 

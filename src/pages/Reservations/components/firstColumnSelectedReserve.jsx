@@ -9,15 +9,15 @@ import { calculateReservationValue } from "../../../utils/CalculateReservationVa
 import { formReducer } from "../form/formState/reducer"
 import { initialState } from "../form/initialState"
 
-const FirstColumn = (props) => {
+const FirstColumn = () => {
 
     const [openEdit, setOpenEdit] = useState(false)
     const [loading, setLoading] = useState(false)
     const [status, setStatus] = useState(0)
+    const [dateTime, setDateTime] = useState("")
 
     const [formState, dispatch] = useReducer(formReducer, initialState)
 
-    const { dateTime, setDateTime } = props.states
     const { selectedClient, setSelectedClient, priceTable, tabelaFixa } = useUser()
     const { editReservation } = useReservation()
 

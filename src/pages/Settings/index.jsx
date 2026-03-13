@@ -5,51 +5,41 @@ import PriceTable from "./components/priceTable"
 import OpeningHours from "./components/openingHours"
 import Top from "../../components/Top"
 import { useEffect, useState } from "react"
-import { jwtDecode } from "jwt-decode"
 import { useUser } from "../../context/globalContext"
-import ReadApi from "../../services/readData"
 import ErrorPage from "../Error"
+import usePark from "../../hooks/usePark" 
+import useColaborators from "../../hooks/useColaborators"
 import { unLoggedIn } from "../../mocks/errorPage"
- 
+
 const Settings = () => {
 
-    const { setDataClient, dataClient, park } = useUser()
-    const { listColaborators, loadData } = ReadApi()
+    const { dataClient, park, unauthorized } = useUser()
+    
+    const { fetchPark } = usePark()
+    const { fetchColaborators } = useColaborators()
 
-    const [unauthorized, setUnauthorized] = useState(false)
     const [errorMsg, setErrorMsg] = useState("")
+    const [unauthorizedTypeUser, setUnauthorizedTypeUser] = useState(false)
 
     useEffect(() => {
-        const token = localStorage.getItem("token")
-
-        if (token) {
-            const decoded = jwtDecode(token)
-            setDataClient(decoded.user)
-        } else {
-            setUnauthorized(true)
-            setErrorMsg(unLoggedIn)
-        }
-    }, [])
-
-    useEffect(() => {
-        if (dataClient.id_establishment) {
-            loadData(dataClient.id_establishment)
-        }
-
-        if (dataClient.type_colaborator === "Funcionário(a)"){
-            setUnauthorized(true)
+        if (dataClient.type_colaborator === "Funcionário(a)") {
+            setUnauthorizedTypeUser(true)
             setErrorMsg("Você não tem permissão para acessar esta funcionalidade")
+        }
+
+        if (dataClient.id_establishment) {
+            fetchPark()
         }
     }, [dataClient])
     
     useEffect(() => {
         if (park) {
-            listColaborators(dataClient.id_establishment)
+            fetchColaborators()
         }
     }, [park])
 
-    if(unauthorized) {
-        return <ErrorPage errorMsg={errorMsg} />
+    if (unauthorized || unauthorizedTypeUser) {
+        return <ErrorPage errorMsg={unauthorized ? unLoggedIn : errorMsg} />
     }
 
     return (

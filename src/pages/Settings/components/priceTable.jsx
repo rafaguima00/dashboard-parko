@@ -5,18 +5,21 @@ import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { useUser } from "../../../context/globalContext"
 import { formatCurrency } from "../../../utils/FormatCurrency"
-import ReadApi from "../../../services/readData"
 import { Spinner } from "react-activity"
 import "react-activity/dist/library.css"
 import api from "../../../services/api/server"
+import usePriceTable from "../../../hooks/usePriceTable"
+import useTabelaFixa from "../../../hooks/useTabelaFixa"
 
 const PriceTable = () => {
     
     const [typeCharge, setTypeCharge] = useState("")
 
     const { neutralColor, primaryColor, cancelColor } = theme
+
     const { dataClient, priceTable, tabelaFixa } = useUser()
-    const { getPriceTable, getTabelaFixa } = ReadApi()
+    const { fetchPriceTable } = usePriceTable()
+    const { fetchTabelaFixa } = useTabelaFixa()
     
     const navigate = useNavigate()
 
@@ -25,8 +28,8 @@ const PriceTable = () => {
     }
 
     useEffect(() => {
-        getPriceTable(dataClient.id_establishment)
-        getTabelaFixa(dataClient.id_establishment)
+        fetchPriceTable()
+        fetchTabelaFixa()
     }, [dataClient])
 
     useEffect(() => {

@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import { theme } from "../../theme/theme"
 
-const { cancelColor, blueColor } = theme
+const { cancelColor, blueColor, primaryColor } = theme
 
 export const Container = styled.div`
     margin: 4rem 5.11rem 4rem 0;
@@ -326,7 +326,7 @@ export const Graphics = styled.div`
     }
 
     div:last-child {
-        background-color: ${props => props.background};
+        background-color: ${primaryColor};
         color: #fff;
     }
 `

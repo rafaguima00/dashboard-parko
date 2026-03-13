@@ -11,12 +11,15 @@ import Top from "../../../components/Top"
 import Modal from "../../../components/Modal"
 import { useState } from "react"
 import { theme } from "../../../theme/theme"
+import { useUser } from "../../../context/globalContext"
+import { handleDownloadValorDoCaixa } from "../utils/downloadSheet"
 
 const FirstHeader = (props) => {
 
-    const { setFiltrarPorData } = props.states
-    const { handleDownload } = props
+    const { caixaAberto, dataClient, setFiltrarPorData } = useUser()
+
     const { neutralColor, primaryColor } = theme
+    const { valoresAporte, valoresRetiradas } = props.resumo
 
     const [abrirModal, setAbrirModal] = useState(false)
     const [dataSelecionada, setDataSelecionada] = useState("")
@@ -38,7 +41,7 @@ const FirstHeader = (props) => {
                 <Icon>
                     <BsPrinter size={14} color="#545454"/>
                 </Icon>
-                <Icon onClick={handleDownload}>
+                <Icon onClick={e => handleDownloadValorDoCaixa(e, dataClient, caixaAberto, valoresAporte, valoresRetiradas)}>
                     <BsDownload size={14} color="#545454"/>
                 </Icon>
                 <Icon onClick={() => setAbrirModal(true)}>
