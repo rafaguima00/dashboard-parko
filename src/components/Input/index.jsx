@@ -3,20 +3,23 @@ import { Container, DivInput, Input, Label } from "./style"
 const TextInput = ({
     textColor,
     borderColor,
+    borderWidth,
     value,
     setValue,
     placeholder,
     label,
     width,
-    required = true
+    required = true,
+    type = "text",
+    margin
 }) => {
-
     return <>
         <Container>
-            <DivInput>
+            <DivInput margin={margin}>
                 <Label textcolor={textColor}>{label}</Label>
                 <Input 
-                    type="text" 
+                    type={type} 
+                    borderwidth={borderWidth}
                     bordercolor={borderColor} 
                     placeholder={placeholder}
                     largura={width}

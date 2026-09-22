@@ -4,9 +4,6 @@ import SecondColumn from "./secondColumnSelectedReserve"
 
 const SelectedReserve = (props) => {
 
-    const { setTrocoCliente, trocoCliente } = props.reservationData
-    const { paymentLines, setPaymentLines } = props.paymentData
-
     return (
         <Content>
             <List padding={"2.4rem 4rem"}>
@@ -14,14 +11,7 @@ const SelectedReserve = (props) => {
                 <FirstColumn />
 
                 {/* Segunda coluna (informações de pagamento) */}
-                <SecondColumn 
-                    states={{
-                        setPaymentLines,
-                        paymentLines,
-                        setTrocoCliente,
-                        trocoCliente
-                    }}
-                />
+                <SecondColumn {...props} />
             </List>
         </Content>
     )

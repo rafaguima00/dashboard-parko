@@ -9,3 +9,16 @@ export const readColaborators = async (id) => {
         return error        
     }
 }
+
+export const createEmailVerification = async (email) => {
+    try {
+        const res = await api.post("/verify-email", email)
+
+        return res
+    } catch (error) {
+        return {
+            status: error.response.status,
+            message: error.response.data.message
+        }
+    }
+} 

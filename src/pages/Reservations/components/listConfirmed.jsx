@@ -11,8 +11,11 @@ import { formatCurrency } from "../../../utils/FormatCurrency"
 const ListConfirmedReserve = (props) => {
 
     const { primaryColor } = theme
+
     const { filterReserv, reservationComplete } = props
+
     const { setSelectedClient, dataClient, priceTable, tabelaFixa } = useUser()
+    
     const { fetchReservations } = useReservation()
 
     const [clicked, setClicked] = useState(0)

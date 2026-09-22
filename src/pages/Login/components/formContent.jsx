@@ -1,7 +1,4 @@
 import {
-    TextField,
-    Label,
-    Input,
     MessageError,
     NewPassword,
     TextPassword,
@@ -11,12 +8,14 @@ import {
 } from "../style"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { theme } from "../../../theme/theme"
-import api from "../../../services/api/server"
 import { Dots } from "react-activity"
 import "react-activity/dist/library.css"
+import Inputs from "./inputs"
+import useAuth from "../../../hooks/useAuth"
 
 const ContentForm = () => {
+
+    const { authentication } = useAuth()
 
     const [error, setError] = useState(false)
     const [messageError, setMessageError] = useState("")
@@ -26,33 +25,26 @@ const ContentForm = () => {
         password: ""
     })
 
-    const { primaryColor } = theme
-
     const navigate = useNavigate()
 
-    const handleLogin = async (e) => {
+    const handleLogin = async e => {
         e.preventDefault()
 
         setTitle(<Dots color={"#f4f4f4"} />)
 
-        await api.post("/login", {
-            email: data.email,
-            password: data.password
-        })
-            .then(response => {    
-                localStorage.setItem("token", JSON.stringify(response.data))
-            })
-            .then(() => {
-                return navigate("/start")
-            })
-            .catch(e => {
-                console.log(e)
-                setError(true)
-                setMessageError(e.response.data.message)
-            })
-            .finally(() => {
-                setTitle("Login")
-            })
+        const { email, password } = data
+
+        const auth = await authentication({ email, password })
+
+        if (auth.error) {
+            setError(auth.error)
+            setMessageError(auth.message)
+            setTitle("Login")
+
+            return
+        }
+
+        auth.handle()
     }
 
     const createPassword = e => {
@@ -62,38 +54,15 @@ const ContentForm = () => {
 
     return <>
         <AreaForm onSubmit={handleLogin}>
-            <div>
-                <TextField>
-                    <Label>E-mail</Label>
-                    <Input
-                        type="email"
-                        placeholder="Digite seu e-mail"
-                        required
-                        onChange={e => setData({ ...data, email: e.target.value })}
-                    />
-                </TextField>
-                <TextField>
-                    <Label>Senha</Label>
-                    <Input
-                        type="password"
-                        placeholder="Digite sua senha"
-                        required
-                        onChange={e => setData({ ...data, password: e.target.value })}
-                    />
-                </TextField>
-            </div>
-            { error &&
+            <Inputs data={data} setData={setData} />
+            {error &&
                 <MessageError>{messageError}</MessageError>
             }
             <NewPassword>
-                <TextPassword textcolor={primaryColor}>Esqueceu a senha?</TextPassword>
-                <BtPassword onClick={e => createPassword(e)}>Crie uma nova</BtPassword>
+                <TextPassword>Esqueceu a senha?</TextPassword>
+                <BtPassword onClick={createPassword}>Crie uma nova</BtPassword>
             </NewPassword>
-            <Login 
-                btcolor={primaryColor} 
-                type="submit" 
-                onClick={e => handleLogin(e)}
-            >
+            <Login type="submit" onClick={handleLogin}>
                 {title}
             </Login>
         </AreaForm>

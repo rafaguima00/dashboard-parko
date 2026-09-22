@@ -10,7 +10,7 @@ export const DivInput = styled.div`
     display: flex;
     flex-direction: column;
     gap: .4rem;
-    margin-top: 1rem;
+    margin: ${props => props.margin || 0};
 `
 
 export const Label = styled.label`
@@ -22,7 +22,7 @@ export const Label = styled.label`
 export const Input = styled.input`
     padding: .5rem;
     background: none;
-    border: 1px solid ${props => props.bordercolor};
+    border: solid ${props => props.borderwidth ? props.borderwidth : 1}px ${props => props.bordercolor};
     border-radius: .5rem;
     width: ${props => props.largura}px;
     height: 2.5rem;

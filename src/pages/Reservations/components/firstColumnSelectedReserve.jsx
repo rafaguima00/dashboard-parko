@@ -83,6 +83,10 @@ const FirstColumn = () => {
         }
     }
 
+    const openModalEdit = () => {
+        selectedClient?.id && setOpenEdit(true)
+    }
+
     useEffect(() => {
         if (selectedClient) {
             formatarDataHoraParaDate(selectedClient?.data_entrada)
@@ -95,7 +99,7 @@ const FirstColumn = () => {
             <InformacoesReserva />
 
             {/* Editar hora de saída da reserva */}
-            <Edit onClick={() => setOpenEdit(true)}>Editar</Edit>
+            <Edit onClick={openModalEdit}>Editar</Edit>
             <Modal
                 isOpen={openEdit}
                 setOpen={setOpenEdit}

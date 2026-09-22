@@ -1,4 +1,7 @@
-import styled from "styled-components";
+import styled from "styled-components"
+import { theme } from "../../theme/theme"
+
+const { primaryColor } = theme
 
 export const Container = styled.div`
     margin: 0;
@@ -95,6 +98,7 @@ export const MessageError = styled.p`
     font-size: 12px;
     color: #CC0000;
     margin: .5rem 0 1rem;
+    max-width: 18rem;
 `
 
 export const NewPassword = styled.div`
@@ -107,7 +111,7 @@ export const NewPassword = styled.div`
 
 export const TextPassword = styled.p`
     font-size: 12px;
-    color: ${props => props.textcolor};
+    color: ${primaryColor};
     font-weight: 600;
     padding-right: 4px;
 `
@@ -131,7 +135,7 @@ export const Login = styled.button`
     padding: 12px;
     border: none;
     border-radius: 10px;
-    background-color: ${props => props.btcolor};
+    background-color: ${primaryColor};
     color: #fff;
     font-size: 15px;
 

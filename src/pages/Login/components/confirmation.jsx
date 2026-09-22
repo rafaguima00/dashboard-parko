@@ -1,32 +1,31 @@
-import { AreaForm, Div, Label, Login } from "../style"
-import { theme } from "../../../theme/theme"
-import { useNavigate } from "react-router-dom"
+import { AreaForm, Login } from "../style"
+import { useLocation, useNavigate } from "react-router-dom"
+import TitleArea from "./titleArea"
 
 const Confirmation = () => {
 
-    const { neutralColor, primaryColor } = theme
     const navigate = useNavigate()
+    const location = useLocation()
+
+    const { message } = location?.state || {}
 
     const handleBack = e => {
         e.preventDefault()
+        
         return navigate("/")
     }
 
-    return <AreaForm>
-        <Div textcolor={neutralColor}>
-            <p>Senha alterada com sucesso!</p>
-            <Label>
-                Sua senha foi alterada com sucesso.
-            </Label>
-        </Div>
-        <Login
-            btcolor={primaryColor}
-            type="submit"
-            onClick={handleBack}
-        >
-            Voltar ao início
-        </Login>
-    </AreaForm>
+    return (
+        <AreaForm>
+            <TitleArea 
+                title="Senha alterada com sucesso!"
+                message={message}
+            />
+            <Login type="submit" onClick={handleBack}>
+                Voltar ao início
+            </Login>
+        </AreaForm>
+    )
 }
 
 export default Confirmation

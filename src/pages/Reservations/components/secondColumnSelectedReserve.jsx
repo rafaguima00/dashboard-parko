@@ -25,12 +25,8 @@ import { checkClientDebts } from "../utils/checkClientDebts"
 
 const SecondColumn = (props) => {
 
-    const {
-        setPaymentLines,
-        paymentLines,
-        setTrocoCliente,
-        trocoCliente
-    } = props.states
+    const { setTrocoCliente, trocoCliente } = props.reservationData
+    const { paymentLines, setPaymentLines } = props.paymentData
 
     const { cancelColor } = theme
 

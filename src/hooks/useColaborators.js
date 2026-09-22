@@ -1,7 +1,10 @@
+import { useNavigate } from "react-router-dom"
 import { useUser } from "../context/globalContext"
-import { readColaborators } from "../services/crud/colaborators"
+import { createEmailVerification, readColaborators } from "../services/crud/colaborators"
 
 const useColaborators = () => {
+
+    const navigate = useNavigate()
 
     const { dataClient, setColaborators } = useUser()
 
@@ -11,7 +14,34 @@ const useColaborators = () => {
         setColaborators(data)
     }
 
-    return { fetchColaborators }
+    const verifyEmail = async (email, setEmail) => {
+        const response = await createEmailVerification(email)
+
+        const onConfirmed = () => {
+            setEmail("")
+            return navigate("/send-link", {
+                state: {
+                    message: response.data.message
+                }
+            })
+        }
+
+        if (response?.status !== 200) {
+            return {
+                error: true,
+                message: response.message,
+                handle: () => {}
+            }
+        }
+
+        return {
+            error: false,
+            message: response.data.message,
+            handle: onConfirmed
+        }
+    }
+
+    return { fetchColaborators, verifyEmail }
 }
 
 export default useColaborators

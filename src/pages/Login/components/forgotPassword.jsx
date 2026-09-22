@@ -1,89 +1,76 @@
-import { useUser } from "../../../context/globalContext"
-import { 
-    FormContent,
-    TextField,
-    Label,
-    Input, 
-    Login,
-    Div,
-    Back,
-    MessageError,
-    AreaForm
-} from "../style"
-import { theme } from "../../../theme/theme"
-import { FaArrowLeft } from "react-icons/fa6"
+import { Login, MessageError, AreaForm } from "../style"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import api from "../../../services/api/server"
 import { Dots } from "react-activity"
 import "react-activity/dist/library.css"
+import useColaborators from "../../../hooks/useColaborators"
+import TextInput from "../../../components/Input"
+import TitleArea from "./titleArea"
 
 const ForgotPassword = () => {
 
-    const { setDataClient, dataClient } = useUser()
-    const { primaryColor, neutralColor } = theme
+    const navigate = useNavigate()
+
+    const { verifyEmail } = useColaborators()
+
+    const cinzaClaro = "#7D7D7D"
 
     const [error, setError] = useState(false)
     const [messageError, setMessageError] = useState("")
     const [title, setTitle] = useState("Avançar")
-
-    const navigate = useNavigate()
+    const [email, setEmail] = useState("")
 
     const handleClick = async (e) => {
         e.preventDefault()
 
         setTitle(<Dots color={"#f4f4f4"} />)
 
-        await api.post("/verify-email", {
-            email: dataClient.email
-        })
-            .then(() => {
-                setTitle("Avançar")
-                setDataClient({ ...dataClient, email: "" })
-                return navigate("/send-link")
-            })
-            .catch(e => {
-                setTitle("Avançar")
-                setError(true)
-                setMessageError(e.response.data.message)
-            })
+        const verify = await verifyEmail({ email }, setEmail)
+
+        if (verify.error) {
+            setError(verify.error)
+            setMessageError(verify.message)
+            setTitle("Avançar")
+
+            return
+        }
+
+        verify.handle()
     }
 
     const goBack = e => {
         e.preventDefault()
+
         return navigate("/")
     }
 
-    return <AreaForm>
-        <Div textcolor={neutralColor}>
-            <Back onClick={goBack}>
-                <FaArrowLeft color={neutralColor} size={20} />
-            </Back>
-            <p>Esqueceu sua senha Parko?</p>
-        </Div>
-        <div>
-            <TextField>
-                <Label>E-mail</Label>
-                <Input
-                    type="email"
-                    placeholder="Digite seu e-mail"
-                    required
-                    value={dataClient.email}
-                    onChange={e => setDataClient({ ...dataClient, email: e.target.value })}
-                />
-            </TextField>
-        </div>
-        { error &&
-            <MessageError>{messageError}</MessageError>
-        }
-        <Login
-            btcolor={primaryColor}
-            type="submit"
-            onClick={handleClick}
-        >
-            {title}
-        </Login>
-    </AreaForm>
+    return <>
+        <AreaForm>
+            <TitleArea 
+                arrow
+                title="Esqueceu sua senha Parko?"
+                onClick={goBack}
+            />
+            <TextInput 
+                label="E-mail"
+                type="email"
+                placeholder="Digite seu e-mail"
+                value={email}
+                setValue={e => setEmail(e.target.value)}
+                width={288}
+                textColor={cinzaClaro}
+                borderColor={cinzaClaro}
+                borderWidth={2}
+                margin={"0 0 1rem"}
+            />
+            {error &&
+                <MessageError>{messageError}</MessageError>
+            }
+            <Login type="submit" onClick={handleClick}>
+                {title}
+            </Login>
+        </AreaForm>
+    </>
 }
 
 export default ForgotPassword
